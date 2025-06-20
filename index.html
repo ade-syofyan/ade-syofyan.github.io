@@ -237,6 +237,95 @@
       .chat-input-area button:hover {
         background-color: #4299e1;
       }
+
+      /* Mobile Navigation */
+      @media (max-width: 768px) {
+        .desktop-nav {
+          display: none;
+        }
+        .mobile-nav-toggle {
+          display: block;
+        }
+        .mobile-menu-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.9);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          z-index: 1010; /* Lebih tinggi dari modal lain */
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .mobile-menu-overlay.open {
+          opacity: 1;
+          visibility: visible;
+        }
+        .mobile-menu-overlay a {
+          color: #e2e8f0;
+          font-size: 1.8rem;
+          padding: 1rem 0;
+          width: 80%;
+          text-align: center;
+          transition: color 0.3s ease;
+        }
+        .mobile-menu-overlay a:hover {
+          color: #63b3ed;
+        }
+        .mobile-menu-close-btn {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: none;
+          border: none;
+          font-size: 2rem;
+          color: #e2e8f0;
+          cursor: pointer;
+          z-index: 1011;
+        }
+        .mobile-menu-close-btn:hover {
+          color: #63b3ed;
+        }
+      }
+      @media (min-width: 769px) {
+        .desktop-nav {
+          display: flex;
+        }
+        .mobile-nav-toggle,
+        .mobile-menu-overlay {
+          display: none;
+        }
+      }
+
+      /* Scroll to Top Button */
+      #scrollToTopBtn {
+        display: none; /* Hidden by default */
+        position: fixed; /* Fixed position */
+        bottom: 20px; /* Place at the bottom */
+        right: 20px; /* Place at the right */
+        z-index: 99; /* Higher than other content */
+        border: none; /* Remove borders */
+        outline: none; /* Remove outline */
+        background-color: #63b3ed; /* Set a background color */
+        color: white; /* Text color */
+        cursor: pointer; /* Add a mouse pointer on hover */
+        padding: 12px 15px; /* Some padding */
+        border-radius: 50%; /* Rounded corners */
+        font-size: 18px; /* Increase font size */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, opacity 0.3s;
+        opacity: 0.8;
+      }
+
+      #scrollToTopBtn:hover {
+        background-color: #4299e1; /* Darker background on hover */
+        opacity: 1;
+      }
     </style>
   </head>
   <body class="leading-relaxed">
@@ -246,11 +335,21 @@
         <a href="#" class="text-2xl font-bold text-white tracking-wide"
           >Ade Syofyan</a
         >
-        <div class="flex space-x-6">
+        <div class="desktop-nav flex space-x-6">
           <a
             href="#about"
             class="text-gray-300 hover:text-white transition duration-300"
             >Tentang Saya</a
+          >
+          <a
+            href="#skills"
+            class="text-gray-300 hover:text-white transition duration-300"
+            >Keahlian</a
+          >
+          <a
+            href="#services"
+            class="text-gray-300 hover:text-white transition duration-300"
+            >Layanan</a
           >
           <a
             href="#portfolio"
@@ -258,11 +357,15 @@
             >Portofolio</a
           >
           <a
+            href="#testimonials"
+            class="text-gray-300 hover:text-white transition duration-300"
+            >Testimoni</a
+          >
+          <a
             href="#contact"
             class="text-gray-300 hover:text-white transition duration-300"
             >Kontak</a
           >
-          <!-- Link baru Chat ke AI di Navbar -->
           <a
             href="#"
             onclick="openChatbotModal(); return false;"
@@ -270,8 +373,33 @@
             >Chat ke AI</a
           >
         </div>
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          class="mobile-nav-toggle text-white text-3xl hidden"
+          onclick="toggleMobileMenu()"
+        >
+          <i data-lucide="menu"></i>
+        </button>
       </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay">
+      <button class="mobile-menu-close-btn" onclick="toggleMobileMenu()">
+        &times;
+      </button>
+      <a href="#about" onclick="toggleMobileMenu()">Tentang Saya</a>
+      <a href="#skills" onclick="toggleMobileMenu()">Keahlian</a>
+      <a href="#services" onclick="toggleMobileMenu()">Layanan</a>
+      <a href="#portfolio" onclick="toggleMobileMenu()">Portofolio</a>
+      <a href="#testimonials" onclick="toggleMobileMenu()">Testimoni</a>
+      <a href="#contact" onclick="toggleMobileMenu()">Kontak</a>
+      <a
+        href="#"
+        onclick="openChatbotModal(); toggleMobileMenu(); return false;"
+        >Chat ke AI</a
+      >
+    </div>
 
     <!-- Hero Section -->
     <header class="py-20 text-center relative overflow-hidden">
@@ -308,7 +436,7 @@
         <div class="md:w-1/3 flex justify-center">
           <img
             id="profile-img"
-            src="IMG_6544.jpg"
+            src="./assets/img/foto_ade.jpg"
             alt="Foto Profil Ade Syofyan"
             class="rounded-full w-64 h-64 object-cover shadow-lg border-4 border-accent"
             onerror="this.onerror=null;this.src='https://placehold.co/300x300/4a5568/e2e8f0?text=AS';"
@@ -452,6 +580,105 @@
       </div>
     </section>
 
+    <!-- Services Section (New) -->
+    <section
+      id="services"
+      class="py-20 bg-card shadow-lg rounded-xl mx-4 my-8 md:mx-auto container"
+    >
+      <div class="container text-center">
+        <h2 class="text-4xl font-bold mb-10 text-white">Layanan Kami</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Service 1: Custom Mobile App Development -->
+          <div
+            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+          >
+            <p class="text-accent text-5xl mb-4 flex justify-center">
+              <i data-lucide="smartphone-charging"></i>
+            </p>
+            <h3 class="text-2xl font-bold text-white mb-2">
+              Pengembangan Aplikasi Mobile Kustom
+            </h3>
+            <p class="text-gray-400 mb-4">
+              Membangun aplikasi Android & iOS yang performa tinggi dan intuitif
+              menggunakan Flutter & Kotlin.
+            </p>
+            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+              <li>UI/UX Responsif</li>
+              <li>Integrasi API</li>
+              <li>Offline Capabilities</li>
+            </ul>
+          </div>
+          <!-- Service 2: Web Application & ERP Development -->
+          <div
+            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+          >
+            <p class="text-accent text-5xl mb-4 flex justify-center">
+              <i data-lucide="layout-dashboard"></i>
+            </p>
+            <h3 class="text-2xl font-bold text-white mb-2">
+              Pengembangan Web & Sistem ERP
+            </h3>
+            <p class="text-gray-400 mb-4">
+              Menciptakan aplikasi web yang skalabel dan sistem ERP khusus untuk
+              efisiensi bisnis Anda.
+            </p>
+            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+              <li>Laravel Backend</li>
+              <li>Panel Admin Kustom</li>
+              <li>Manajemen Database</li>
+            </ul>
+          </div>
+          <!-- Service 3: AI Integration & Chatbot Solutions -->
+          <div
+            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+          >
+            <p class="text-accent text-5xl mb-4 flex justify-center">
+              <i data-lucide="bot"></i>
+            </p>
+            <h3 class="text-2xl font-bold text-white mb-2">
+              Integrasi AI & Solusi Chatbot
+            </h3>
+            <p class="text-gray-400 mb-4">
+              Mengotomatisasi proses bisnis dengan integrasi AI dan chatbot
+              interaktif (mis. WhatsApp AI).
+            </p>
+            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+              <li>AI Data Processing</li>
+              <li>Chatbot Otomatisasi</li>
+              <li>Integrasi API AI</li>
+            </ul>
+          </div>
+          <!-- Service 4: Real-time System Development -->
+          <div
+            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+          >
+            <p class="text-accent text-5xl mb-4 flex justify-center">
+              <i data-lucide="server"></i>
+            </p>
+            <h3 class="text-2xl font-bold text-white mb-2">
+              Pengembangan Sistem Real-time
+            </h3>
+            <p class="text-gray-400 mb-4">
+              Membangun aplikasi dengan kemampuan pemrosesan data dan interaksi
+              secara real-time.
+            </p>
+            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+              <li>WebSockets</li>
+              <li>Streaming Data</li>
+              <li>Push Notifications</li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-gray-400 text-xl mt-12">
+          Punya kebutuhan spesifik?
+          <span class="text-accent font-semibold"
+            >Saya siap membantu mewujudkannya!</span
+          >
+          <br />Hubungi saya untuk diskusi lebih lanjut tentang proyek Anda.
+        </p>
+      </div>
+    </section>
+
     <!-- Portfolio Section -->
     <section
       id="portfolio"
@@ -532,6 +759,60 @@
           <br />Silakan lengkapi detail proyek lainnya agar saya bisa
           menambahkannya di sini!
         </p>
+      </div>
+    </section>
+
+    <!-- Testimonials Section (New) -->
+    <section id="testimonials" class="py-20">
+      <div class="container text-center">
+        <h2 class="text-4xl font-bold mb-10 text-white">Apa Kata Klien Saya</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Testimonial 1 -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <p class="text-gray-300 italic mb-4">
+              "Ade adalah seorang developer yang sangat berdedikasi dan memiliki
+              kemampuan pemecahan masalah yang luar biasa. Proyek kami selesai
+              tepat waktu dengan kualitas yang melebihi ekspektasi!"
+            </p>
+            <p class="font-semibold text-white">
+              - John Doe, CEO Tech Solutions
+            </p>
+            <p class="text-gray-400 text-sm">Jakarta</p>
+          </div>
+          <!-- Testimonial 2 -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <p class="text-gray-300 italic mb-4">
+              "Integrasi AI yang dikembangkan Ade sangat membantu operasional
+              kami, terutama chatbot WhatsApp-nya. Sangat merekomendasikan
+              jasanya!"
+            </p>
+            <p class="font-semibold text-white">
+              - Jane Smith, Marketing Manager Innovate Corp
+            </p>
+            <p class="text-gray-400 text-sm">Surabaya</p>
+          </div>
+          <!-- Add more testimonials as needed -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <p class="text-gray-300 italic mb-4">
+              "Kerja sama yang lancar dan hasil yang memuaskan. Ade selalu
+              responsif terhadap masukan dan memberikan solusi terbaik."
+            </p>
+            <p class="font-semibold text-white">
+              - Budi Santoso, Project Lead Global Auto
+            </p>
+            <p class="text-gray-400 text-sm">Bandung</p>
+          </div>
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <p class="text-gray-300 italic mb-4">
+              "Aplikasi mobile yang dibuat Ade sangat user-friendly dan stabil.
+              Peningkatan penjualan kami signifikan setelah peluncuran."
+            </p>
+            <p class="font-semibold text-white">
+              - Siti Aminah, Owner Property Pro
+            </p>
+            <p class="text-gray-400 text-sm">Padang</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -670,6 +951,11 @@
       </div>
     </div>
 
+    <!-- Scroll to Top Button -->
+    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Gulir ke atas">
+      <i data-lucide="arrow-up"></i>
+    </button>
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -726,6 +1012,11 @@
         document.addEventListener("DOMContentLoaded", async () => {
           // Inisialisasi ikon Lucide
           lucide.createIcons();
+          // Inisialisasi mobile menu toggle button display
+          const mobileNavToggle = document.querySelector(".mobile-nav-toggle");
+          if (window.innerWidth <= 768) {
+            mobileNavToggle.style.display = "block";
+          }
         });
 
         // Fungsionalitas Modal untuk Detail Proyek
@@ -1034,6 +1325,33 @@
           resizeCanvas();
           init(); // Inisialisasi ulang partikel setelah resize untuk penempatan yang benar
         });
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById("mobileMenu");
+        window.toggleMobileMenu = function () {
+          mobileMenu.classList.toggle("open");
+        };
+
+        // Scroll to Top functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        window.onscroll = function () {
+          if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+          ) {
+            scrollToTopBtn.style.display = "block";
+          } else {
+            scrollToTopBtn.style.display = "none";
+          }
+        };
+
+        window.scrollToTop = function () {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        };
       })();
     </script>
   </body>
