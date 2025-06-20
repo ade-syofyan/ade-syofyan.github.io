@@ -307,7 +307,7 @@
       }
       .mobile-menu-overlay a {
         color: #e2e8f0;
-        font-size: 1.8rem;
+        font-size: 0.8rem;
         padding: 1rem 0;
         width: 80%;
         text-align: center;
@@ -387,6 +387,46 @@
         color: #63b3ed; /* Warna teks aksen untuk mobile menu */
         font-weight: 600; /* Atau gaya lain yang diinginkan */
       }
+
+      /* Animasi untuk Workflow Section */
+      .workflow-step {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .workflow-step.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Tambahkan delay animasi untuk setiap step agar muncul berurutan */
+      .workflow-step:nth-child(1).animate {
+        transition-delay: 0.1s;
+      }
+      .workflow-step:nth-child(2).animate {
+        transition-delay: 0.2s;
+      }
+      .workflow-step:nth-child(3).animate {
+        transition-delay: 0.3s;
+      }
+      .workflow-step:nth-child(4).animate {
+        transition-delay: 0.4s;
+      }
+
+      /* Animasi umum untuk section saat di-scroll */
+      .fade-in-on-scroll {
+        opacity: 0;
+        transform: translateY(50px); /* Mulai sedikit lebih bawah */
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      .fade-in-on-scroll.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+
     </style>
   </head>
   <body class="leading-relaxed">
@@ -412,6 +452,11 @@
             href="#services"
             class="text-gray-300 hover:text-white transition duration-300"
             >Layanan</a
+          >
+          <a
+            href="#workflow"
+            class="text-gray-300 hover:text-white transition duration-300"
+            >Proses Kerja</a
           >
           <a
             href="#portfolio"
@@ -462,6 +507,7 @@
       <a href="#about" onclick="closeMobileMenu()">Tentang Saya</a>
       <a href="#skills" onclick="closeMobileMenu()">Keahlian</a>
       <a href="#services" onclick="closeMobileMenu()">Layanan</a>
+      <a href="#workflow" onclick="closeMobileMenu()">Proses Kerja</a>
       <a href="#portfolio" onclick="closeMobileMenu()">Portofolio</a>
       <a href="#testimonials" onclick="closeMobileMenu()">Testimoni</a>
       <a href="#contact" onclick="closeMobileMenu()">Kontak</a>
@@ -498,7 +544,7 @@
     <!-- About Me Section -->
     <section
       id="about"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
     >
       <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
         <div class="md:w-1/3 flex justify-center">
@@ -548,7 +594,7 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20">
+    <section id="skills" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Keahlian Saya</h2>
         <!-- Updated grid classes for better responsiveness on small screens -->
@@ -652,10 +698,10 @@
     <!-- Services Section (New) -->
     <section
       id="services"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
     >
       <div class="text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Layanan Kami</h2>
+        <h2 class="text-4xl font-bold mb-10 text-white">Layanan Saya</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Service 1: Custom Mobile App Development -->
           <div
@@ -748,10 +794,83 @@
       </div>
     </section>
 
+    <!-- Workflow Section -->
+    <section id="workflow" class="py-20 fade-in-on-scroll">
+      <div class="container text-center">
+        <h2 class="text-4xl font-bold mb-16 text-white">
+          Bagaimana Saya Bekerja
+        </h2>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="workflowSteps"
+        >
+          <!-- Step 1: Konsultasi & Perencanaan -->
+          <div class="flex flex-col items-center workflow-step">
+            <div
+              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+            >
+              1
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">
+              Konsultasi & Perencanaan
+            </h3>
+            <p class="text-gray-400 text-sm">
+              Memahami kebutuhan Anda, menentukan lingkup proyek, dan menyusun
+              rencana kerja yang detail.
+            </p>
+          </div>
+          <!-- Step 2: Desain & Prototyping -->
+          <div class="flex flex-col items-center workflow-step">
+            <div
+              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+            >
+              2
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">
+              Desain & Prototyping
+            </h3>
+            <p class="text-gray-400 text-sm">
+              Merancang antarmuka pengguna (UI/UX) yang intuitif dan membuat
+              prototipe untuk validasi awal.
+            </p>
+          </div>
+          <!-- Step 3: Pengembangan & Pengujian -->
+          <div class="flex flex-col items-center workflow-step">
+            <div
+              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+            >
+              3
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">
+              Pengembangan & Pengujian
+            </h3>
+            <p class="text-gray-400 text-sm">
+              Implementasi kode, integrasi fitur, dan pengujian menyeluruh
+              untuk memastikan kualitas dan fungsionalitas.
+            </p>
+          </div>
+          <!-- Step 4: Deployment & Dukungan -->
+          <div class="flex flex-col items-center workflow-step">
+            <div
+              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+            >
+              4
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">
+              Deployment & Dukungan
+            </h3>
+            <p class="text-gray-400 text-sm">
+              Peluncuran aplikasi ke server atau app store, serta menyediakan
+              dukungan pasca-peluncuran.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Portfolio Section -->
     <section
       id="portfolio"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
     >
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Portofolio Pilihan</h2>
@@ -832,7 +951,7 @@
     </section>
 
     <!-- Testimonials Section (New) -->
-    <section id="testimonials" class="py-20">
+    <section id="testimonials" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Apa Kata Klien Saya</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -886,7 +1005,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20">
+    <section id="contact" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Hubungi Saya</h2>
         <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
@@ -1127,6 +1246,51 @@
           // Inisialisasi ikon Lucide
           lucide.createIcons();
           // Inisialisasi mobile menu toggle button display
+          
+          // --- Animasi untuk Section saat di-scroll (Workflow dan lainnya) ---
+          const workflowSteps = document.querySelectorAll('.workflow-step');
+          const fadeInSections = document.querySelectorAll('.fade-in-on-scroll');
+          if (workflowSteps.length > 0) {
+            const observerOptions = {
+              root: null, // relatif terhadap viewport
+              rootMargin: '0px',
+              threshold: 0.2 // picu saat 20% elemen terlihat
+            };
+
+            const observerCallback = (entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('animate');
+                  observer.unobserve(entry.target); // Hentikan observasi setelah animasi dipicu
+                }
+              });
+            };
+
+            const workflowObserver = new IntersectionObserver(observerCallback, observerOptions);
+            workflowSteps.forEach(step => {
+              workflowObserver.observe(step);
+            });
+          }
+
+          if (fadeInSections.length > 0) {
+            const sectionObserverOptions = {
+              root: null,
+              rootMargin: '0px',
+              threshold: 0.15 // Picu sedikit lebih awal untuk section yang lebih besar
+            };
+            const sectionObserverCallback = (entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('animate');
+                  observer.unobserve(entry.target);
+                }
+              });
+            };
+            const sectionObserver = new IntersectionObserver(sectionObserverCallback, sectionObserverOptions);
+            fadeInSections.forEach(section => {
+              sectionObserver.observe(section);
+            });
+          }
           // mobileNavToggle display is now controlled by CSS media queries
         });
 
@@ -1213,6 +1377,7 @@
                 Nama: Ade Syofyan
                 Jabatan: Programmer Senior
                 Pengalaman: Lebih dari 7 tahun dalam pengembangan aplikasi web, mobile, dan ERP.
+                Proses Kerja: Konsultasi & Perencanaan, Desain & Prototyping, Pengembangan & Pengujian, Deployment & Dukungan.
                 Spesialisasi: Membangun solusi digital inovatif yang efisien dan berdampak positif. Ahli dalam integrasi AI (AI akuntan untuk input jurnal otomatis, chatbot WhatsApp AI untuk tim sales/CS).
                 Tech Stack: Laravel, Flutter, Firebase, Kotlin, PHP, JavaScript, Sistem Real-time.
                 Bidang Keahlian: Mobile Development, Web Development, AI Integration, ERP Systems, Firebase, Sistem Real-time, Problem Solving, Cloud Services.
@@ -1220,6 +1385,13 @@
                 Nomor WhatsApp: 082284955080
                 CV: https://drive.google.com/file/d/1ggCr03nfsIvysd_dOK1nnI6OtwXrMa_1/view?usp=sharing
             `;
+        
+        // Opsi cepat untuk chatbot
+        const quickChatOptions = [
+            "Ceritakan tentang pengalaman Flutter Anda.",
+            "Proyek AI apa saja yang pernah dikerjakan?",
+            "Bagaimana proses kerja Anda?"
+        ];
 
         // Fungsi untuk mengirim pesan ke LLM
         window.sendChatMessage = async function () {
@@ -1333,6 +1505,28 @@
           }
         };
 
+        // Fungsi untuk menambahkan opsi cepat ke chat display
+        function addQuickOptions() {
+            const quickOptionsDiv = document.createElement("div");
+            quickOptionsDiv.className = "flex flex-wrap gap-2 mt-2 mb-2 justify-start";
+            quickChatOptions.forEach(optionText => {
+                const button = document.createElement("button");
+                button.className = "bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm py-1 px-3 rounded-full transition-colors";
+                button.textContent = optionText;
+                button.onclick = () => {
+                    chatInput.value = optionText;
+                    sendChatMessage();
+                    // Hapus opsi cepat setelah salah satu diklik
+                    if (quickOptionsDiv.parentNode) {
+                        quickOptionsDiv.parentNode.removeChild(quickOptionsDiv);
+                    }
+                };
+                quickOptionsDiv.appendChild(button);
+            });
+            chatDisplay.appendChild(quickOptionsDiv);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
         // Event listener untuk tombol Enter di input chat
         chatInput.addEventListener("keypress", function (event) {
           if (event.key === "Enter") {
@@ -1341,6 +1535,27 @@
           }
         });
 
+        // Modifikasi openChatbotModal untuk memuat histori dan menampilkan opsi cepat
+        window.openChatbotModal = function () {
+          chatbotModal.classList.add("open");
+          chatInput.focus(); // Fokuskan input saat modal terbuka
+          loadChatHistory(); // Muat histori chat
+          if (chatDisplay.children.length <= 1) { // Hanya tampilkan jika belum ada interaksi signifikan
+            addQuickOptions();
+          }
+        };
+
+        // Modifikasi closeChatbotModal untuk menyimpan histori
+        window.closeChatbotModal = function () {
+          saveChatHistory(); // Simpan histori chat
+          chatbotModal.classList.remove("open");
+          // Tidak perlu reset chat display di sini jika ingin histori tetap ada saat dibuka kembali
+          // chatDisplay.innerHTML = `
+          //     <div class="flex justify-start mb-2">
+          //         <div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div>
+          //     </div>
+          // `;
+        };
         // --- Logika Canvas untuk Efek Latar Belakang "Plexus" ---
         const canvas = document.getElementById("heroCanvas");
         const ctx = canvas.getContext("2d");
@@ -1472,7 +1687,12 @@
         // Scroll to Top functionality
         const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
+        const profileImg = document.getElementById('profile-img'); // Dapatkan elemen gambar profil
         window.onscroll = function () {
+          // Parallax logic for Hero Canvas
+          const scrollY = window.scrollY;
+          const parallaxSpeed = 0.4; // Adjust this value (0 to 1) for desired effect
+          heroCanvas.style.transform = 'translateY(' + scrollY * parallaxSpeed + 'px)';
           if (
             document.body.scrollTop > 20 ||
             document.documentElement.scrollTop > 20
@@ -1481,8 +1701,84 @@
           } else {
             scrollToTopBtn.style.display = "none";
           }
-          highlightNavLinkOnScroll(); // Panggil fungsi highlight di setiap scroll
         };
+
+        // Modifikasi window.onscroll untuk menambahkan efek parallax pada gambar profil
+        const aboutSection = document.getElementById('about'); // Dapatkan section About Me
+        window.onscroll = function () {
+            // Parallax logic for Hero Canvas
+            const scrollY = window.scrollY;
+            const parallaxSpeedCanvas = 0.4; // Kecepatan parallax untuk kanvas
+            heroCanvas.style.transform = 'translateY(' + scrollY * parallaxSpeedCanvas + 'px)';
+
+            // Parallax logic for Profile Image (within About Me section)
+            if (profileImg && aboutSection) {
+                const sectionTop = aboutSection.offsetTop;
+                const sectionHeight = aboutSection.offsetHeight;
+                const scrollRelativeToSection = scrollY - sectionTop;
+                const parallaxSpeedImg = 0.1; // Kecepatan parallax untuk gambar profil (nilai kecil untuk efek ringan)
+
+                // Terapkan transformasi hanya saat section About Me terlihat atau dekat
+                // Ini mencegah gambar bergerak saat section masih jauh di atas atau di bawah
+                if (scrollY + window.innerHeight > sectionTop && scrollY < sectionTop + sectionHeight) {
+                     // Hitung pergeseran berdasarkan scroll relatif
+                     // Kita bisa menggeser gambar ke atas saat scroll ke bawah
+                    const translateY = scrollRelativeToSection * parallaxSpeedImg;
+                    profileImg.style.transform = 'translateY(' + translateY + 'px)';
+                } else {
+                    // Reset transformasi saat section tidak terlihat
+                     profileImg.style.transform = 'translateY(0px)';
+                }
+            }
+
+            // Scroll to Top Button logic
+            if (
+                document.body.scrollTop > 20 ||
+                document.documentElement.scrollTop > 20
+            ) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+
+            // Highlight Nav Link logic (panggil fungsi yang sudah ada)
+            highlightNavLinkOnScroll();
+        };
+
+        // Fungsi untuk menyimpan dan memuat histori chat
+        function saveChatHistory() {
+            const messages = [];
+            chatDisplay.querySelectorAll('.chat-message').forEach(msgElement => {
+                messages.push({
+                    text: msgElement.textContent,
+                    isUser: msgElement.parentElement.classList.contains('justify-end')
+                });
+            });
+            localStorage.setItem('chatbotHistory', JSON.stringify(messages));
+        }
+
+        function loadChatHistory() {
+            const savedHistory = localStorage.getItem('chatbotHistory');
+            chatDisplay.innerHTML = ''; // Bersihkan display dulu
+            if (savedHistory) {
+                const messages = JSON.parse(savedHistory);
+                if (messages.length === 0 || (messages.length === 1 && !messages[0].isUser)) {
+                     // Jika histori kosong atau hanya ada pesan default AI, tampilkan pesan default
+                    chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div></div>`;
+                } else {
+                    messages.forEach(msg => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.className = `flex ${msg.isUser ? 'justify-end' : 'justify-start'} mb-2`;
+                        messageDiv.innerHTML = `<div class="${msg.isUser ? 'bg-blue-600' : 'bg-gray-800'} text-white p-3 rounded-lg max-w-[80%] chat-message">${msg.text}</div>`;
+                        chatDisplay.appendChild(messageDiv);
+                    });
+                }
+            } else {
+                 // Jika tidak ada histori sama sekali, tampilkan pesan default
+                chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div></div>`;
+            }
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
 
         window.scrollToTop = function () {
           window.scrollTo({
@@ -1596,7 +1892,6 @@
 
         // Panggil fungsi saat halaman dimuat dan setiap kali di-scroll
         window.addEventListener("load", highlightNavLinkOnScroll);
-        // Event listener untuk scroll sudah ada di window.onscroll
         // window.addEventListener("scroll", highlightNavLinkOnScroll); // Dihapus karena sudah digabung ke window.onscroll
       })();
     </script>
