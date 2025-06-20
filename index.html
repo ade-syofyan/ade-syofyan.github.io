@@ -1399,11 +1399,27 @@
             `;
         
         // Opsi cepat untuk chatbot
-        const quickChatOptions = [
+        const allQuickChatOptions = [
             "Ceritakan tentang pengalaman Flutter Anda.",
             "Proyek AI apa saja yang pernah dikerjakan?",
-            "Bagaimana proses kerja Anda?"
+            "Bagaimana proses kerja Anda?",
+            "Teknologi apa yang paling Anda kuasai?",
+            "Bisakah Anda jelaskan lebih lanjut tentang integrasi AI akuntan?",
+            "Apa saja layanan yang Anda tawarkan?",
+            "Proyek web apa yang paling menantang?",
+            "Bagaimana Anda memastikan kualitas kode?",
+            "Apakah Anda tersedia untuk proyek freelance?",
+            "Berapa lama biasanya Anda mengerjakan proyek mobile?"
         ];
+
+        // Fungsi untuk mengacak array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         // Fungsi untuk mengirim pesan ke LLM
         window.sendChatMessage = async function () {
@@ -1542,9 +1558,13 @@
         
         // Fungsi untuk menambahkan opsi cepat ke chat display
         function addQuickOptions() {
+            // Ambil 3 opsi acak dari allQuickChatOptions
+            const shuffledOptions = shuffleArray([...allQuickChatOptions]);
+            const selectedOptions = shuffledOptions.slice(0, 3); // Ambil 3 pertanyaan pertama setelah diacak
+
             const quickOptionsDiv = document.createElement("div");
             quickOptionsDiv.className = "flex flex-wrap gap-2 mt-2 mb-2 justify-start";
-            quickChatOptions.forEach(optionText => {
+            selectedOptions.forEach(optionText => {
                 const button = document.createElement("button");
                 button.className = "bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm py-1 px-3 rounded-full transition-colors";
                 button.textContent = optionText;
