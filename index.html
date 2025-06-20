@@ -165,7 +165,7 @@
         background-color: #2d3748;
         padding: 2rem;
         border-radius: 1rem;
-        max-width: 90%; /* Lebar maksimal diperbesar untuk tampilan lebih baik */
+        max-width: 90%; /* Lebar maksimal */
         width: 700px; /* Lebar spesifik untuk desktop */
         max-height: 90%;
         overflow-y: auto;
@@ -205,43 +205,45 @@
 
       /* Gaya spesifik Chatbot */
       .chatbot-content {
-        background-color: #2d3748;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        max-width: 90%;
-        width: 500px;
-        max-height: 80%;
-        overflow: hidden; /* Sembunyikan overflow untuk memastikan tampilan chat internal menangani scroll */
-        display: flex;
-        flex-direction: column;
-        position: relative;
+        background-color: #2d3748; /* Warna latar belakang konten chatbot */
+        padding: 1.5rem; /* Padding di dalam konten chatbot */
+        border-radius: 1rem; /* Sudut membulat untuk konten chatbot */
+        max-width: 90%; /* Lebar maksimal 90% dari viewport */
+        width: 100%; /* Gunakan lebar penuh dari parent (modal-overlay yang sudah di tengah) */
+        max-height: 80%; /* Tinggi maksimal 80% dari viewport */
+        overflow: hidden; /* Sembunyikan overflow, chat-display akan menangani scroll internal */
+        display: flex; /* Gunakan flexbox untuk layout internal */
+        flex-direction: column; /* Susun elemen anak secara vertikal */
+        position: relative; /* Untuk positioning tombol close */
       }
       .chat-display {
-        flex-grow: 1;
-        background-color: #1a202c;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        overflow-y: auto;
-        margin-bottom: 1rem;
-        display: flex;
-        flex-direction: column;
+        flex-grow: 1; /* Biarkan area display chat mengambil sisa ruang vertikal */
+        background-color: #1a202c; /* Warna latar belakang area display chat */
+        border-radius: 0.5rem; /* Sudut membulat untuk display chat */
+        padding: 1rem; /* Padding di dalam display chat */
+        overflow-y: auto; /* Aktifkan scroll vertikal jika konten melebihi area */
+        margin-bottom: 1rem; /* Jarak bawah sebelum area input */
+        display: flex; /* Gunakan flexbox untuk pesan */
+        flex-direction: column; /* Susun pesan secara vertikal */
       }
       /* Gaya untuk pesan chat agar teks membungkus */
       .chat-message {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        word-wrap: break-word; /* Bungkus kata yang panjang */
+        overflow-wrap: break-word; /* Alternatif untuk word-wrap */
       }
       .chat-input-area {
-        display: flex;
-        gap: 0.5rem;
+        display: flex; /* Gunakan flexbox untuk input dan tombol */
+        flex-direction: column; /* Default: susun vertikal untuk layar kecil */
+        gap: 0.5rem; /* Jarak antara input dan tombol saat vertikal */
       }
       .chat-input-area input {
-        flex-grow: 1;
         background-color: #4a5568;
         border: 1px solid #63b3ed;
         border-radius: 0.5rem;
         padding: 0.75rem 1rem;
         color: #e2e8f0;
+        width: 100%; /* Lebar penuh saat dalam mode kolom */
+        box-sizing: border-box; /* Padding dan border termasuk dalam width */
       }
       .chat-input-area button {
         background-color: #63b3ed;
@@ -249,6 +251,9 @@
         padding: 0.75rem 1rem;
         border-radius: 0.5rem;
         transition: background-color 0.3s ease;
+        width: 100%; /* Lebar penuh saat dalam mode kolom */
+        box-sizing: border-box; /* Padding dan border termasuk dalam width */
+        white-space: nowrap; /* Cegah teks tombol terpotong ke baris baru */
       }
       .chat-input-area button:hover {
         background-color: #4299e1;
@@ -256,6 +261,21 @@
 
       /* Mobile Navigation - Awal perbaikan */
       /* Sembunyikan desktop nav dan tampilkan mobile toggle secara default untuk mobile-first */
+      
+      /* Media query untuk chat input area pada layar yang lebih lebar */
+      @media (min-width: 380px) { /* Anda bisa menyesuaikan breakpoint ini */
+        .chat-input-area {
+          flex-direction: row; /* Kembali ke layout horizontal */
+        }
+        .chat-input-area input {
+          flex-grow: 1;    /* Biarkan input mengambil sisa ruang */
+          width: auto;     /* Reset lebar dari mode kolom */
+        }
+        .chat-input-area button {
+          width: auto;     /* Lebar tombol berdasarkan konten & padding */
+          flex-shrink: 0;  /* Cegah tombol menyusut */
+        }
+      }
       /* .desktop-nav { */
         /* display: none; /* Now handled by Tailwind 'hidden md:flex' */
       /* } */
@@ -1003,7 +1023,6 @@
             type="text"
             id="chatInput"
             placeholder="Ketik pertanyaan Anda..."
-            class="flex-grow"
           />
           <button onclick="sendChatMessage()">Kirim</button>
         </div>
