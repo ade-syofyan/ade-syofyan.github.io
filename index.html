@@ -16,7 +16,7 @@
     <meta name="author" content="Ade Syofyan" />
     <link rel="canonical" href="https://ade-syofyan.github.io/" />
 
-    <!-- Open Graph / Facebook / LinkedIn -->
+    <!-- Open Graph / Facebook / LinkedIn (untuk Rich Snippets di media sosial) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ade-syofyan.github.io/" />
     <meta
@@ -31,9 +31,11 @@
       property="og:image"
       content="https://placehold.co/1200x630/4a5568/e2e8f0?text=Ade+Syofyan+Portfolio"
     />
-    <!-- Ganti dengan URL gambar pratinjau yang menarik -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="id_ID" />
 
-    <!-- Twitter Card -->
+    <!-- Twitter Card (untuk Rich Snippets di Twitter) -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://ade-syofyan.github.io/" />
     <meta
@@ -48,7 +50,20 @@
       property="twitter:image"
       content="https://placehold.co/1200x675/4a5568/e2e8f0?text=Ade+Syofyan+Portfolio"
     />
-    <!-- Ganti dengan URL gambar pratinjau yang menarik -->
+    <meta property="twitter:image:width" content="1200" />
+    <meta property="twitter:image:height" content="675" />
+    <meta name="twitter:creator" content="@yourtwitterhandle" />
+    <!-- Ganti dengan handle Twitter Anda jika ada -->
+
+    <!-- Meta Tag Tambahan untuk Kontrol Crawler dan Caching -->
+    <meta name="robots" content="index, follow" />
+    <!-- Menginstruksikan crawler untuk mengindeks dan mengikuti tautan -->
+    <meta name="googlebot" content="index, follow" />
+    <!-- Spesifik untuk Google bot -->
+    <meta name="revisit-after" content="7 days" />
+    <!-- Menginstruksikan bot untuk mengunjungi kembali setelah 7 hari -->
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
 
     <link
       rel="icon"
@@ -325,6 +340,18 @@
       #scrollToTopBtn:hover {
         background-color: #4299e1; /* Darker background on hover */
         opacity: 1;
+      }
+
+      /* Gaya untuk link navigasi aktif */
+      .desktop-nav a.active {
+        color: #ffffff; /* Warna teks aktif */
+        border-bottom: 2px solid #63b3ed; /* Garis bawah biru aksen */
+        padding-bottom: 4px; /* Sedikit padding agar garis tidak terlalu dekat teks */
+      }
+
+      .mobile-menu-overlay a.active {
+        color: #63b3ed; /* Warna teks aksen untuk mobile menu */
+        font-weight: 600; /* Atau gaya lain yang diinginkan */
       }
     </style>
   </head>
@@ -961,18 +988,54 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Ade Syofyan",
-        "url": "./assets/img/foto_ade.jpg",
-        "image": "data:image/png;base64, [GANTI_DENGAN_BASE64_FOTO_PROFIL_ANDA]",
+        "url": "https://ade-syofyan.github.io/",
+        "image": "https://placehold.co/300x300/4a5568/e2e8f0?text=AS", <!-- Ganti dengan URL foto profil asli -->
         "sameAs": [
           "https://www.linkedin.com/in/ade-syofyan/",
-          "mailto:ade.syofyan@gmail.com"
+          "mailto:ade.syofyan@gmail.com",
+          "https://wa.me/6282284955080" <!-- Menambahkan WhatsApp ke sameAs -->
         ],
         "jobTitle": "Mobile & Web Developer Senior",
         "worksFor": {
           "@type": "Organization",
           "name": "Freelance / Independent Contractor"
         },
-        "description": "Programmer senior dengan pengalaman lebih dari 7 tahun dalam pengembangan aplikasi web, mobile, dan ERP. Ahli dalam membangun solusi digital untuk properti, otomotif, layanan publik, serta integrasi AI untuk efisiensi bisnis. Berpengalaman membuat AI akuntan untuk input jurnal otomatis, serta chatbot WhatsApp AI untuk mendukung tim sales dan customer service. Mahir dalam stack Laravel, Flutter, Firebase, dan integrasi sistem real-time."
+        "description": "Programmer senior dengan pengalaman lebih dari 7 tahun dalam pengembangan aplikasi web, mobile, dan ERP. Ahli dalam membangun solusi digital untuk properti, otomotif, layanan publik, serta integrasi AI untuk efisiensi bisnis. Berpengalaman membuat AI akuntan untuk input jurnal otomatis, serta chatbot WhatsApp AI untuk mendukung tim sales dan customer service. Mahir dalam stack Laravel, Flutter, Firebase, dan integrasi sistem real-time.",
+        "knowsAbout": [
+          "Mobile Development",
+          "Web Development",
+          "AI Integration",
+          "ERP Systems",
+          "Firebase",
+          "Real-time Systems",
+          "Problem Solving",
+          "Cloud Services",
+          "Flutter",
+          "Kotlin",
+          "Laravel",
+          "PHP",
+          "JavaScript"
+        ],
+        "alumniOf": {
+          "@type": "EducationalOrganization",
+          "name": "Nama Universitas/Institusi Anda" <!-- Ganti dengan nama universitas/institusi Anda -->
+        },
+        "hasOccupation": {
+          "@type": "Occupation",
+          "name": "Software Developer",
+          "description": "Mengembangkan dan mengelola aplikasi web dan mobile, serta sistem ERP, dengan fokus pada solusi inovatif dan efisiensi bisnis."
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Padang",
+          "addressRegion": "Sumatera Barat",
+          "addressCountry": "ID"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+6282284955080",
+          "contactType": "customer service"
+        }
       }
     </script>
 
@@ -1156,10 +1219,11 @@
             });
 
             const payload = { contents: chatHistory };
-            const encodedApiKey = "QUl6YVN5QVlvcW1HeFpUOUZ3RzJvYkMzLXhweFNNNm9yVnhpMFdr";
-           
+            const encodedApiKey =
+              "QUl6YVN5QVlvcW1HeFpUOUZ3RzJvYkMzLXhweFNNNm9yVnhpMFdr";
+
             function decodeBase64(encodedString) {
-              return atob(encodedString); 
+              return atob(encodedString);
             }
 
             const apiKey = decodeBase64(encodedApiKey);
@@ -1350,6 +1414,7 @@
           } else {
             scrollToTopBtn.style.display = "none";
           }
+          highlightNavLinkOnScroll(); // Panggil fungsi highlight di setiap scroll
         };
 
         window.scrollToTop = function () {
@@ -1358,6 +1423,77 @@
             behavior: "smooth",
           });
         };
+
+        // --- Logika highlight menu aktif saat scroll ---
+        // Dapatkan semua section yang memiliki ID yang sesuai dengan link navigasi
+        const sections = document.querySelectorAll("section[id]");
+
+        // Dapatkan semua link navigasi desktop dan mobile
+        const desktopNavLinks = document.querySelectorAll(".desktop-nav a");
+        const mobileNavLinks = document.querySelectorAll(
+          ".mobile-menu-overlay a"
+        );
+
+        function highlightNavLinkOnScroll() {
+          let currentSectionId = ""; // Untuk menyimpan ID section yang sedang aktif
+          const headerHeight = document.querySelector("nav").offsetHeight; // Tinggi navbar
+
+          sections.forEach((section) => {
+            // Dapatkan posisi scroll saat ini
+            const scrollY = window.scrollY;
+
+            // Dapatkan posisi atas dan tinggi setiap section
+            // Kurangi sedikit offset untuk akun fixed header
+            const sectionTop = section.offsetTop - headerHeight - 10; // Offset tambahan agar lebih akurat
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            // Cek apakah posisi scroll berada di dalam section saat ini
+            if (scrollY >= sectionTop && scrollY < sectionBottom) {
+              currentSectionId = section.getAttribute("id");
+            }
+          });
+
+          // Hapus kelas 'active' dari semua link navigasi terlebih dahulu
+          desktopNavLinks.forEach((link) => {
+            link.classList.remove("active");
+          });
+          mobileNavLinks.forEach((link) => {
+            link.classList.remove("active");
+          });
+
+          // Tambahkan kelas 'active' ke link yang sesuai dengan section aktif
+          if (currentSectionId) {
+            const activeDesktopLink = document.querySelector(
+              `.desktop-nav a[href="#${currentSectionId}"]`
+            );
+            if (activeDesktopLink) {
+              activeDesktopLink.classList.add("active");
+            }
+
+            const activeMobileLink = document.querySelector(
+              `.mobile-menu-overlay a[href="#${currentSectionId}"]`
+            );
+            if (activeMobileLink) {
+              activeMobileLink.classList.add("active");
+            }
+          }
+        }
+
+        // Panggil fungsi saat halaman dimuat dan setiap kali di-scroll
+        window.addEventListener("load", highlightNavLinkOnScroll);
+        // Event listener untuk scroll sudah ada di window.onscroll
+        // window.addEventListener("scroll", highlightNavLinkOnScroll); // Dihapus karena sudah digabung ke window.onscroll
+
+        // Tambahkan fungsi ini agar saat link diklik, menu mobile tertutup dan link tetap aktif
+        mobileNavLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            document.getElementById("mobileMenu").classList.remove("open");
+            // Beri sedikit delay agar scroll selesai sebelum highlight diperbarui
+            setTimeout(() => {
+              highlightNavLinkOnScroll();
+            }, 100);
+          });
+        });
       })();
     </script>
   </body>
