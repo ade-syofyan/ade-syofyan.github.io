@@ -1219,14 +1219,8 @@
             });
 
             const payload = { contents: chatHistory };
-            const encodedApiKey =
-              "QUl6YVN5QVlvcW1HeFpUOUZ3RzJvYkMzLXhweFNNNm9yVnhpMFdr";
-
-            function decodeBase64(encodedString) {
-              return atob(encodedString);
-            }
-
-            const apiKey = decodeBase64(encodedApiKey);
+            
+            const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
