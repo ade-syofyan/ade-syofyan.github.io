@@ -1482,6 +1482,54 @@
           ".mobile-menu-overlay a"
         );
 
+        // Fungsi untuk smooth scroll ke target dengan offset header
+        function smoothScrollToTarget(event) {
+            const link = event.currentTarget;
+            const targetId = link.getAttribute("href"); // e.g., "#about"
+
+            // Pastikan ini adalah tautan ke section (bukan hanya "#")
+            if (targetId && targetId.startsWith("#") && targetId.length > 1) {
+                event.preventDefault(); // Mencegah default jump
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    const headerOffset = document.querySelector('nav').offsetHeight;
+                    const elementPosition = targetElement.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Jika ini adalah tautan di menu mobile, tutup menu setelah klik
+                if (link.closest('.mobile-menu-overlay')) {
+                    closeMobileMenu();
+                }
+            }
+            // Jika targetId hanya "#" (seperti pada link Chat AI), biarkan atribut onclick-nya yang menangani
+        }
+
+        // Tambahkan event listener ke tautan navigasi desktop
+        desktopNavLinks.forEach(link => {
+            const href = link.getAttribute("href");
+            // Hanya tambahkan ke tautan yang mengarah ke section
+            if (href && href.startsWith("#") && href.length > 1) {
+                link.addEventListener("click", smoothScrollToTarget);
+            }
+        });
+
+        // Tambahkan event listener ke tautan navigasi mobile
+        mobileNavLinks.forEach(link => {
+            const href = link.getAttribute("href");
+            // Hanya tambahkan ke tautan yang mengarah ke section
+            if (href && href.startsWith("#") && href.length > 1) {
+                link.addEventListener("click", smoothScrollToTarget);
+            }
+            // Tautan "Chat ke AI" di mobile sudah ditangani oleh atribut onclick-nya
+        });
+
         function highlightNavLinkOnScroll() {
           let currentSectionId = ""; // Untuk menyimpan ID section yang sedang aktif
           const headerHeight = document.querySelector("nav").offsetHeight; // Tinggi navbar
@@ -1531,13 +1579,6 @@
         window.addEventListener("load", highlightNavLinkOnScroll);
         // Event listener untuk scroll sudah ada di window.onscroll
         // window.addEventListener("scroll", highlightNavLinkOnScroll); // Dihapus karena sudah digabung ke window.onscroll
-
-        // Tambahkan fungsi ini agar saat link diklik, menu mobile tertutup dan link tetap aktif
-        mobileNavLinks.forEach((link) => {
-          link.addEventListener("click", () => {
-            closeMobileMenu(); // Gunakan closeMobileMenu() yang baru
-          });
-        });
       })();
     </script>
   </body>
