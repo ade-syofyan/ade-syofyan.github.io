@@ -1621,22 +1621,27 @@
 
         // Modifikasi closeChatbotModal untuk menggunakan modal konfirmasi kustom
         window.closeChatbotModal = function () {
-          showCustomConfirm(
-            "Simpan sesi chat ini?",
-            () => { // Callback jika "Simpan" diklik
-              saveChatHistory();
-              actuallyCloseChatbot();
-            },
-            () => { // Callback jika "Jangan Simpan" diklik
-              showCustomConfirm(
-                "Hapus semua histori chat yang tersimpan?",
-                () => { deleteChatHistory(); actuallyCloseChatbot(); }, // Hapus
-                () => { actuallyCloseChatbot(); }, // Jangan Hapus
-                "Hapus", "Jangan Hapus"
-              );
-            },
-            "Simpan", "Jangan Simpan"
-          );
+          const hasUserInteracted = chatDisplay.querySelector('.flex.justify-end'); // Cek apakah ada pesan dari pengguna
+
+          if (!hasUserInteracted) {
+            // Jika tidak ada interaksi pengguna (tidak ada pesan yang dikirim pengguna),
+            // tutup modal secara langsung.
+            actuallyCloseChatbot();
+          } else {
+            // Jika ada interaksi pengguna, tampilkan dialog konfirmasi.
+            showCustomConfirm(
+              "Simpan sesi chat ini?",
+              () => { // Callback jika "Simpan" diklik
+                saveChatHistory();
+                actuallyCloseChatbot();
+              },
+              () => { // Callback jika "Jangan Simpan" diklik
+                deleteChatHistory(); 
+                actuallyCloseChatbot();
+              },
+              "Simpan", "Jangan Simpan"
+            );
+          }
         };
         // --- Logika Canvas untuk Efek Latar Belakang "Plexus" ---
         const canvas = document.getElementById("heroCanvas");
