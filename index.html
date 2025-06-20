@@ -44,7 +44,7 @@
     />
     <meta
       property="twitter:description"
-      content="Portofolio resmi Ade Syofyan, seorang Mobile & Web Developer senior dengan keahlian di Flutter, Kotlin, Laravel, Firebase, ERP, dan integrasi AI. Ahli dalam membangun solusi digital inovatif dan memecahkan masalah."
+      content="Portofolio resmi Ade Syofyan, seorang Mobile & Web Developer senior dengan keahlian di Flutter, Kotlin, Laravel, Firebase, ERP, dan integrasi AI. Ahli dalam membangun solusi digital inovasi dan memecahkan masalah."
     />
     <meta
       property="twitter:image"
@@ -88,6 +88,7 @@
         background-color: #1a202c; /* Latar belakang gelap */
         color: #e2e8f0; /* Teks abu-abu terang */
         scroll-behavior: smooth;
+        overflow-x: hidden; /* Prevent horizontal scrollbar */
       }
       .container {
         max-width: 1200px;
@@ -253,68 +254,77 @@
         background-color: #4299e1;
       }
 
-      /* Mobile Navigation */
-      @media (max-width: 768px) {
-        .desktop-nav {
-          display: none;
-        }
-        .mobile-nav-toggle {
-          display: block;
-        }
-        .mobile-menu-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.9);
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          z-index: 1010; /* Lebih tinggi dari modal lain */
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .mobile-menu-overlay.open {
-          opacity: 1;
-          visibility: visible;
-        }
-        .mobile-menu-overlay a {
-          color: #e2e8f0;
-          font-size: 1.8rem;
-          padding: 1rem 0;
-          width: 80%;
-          text-align: center;
-          transition: color 0.3s ease;
-        }
-        .mobile-menu-overlay a:hover {
-          color: #63b3ed;
-        }
-        .mobile-menu-close-btn {
-          position: absolute;
-          top: 1rem;
-          right: 1rem;
-          background: none;
-          border: none;
-          font-size: 2rem;
-          color: #e2e8f0;
-          cursor: pointer;
-          z-index: 1011;
-        }
-        .mobile-menu-close-btn:hover {
-          color: #63b3ed;
-        }
+      /* Mobile Navigation - Awal perbaikan */
+      /* Sembunyikan desktop nav dan tampilkan mobile toggle secara default untuk mobile-first */
+      /* .desktop-nav { */
+        /* display: none; /* Now handled by Tailwind 'hidden md:flex' */
+      /* } */
+      /* .mobile-nav-toggle { */
+        /* display: block; /* Now handled by Tailwind 'md:hidden' (button is inline-block by default) */
+      /* } */
+
+      .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95); /* Lebih gelap untuk fokus */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1010; /* Lebih tinggi dari modal lain */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(100%); /* Geser keluar dari layar */
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
       }
-      @media (min-width: 769px) {
-        .desktop-nav {
-          display: flex;
-        }
-        .mobile-nav-toggle,
-        .mobile-menu-overlay {
-          display: none;
-        }
+      .mobile-menu-overlay.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0); /* Geser masuk */
+      }
+      .mobile-menu-overlay a {
+        color: #e2e8f0;
+        font-size: 1.8rem;
+        padding: 1rem 0;
+        width: 80%;
+        text-align: center;
+        transition: color 0.3s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis pemisah */
+      }
+      .mobile-menu-overlay a:last-child {
+        border-bottom: none; /* Hapus garis bawah terakhir */
+      }
+      .mobile-menu-overlay a:hover {
+        color: #63b3ed;
+      }
+      .mobile-menu-close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 2.5rem; /* Ukuran lebih besar */
+        color: #e2e8f0;
+        cursor: pointer;
+        z-index: 1011;
+        transition: color 0.3s ease;
+      }
+      .mobile-menu-close-btn:hover {
+        color: #63b3ed;
+      }
+
+      /* Responsif untuk Tablet dan Desktop */
+      @media (min-width: 768px) {
+        /* .desktop-nav { */
+          /* display: flex; /* Tampilkan desktop nav */ /* Now handled by Tailwind 'hidden md:flex' */
+        /* } */
+        /* .mobile-nav-toggle, */
+        /* .mobile-menu-overlay { */
+          /* display: none; /* Sembunyikan mobile toggle dan overlay */ /* Now handled by Tailwind 'md:hidden' for these elements */
+        /* } */
       }
 
       /* Scroll to Top Button */
@@ -349,6 +359,10 @@
         padding-bottom: 4px; /* Sedikit padding agar garis tidak terlalu dekat teks */
       }
 
+      /* Fix for nested CSS rules */
+      /* .container rule was incorrectly nested */
+      /* .mobile-menu-overlay a.active rule was incorrectly nested */
+
       .mobile-menu-overlay a.active {
         color: #63b3ed; /* Warna teks aksen untuk mobile menu */
         font-weight: 600; /* Atau gaya lain yang diinginkan */
@@ -362,7 +376,8 @@
         <a href="#" class="text-2xl font-bold text-white tracking-wide"
           >Ade Syofyan</a
         >
-        <div class="desktop-nav flex space-x-6">
+        <!-- Use Tailwind for responsive display: hidden on small, flex on medium and up -->
+        <div class="hidden md:flex space-x-6 desktop-nav">
           <a
             href="#about"
             class="text-gray-300 hover:text-white transition duration-300"
@@ -402,8 +417,12 @@
         </div>
         <!-- Mobile Menu Toggle Button -->
         <button
-          class="mobile-nav-toggle text-white text-3xl hidden"
+          id="mobileMenuToggleBtn"
+          class="md:hidden text-white text-3xl mobile-nav-toggle" /* Use Tailwind 'md:hidden' */
           onclick="toggleMobileMenu()"
+          aria-label="Toggle Mobile Menu"
+          aria-expanded="false" /* Initial accessibility state */
+          aria-controls="mobileMenu" /* Links button to the menu it controls */
         >
           <i data-lucide="menu"></i>
         </button>
@@ -411,19 +430,22 @@
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobileMenu" class="mobile-menu-overlay">
-      <button class="mobile-menu-close-btn" onclick="toggleMobileMenu()">
+    <!-- Added md:hidden to ensure it's hidden on medium screens and up via Tailwind -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+      <button
+        class="mobile-menu-close-btn"
+        onclick="toggleMobileMenu()"
+        aria-label="Close Mobile Menu"
+      >
         &times;
       </button>
-      <a href="#about" onclick="toggleMobileMenu()">Tentang Saya</a>
-      <a href="#skills" onclick="toggleMobileMenu()">Keahlian</a>
-      <a href="#services" onclick="toggleMobileMenu()">Layanan</a>
-      <a href="#portfolio" onclick="toggleMobileMenu()">Portofolio</a>
-      <a href="#testimonials" onclick="toggleMobileMenu()">Testimoni</a>
-      <a href="#contact" onclick="toggleMobileMenu()">Kontak</a>
-      <a
-        href="#"
-        onclick="openChatbotModal(); toggleMobileMenu(); return false;"
+      <a href="#about" onclick="closeMobileMenu()">Tentang Saya</a>
+      <a href="#skills" onclick="closeMobileMenu()">Keahlian</a>
+      <a href="#services" onclick="closeMobileMenu()">Layanan</a>
+      <a href="#portfolio" onclick="closeMobileMenu()">Portofolio</a>
+      <a href="#testimonials" onclick="closeMobileMenu()">Testimoni</a>
+      <a href="#contact" onclick="closeMobileMenu()">Kontak</a>
+      <a href="#" onclick="openChatbotModal(); closeMobileMenu(); return false;"
         >Chat ke AI</a
       >
     </div>
@@ -443,7 +465,8 @@
           keahlian memecahkan masalah. Membangun solusi digital inovatif dari
           ide hingga implementasi.
         </p>
-        <div class="space-x-4">
+        <!-- Added flex and flex-wrap for better button responsiveness -->
+        <div class="flex flex-wrap justify-center space-x-4">
           <a href="#portfolio" class="btn-primary inline-block"
             >Lihat Portofolio</a
           >
@@ -455,11 +478,9 @@
     <!-- About Me Section -->
     <section
       id="about"
-      class="py-20 bg-card shadow-lg rounded-xl mx-4 my-8 md:mx-auto container"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
     >
-      <div
-        class="container flex flex-col md:flex-row items-center gap-12 relative z-10"
-      >
+      <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
         <div class="md:w-1/3 flex justify-center">
           <img
             id="profile-img"
@@ -510,7 +531,8 @@
     <section id="skills" class="py-20">
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Keahlian Saya</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <!-- Updated grid classes for better responsiveness on small screens -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
           >
@@ -610,9 +632,9 @@
     <!-- Services Section (New) -->
     <section
       id="services"
-      class="py-20 bg-card shadow-lg rounded-xl mx-4 my-8 md:mx-auto container"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
     >
-      <div class="container text-center">
+      <div class="text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Layanan Kami</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Service 1: Custom Mobile App Development -->
@@ -709,9 +731,9 @@
     <!-- Portfolio Section -->
     <section
       id="portfolio"
-      class="py-20 bg-card shadow-lg rounded-xl mx-4 my-8 md:mx-auto container"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
     >
-      <div class="container text-center">
+      <div class="text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Portofolio Pilihan</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Kartu Proyek 1: PPDB SMAKPA Padang -->
@@ -922,7 +944,13 @@
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
       <div class="modal-content">
-        <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+        <button
+          class="modal-close-btn"
+          onclick="closeModal()"
+          aria-label="Close Project Modal"
+        >
+          &times;
+        </button>
         <h3 id="modalTitle" class="text-3xl font-bold text-white mb-4"></h3>
         <p id="modalType" class="text-gray-400 text-lg mb-2"></p>
         <p id="modalRole" class="text-gray-400 text-lg mb-4"></p>
@@ -952,7 +980,11 @@
     <!-- Modal Chatbot -->
     <div id="chatbotModal" class="modal-overlay">
       <div class="chatbot-content">
-        <button class="modal-close-btn" onclick="closeChatbotModal()">
+        <button
+          class="modal-close-btn"
+          onclick="closeChatbotModal()"
+          aria-label="Close Chatbot Modal"
+        >
           &times;
         </button>
         <h3 class="text-2xl font-bold text-white mb-4">Tanya Ade ✨</h3>
@@ -1076,10 +1108,7 @@
           // Inisialisasi ikon Lucide
           lucide.createIcons();
           // Inisialisasi mobile menu toggle button display
-          const mobileNavToggle = document.querySelector(".mobile-nav-toggle");
-          if (window.innerWidth <= 768) {
-            mobileNavToggle.style.display = "block";
-          }
+          // mobileNavToggle display is now controlled by CSS media queries
         });
 
         // Fungsionalitas Modal untuk Detail Proyek
@@ -1220,7 +1249,7 @@
 
             const payload = { contents: chatHistory };
 
-            const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk";
+            const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk"; // Pastikan API Key Anda benar
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
@@ -1392,8 +1421,33 @@
 
         // Mobile Menu Toggle
         const mobileMenu = document.getElementById("mobileMenu");
+        const mobileMenuToggleBtn = document.getElementById("mobileMenuToggleBtn"); // Get the toggle button
+
         window.toggleMobileMenu = function () {
-          mobileMenu.classList.toggle("open");
+          const isOpen = mobileMenu.classList.toggle("open");
+          if (mobileMenuToggleBtn) {
+            mobileMenuToggleBtn.setAttribute("aria-expanded", isOpen.toString()); // Update aria-expanded
+          }
+
+          // Nonaktifkan scroll body saat menu mobile terbuka
+          if (isOpen) {
+            document.body.style.overflow = "hidden";
+          } else {
+            document.body.style.overflow = "";
+          }
+        };
+
+        // Ensure closeMobileMenu also updates aria-expanded
+        window.closeMobileMenu = function () {
+          mobileMenu.classList.remove("open");
+          document.body.style.overflow = ""; // Aktifkan scroll body
+          if (mobileMenuToggleBtn) {
+            mobileMenuToggleBtn.setAttribute("aria-expanded", "false"); // Set to false when closed
+          }
+          // Beri sedikit delay agar scroll selesai sebelum highlight diperbarui
+          setTimeout(() => {
+            highlightNavLinkOnScroll();
+          }, 100);
         };
 
         // Scroll to Top functionality
@@ -1481,11 +1535,7 @@
         // Tambahkan fungsi ini agar saat link diklik, menu mobile tertutup dan link tetap aktif
         mobileNavLinks.forEach((link) => {
           link.addEventListener("click", () => {
-            document.getElementById("mobileMenu").classList.remove("open");
-            // Beri sedikit delay agar scroll selesai sebelum highlight diperbarui
-            setTimeout(() => {
-              highlightNavLinkOnScroll();
-            }, 100);
+            closeMobileMenu(); // Gunakan closeMobileMenu() yang baru
           });
         });
       })();
