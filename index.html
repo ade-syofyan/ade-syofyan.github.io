@@ -1224,6 +1224,9 @@
     <script>
       // Gunakan IIFE untuk cakupan
       (async function () {
+        // Variabel untuk menyimpan riwayat percakapan
+        let conversationHistory = [];
+
         // Data proyek (dapat diperluas nanti)
         const projects = {
           ppdb: {
@@ -1397,7 +1400,7 @@
                 Nomor WhatsApp: 082284955080
                 CV: https://drive.google.com/file/d/1soqROMMjqd4pOTvj3nr9ANXJ4qaps7QE/view?usp=sharing
             `;
-        
+
         // Opsi cepat untuk chatbot
         const allQuickChatOptions = [
             "Ceritakan tentang pengalaman Flutter Anda.",
@@ -1421,6 +1424,22 @@
             return array;
         }
 
+        // Instruksi sistem untuk memandu perilaku LLM
+        const systemInstructionText = `Anda adalah Ade Syofyan, seorang Programmer Senior.
+            Jawablah pertanyaan HANYA berdasarkan informasi profil saya yang terlampir.
+            Fokus pada keahlian pengembangan aplikasi, teknologi yang saya kuasai, dan jenis proyek yang saya kerjakan.
+
+            ATURAN KHUSUS:
+            1. Jika pertanyaan TIDAK terkait dengan jasa program, keahlian teknis, atau pengalaman saya yang disebutkan di profil, jawablah dengan sopan bahwa Anda tidak memiliki informasi tersebut atau itu di luar cakupan pengetahuan Anda sebagai asisten AI di portofolio ini. Contoh: "Maaf, saya hanya dapat memberikan informasi seputar keahlian dan proyek yang saya kerjakan. Untuk pertanyaan di luar itu, saya tidak memiliki datanya."
+            2. Jika ada pertanyaan mengenai HARGA atau TARIF jasa, atau jika pengguna menyatakan MINAT untuk PEMESANAN/KOLABORASI langsung, selalu arahkan mereka untuk menghubungi saya melalui WhatsApp. Respons harus mencakup tautan wa.me dengan pesan pre-filled yang merangkum pertanyaan/minat mereka. Format pesan pre-filled harus jelas dan merangkum minat pengguna. Contoh format: "Untuk informasi mengenai harga atau pemesanan/kolaborasi, mohon hubungi saya langsung melalui [WhatsApp](https://wa.me/6282284955080?text=Halo%20Ade%2C%20saya%20tertarik%20dengan%20[Rangkuman%20minat%20atau%20pertanyaan%20pengguna%2C%20contoh%3A%20pengembangan%20aplikasi%20mobile%20Flutter]). Saya akan dengan senang hati membantu Anda di sana!" Pastikan [Rangkuman minat atau pertanyaan pengguna] diisi dengan ringkasan pertanyaan terakhir pengguna, di-encode URL agar sesuai untuk tautan WhatsApp.
+            3. JANGAN mengarang jawaban atau memberikan informasi yang tidak ada dalam profil.
+            4. Jaga nada bicara tetap profesional dan membantu.
+
+            Informasi Profil Ade Syofyan:
+            ${adeProfileContext}
+            `;
+
+
         // Fungsi untuk mengirim pesan ke LLM
         window.sendChatMessage = async function () {
           // Dijadikan dapat diakses secara global
@@ -1433,6 +1452,9 @@
           userMessageDiv.className = "flex justify-end mb-2";
           userMessageDiv.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`;
           chatDisplay.appendChild(userMessageDiv);
+
+          // Tambahkan pesan pengguna ke riwayat percakapan
+          conversationHistory.push({ role: "user", parts: [{ text: message }] });
           chatInput.value = ""; // Kosongkan input
 
           // Tambahkan indikator loading
@@ -1443,33 +1465,15 @@
           chatDisplay.scrollTop = chatDisplay.scrollHeight; // Gulir ke bawah
 
           try {
-            let chatHistory = [];
-            // Instruksi sistem untuk memandu perilaku LLM
-            const systemInstruction = `Anda adalah Ade Syofyan, seorang Programmer Senior.
-                    Jawablah pertanyaan HANYA berdasarkan informasi profil saya yang terlampir.
-                    Fokus pada keahlian pengembangan aplikasi, teknologi yang saya kuasai, dan jenis proyek yang saya kerjakan.
-
-                    ATURAN KHUSUS:
-                    1. Jika pertanyaan TIDAK terkait dengan jasa program, keahlian teknis, atau pengalaman saya yang disebutkan di profil, jawablah dengan sopan bahwa Anda tidak memiliki informasi tersebut atau itu di luar cakupan pengetahuan Anda sebagai asisten AI di portofolio ini. Contoh: "Maaf, saya hanya dapat memberikan informasi seputar keahlian dan proyek yang saya kerjakan. Untuk pertanyaan di luar itu, saya tidak memiliki datanya."
-                    2. Jika ada pertanyaan mengenai HARGA atau TARIF jasa, atau jika pengguna menyatakan MINAT untuk PEMESANAN/KOLABORASI langsung, selalu arahkan mereka untuk menghubungi saya melalui WhatsApp. Respons harus mencakup tautan wa.me dengan pesan pre-filled yang merangkum pertanyaan/minat mereka. Format pesan pre-filled harus jelas dan merangkum minat pengguna. Contoh format: "Untuk informasi mengenai harga atau pemesanan/kolaborasi, mohon hubungi saya langsung melalui [WhatsApp](https://wa.me/6282284955080?text=Halo%20Ade%2C%20saya%20tertarik%20dengan%20[Rangkuman%20minat%20atau%20pertanyaan%20pengguna%2C%20contoh%3A%20pengembangan%20aplikasi%20mobile%20Flutter]). Saya akan dengan senang hati membantu Anda di sana!" Pastikan [Rangkuman minat atau pertanyaan pengguna] diisi dengan ringkasan pertanyaan terakhir pengguna, di-encode URL agar sesuai untuk tautan WhatsApp.
-                    3. JANGAN mengarang jawaban atau memberikan informasi yang tidak ada dalam profil.
-                    4. Jaga nada bicara tetap profesional dan membantu.
-
-                    Informasi Profil Ade Syofyan:
-                    ${adeProfileContext}
-                    `;
-
-            chatHistory.push({
-              role: "user",
-              parts: [
-                { text: systemInstruction + "\n\nPertanyaan: " + message },
-              ],
-            });
-
-            const payload = { contents: chatHistory };
+            const payload = {
+              contents: conversationHistory,
+              systemInstruction: {
+                parts: [{ text: systemInstructionText }],
+              },
+            };
 
             const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk"; // Pastikan API Key Anda benar
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
               method: "POST",
@@ -1488,7 +1492,8 @@
               result.candidates[0].content.parts &&
               result.candidates[0].content.parts.length > 0
             ) {
-              let text = result.candidates[0].content.parts[0].text;
+              const modelResponse = result.candidates[0].content;
+              let text = modelResponse.parts[0].text;
 
               // Tambahkan logika untuk memeriksa apakah AI mengarahkan ke WhatsApp
               const whatsappRegex = /\[(.*?)\]\((https:\/\/wa\.me\/.*?)\)/;
@@ -1513,6 +1518,10 @@
               aiMessageDiv.className = "flex justify-start mb-2";
               aiMessageDiv.innerHTML = `<div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">${text}</div>`;
               chatDisplay.appendChild(aiMessageDiv);
+
+              // Simpan respons AI yang sudah diproses ke riwayat
+              conversationHistory.push({ role: "model", parts: [{ text: text }] });
+
               typeMessage(aiMessageDiv.querySelector('.chat-message'), text);
             } else {
               const errorMessageDiv = document.createElement("div");
@@ -1854,18 +1863,13 @@
 
         // Fungsi untuk menyimpan dan memuat histori chat
         function saveChatHistory() {
-            const messages = [];
-            chatDisplay.querySelectorAll('.chat-message').forEach(msgElement => {
-                messages.push({
-                    text: msgElement.innerHTML, // Simpan innerHTML untuk menjaga format tautan
-                    isUser: msgElement.parentElement.classList.contains('justify-end')
-                });
-            });
-            localStorage.setItem('chatbotHistory', JSON.stringify(messages));
+            // Simpan seluruh riwayat percakapan ke localStorage
+            localStorage.setItem('chatbotHistory', JSON.stringify(conversationHistory));
         }
 
         function deleteChatHistory() {
             localStorage.removeItem('chatbotHistory');
+            conversationHistory = []; // Kosongkan riwayat di memori
             // Reset tampilan chat ke kondisi awal
             chatDisplay.innerHTML = `
                 <div class="flex justify-start mb-2">
@@ -1873,28 +1877,26 @@
                 </div>
             `;
             // Opsional: tambahkan kembali opsi cepat jika tampilan direset
-            if (typeof addQuickOptions === 'function' && chatDisplay.children.length <= 1) {
+            if (chatDisplay.children.length <= 1) {
                 addQuickOptions();
             }
-            // console.log("Chat history deleted."); // Untuk debugging
         }
 
         function loadChatHistory() {
             const savedHistory = localStorage.getItem('chatbotHistory');
             chatDisplay.innerHTML = ''; // Bersihkan display dulu
+            conversationHistory = []; // Reset dulu
             if (savedHistory) {
-                const messages = JSON.parse(savedHistory);
-                if (messages.length === 0 || (messages.length === 1 && !messages[0].isUser)) {
-                     // Jika histori kosong atau hanya ada pesan default AI, tampilkan pesan default
-                    chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div></div>`;
-                } else {
-                    messages.forEach(msg => {
-                        const messageDiv = document.createElement("div");
-                        messageDiv.className = `flex ${msg.isUser ? 'justify-end' : 'justify-start'} mb-2`;
-                        messageDiv.innerHTML = `<div class="${msg.isUser ? 'bg-blue-600' : 'bg-gray-800'} text-white p-3 rounded-lg max-w-[80%] chat-message">${msg.text}</div>`;
-                        chatDisplay.appendChild(messageDiv);
-                    });
-                }
+                conversationHistory = JSON.parse(savedHistory);
+                // Bangun kembali UI dari riwayat yang dimuat
+                conversationHistory.forEach(msg => {
+                    const isUser = msg.role === 'user';
+                    const messageDiv = document.createElement("div");
+                    messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} mb-2`;
+                    // Gunakan innerHTML untuk merender tautan jika ada
+                    messageDiv.innerHTML = `<div class="${isUser ? 'bg-blue-600' : 'bg-gray-800'} text-white p-3 rounded-lg max-w-[80%] chat-message">${msg.parts[0].text}</div>`;
+                    chatDisplay.appendChild(messageDiv);
+                });
             } else {
                  // Jika tidak ada histori sama sekali, tampilkan pesan default
                 chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div></div>`;
