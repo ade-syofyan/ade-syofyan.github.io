@@ -196,6 +196,12 @@ const achievements = {
     description: "Menampilkan info profil dengan perintah `neofetch`.",
     icon: "cpu",
   },
+  system_crasher: {
+    name: "System Crasher",
+    unlocked: false,
+    description: "Menemukan cara untuk 'merusak' portofolio.",
+    icon: "shield-alert",
+  },
 };
 
 // --- Virtual File System Data ---

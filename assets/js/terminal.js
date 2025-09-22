@@ -19,6 +19,9 @@ function initializeTerminal() {
   let historyIndex = 0;
   let currentPath = [];
   let chatMode = false; // State untuk mode chat
+  // State untuk konfirmasi perintah berbahaya
+  let isAwaitingConfirmation = false;
+  let confirmationCallback = null;
 
   const getCurrentDirectory = () => {
     let current = fileSystem;
@@ -109,7 +112,7 @@ function initializeTerminal() {
   };
 
   const commands = {
-    help: "Perintah yang tersedia: <br> `help`   - Menampilkan bantuan ini <br> `neofetch` - Menampilkan info profil dengan gaya <br> `cowsay <pesan>` - Menampilkan pesan dengan gaya sapi <br> `ls`     - Menampilkan isi direktori <br> `cat <file>` - Membaca isi file <br> `cd <dir>` - Pindah direktori <br> `chat`   - Memulai mode percakapan dengan AI <br> `about`  - Menampilkan info tentang saya <br> `skills` - Menampilkan daftar keahlian <br> `contact` - Menampilkan info kontak <br> `social` - Menampilkan link media sosial <br> `achievements` - Menampilkan daftar pencapaian <br> `open <arg>` - Membuka link (e.g., `open linkedin`) <br> `goto <arg>` - Navigasi ke bagian (e.g., `goto skills`) <br> `clear`  - Membersihkan layar terminal <br> `exit`   - Menutup terminal",
+    help: "Perintah yang tersedia: <br> `help`   - Menampilkan bantuan ini <br> `neofetch` - Menampilkan info profil dengan gaya <br> `cowsay &lt;pesan&gt;` - Menampilkan pesan dengan gaya sapi <br> `ls`     - Menampilkan isi direktori <br> `cat &lt;file&gt;` - Membaca isi file <br> `cd &lt;dir&gt;` - Pindah direktori <br> `chat`   - Memulai mode percakapan dengan AI <br> `about`  - Menampilkan info tentang saya <br> `skills` - Menampilkan daftar keahlian <br> `contact` - Menampilkan info kontak <br> `social` - Menampilkan link media sosial <br> `achievements` - Menampilkan daftar pencapaian <br> `open &lt;arg&gt;` - Membuka link (e.g., `open linkedin`) <br> `goto &lt;arg&gt;` - Navigasi ke bagian (e.g., `goto skills`) <br> `clear`  - Membersihkan layar terminal <br> `exit`   - Menutup terminal <br> `reboot` - Merestart 'sistem' (easter egg) <br> `format c:` - Memformat 'drive' (easter egg)",
     about:
       "Halo, saya Ade Syofyan. Seorang Mobile & Web Developer dengan pengalaman lebih dari 7 tahun.",
     skills:
@@ -267,6 +270,39 @@ function initializeTerminal() {
 
       return `<pre>${finalOutput}</pre>`;
     },
+
+    // --- Easter Egg Commands ---
+    _requestTerminalConfirmation: (message, onConfirm) => {
+      printToTerminal(`${message} [y/n]`);
+      isAwaitingConfirmation = true;
+      confirmationCallback = onConfirm;
+      terminalInput.focus();
+      return "";
+    },
+
+    reboot: function () {
+      return this._requestTerminalConfirmation(
+        "Sistem ini akan di-reboot. Apakah Anda yakin?",
+        () => window.triggerBSOD && window.triggerBSOD()
+      );
+    },
+
+    format: function (drive) {
+      if (drive && drive.toLowerCase() === "c:") {
+        return this._requestTerminalConfirmation(
+          "PERINGATAN: Semua data di 'drive C:' akan hilang. Lanjutkan?",
+          () => window.triggerBSOD && window.triggerBSOD()
+        );
+      }
+      return "Gunakan: `format c:`";
+    },
+
+    shutdown: function () {
+      return this.reboot();
+    },
+    "rm -rf /": function () {
+      return this.reboot();
+    },
   };
 
   const handleTerminalChat = async (message) => {
@@ -300,6 +336,34 @@ function initializeTerminal() {
   const processCommand = (command) => {
     const originalCommand = command.trim();
     printToTerminal(originalCommand, true);
+
+    if (isAwaitingConfirmation) {
+      isAwaitingConfirmation = false;
+      if (originalCommand.toLowerCase() === "y") {
+        // 1. Tutup (sembunyikan) terminal terlebih dahulu
+        terminal.classList.add("hidden");
+        terminalWindow.classList.remove("maximized");
+
+        // 2. Jalankan callback (trigger BSOD) setelah jeda singkat
+        if (confirmationCallback) {
+          setTimeout(confirmationCallback, 200); // Jeda 200ms untuk transisi visual
+        }
+
+        // 3. Reset state terminal untuk penggunaan berikutnya
+        fullResetTerminal();
+      } else {
+        printToTerminal("Aksi dibatalkan.");
+      }
+      confirmationCallback = null;
+      return;
+    }
+
+    // Khusus untuk perintah 'rm -rf /' yang mengandung spasi
+    if (originalCommand.toLowerCase() === "rm -rf /") {
+      commands["rm -rf /"]();
+      return;
+    }
+
     if (chatMode) {
       if (originalCommand.toLowerCase() === "exit") {
         chatMode = false;
@@ -310,14 +374,25 @@ function initializeTerminal() {
       }
       return;
     }
-    const parts = originalCommand.split(" ");
-    const cmd = parts[0].toLowerCase();
-    const args = parts.slice(1);
-    const result = commands[cmd];
 
+    let cmd;
+    let args;
+
+    // Modifikasi cara memproses perintah untuk menangani "format c:"
+    if (originalCommand.toLowerCase().startsWith("format c:")) {
+      cmd = "format";
+      args = ["c:"];
+    } else {
+      const parts = originalCommand.split(" ");
+      cmd = parts[0].toLowerCase();
+      args = parts.slice(1);
+    }
+
+    const result = commands[cmd];
     unlockAchievement("terminal_velocity");
     if (typeof result === "function") {
-      const output = result(...args);
+      // Gunakan .apply() untuk menjaga konteks 'this' ke objek 'commands'
+      const output = result.apply(commands, args);
       if (output) printToTerminal(output);
     } else if (result && args.length === 0) {
       printToTerminal(result);

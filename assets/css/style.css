@@ -1091,3 +1091,17 @@ pre[class*="language-"] {
 .text-menu-active {
   color: var(--color-accent);
 }
+
+/* BSOD Easter Egg Cursor Blink */
+#bsod p:last-child {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: white;
+    }
+}

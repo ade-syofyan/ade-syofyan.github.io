@@ -331,6 +331,89 @@ function initializeModals() {
   };
 }
 
+// --- BSOD Easter Egg ---
+function initializeBSOD() {
+  const container = document.getElementById("bsod-container");
+  const successModal = document.getElementById("bsodSuccessModal");
+  if (!container || !successModal) return;
+
+  const bsodViews = {
+    win: document.getElementById("bsod-win"),
+    mac: document.getElementById("bsod-mac"),
+    linux: document.getElementById("bsod-linux"),
+    ios: document.getElementById("bsod-ios"),
+    android: document.getElementById("bsod-android"),
+  };
+
+  const closeSuccessModal = () => {
+    successModal.classList.add("hidden");
+    lucide.createIcons(); // Re-render icons if any were changed
+  };
+
+  document
+    .getElementById("bsodSuccessCloseBtn")
+    .addEventListener("click", closeSuccessModal);
+
+  const showSuccess = () => {
+    successModal.classList.remove("hidden");
+    lucide.createIcons(); // Ensure popper icon is rendered
+  };
+
+  const hideAllBSOD = () => {
+    container.classList.add("hidden");
+    Object.values(bsodViews).forEach((view) => view.classList.add("hidden"));
+  };
+
+  window.triggerBSOD = function () {
+    unlockAchievement("system_crasher");
+
+    let targetBsod = bsodViews.linux; // Default
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    if (userAgent.includes("windows nt")) {
+      targetBsod = bsodViews.win;
+    } else if (userAgent.includes("macintosh")) {
+      targetBsod = bsodViews.mac;
+    } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+      targetBsod = bsodViews.ios;
+    } else if (userAgent.includes("android")) {
+      targetBsod = bsodViews.android;
+    }
+
+    container.classList.remove("hidden");
+    targetBsod.classList.remove("hidden");
+
+    const completeSequence = () => {
+      hideAllBSOD();
+      showSuccess();
+    };
+
+    // Untuk Windows, tunggu progress bar selesai.
+    // Untuk yang lain, gunakan timeout tetap.
+    if (targetBsod === bsodViews.win) {
+      const progressEl = document.getElementById("bsod-win-progress");
+      let progress = 0;
+      progressEl.textContent = progress; // Reset progress ke 0
+
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5; // Increment acak
+        if (progress >= 100) {
+          progress = 100;
+          progressEl.textContent = progress;
+          clearInterval(interval);
+          // Tunggu sejenak setelah 100% ditampilkan sebelum menutup
+          setTimeout(completeSequence, 500);
+        } else {
+          progressEl.textContent = progress;
+        }
+      }, 300);
+    } else {
+      // Untuk Mac/Linux, gunakan timeout 3 detik seperti semula
+      setTimeout(completeSequence, 3000);
+    }
+  };
+}
+
 // --- Project Rendering ---
 function renderProjects(projects, filter = "all") {
   const portfolioGrid = document.getElementById("portfolio-grid");

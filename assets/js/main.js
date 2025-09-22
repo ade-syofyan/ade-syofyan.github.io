@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI elements
   initializeTheme();
   initializeMobileMenu();
+  initializeBSOD();
   initializeModals();
   initializeScrollToTop();
   initializeNavHighlighting();

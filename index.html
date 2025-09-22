@@ -951,6 +951,74 @@
       </div>
     </div>
 
+    <!-- BSOD Success Modal -->
+    <div id="bsodSuccessModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[1020] hidden p-4">
+        <div class="p-8 rounded-lg shadow-xl w-full max-w-md text-center" style="background-color: var(--bg-card);">
+            <div class="text-accent mx-auto mb-4 w-24 h-24 flex items-center justify-center">
+                <i data-lucide="party-popper" class="w-16 h-16"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4" style="color: var(--text-white);">Selamat!</h3>
+            <p id="bsodSuccessMessage" class="text-lg mb-6" style="color: var(--text-secondary);">Anda telah menemukan easter egg dan membuka sebuah achievement!</p>
+            <button id="bsodSuccessCloseBtn" class="btn-primary px-6 py-2">Keren!</button>
+        </div>
+    </div>
+
+    <!-- BSOD Easter Egg -->
+    <div id="bsod-container" class="hidden fixed inset-0 z-[9999]">
+        <!-- Windows BSOD -->
+        <div id="bsod-win" class="hidden w-full h-full bg-[#0078D6] text-white font-['Segoe_UI',_sans-serif] p-8 flex flex-col justify-center items-center">
+            <div class="w-full max-w-4xl">
+                <p class="text-9xl font-thin mb-8">:(</p>
+                <p class="text-2xl mb-8">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</p>
+                <p class="text-2xl mb-8"><span id="bsod-win-progress">0</span>% complete</p>
+                <p class="text-sm mt-12">For more information about this issue and possible fixes, you've just found a cool easter egg!</p>
+                <p class="text-sm">If you call support, give them this info:<br>Stop Code: TOO_MUCH_AWESOMENESS</p>
+            </div>
+        </div>
+
+        <!-- macOS Kernel Panic -->
+        <div id="bsod-mac" class="hidden w-full h-full bg-black text-gray-300 font-mono p-8 flex flex-col justify-center items-center text-sm">
+            <div class="w-full max-w-4xl">
+                <p class="mb-4">panic(cpu 0 caller 0xffffff8000c2aadd): "A user initiated a kernel panic. This is not a bug."@/System/Library/Kernels/kernel</p>
+                <p class="mb-4">Debugger called: &lt;panic&gt;</p>
+                <p class="mb-4">Backtrace (CPU 0), Frame : Return Address</p>
+                <p>0xffffff8000c2aadd : 0xffffff8000c2ab5f ...</p>
+                <p>0xffffff8000c2ab5f : 0xffffff8000c2ac4f ...</p>
+                <p class="mt-8">You need to restart your computer. Hold down the Power button for several seconds or press the Restart button.</p>
+                <p class="mt-2">Just kidding! Press any key to continue.</p>
+            </div>
+        </div>
+
+        <!-- iOS "Spinning Wheel" Screen -->
+        <div id="bsod-ios" class="hidden w-full h-full bg-black flex justify-center items-center">
+            <div class="w-8 h-8 border-4 border-gray-500 border-t-gray-200 rounded-full animate-spin"></div>
+        </div>
+
+        <!-- Android Recovery Mode Screen -->
+        <div id="bsod-android" class="hidden w-full h-full bg-black text-gray-300 font-mono p-4 text-xs flex flex-col justify-center items-center">
+            <div class="w-full max-w-md border-2 border-yellow-500 p-2">
+                <p class="bg-yellow-500 text-black font-bold text-center mb-2">Android Recovery</p>
+                <p>ade-syofyan/portfolio/1.0</p>
+                <p class="mt-4 text-red-500">Can't load portfolio...<br>You've found a cool easter egg!</p>
+                <p class="mt-4">Try rebooting the system now...</p>
+            </div>
+        </div>
+
+        <!-- Linux Kernel Panic -->
+        <div id="bsod-linux" class="hidden w-full h-full bg-black text-white font-mono p-8 text-xs overflow-y-auto">
+            <p>[ 1234.567890] Kernel panic - not syncing: A user-forced panic has occurred!</p>
+            <p>[ 1234.567891] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-generic #42-Ubuntu</p>
+            <p>[ 1234.567892] Hardware name: Ade Syofyan's Portfolio / Awesome-VM, BIOS 1.0.0 04/01/2024</p>
+            <p>[ 1234.567893] Call Trace:</p>
+            <p>[ 1234.567894]  dump_stack_lvl+0x46/0x5a</p>
+            <p>[ 1234.567895]  panic+0x101/0x2e3</p>
+            <p>[ 1234.567896]  user_force_panic+0x1/0x1</p>
+            <p>[ 1234.567897] ... (just a cool easter egg)</p>
+            <p>[ 1234.567898] ---[ end Kernel panic - not syncing: A user-forced panic has occurred! ]---</p>
+            <p class="mt-8 animate-pulse">Rebooting in 3... 2... 1... (or just press any key)</p>
+        </div>
+    </div>
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
