@@ -439,6 +439,8 @@ function initializeTerminal() {
     terminalWindow.classList.remove("maximized");
   };
 
+  window.minimizeTerminal = minimizeTerminal;
+
   terminalInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       const command = terminalInput.value.trim();

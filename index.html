@@ -84,6 +84,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- jsPDF for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
@@ -804,6 +806,28 @@
       </div>
     </footer>
 
+    <!-- Dynamic Case Study Modal -->
+    <div id="caseStudyModal" class="modal-overlay">
+      <div class="modal-content max-w-3xl">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">&times;</button>
+          <h3 id="caseStudyTitle" class="text-3xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
+        </div>
+        <!-- Modal Body (Scrollable) -->
+        <div id="caseStudyBody" class="modal-body">
+          <!-- Content will be injected here by JavaScript -->
+          <p style="color: var(--text-secondary);">Menganalisis permintaan Anda dan menghasilkan studi kasus yang relevan...</p>
+        </div>
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button id="downloadCaseStudyPdfBtn" class="btn-primary inline-flex items-center gap-2">
+            <i data-lucide="download"></i>Unduh sebagai PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
       <div class="modal-content">
@@ -1083,6 +1107,7 @@
     <!-- Scripts -->
     <script src="./assets/js/data.js" defer></script>
     <!-- Karena file lain bergantung pada data ini, file ini bisa dimuat lebih awal jika diperlukan, tapi defer sudah cukup baik -->
+    <script src="./assets/js/caseStudyGenerator.js" defer></script>
     <script src="./assets/js/ui.js" defer></script>
     <script src="./assets/js/animations.js" defer></script>
     <script src="./assets/js/components.js" defer></script>

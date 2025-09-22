@@ -19,25 +19,25 @@ function initializeChatbot() {
     }
   };
 
-  function actuallyCloseChatbot() {
+  window.actuallyCloseChatbot = function () {
     chatbotModal.classList.remove("open");
     document.body.classList.remove("modal-open");
-  }
+  };
 
   window.closeChatbotModal = function () {
     const hasUserInteracted = chatDisplay.querySelector(".flex.justify-end");
     if (!hasUserInteracted) {
-      actuallyCloseChatbot();
+      window.actuallyCloseChatbot();
     } else {
       showCustomConfirm(
         "Simpan sesi chat ini?",
         () => {
           saveChatHistory();
-          actuallyCloseChatbot();
+          window.actuallyCloseChatbot();
         },
         () => {
           deleteChatHistory();
-          actuallyCloseChatbot();
+          window.actuallyCloseChatbot();
         },
         "Simpan",
         "Jangan Simpan"
@@ -90,43 +90,51 @@ function addQuickOptions() {
   chatDisplay.scrollTop = chatDisplay.scrollHeight;
 }
 
-function analyzeAndHighlight(text) {
+function analyzeAndHighlight(text, source = "chatbot") {
   const lowerText = text.toLowerCase();
-  document
-    .querySelectorAll(".highlight-feature")
-    .forEach((el) => el.classList.remove("highlight-feature"));
-
-  const keywordMap = {
-    flutter: '[data-skill="mobile"]',
-    kotlin: '[data-skill="mobile"]',
-    mobile: '[data-skill="mobile"]',
-    laravel: '[data-skill="web"]',
-    php: '[data-skill="web"]',
-    web: '[data-skill="web"]',
-    ai: '[data-skill="ai"]',
-    chatbot: '[data-skill="ai"]',
-    erp: '[data-skill="erp"]',
-    firebase: '[data-skill="firebase"]',
+  // Peta untuk Project Spotlight (fitur lama)
+  const projectSpotlightMap = {
+    flutter: "myintercom",
+    toyota: "myintercom",
+    intercom: "myintercom",
+    laravel: "payoapp", // atau 'ppdb'
+    ppdb: "ppdb",
+    smakpa: "ppdb",
+    "super-app": "payoapp",
+    ojek: "payoapp",
   };
 
-  for (const keyword in keywordMap) {
+  for (const keyword in projectSpotlightMap) {
     if (lowerText.includes(keyword)) {
-      const elementToHighlight = document.querySelector(keywordMap[keyword]);
-      if (elementToHighlight) {
-        elementToHighlight.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-        setTimeout(
-          () => elementToHighlight.classList.add("highlight-feature"),
-          500
-        );
-        setTimeout(
-          () => elementToHighlight.classList.remove("highlight-feature"),
-          2500
-        );
-        break;
+      const projectId = projectSpotlightMap[keyword];
+      if (window.spotlightProject) window.spotlightProject(projectId);
+      break; // Sorot hanya proyek pertama yang cocok
+    }
+  }
+
+  // Peta untuk Dynamic Case Study Generator (fitur baru)
+  const caseStudyKeywordMap = {
+    logistik: "logistik",
+    otomotif: "otomotif",
+    dealer: "otomotif",
+    pendidikan: "pendidikan",
+    sekolah: "pendidikan",
+    properti: "properti",
+  };
+
+  for (const keyword in caseStudyKeywordMap) {
+    if (lowerText.includes(keyword)) {
+      const topic = caseStudyKeywordMap[keyword];
+      if (window.generateCaseStudy) {
+        window.generateCaseStudy(topic);
+        // Minimalkan jendela chat setelah studi kasus dipicu
+        if (source === "chatbot" && window.actuallyCloseChatbot) {
+          setTimeout(window.actuallyCloseChatbot, 300); // Tutup modal chatbot
+        } else if (source === "terminal" && window.minimizeTerminal) {
+          setTimeout(window.minimizeTerminal, 300); // Minimalkan terminal
+        }
       }
+      break; // Hasilkan hanya satu studi kasus per pesan untuk mencegah beberapa modal muncul
     }
   }
 }
@@ -167,7 +175,7 @@ async function sendChatMessage() {
   userMessageDiv.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`;
   chatDisplay.appendChild(userMessageDiv);
 
-  conversationHistory.push({ role: "user", parts: [{ text: message }] });
+  conversationHistory.push({ role: "user", parts: [{ text: message }] }); // Pass 'chatbot' as source
   analyzeAndHighlight(message);
   chatInput.value = "";
 
@@ -279,11 +287,11 @@ function loadChatHistory() {
   chatDisplay.scrollTop = chatDisplay.scrollHeight;
 }
 
-window.getTerminalChatResponse = async function(message, outputCallback) {
+window.getTerminalChatResponse = async function (message, outputCallback) {
   if (!message) return;
 
   conversationHistory.push({ role: "user", parts: [{ text: message }] });
-  analyzeAndHighlight(message);
+  analyzeAndHighlight(message, "terminal");
 
   try {
     const payload = {
@@ -307,15 +315,17 @@ window.getTerminalChatResponse = async function(message, outputCallback) {
       // Handle WhatsApp link specifically for terminal
       const whatsappRegex = /\[(.*?)\]\((https?:\/\/wa\.me.*?)\)/g;
       text = text.replace(whatsappRegex, (match, linkText, url) => {
-        const encodedMessage = encodeURIComponent(`Halo Ade, saya tertarik dengan ${message}`);
+        const encodedMessage = encodeURIComponent(
+          `Halo Ade, saya tertarik dengan ${message}`
+        );
         const waLink = `${siteConfig.social.whatsapp}?text=${encodedMessage}`;
         return `${linkText} ( ${waLink} )`; // Make link visible in terminal
       });
 
       // Handle other markdown links
-      text = text.replace(/\[(.*?)\]\((.*?)\)/g, '$1 ( $2 )');
+      text = text.replace(/\[(.*?)\]\((.*?)\)/g, "$1 ( $2 )");
       // Handle bold
-      text = text.replace(/\*\*(.*?)\*\*/g, '$1');
+      text = text.replace(/\*\*(.*?)\*\*/g, "$1");
 
       conversationHistory.push({ role: "model", parts: [{ text: text }] });
       outputCallback(text);
@@ -324,6 +334,9 @@ window.getTerminalChatResponse = async function(message, outputCallback) {
     }
   } catch (error) {
     console.error("Error calling Gemini API for terminal:", error);
-    outputCallback("Terjadi kesalahan saat menghubungi AI. Coba lagi nanti.", true);
+    outputCallback(
+      "Terjadi kesalahan saat menghubungi AI. Coba lagi nanti.",
+      true
+    );
   }
 };
