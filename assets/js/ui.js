@@ -310,15 +310,26 @@ function initializeModals() {
 }
 
 // --- Project Rendering ---
-function renderProjects(projects) {
+function renderProjects(projects, filter = "all") {
   const portfolioGrid = document.getElementById("portfolio-grid");
   if (!portfolioGrid) return;
   portfolioGrid.innerHTML = "";
 
-  projects.forEach((project) => {
+  const filteredProjects =
+    filter === "all" ? projects : projects.filter((p) => p.category === filter);
+
+  if (filteredProjects.length === 0) {
+    portfolioGrid.innerHTML = `<p class="col-span-full text-center" style="color: var(--text-secondary);">Tidak ada proyek dalam kategori ini.</p>`;
+    return;
+  }
+
+  filteredProjects.forEach((project) => {
     const projectCard = document.createElement("div");
-    projectCard.className =
-      "p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer";
+    // Tambahkan animasi fade-in
+    projectCard.className = `
+      p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
+      opacity-0 animate-fade-in
+    `;
     projectCard.style.backgroundColor = "var(--bg-card-secondary)";
     projectCard.setAttribute("onclick", `openModal('${project.id}')`);
 
@@ -335,6 +346,60 @@ function renderProjects(projects) {
         `;
     portfolioGrid.appendChild(projectCard);
   });
+  // Memicu reflow untuk memastikan animasi berjalan
+  void portfolioGrid.offsetWidth;
+  portfolioGrid
+    .querySelectorAll(".animate-fade-in")
+    .forEach((card) => card.classList.remove("opacity-0"));
+}
+
+// --- Project Filter Rendering ---
+function renderProjectFilters(projects) {
+  const filtersContainer = document.getElementById("portfolio-filters");
+  if (!filtersContainer) return;
+
+  // Definisikan detail untuk setiap kategori, termasuk ikon
+  const categoryDetails = {
+    all: { name: "Semua", icon: "layout-grid" },
+    web: { name: "Web", icon: "globe" },
+    mobile: { name: "Mobile", icon: "smartphone" },
+  };
+
+  // Ambil kategori unik dari data proyek dan pastikan 'all' ada di urutan pertama
+  const projectCategories = [...new Set(projects.map((p) => p.category))];
+  const orderedCategories = [
+    "all",
+    ...projectCategories.filter((cat) => cat !== "all"),
+  ];
+
+  orderedCategories.forEach((categoryKey) => {
+    const details = categoryDetails[categoryKey];
+    if (!details) return; // Lewati jika kategori tidak terdefinisi
+
+    const button = document.createElement("button");
+    button.className = "filter-btn";
+    button.dataset.filter = categoryKey;
+    button.innerHTML = `<i data-lucide="${details.icon}" class="w-4 h-4 mr-2"></i><span>${details.name}</span>`;
+
+    if (categoryKey === "all") {
+      button.classList.add("active");
+    }
+
+    button.addEventListener("click", () => {
+      filtersContainer
+        .querySelectorAll(".filter-btn")
+        .forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      renderProjects(projects, categoryKey);
+    });
+
+    filtersContainer.appendChild(button);
+  });
+
+  // Panggil kembali createIcons untuk merender ikon yang baru ditambahkan
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons();
+  }
 }
 
 // --- Testimonial Rendering ---

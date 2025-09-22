@@ -22,6 +22,7 @@ const projectsData = [
     type: "Website Pendaftaran Peserta Didik Baru Online",
     thumbnail: "./assets/img/project/ppdb-smakpa/ppdb-smakpa-public.png",
     tag: "Full-Stack Development",
+    category: "web",
     goal: "SMAKPA Padang menghadapi tantangan dalam proses pendaftaran yang **masih manual**, memakan waktu, **rentan kesalahan data**, dan memiliki jangkauan terbatas. Mereka membutuhkan sebuah sistem digital untuk modernisasi proses ini.",
     role: "Lead Full-Stack Developer",
     process:
@@ -53,6 +54,7 @@ const projectsData = [
     thumbnail:
       "https://play-lh.googleusercontent.com/5-J1aWc6Pq-sYxR-9-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z=w1052-h592-rw",
     tag: "Mobile & Backend Development",
+    category: "mobile",
     goal: "Menciptakan aplikasi untuk pelanggan Toyota Intercom yang mempermudah berbagai layanan seperti **Booking Service**, **Test Drive**, hingga perpanjangan asuransi, serta memberikan **reward dan promo eksklusif**.",
     role: "Senior Programmer",
     process:
@@ -81,6 +83,7 @@ const projectsData = [
     thumbnail:
       "https://play-lh.googleusercontent.com/V-zE_TXZgLq_V_-_p-Z_g_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-",
     tag: "System Migration & Feature Dev",
+    category: "mobile",
     goal: "Merevitalisasi PayoApp, sebuah **super-app lokal**, dengan melakukan **migrasi sistem besar-besaran** untuk mendukung berbagai layanan seperti transportasi online, kuliner, logistik, dan farmasi bagi masyarakat di Sumatera Barat.",
     role: "Senior Programmer",
     process:

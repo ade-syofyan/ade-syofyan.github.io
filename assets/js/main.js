@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Load data-dependent content
   if (typeof projectsData !== "undefined") {
     renderProjects(projectsData);
+    renderProjectFilters(projectsData);
   }
   if (typeof testimonialsData !== "undefined") {
     renderTestimonials(testimonialsData);

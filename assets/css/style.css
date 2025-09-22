@@ -125,6 +125,29 @@ body {
   /* Sedikit naik saat hover */
 }
 
+/* Gaya untuk tombol filter portofolio */
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  /* Pill shape */
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
 /* Scrollbar kustom untuk browser webkit */
 ::-webkit-scrollbar {
   width: 8px;
