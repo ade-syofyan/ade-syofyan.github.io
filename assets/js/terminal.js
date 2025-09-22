@@ -141,8 +141,9 @@ function initializeTerminal() {
         localStorage.getItem("portfolioAchievements") || "[]"
       );
       let output = "Daftar Pencapaian:<br>-------------------<br>";
-      for (const id in achievements) {
-        const ach = achievements[id];
+      for (const id in window.achievements) {
+        // Use window.achievements to be explicit
+        const ach = window.achievements[id];
         output += `<span style="color: ${
           unlockedIds.includes(id) ? "var(--terminal-prompt-color)" : "inherit"
         }">[${unlockedIds.includes(id) ? "✓" : "✗"}] ${ach.name}:</span> ${
