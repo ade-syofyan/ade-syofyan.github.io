@@ -407,6 +407,22 @@ function initializeBSOD() {
           progressEl.textContent = progress;
         }
       }, 300);
+    } else if (targetBsod === bsodViews.ios) {
+      const progressInner = document.getElementById("ios-progress-bar-inner");
+      let progress = 0;
+      progressInner.style.width = "0%"; // Reset progress
+
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 10) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          progressInner.style.width = `${progress}%`;
+          clearInterval(interval);
+          setTimeout(completeSequence, 500);
+        } else {
+          progressInner.style.width = `${progress}%`;
+        }
+      }, 400);
     } else {
       // Untuk Mac/Linux, gunakan timeout 3 detik seperti semula
       setTimeout(completeSequence, 3000);
