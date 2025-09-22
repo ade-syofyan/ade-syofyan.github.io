@@ -81,6 +81,11 @@
     />
     <!-- Lucide Icons CDN for professional icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
 
     <style>
       /* --- Theme Variables --- */
@@ -91,6 +96,7 @@
         --bg-card-secondary: #4a5568;
         --bg-nav: #111827; /* bg-gray-900 */
         --bg-modal: #2d3748;
+        --bg-nav-link-hover: var(--bg-card); /* Latar belakang hover/active untuk link nav */
         --bg-overlay: rgba(26, 32, 44, 0.8); /* Latar belakang overlay semi-transparan */
         --text-primary: #e2e8f0;
         --text-secondary: #a0aec0; /* text-gray-400 */
@@ -99,6 +105,17 @@
         --color-accent-hover: #4299e1;
         --border-color: #4a5568;
         --shadow-color: rgba(0, 0, 0, 0.4);
+        /* Prism.js Dark Theme Overrides */
+        --prism-bg: #2d3748;
+        --prism-color: #f8f8f2;
+        --prism-token-comment: #6272a4;
+        --prism-token-punctuation: #f8f8f2;
+        --prism-token-keyword: #ff79c6;
+        --prism-token-function: #50fa7b;
+        --prism-token-string: #f1fa8c;
+        --prism-token-number: #bd93f9;
+        --prism-token-operator: #ff79c6;
+        --prism-token-class-name: #8be9fd;
       }
 
       html[data-theme='light'] {
@@ -108,6 +125,7 @@
         --bg-card-secondary: #edf2f7;
         --bg-nav: #ffffff;
         --bg-modal: #ffffff;
+        --bg-nav-link-hover: var(--bg-card-secondary); /* Latar belakang hover/active untuk link nav */
         --bg-overlay: rgba(247, 250, 252, 0.8); /* Latar belakang overlay untuk tema terang */
         --text-primary: #2d3748;
         --text-secondary: #718096;
@@ -116,6 +134,17 @@
         --color-accent-hover: #2b6cb0;
         --border-color: #e2e8f0;
         --shadow-color: rgba(0, 0,0, 0.1);
+        /* Prism.js Light Theme Overrides */
+        --prism-bg: #f5f2f0;
+        --prism-color: #393a34;
+        --prism-token-comment: #999988;
+        --prism-token-punctuation: #999;
+        --prism-token-keyword: #0077aa;
+        --prism-token-function: #d73a49;
+        --prism-token-string: #669900;
+        --prism-token-number: #990055;
+        --prism-token-operator: #a67f59;
+        --prism-token-class-name: #22863a;
       }
 
       body {
@@ -411,7 +440,7 @@
 
       /* Gaya untuk link navigasi aktif */
       .desktop-nav a.active {
-        background-color: var(--bg-card);
+        background-color: var(--bg-nav-link-hover);
         color: var(--text-white);
       }
 
@@ -645,10 +674,105 @@
         color: var(--text-secondary);
       }
       .nav-link:hover {
-        background-color: var(--bg-card);
+        background-color: var(--bg-nav-link-hover);
         color: var(--text-white);
       }
 
+      /* Gaya untuk menyorot fitur secara dinamis */
+      .highlight-feature {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px var(--color-accent), 0 0 5px var(--color-accent) inset;
+        border: 1px solid var(--color-accent);
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+      }
+      .skill-card {
+        /* Tambahkan transisi pada skill-card agar kembali ke normal dengan mulus */
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.5s ease-out, border 0.5s ease-out;
+      }
+
+      /* Styles for "Behind the Code" feature */
+      .code-viewer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+      }
+      .code-viewer.open {
+        max-height: 500px; /* Adjust as needed */
+        overflow-y: auto;
+      }
+      .btn-code-toggle {
+        background-color: var(--bg-card-secondary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        margin-top: 1rem;
+      }
+      .btn-code-toggle:hover {
+        background-color: var(--color-accent);
+        color: white;
+        border-color: var(--color-accent);
+      }
+
+      /* Themed Prism.js styles */
+      pre[class*="language-"] {
+        background: var(--prism-bg) !important;
+        color: var(--prism-color) !important;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+        padding: 1em !important;
+        margin: 0 !important;
+      }
+      /* More specific Prism token styles using variables */
+      .token.comment,
+      .token.prolog,
+      .token.doctype,
+      .token.cdata {
+        color: var(--prism-token-comment);
+      }
+      .token.punctuation {
+        color: var(--prism-token-punctuation);
+      }
+      .token.property,
+      .token.tag,
+      .token.boolean,
+      .token.number,
+      .token.constant,
+      .token.symbol,
+      .token.deleted {
+        color: var(--prism-token-number);
+      }
+      .token.selector,
+      .token.attr-name,
+      .token.string,
+      .token.char,
+      .token.builtin,
+      .token.inserted {
+        color: var(--prism-token-string);
+      }
+      .token.operator,
+      .token.entity,
+      .token.url {
+        color: var(--prism-token-operator);
+      }
+      .token.atrule,
+      .token.attr-value,
+      .token.keyword {
+        color: var(--prism-token-keyword);
+      }
+      .token.function,
+      .token.class-name {
+        color: var(--prism-token-function);
+      }
+      /* Pastikan warna teks dasar juga menggunakan variabel */
+      code[class*="language-"],
+      pre[class*="language-"] {
+        color: var(--prism-color) !important;
+      }
 
     </style>
     <script>
@@ -870,6 +994,7 @@
         >
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            data-skill="mobile"
           >
             <!-- Ikon Pengembangan Mobile -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -882,6 +1007,7 @@
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            data-skill="web"
           >
             <!-- Ikon Pengembangan Web -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -894,6 +1020,7 @@
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            data-skill="ai"
           >
             <!-- Ikon Integrasi AI -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -906,6 +1033,7 @@
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            data-skill="erp"
           >
             <!-- Ikon Sistem ERP -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -916,6 +1044,7 @@
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            data-skill="firebase"
           >
             <!-- Ikon Firebase -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -1086,6 +1215,27 @@
                 ...
               </p>
             </div>
+            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
+            <button class="btn-code-toggle" data-code-source="visitor-counter-code">
+              Lihat Kode
+            </button>
+            <div class="code-viewer"></div>
+            <!-- Kode Sumber (disembunyikan) -->
+            <div id="visitor-counter-code" class="hidden">
+              <pre><code class="language-javascript">
+const visitorCountElement = document.getElementById('visitor-count');
+let currentVisitors = Math.floor(Math.random() * 151) + 150;
+visitorCountElement.textContent = currentVisitors;
+
+setInterval(() => {
+  const fluctuation = Math.floor(Math.random() * 5) - 2;
+  currentVisitors = Math.max(100, currentVisitors + fluctuation);
+  visitorCountElement.classList.add('pop-in');
+  visitorCountElement.textContent = currentVisitors;
+  setTimeout(() => visitorCountElement.classList.remove('pop-in'), 300);
+}, Math.random() * 2000 + 2000);
+              </code></pre>
+            </div>
           </div>
     
           <!-- Demo 2: Placeholder for another demo -->
@@ -1105,6 +1255,31 @@
               Buat Palet Baru
             </button>
             <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
+          </div>
+          <!-- Kode Sumber untuk Palette Generator (disembunyikan) -->
+          <div id="palette-generator-code" class="hidden">
+            <pre><code class="language-javascript">
+const paletteContainer = document.getElementById('palette-container');
+const generateBtn = document.getElementById('generate-palette-btn');
+const copyFeedback = document.getElementById('copy-feedback');
+
+function generatePalette() {
+  paletteContainer.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    const swatch = document.createElement('div');
+    swatch.className = 'color-swatch';
+    swatch.style.backgroundColor = color;
+    swatch.addEventListener('click', () => {
+      navigator.clipboard.writeText(color);
+      copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
+    });
+    paletteContainer.appendChild(swatch);
+  }
+}
+generateBtn.addEventListener('click', generatePalette);
+generatePalette(); // Initial generation
+            </code></pre>
           </div>
 
         </div>
@@ -1687,6 +1862,7 @@
           // Inisialisasi ikon Lucide
           // --- Achievement System ---
           const achievements = {
+              'code_inspector': { name: 'Inspektur Kode', unlocked: false, description: 'Melihat "di balik layar" salah satu demo interaktif.', icon: 'code' },
               'explorer': { name: 'Penjelajah Sejati', unlocked: false, description: 'Menjelajahi hingga bagian akhir halaman.', icon: 'compass' },
               'ai_challenger': { name: 'Penantang AI', unlocked: false, description: 'Mengajukan pertanyaan pertama ke chatbot AI.', icon: 'bot' },
               'terminal_velocity': { name: 'Kecepatan Terminal', unlocked: false, description: 'Menggunakan mode terminal interaktif.', icon: 'terminal' },
@@ -1987,6 +2163,36 @@
           }
           // Hasilkan palet awal saat halaman dimuat
           generatePalette();
+
+          // --- "Behind the Code" Logic ---
+          const codeToggleButtons = document.querySelectorAll('.btn-code-toggle');
+          codeToggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+              const sourceId = button.dataset.codeSource;
+              const sourceElement = document.getElementById(sourceId);
+              const viewerElement = button.nextElementSibling;
+
+              if (sourceElement && viewerElement) {
+                const isOpen = viewerElement.classList.toggle('open');
+
+                if (isOpen) {
+                  // Jika belum ada isinya, isi dengan kode dan highlight
+                  if (viewerElement.innerHTML.trim() === '') {
+                    viewerElement.innerHTML = sourceElement.innerHTML;
+                    Prism.highlightAllUnder(viewerElement);
+                  }
+                  button.textContent = 'Sembunyikan Kode';
+                  unlockAchievement('code_inspector'); // Unlock achievement
+                } else {
+                  button.textContent = 'Lihat Kode';
+                }
+              }
+            });
+          });
+          // Pindahkan tombol "Lihat Kode" untuk palette generator ke dalam card-nya
+          const paletteCard = document.getElementById('palette-container').closest('.bg-card');
+          const paletteCodeBtn = document.querySelector('[data-code-source="palette-generator-code"]');
+          if (paletteCard && paletteCodeBtn) paletteCard.appendChild(paletteCodeBtn);
 
           // --- Interactive Terminal Logic ---
           const terminal = document.getElementById('terminal');
@@ -2305,6 +2511,41 @@
           // Dijadikan dapat diakses secara global
           const message = chatInput.value.trim();
 
+          // --- ANALISIS DAN HIGHLIGHT FITUR ---
+          // Fungsi untuk menganalisis teks dan menyorot elemen yang relevan
+          function analyzeAndHighlight(text) {
+            const lowerText = text.toLowerCase();
+            
+            // Hapus highlight sebelumnya dari semua elemen yang mungkin
+            document.querySelectorAll('.highlight-feature').forEach(el => el.classList.remove('highlight-feature'));
+
+            // Pemetaan kata kunci ke selector elemen
+            const keywordMap = {
+              'flutter': '[data-skill="mobile"]',
+              'kotlin': '[data-skill="mobile"]',
+              'mobile': '[data-skill="mobile"]',
+              'laravel': '[data-skill="web"]',
+              'php': '[data-skill="web"]',
+              'web': '[data-skill="web"]',
+              'ai': '[data-skill="ai"]',
+              'chatbot': '[data-skill="ai"]',
+              'erp': '[data-skill="erp"]',
+              'firebase': '[data-skill="firebase"]',
+            };
+
+            for (const keyword in keywordMap) {
+              if (lowerText.includes(keyword)) {
+                const selector = keywordMap[keyword];
+                const elementToHighlight = document.querySelector(selector);
+                if (elementToHighlight) {
+                  elementToHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  setTimeout(() => elementToHighlight.classList.add('highlight-feature'), 500); // Delay untuk efek setelah scroll
+                  setTimeout(() => elementToHighlight.classList.remove('highlight-feature'), 2500); // Hapus highlight setelah 2 detik
+                  break; // Hentikan setelah menemukan kata kunci pertama
+                }
+              }
+            }
+          }
           if (!message) return;
 
           // Tambahkan pesan pengguna ke tampilan
@@ -2316,6 +2557,9 @@
 
           // Tambahkan pesan pengguna ke riwayat percakapan
           conversationHistory.push({ role: "user", parts: [{ text: message }] });
+          
+          // Panggil fungsi analisis setelah pesan dikirim
+          analyzeAndHighlight(message);
           chatInput.value = ""; // Kosongkan input
 
           // Tambahkan indikator loading
