@@ -551,9 +551,9 @@
         <div class="md:w-1/3 flex justify-center">
           <img
             id="profile-img"
-            src="./assets/img/foto_ade.jpg"
+            src="./assets/img/foto_ade_new.jpeg"
             alt="Foto Profil Ade Syofyan"
-            class="rounded-full w-64 h-64 object-cover shadow-lg border-4 border-accent"
+            class="rounded-full w-64 h-64 object-cover object-top shadow-lg border-4 border-accent"
             onerror="this.onerror=null;this.src='https://placehold.co/300x300/4a5568/e2e8f0?text=AS';"
           />
         </div>
@@ -1544,22 +1544,32 @@
         };
 
        // Fungsi untuk menambahkan efek mengetik
-       function typeMessage(element, text, delay = 30) {
+       function typeMessage(element, text, delay = 20) {
             let i = 0;
-            element.textContent = ''; // Kosongkan elemen terlebih dahulu
+            element.innerHTML = ''; // Gunakan innerHTML dari awal
             function typing() {
                 if (i < text.length) {
-                    // Tambahkan karakter berikutnya
-                    element.textContent += text.charAt(i);
+                    // Cek apakah karakter saat ini adalah awal dari tag HTML (misal, <a href...>)
+                    if (text.charAt(i) === '<') {
+                        // Cari akhir dari tag HTML
+                        const tagEndIndex = text.indexOf('>', i);
+                        if (tagEndIndex !== -1) {
+                            // Ekstrak seluruh tag dan langsung tambahkan ke innerHTML
+                            const tag = text.substring(i, tagEndIndex + 1);
+                            element.innerHTML += tag;
+                            // Pindahkan indeks melewati tag yang baru ditambahkan
+                            i = tagEndIndex + 1;
+                            // Lanjutkan proses mengetik tanpa jeda
+                            typing();
+                            return; // Keluar dari pemanggilan saat ini untuk melanjutkan di pemanggilan berikutnya
+                        }
+                    }
+
+                    // Jika bukan tag HTML, ketik karakter seperti biasa
+                    element.innerHTML += text.charAt(i);
                     i++;
-                    // Gulir ke bawah saat teks ditambahkan
                     chatDisplay.scrollTop = chatDisplay.scrollHeight;
-                    // Panggil fungsi lagi setelah jeda
                     setTimeout(typing, delay);
-                } else {
-                    // Setelah selesai mengetik, jika teks mengandung HTML (misal link), set innerHTML
-                    // Ini diperlukan karena textContent akan meng-escape HTML
-                    element.innerHTML = text;
                 }
             }
             typing();
