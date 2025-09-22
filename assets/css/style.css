@@ -854,6 +854,13 @@ body {
   transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.5s ease-out, border 0.5s ease-out;
 }
 
+/* Tambahkan isyarat interaktif untuk kartu keahlian yang dapat difilter */
+.skill-card[data-skill] {
+  cursor: pointer;
+  border: 1px solid transparent;
+  /* Siapkan untuk transisi border */
+}
+
 /* Styles for "Behind the Code" feature */
 .code-viewer {
   max-height: 0;
@@ -948,4 +955,50 @@ pre[class*="language-"] {
 code[class*="language-"],
 pre[class*="language-"] {
   color: var(--prism-color) !important;
+}
+
+/* Gaya untuk Tech Stack di Modal */
+.tech-tag {
+  position: relative;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  cursor: help;
+  transition: all 0.2s ease;
+}
+
+.tech-tag:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent-hover);
+}
+
+/* Global Tooltip for Tech Stack (New and Improved) */
+#global-tooltip {
+  position: fixed;
+  /* Use fixed positioning to escape containers */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  max-width: 250px;
+  text-align: center;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  z-index: 2000;
+  /* High z-index to be on top of everything */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  /* Prevent tooltip from blocking mouse events */
+}
+
+#global-tooltip.visible {
+  opacity: 1;
+  visibility: visible;
 }

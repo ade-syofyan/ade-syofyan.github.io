@@ -151,7 +151,7 @@ function initializeHeroCanvas() {
 // --- Scroll-triggered Animations ---
 function initializeScrollAnimations() {
   const animatedElements = document.querySelectorAll(
-    ".workflow-step, .fade-in-on-scroll, #skills-grid, #services-grid"
+    ".fade-in-on-scroll, #skills-grid, #services-grid, #workflowSteps"
   );
   if (animatedElements.length === 0) return;
 
@@ -175,6 +175,11 @@ function initializeScrollAnimations() {
           cards.forEach((card, index) => {
             card.style.transitionDelay = `${index * 100}ms`;
             card.classList.add("animate");
+          });
+        } else if (entry.target.id === "workflowSteps") {
+          const steps = entry.target.querySelectorAll(".workflow-step");
+          steps.forEach((step) => {
+            step.classList.add("animate");
           });
         } else {
           entry.target.classList.add("animate");

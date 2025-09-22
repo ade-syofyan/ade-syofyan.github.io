@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeMobileMenu();
   initializeModals();
   initializeScrollToTop();
+  initializeSkillFiltering();
   initializeNavHighlighting();
 
   // Initialize Animations

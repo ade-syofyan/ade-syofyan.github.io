@@ -197,6 +197,9 @@ async function sendChatMessage() {
       const modelResponse = result.candidates[0].content;
       let text = modelResponse.parts[0].text;
 
+      // --- IDE BRILIAN: Analisis respons AI dan sorot keahlian yang relevan ---
+      analyzeAndHighlight(text);
+
       const whatsappRegex = new RegExp(`\\[(.*?)\\]\\((${siteConfig.social.whatsapp.replace('?','\\?')}.*?)\\)`);
       if (whatsappRegex.test(text)) {
         const encodedMessage = encodeURIComponent(

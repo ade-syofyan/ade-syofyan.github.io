@@ -46,6 +46,23 @@ const projectsData = [
     links: {
       liveSite: "https://psb.smk-smakpa.sch.id/",
     },
+    techStack: [
+      {
+        name: "Laravel",
+        reason:
+          "Framework PHP yang kuat untuk backend yang aman, skalabel, dan memiliki ekosistem yang matang.",
+      },
+      {
+        name: "JavaScript",
+        reason:
+          "Untuk interaktivitas frontend, validasi formulir, dan pengalaman pengguna yang dinamis.",
+      },
+      {
+        name: "MySQL",
+        reason:
+          "Sistem database yang andal dan teruji untuk menyimpan data pendaftar dan konfigurasi sistem.",
+      },
+    ],
   },
   {
     id: "myintercom",
@@ -75,6 +92,23 @@ const projectsData = [
       playStore:
         "https://play.google.com/store/apps/details?id=com.sukumaya.intercomapp",
     },
+    techStack: [
+      {
+        name: "Flutter",
+        reason:
+          "Dipilih untuk pengembangan cross-platform yang cepat, memungkinkan satu basis kode untuk Android & iOS.",
+      },
+      {
+        name: "Laravel",
+        reason:
+          "Menyediakan API backend yang solid dan aman untuk mengelola data booking, reward, dan pengguna.",
+      },
+      {
+        name: "Firebase",
+        reason:
+          "Digunakan untuk notifikasi push real-time agar pengguna selalu mendapatkan update promo dan status layanan.",
+      },
+    ],
   },
   {
     id: "payoapp",
@@ -104,6 +138,23 @@ const projectsData = [
       playStore:
         "https://play.google.com/store/apps/details?id=com.payoapp.update",
     },
+    techStack: [
+      {
+        name: "Laravel 11",
+        reason:
+          "Dipilih untuk migrasi karena performa tinggi, fitur modern, dan keamanan yang jauh lebih baik dari CodeIgniter.",
+      },
+      {
+        name: "PHP 8.2",
+        reason:
+          "Memanfaatkan fitur-fitur bahasa terbaru untuk kode yang lebih bersih, cepat, dan efisien.",
+      },
+      {
+        name: "MySQL",
+        reason:
+          "Struktur database dioptimalkan untuk menangani ribuan transaksi dan data pengguna secara efisien.",
+      },
+    ],
   },
   // Untuk menambahkan proyek baru, cukup salin objek di atas dan isi datanya.
 ];

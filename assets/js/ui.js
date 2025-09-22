@@ -167,6 +167,45 @@ function initializeModals() {
         project.impact || ""
       );
 
+      // Tambahkan Tech Stack
+      const modalTechStack = document.getElementById("modalTechStack");
+      modalTechStack.innerHTML = "";
+      if (project.techStack && project.techStack.length > 0) {
+        project.techStack.forEach((tech) => {
+          const tagEl = document.createElement("div");
+          tagEl.className = "tech-tag";
+          tagEl.textContent = tech.name;
+
+          // --- New Tooltip Logic ---
+          const tooltip = document.getElementById("global-tooltip");
+          tagEl.addEventListener("mouseenter", () => {
+            tooltip.textContent = tech.reason;
+            tooltip.classList.add("visible");
+
+            const tagRect = tagEl.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+
+            // Position tooltip above the tag
+            let top = tagRect.top - tooltipRect.height - 8; // 8px gap
+            let left = tagRect.left + tagRect.width / 2 - tooltipRect.width / 2;
+
+            // Adjust if it goes off-screen
+            if (left < 10) left = 10;
+            if (left + tooltipRect.width > window.innerWidth - 10)
+              left = window.innerWidth - tooltipRect.width - 10;
+
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+          });
+
+          tagEl.addEventListener("mouseleave", () => {
+            tooltip.classList.remove("visible");
+          });
+
+          modalTechStack.appendChild(tagEl);
+        });
+      }
+
       const modalImages = document.getElementById("modalImages");
       modalImages.innerHTML = "";
       if (project.images && project.images.length > 0) {
@@ -400,6 +439,31 @@ function renderProjectFilters(projects) {
   if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
+}
+
+// --- Interactive Skill Filtering ---
+function initializeSkillFiltering() {
+  const skillCards = document.querySelectorAll(".skill-card[data-skill]");
+  const portfolioSection = document.getElementById("portfolio");
+
+  skillCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const skill = card.dataset.skill;
+
+      // Cari tombol filter yang sesuai di bagian portofolio
+      const filterButton = document.querySelector(
+        `#portfolio-filters .filter-btn[data-filter="${skill}"]`
+      );
+
+      if (filterButton) {
+        // Gulir ke bagian portofolio
+        portfolioSection.scrollIntoView({ behavior: "smooth" });
+
+        // Tunggu sebentar agar scroll selesai, lalu klik tombol filter
+        setTimeout(() => filterButton.click(), 500);
+      }
+    });
+  });
 }
 
 // --- Testimonial Rendering ---

@@ -816,6 +816,12 @@ generatePalette(); // Initial generation
         <p id="modalType" class="text-lg mb-2" style="color: var(--text-secondary);"></p>
         <p id="modalRole" class="text-lg mb-4" style="color: var(--text-secondary);"></p>
 
+        <!-- Tech Stack Section -->
+        <div class="mb-6">
+          <p class="font-semibold text-accent mb-2">Teknologi yang Digunakan:</p>
+          <div id="modalTechStack" class="flex flex-wrap gap-2"></div>
+        </div>
+
         <div
           id="modalImages"
           class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
@@ -891,6 +897,9 @@ generatePalette(); // Initial generation
             </div>
         </div>
     </div>
+
+    <!-- Global Tooltip Element -->
+    <div id="global-tooltip"></div>
 
     <!-- Scroll to Top Button -->
     <button onclick="scrollToTop()" id="scrollToTopBtn" title="Gulir ke atas">
