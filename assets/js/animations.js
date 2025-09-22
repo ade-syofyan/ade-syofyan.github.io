@@ -99,7 +99,7 @@ function createPlexusInstance(canvas, options = {}) {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p) => {
-      // p.update(); // Dinonaktifkan agar partikel tidak bergerak
+      p.update();
       p.draw();
     });
     connect();
