@@ -74,9 +74,25 @@ function initializeTerminal() {
 
   // Fungsi untuk menampilkan teks dengan efek mengetik di terminal
   const typeTerminalMessage = (element, text, delay = 20) => {
+    // Batalkan proses mengetik sebelumnya jika ada
+    if (activeTypingAbortController) {
+      activeTypingAbortController.abort();
+    }
+
+    const controller = new AbortController();
+    activeTypingAbortController = controller;
+
     let i = 0;
     element.innerHTML = ""; // Pastikan elemen kosong sebelum mengetik
     function typing() {
+      if (controller.signal.aborted) {
+        // Jika dibatalkan, tampilkan sisa teks secara instan
+        element.innerHTML += text.substring(i).replace(/<[^>]*>?/gm, "");
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        activeTypingAbortController = null;
+        return;
+      }
+
       if (i < text.length) {
         // Tangani tag HTML agar tidak diketik karakter demi karakter
         if (text.charAt(i) === "<") {
@@ -84,7 +100,7 @@ function initializeTerminal() {
           if (tagEndIndex !== -1) {
             element.innerHTML += text.substring(i, tagEndIndex + 1);
             i = tagEndIndex + 1;
-            typing(); // Lanjutkan mengetik segera setelah menambahkan tag
+            setTimeout(typing, 0); // Lanjutkan segera
             return;
           }
         }
@@ -361,6 +377,8 @@ function initializeTerminal() {
         printToTerminal("Aksi dibatalkan.");
       }
       confirmationCallback = null;
+      let activeTypingAbortController = null;
+
       return;
     }
 
@@ -442,6 +460,33 @@ function initializeTerminal() {
   window.minimizeTerminal = minimizeTerminal;
 
   terminalInput.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "c") {
+      e.preventDefault();
+      printToTerminal(terminalInput.value + "^C", true);
+      terminalInput.value = "";
+
+      if (isAwaitingConfirmation) {
+        isAwaitingConfirmation = false;
+        confirmationCallback = null;
+        printToTerminal("Aksi dibatalkan.");
+      } else if (activeTypingAbortController) {
+        // Hentikan efek mengetik AI
+        activeTypingAbortController.abort();
+        activeTypingAbortController = null;
+        // Hapus indikator "sedang mengetik" jika masih ada
+        const typingIndicator = terminalOutput.querySelector(".animate-pulse");
+        if (
+          typingIndicator &&
+          typingIndicator.parentElement.parentElement === terminalOutput
+        ) {
+          terminalOutput.removeChild(typingIndicator.parentElement);
+        }
+      }
+      // Fokus kembali ke input setelah membatalkan
+      terminalInput.focus();
+      return;
+    }
+
     if (e.key === "Enter") {
       const command = terminalInput.value.trim();
       if (command) {
