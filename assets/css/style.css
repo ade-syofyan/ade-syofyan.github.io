@@ -520,13 +520,17 @@ body.modal-open {
   gap: 1rem;
 }
 
-.mobile-menu-overlay a, .mobile-menu-overlay .mobile-menu-cta, .mobile-menu-overlay .mt-8 {
+.mobile-menu-overlay a,
+.mobile-menu-overlay .mobile-menu-cta,
+.mobile-menu-overlay .mt-8 {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.3s ease-out, transform 0.3s ease-out, color 0.3s ease;
 }
 
-.mobile-menu-overlay.open a, .mobile-menu-overlay.open .mobile-menu-cta, .mobile-menu-overlay.open .mt-8 {
+.mobile-menu-overlay.open a,
+.mobile-menu-overlay.open .mobile-menu-cta,
+.mobile-menu-overlay.open .mt-8 {
   opacity: 1;
   transform: translateY(0);
 }
@@ -534,6 +538,7 @@ body.modal-open {
 .mobile-menu-overlay.open a:hover {
   color: var(--color-accent);
 }
+
 .mobile-menu-close-btn {
   position: absolute;
   top: 1.25rem;
@@ -1099,14 +1104,34 @@ pre[class*="language-"] {
 
 /* BSOD Easter Egg Cursor Blink */
 #bsod p:last-child {
-    animation: blink 1s step-end infinite;
+  animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-    from, to {
-        color: transparent;
-    }
-    50% {
-        color: white;
-    }
+
+  from,
+  to {
+    color: transparent;
+  }
+
+  50% {
+    color: white;
+  }
+}
+
+/* CSS Hacker Mode Easter Egg */
+body.hackerman-mode {
+  transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
+  transform: rotate(-1deg) scale(0.99);
+  filter: hue-rotate(45deg) contrast(1.1);
+}
+
+/* Counter-rotate fixed elements so they stay aligned */
+body.hackerman-mode .modal-overlay,
+body.hackerman-mode #terminal,
+body.hackerman-mode #scrollToTopBtn,
+body.hackerman-mode #terminal-toggle-btn,
+body.hackerman-mode #achievement-toggle-btn,
+body.hackerman-mode #achievement-toast {
+  transform: rotate(1deg);
 }

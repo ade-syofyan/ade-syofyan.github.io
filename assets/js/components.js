@@ -193,10 +193,49 @@ function initializeTimeTravelerAchievement() {
       const isNewlyUnlocked = window.unlockAchievement("time_traveler");
       if (isNewlyUnlocked) {
         clearTimeout(timerId);
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
       }
     }
   };
 
   document.addEventListener("visibilitychange", handleVisibilityChange);
+}
+
+// --- CSS Hacker Achievement ---
+function initializeCssHackerAchievement() {
+  const SECRET_CLASS = "hackerman-mode";
+
+  // Don't run if the achievement is already unlocked
+  const savedAchievements = JSON.parse(
+    localStorage.getItem("portfolioAchievements") || "[]"
+  );
+  if (savedAchievements.includes("css_hacker")) {
+    return;
+  }
+
+  const observer = new MutationObserver((mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+      if (
+        mutation.type === "attributes" &&
+        mutation.attributeName === "class"
+      ) {
+        const targetElement = mutation.target;
+        if (targetElement.classList.contains(SECRET_CLASS)) {
+          console.log(
+            "%c[CLASSIFIED] Access Granted. Welcome, fellow developer.",
+            "color: #00ff00; font-size: 1.2em; font-family: monospace;"
+          );
+          const isNewlyUnlocked = window.unlockAchievement("css_hacker");
+          if (isNewlyUnlocked) {
+            observer.disconnect(); // Stop observing once unlocked
+          }
+        }
+      }
+    }
+  });
+
+  observer.observe(document.body, { attributes: true });
 }

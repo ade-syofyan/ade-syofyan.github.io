@@ -208,6 +208,12 @@ const achievements = {
     description: "Kembali setelah meninggalkan tab terbuka selama 15 menit.",
     icon: "clock",
   },
+  css_hacker: {
+    name: "Peretas CSS",
+    unlocked: false,
+    description: "Mengaktifkan mode rahasia melalui DevTools.",
+    icon: "bug",
+  },
 };
 
 // --- Virtual File System Data ---

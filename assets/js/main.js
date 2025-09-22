@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializePaletteGenerator();
   initializeCodeViewers();
   initializeTimeTravelerAchievement();
+  initializeCssHackerAchievement();
   initializeCaseStudyGenerator();
 
   // Initialize Complex Modules
