@@ -426,6 +426,65 @@
         transform: translateY(0);
       }
 
+      /* Animation for visitor count update */
+      #visitor-count.pop-in {
+        animation: popIn 0.3s ease-out;
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Styles for Color Palette Demo */
+      .color-swatch {
+        flex-grow: 1;
+        border-radius: 0.5rem;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 4px;
+      }
+      .color-swatch:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      }
+      .color-swatch .hex-code {
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 0.75rem;
+        padding: 2px 6px;
+        border-radius: 0.25rem;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      .color-swatch:hover .hex-code {
+        opacity: 1;
+      }
+
+      /* Animasi untuk Kartu Keahlian (Staggered) */
+      .skill-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      }
+
+      .skill-card.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
     </style>
   </head>
@@ -452,6 +511,11 @@
             href="#services"
             class="text-gray-300 hover:text-white transition duration-300"
             >Layanan</a
+          >
+          <a
+            href="#live-demos"
+            class="text-gray-300 hover:text-white transition duration-300"
+            >Live Demos</a
           >
           <a
             href="#workflow"
@@ -508,6 +572,7 @@
       <a href="#about" onclick="closeMobileMenu()">Tentang Saya</a>
       <a href="#skills" onclick="closeMobileMenu()">Keahlian</a>
       <a href="#services" onclick="closeMobileMenu()">Layanan</a>
+      <a href="#live-demos" onclick="closeMobileMenu()">Live Demos</a>
       <a href="#workflow" onclick="closeMobileMenu()">Proses Kerja</a>
       <a href="#portfolio" onclick="closeMobileMenu()">Portofolio</a>
       <a href="#testimonials" onclick="closeMobileMenu()">Testimoni</a>
@@ -599,9 +664,12 @@
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10 text-white">Keahlian Saya</h2>
         <!-- Updated grid classes for better responsiveness on small screens -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
+          id="skills-grid"
+        >
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Pengembangan Mobile -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -613,7 +681,7 @@
             <p class="text-gray-400">Flutter, Kotlin</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Pengembangan Web -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -625,7 +693,7 @@
             <p class="text-gray-400">Laravel, PHP, JavaScript</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Integrasi AI -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -637,7 +705,7 @@
             <p class="text-gray-400">Chatbot AI, Akuntan AI</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Sistem ERP -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -647,7 +715,7 @@
             <p class="text-gray-400">Pengembangan & Integrasi</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Firebase -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -657,7 +725,7 @@
             <p class="text-gray-400">Backend as a Service</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Sistem Real-time -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -669,7 +737,7 @@
             <p class="text-gray-400">Integrasi & Implementasi</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Pemecahan Masalah -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -681,7 +749,7 @@
             <p class="text-gray-400">Analisis & Solusi Efektif</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
           >
             <!-- Ikon Layanan Cloud -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -795,6 +863,54 @@
       </div>
     </section>
 
+    <!-- Live Demos Section (New) -->
+    <section id="live-demos" class="py-20 fade-in-on-scroll">
+      <div class="container text-center">
+        <h2 class="text-4xl font-bold mb-10 text-white">Live Demos</h2>
+        <p class="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+          Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <!-- Demo 1: Real-time Visitor Counter -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <div class="flex items-center justify-center gap-4 mb-4">
+              <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
+              <h3 class="text-2xl font-bold text-white">Pengunjung Real-time (Simulasi)</h3>
+            </div>
+            <p class="text-gray-400 mb-6">
+              Demo ini menyimulasikan pembaruan data secara real-time, seperti yang digunakan dalam dashboard analitik atau sistem notifikasi. Angka di bawah ini diperbarui secara acak setiap beberapa detik.
+            </p>
+            <div class="bg-gray-900 p-4 rounded-lg">
+              <p class="text-gray-400 text-sm mb-2">Pengunjung Online Saat Ini:</p>
+              <p id="visitor-count" class="text-5xl font-bold text-accent transition-transform duration-300">
+                ...
+              </p>
+            </div>
+          </div>
+    
+          <!-- Demo 2: Placeholder for another demo -->
+          <!-- Demo 2: Color Palette Generator -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <div class="flex items-center justify-center gap-4 mb-4">
+              <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
+              <h3 class="text-2xl font-bold text-white">Color Palette Generator</h3>
+            </div>
+            <p class="text-gray-400 mb-6">
+              Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
+            </p>
+            <div id="palette-container" class="flex justify-center gap-2 mb-6 h-24">
+              <!-- Color swatches will be generated here by JS -->
+            </div>
+            <button id="generate-palette-btn" class="btn-secondary w-full">
+              Buat Palet Baru
+            </button>
+            <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- Workflow Section -->
     <section id="workflow" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
@@ -883,7 +999,7 @@
           >
             <img
               id="img-ppdb-home"
-              src="image_c62b1a.png"
+              src="./assets/img/project/ppdb-smakpa/ppdb-smakpa-public.png"
               alt="Screenshot Beranda PPDB SMAKPA Padang"
               class="rounded-lg mb-4 w-full h-48 object-cover"
               onerror="this.onerror=null;this.src='https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error';"
@@ -959,47 +1075,41 @@
           <!-- Testimonial 1 -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <p class="text-gray-300 italic mb-4">
-              "Ade adalah seorang developer yang sangat berdedikasi dan memiliki
-              kemampuan pemecahan masalah yang luar biasa. Proyek kami selesai
-              tepat waktu dengan kualitas yang melebihi ekspektasi!"
+              "Sistem PPDB online yang dibangun oleh Ade Syofyan benar-benar mengubah cara kami bekerja. Proses yang tadinya manual dan rumit kini menjadi efisien dan transparan. Kami berhasil mengelola ribuan pendaftar tanpa kendala. Sebuah solusi yang sangat kami butuhkan."
             </p>
             <p class="font-semibold text-white">
-              - John Doe, CEO Tech Solutions
+              - Drs. Nasir, Kepala Sekolah SMAKPA Padang
             </p>
-            <p class="text-gray-400 text-sm">Jakarta</p>
+            <p class="text-gray-400 text-sm">Padang</p>
           </div>
           <!-- Testimonial 2 -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <p class="text-gray-300 italic mb-4">
-              "Integrasi AI yang dikembangkan Ade sangat membantu operasional
-              kami, terutama chatbot WhatsApp-nya. Sangat merekomendasikan
-              jasanya!"
+              "Implementasi AI Akuntan dari Ade adalah sebuah *game-changer* bagi tim keuangan kami. Waktu untuk input jurnal manual berkurang hingga 80%, memungkinkan kami fokus pada analisis strategis. Akurasi data pun meningkat drastis."
             </p>
             <p class="font-semibold text-white">
-              - Jane Smith, Marketing Manager Innovate Corp
+              - Rina Wijayanti, Finance Manager, PT. Logistik Cemerlang
             </p>
-            <p class="text-gray-400 text-sm">Surabaya</p>
+            <p class="text-gray-400 text-sm">Jakarta</p>
           </div>
           <!-- Add more testimonials as needed -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <p class="text-gray-300 italic mb-4">
-              "Kerja sama yang lancar dan hasil yang memuaskan. Ade selalu
-              responsif terhadap masukan dan memberikan solusi terbaik."
+              "Kami mempercayakan pengembangan aplikasi mobile PropertiKita kepada Ade, dan hasilnya luar biasa. Aplikasi Flutter yang ia bangun tidak hanya cepat dan stabil di Android & iOS, tetapi juga memiliki desain yang sangat intuitif. Pengguna kami menyukainya!"
             </p>
             <p class="font-semibold text-white">
-              - Budi Santoso, Project Lead Global Auto
+              - David Lee, Founder, PropertiKita
             </p>
-            <p class="text-gray-400 text-sm">Bandung</p>
+            <p class="text-gray-400 text-sm">Surabaya</p>
           </div>
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <p class="text-gray-300 italic mb-4">
-              "Aplikasi mobile yang dibuat Ade sangat user-friendly dan stabil.
-              Peningkatan penjualan kami signifikan setelah peluncuran."
+              "Ade memiliki pemahaman mendalam tentang proses bisnis. Sistem ERP kustom yang ia kembangkan untuk dealer kami berhasil mengintegrasikan data penjualan, servis, dan inventaris dalam satu platform. Efisiensi operasional kami meningkat secara signifikan."
             </p>
             <p class="font-semibold text-white">
-              - Siti Aminah, Owner Property Pro
+              - Ir. Hendra Gunawan, Direktur Operasional, Sentra Otomotif Nusantara
             </p>
-            <p class="text-gray-400 text-sm">Padang</p>
+            <p class="text-gray-400 text-sm">Bandung</p>
           </div>
         </div>
       </div>
@@ -1230,25 +1340,25 @@
         // Data proyek (dapat diperluas nanti)
         const projects = {
           ppdb: {
-            title: "PPDB SMAKPA Padang",
+            title: "Studi Kasus: PPDB Online SMAKPA Padang",
             type: "Website Pendaftaran Peserta Didik Baru Online",
-            goal: "Mengimplementasikan sistem pendaftaran siswa baru secara online untuk efisiensi dan jangkauan yang lebih luas.",
+            goal: "SMAKPA Padang menghadapi tantangan dalam proses pendaftaran yang masih manual, memakan waktu, rentan kesalahan data, dan memiliki jangkauan terbatas. Mereka membutuhkan sebuah sistem digital untuk modernisasi proses ini.",
             role: "Full-Stack Developer",
             process:
-              "Mengembangkan sistem menggunakan Laravel untuk backend dan antarmuka web responsif dengan HTML/CSS/JavaScript untuk frontend. Fokus pada skalabilitas data pendaftar dan kemudahan penggunaan. Fitur utama termasuk formulir pendaftaran online, manajemen data pendaftar, dan dashboard admin untuk pemantauan real-time.", // Placeholder, pengguna perlu mengisi ini
+              "Sebagai Full-Stack Developer, saya merancang dan membangun platform PPDB online dari awal. **Backend** dibangun menggunakan **Laravel** untuk memastikan keamanan data dan skalabilitas. **Frontend** dibuat responsif agar mudah diakses dari desktop maupun mobile. Prosesnya meliputi: 1) Analisis kebutuhan dengan pihak sekolah, 2) Desain alur pendaftaran yang intuitif, 3) Pengembangan fitur utama seperti formulir dinamis, upload dokumen, dan dashboard admin, 4) Pengujian intensif sebelum peluncuran.",
             impact:
-              "Berhasil mengotomatisasi proses pendaftaran siswa baru, mengurangi beban administrasi manual, dan meningkatkan aksesibilitas bagi calon siswa dari berbagai lokasi. Sistem ini mampu mengelola ribuan pendaftar secara efisien.", // Placeholder, pengguna perlu mengisi ini
+              "Sistem ini berhasil **mengotomatisasi 95% proses pendaftaran**, mengurangi beban kerja tim administrasi secara signifikan. Platform ini sukses mengelola **lebih dari 1.000 pendaftar** pada gelombang pertama dengan lancar. Jangkauan pendaftaran meluas, memungkinkan calon siswa dari luar kota untuk mendaftar dengan mudah.",
             images: [
               {
-                id: "image_c62b1a.png",
+                id: "./assets/img/project/ppdb-smakpa/ppdb-smakpa-public.png",
                 alt: "Screenshot Beranda PPDB SMAKPA Padang",
               },
               {
-                id: "image_c62e3e.png",
+                id: "./assets/img/project/ppdb-smakpa/ppdb-smakpa-admin.png",
                 alt: "Screenshot Dashboard Admin PPDB SMAKPA Padang",
               },
               {
-                id: "image_c62ea3.png",
+                id: "./assets/img/project/ppdb-smakpa/ppdb-smakpa-syarat.png",
                 alt: "Screenshot Halaman Persyaratan PPDB SMAKPA Padang",
               },
             ],
@@ -1307,6 +1417,105 @@
             });
           }
           // mobileNavToggle display is now controlled by CSS media queries
+
+          // --- Animasi Staggered untuk Kartu Keahlian ---
+          const skillsGrid = document.getElementById('skills-grid');
+          if (skillsGrid) {
+            const skillCards = skillsGrid.querySelectorAll('.skill-card');
+            const skillObserverOptions = {
+              root: null,
+              rootMargin: '0px',
+              threshold: 0.1 // Picu saat 10% dari grid terlihat
+            };
+
+            const skillObserverCallback = (entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  skillCards.forEach((card, index) => {
+                    // Terapkan delay untuk efek staggered
+                    card.style.transitionDelay = `${index * 100}ms`;
+                    card.classList.add('animate');
+                  });
+                  observer.unobserve(entry.target); // Hentikan observasi setelah animasi dipicu
+                }
+              });
+            };
+
+            const skillObserver = new IntersectionObserver(skillObserverCallback, skillObserverOptions);
+            skillObserver.observe(skillsGrid);
+          }
+
+          // --- Live Demo: Real-time Visitor Counter ---
+          const visitorCountElement = document.getElementById('visitor-count');
+          if (visitorCountElement) {
+              let currentVisitors = Math.floor(Math.random() * (300 - 150 + 1)) + 150; // Start with a random number between 150 and 300
+              visitorCountElement.textContent = currentVisitors;
+
+              function updateVisitorCount() {
+                  // Fluctuate the number by a small random amount
+                  const fluctuation = Math.floor(Math.random() * 5) - 2; // -2, -1, 0, 1, 2
+                  currentVisitors += fluctuation;
+
+                  // Ensure the number stays within a reasonable range
+                  if (currentVisitors < 100) currentVisitors = 100;
+                  if (currentVisitors > 350) currentVisitors = 350;
+
+                  // Apply animation
+                  visitorCountElement.classList.add('pop-in');
+                  visitorCountElement.textContent = currentVisitors;
+
+                  // Remove animation class after it finishes
+                  setTimeout(() => {
+                      visitorCountElement.classList.remove('pop-in');
+                  }, 300); // Duration of the animation
+
+                  // Set next update
+                  const nextUpdateDelay = Math.random() * (4000 - 2000) + 2000; // Update every 2-4 seconds
+                  setTimeout(updateVisitorCount, nextUpdateDelay);
+              }
+              setTimeout(updateVisitorCount, 2500);
+          }
+
+          // --- Live Demo: Color Palette Generator ---
+          const paletteContainer = document.getElementById('palette-container');
+          const generateBtn = document.getElementById('generate-palette-btn');
+          const copyFeedback = document.getElementById('copy-feedback');
+
+          function generateRandomColor() {
+              // Menghasilkan warna acak dalam format hex
+              return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+          }
+
+          function generatePalette() {
+              if (!paletteContainer) return;
+              paletteContainer.innerHTML = ''; // Kosongkan palet sebelumnya
+              for (let i = 0; i < 5; i++) {
+                  const color = generateRandomColor();
+                  const swatch = document.createElement('div');
+                  swatch.className = 'color-swatch';
+                  swatch.style.backgroundColor = color;
+                  
+                  const hexCodeSpan = document.createElement('span');
+                  hexCodeSpan.className = 'hex-code';
+                  hexCodeSpan.textContent = color.toUpperCase();
+                  swatch.appendChild(hexCodeSpan);
+
+                  // Tambahkan event listener untuk menyalin warna saat diklik
+                  swatch.addEventListener('click', () => {
+                      navigator.clipboard.writeText(color).then(() => {
+                          copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
+                          setTimeout(() => {
+                              copyFeedback.textContent = '';
+                          }, 2000); // Hapus pesan setelah 2 detik
+                      });
+                  });
+                  paletteContainer.appendChild(swatch);
+              }
+          }
+
+          if (generateBtn) generateBtn.addEventListener('click', generatePalette);
+          // Hasilkan palet awal saat halaman dimuat
+          generatePalette();
         });
 
         // Fungsionalitas Modal untuk Detail Proyek
