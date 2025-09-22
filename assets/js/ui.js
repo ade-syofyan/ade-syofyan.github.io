@@ -129,10 +129,21 @@ function initializeMobileMenu() {
   };
 }
 
+// --- Helper Functions ---
+function parseMarkdownBold(text) {
+  if (!text) return "";
+  // Mengganti **teks** dengan tag <strong> yang diberi gaya
+  return text.replace(
+    /\*\*(.*?)\*\*/g,
+    '<strong class="font-semibold text-accent">$1</strong>'
+  );
+}
+
 // --- Modals (Project, Achievement, Confirm) ---
 function initializeModals() {
   const projectModal = document.getElementById("projectModal");
   const achievementModal = document.getElementById("achievementModal");
+  const lightboxModal = document.getElementById("lightboxModal");
 
   // Project Modal
   window.openModal = function (projectId) {
@@ -146,10 +157,15 @@ function initializeModals() {
       document.getElementById("modalRole").textContent = `Peran: ${
         project.role || ""
       }`;
-      document.getElementById("modalGoal").textContent = project.goal || "";
-      document.getElementById("modalProcess").textContent =
-        project.process || "";
-      document.getElementById("modalImpact").textContent = project.impact || "";
+      document.getElementById("modalGoal").innerHTML = parseMarkdownBold(
+        project.goal || ""
+      );
+      document.getElementById("modalProcess").innerHTML = parseMarkdownBold(
+        project.process || ""
+      );
+      document.getElementById("modalImpact").innerHTML = parseMarkdownBold(
+        project.impact || ""
+      );
 
       const modalImages = document.getElementById("modalImages");
       modalImages.innerHTML = "";
@@ -159,12 +175,14 @@ function initializeModals() {
           imgElement.src = imgData.src;
           imgElement.alt = imgData.alt;
           imgElement.className =
-            "rounded-lg w-full h-auto object-cover shadow-md";
+            "rounded-lg w-full h-auto object-cover shadow-md transition-transform duration-200 hover:scale-105";
           imgElement.onerror = function () {
             this.onerror = null;
             this.src =
               "https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error";
           };
+          // Tambahkan event listener untuk membuka lightbox saat gambar diklik
+          imgElement.addEventListener("click", () => openLightbox(imgData.src));
           modalImages.appendChild(imgElement);
         });
       }
@@ -179,6 +197,28 @@ function initializeModals() {
   if (projectModal) {
     projectModal.addEventListener("click", (e) => {
       if (e.target === projectModal) closeModal();
+    });
+  }
+
+  // Lightbox Modal
+  window.openLightbox = function (imageUrl) {
+    const lightboxImage = document.getElementById("lightboxImage");
+    if (lightboxModal && lightboxImage) {
+      lightboxImage.src = imageUrl;
+      lightboxModal.classList.add("open");
+    }
+  };
+
+  window.closeLightbox = function () {
+    if (lightboxModal) {
+      lightboxModal.classList.remove("open");
+    }
+  };
+
+  if (lightboxModal) {
+    // Tutup lightbox saat mengklik area overlay (di luar gambar)
+    lightboxModal.addEventListener("click", (e) => {
+      if (e.target.id === "lightboxModal") closeLightbox();
     });
   }
 
@@ -264,6 +304,31 @@ function renderProjects(projects) {
             <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${project.tag}</span>
         `;
     portfolioGrid.appendChild(projectCard);
+  });
+}
+
+// --- Testimonial Rendering ---
+function renderTestimonials(testimonials) {
+  const testimonialsGrid = document.getElementById("testimonials-grid");
+  if (!testimonialsGrid) return;
+  testimonialsGrid.innerHTML = "";
+
+  testimonials.forEach((testimonial) => {
+    const testimonialCard = document.createElement("div");
+    testimonialCard.className = "bg-card p-6 rounded-xl shadow-lg text-left";
+
+    testimonialCard.innerHTML = `
+      <p class="italic mb-4" style="color: var(--text-secondary);">
+        "${parseMarkdownBold(testimonial.quote)}"
+      </p>
+      <p class="font-semibold" style="color: var(--text-white);">
+        - ${testimonial.name}
+      </p>
+      <p class="text-sm" style="color: var(--text-secondary);">${
+        testimonial.title
+      }</p>
+    `;
+    testimonialsGrid.appendChild(testimonialCard);
   });
 }
 
@@ -373,4 +438,44 @@ function initializeScrollToTop() {
   window.scrollToTop = function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+}
+
+// --- Populate UI with Centralized Data ---
+function populateStaticData() {
+  if (typeof siteConfig === "undefined") return;
+
+  // Navbar
+  document.getElementById("nav-brand").textContent = siteConfig.name;
+
+  // Hero Section
+  document.getElementById(
+    "hero-title"
+  ).innerHTML = `Halo, saya <span class="text-accent">${siteConfig.name}</span>`;
+  document.getElementById(
+    "hero-subtitle"
+  ).innerHTML = `<span class="font-semibold">${siteConfig.jobTitleShort}</span> dengan keahlian memecahkan masalah. Membangun solusi digital inovatif dari ide hingga implementasi.`;
+
+  // About Section
+  document.getElementById("cv-link-about").href = siteConfig.cvUrl;
+
+  // Contact Section
+  const contactEmail = document.getElementById("contact-email");
+  contactEmail.href = `mailto:${siteConfig.email}`;
+  contactEmail.textContent = siteConfig.email;
+
+  const contactPhone = document.getElementById("contact-phone");
+  contactPhone.href = `tel:${siteConfig.phone}`;
+  contactPhone.textContent = siteConfig.phoneDisplay;
+
+  const contactLinkedin = document.getElementById("contact-linkedin");
+  contactLinkedin.href = siteConfig.social.linkedin;
+
+  // Footer
+  const currentYear = new Date().getFullYear();
+  document.getElementById(
+    "footer-text"
+  ).textContent = `© ${currentYear} ${siteConfig.name}. Hak Cipta Dilindungi Undang-Undang.`;
+
+  // JSON-LD Schema
+  // (Implementasi lebih lanjut bisa dilakukan di sini jika diperlukan)
 }

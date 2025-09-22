@@ -106,7 +106,7 @@
         class="container flex justify-between items-center"
         id="main-navbar"
       >
-        <a href="#" class="text-2xl font-bold tracking-wide" style="color: var(--text-white);"
+        <a href="#" id="nav-brand" class="text-2xl font-bold tracking-wide" style="color: var(--text-white);"
           >Ade Syofyan</a
         >
         <!-- Redesigned Desktop Navigation -->
@@ -224,11 +224,11 @@
       <canvas id="heroCanvas"></canvas>
       <div class="container relative z-10">
         <h1
-          class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight" style="color: var(--text-white);"
+          id="hero-title" class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight" style="color: var(--text-white);"
         >
           Halo, saya <span class="text-accent">Ade Syofyan</span>
         </h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" style="color: var(--text-secondary);">
+        <p id="hero-subtitle" class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" style="color: var(--text-secondary);">
           <span class="font-semibold">Mobile & Web Developer</span> dengan
           keahlian memecahkan masalah. Membangun solusi digital inovatif dari
           ide hingga implementasi.
@@ -287,7 +287,7 @@
             solusi terbaik dengan pendekatan *problem-solving* yang kuat.
           </p>
           <a
-            href="https://drive.google.com/file/d/1soqROMMjqd4pOTvj3nr9ANXJ4qaps7QE/view?usp=sharing"
+            id="cv-link-about" href="#"
             target="_blank"
             class="btn-secondary inline-block"
             >Lihat CV Saya</a
@@ -297,8 +297,11 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20 fade-in-on-scroll">
-      <div class="container text-center">
+    <section id="skills" class="py-20 fade-in-on-scroll relative">
+      <!-- Canvas untuk efek plexus di background -->
+      <canvas class="plexus-canvas"></canvas>
+      <!-- Konten harus memiliki z-index agar di atas canvas -->
+      <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Keahlian Saya</h2>
         <!-- Updated grid classes for better responsiveness on small screens -->
         <div
@@ -401,6 +404,18 @@
               Cloud Services
             </h3>
             <p style="color: var(--text-secondary);">Deployment & Management</p>
+          </div>
+          <div
+            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+          >
+            <!-- Ikon DevOps -->
+            <p class="text-accent text-5xl mb-4 flex justify-center">
+              <i data-lucide="server-cog"></i>
+            </p>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
+              DevOps
+            </h3>
+            <p style="color: var(--text-secondary);">Ubuntu, Nginx, Git</p>
           </div>
         </div>
       </div>
@@ -600,8 +615,11 @@ generatePalette(); // Initial generation
     </section>
 
     <!-- Workflow Section -->
-    <section id="workflow" class="py-20 fade-in-on-scroll">
-      <div class="container text-center">
+    <section id="workflow" class="py-20 fade-in-on-scroll relative">
+      <!-- Canvas untuk efek plexus di background -->
+      <canvas class="plexus-canvas"></canvas>
+      <!-- Konten harus memiliki z-index agar di atas canvas -->
+      <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
           Bagaimana Saya Bekerja
         </h2>
@@ -689,56 +707,24 @@ generatePalette(); // Initial generation
     </section>
 
     <!-- Testimonials Section (New) -->
-    <section id="testimonials" class="py-20 fade-in-on-scroll">
-      <div class="container text-center">
+    <section id="testimonials" class="py-20 fade-in-on-scroll relative">
+      <!-- Canvas untuk efek plexus di background -->
+      <canvas class="plexus-canvas"></canvas>
+      <!-- Konten harus memiliki z-index agar di atas canvas -->
+      <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Apa Kata Klien Saya</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Testimonial 1 -->
-          <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="italic mb-4" style="color: var(--text-secondary);">
-              "Sistem PPDB online yang dibangun oleh Ade Syofyan benar-benar mengubah cara kami bekerja. Proses yang tadinya manual dan rumit kini menjadi efisien dan transparan. Kami berhasil mengelola ribuan pendaftar tanpa kendala. Sebuah solusi yang sangat kami butuhkan."
-            </p>
-            <p class="font-semibold" style="color: var(--text-white);">
-              - Drs. Nasir, Kepala Sekolah SMAKPA Padang
-            </p>
-            <p class="text-sm" style="color: var(--text-secondary);">Padang</p>
-          </div>
-          <!-- Testimonial 2 -->
-          <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="italic mb-4" style="color: var(--text-secondary);">
-              "Implementasi AI Akuntan dari Ade adalah sebuah *game-changer* bagi tim keuangan kami. Waktu untuk input jurnal manual berkurang hingga 80%, memungkinkan kami fokus pada analisis strategis. Akurasi data pun meningkat drastis."
-            </p>
-            <p class="font-semibold" style="color: var(--text-white);">
-              - Rina Wijayanti, Finance Manager, PT. Logistik Cemerlang
-            </p>
-            <p class="text-sm" style="color: var(--text-secondary);">Jakarta</p>
-          </div>
-          <!-- Add more testimonials as needed -->
-          <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="italic mb-4" style="color: var(--text-secondary);">
-              "Kami mempercayakan pengembangan aplikasi mobile PropertiKita kepada Ade, dan hasilnya luar biasa. Aplikasi Flutter yang ia bangun tidak hanya cepat dan stabil di Android & iOS, tetapi juga memiliki desain yang sangat intuitif. Pengguna kami menyukainya!"
-            </p>
-            <p class="font-semibold" style="color: var(--text-white);">
-              - David Lee, Founder, PropertiKita
-            </p>
-            <p class="text-sm" style="color: var(--text-secondary);">Surabaya</p>
-          </div>
-          <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="italic mb-4" style="color: var(--text-secondary);">
-              "Ade memiliki pemahaman mendalam tentang proses bisnis. Sistem ERP kustom yang ia kembangkan untuk dealer kami berhasil mengintegrasikan data penjualan, servis, dan inventaris dalam satu platform. Efisiensi operasional kami meningkat secara signifikan."
-            </p>
-            <p class="font-semibold" style="color: var(--text-white);">
-              - Ir. Hendra Gunawan, Direktur Operasional, Sentra Otomotif Nusantara
-            </p>
-            <p class="text-sm" style="color: var(--text-secondary);">Bandung</p>
-          </div>
+        <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Testimonials will be injected here by JavaScript -->
         </div>
       </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 fade-in-on-scroll">
-      <div class="container text-center">
+    <section id="contact" class="py-20 fade-in-on-scroll relative">
+      <!-- Canvas untuk efek plexus di background -->
+      <canvas class="plexus-canvas"></canvas>
+      <!-- Konten harus memiliki z-index agar di atas canvas -->
+      <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Tertarik untuk berkolaborasi atau memiliki pertanyaan? Jangan ragu
@@ -756,7 +742,7 @@ generatePalette(); // Initial generation
             </p>
             <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Email</h3>
             <a
-              href="mailto:ade.syofyan@gmail.com"
+              id="contact-email" href="#"
               class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
               >ade.syofyan@gmail.com</a
             >
@@ -770,7 +756,7 @@ generatePalette(); // Initial generation
             </p>
             <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Telepon</h3>
             <a
-              href="tel:+6282284955080"
+              id="contact-phone" href="#"
               class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
               >0822-8495-5080</a
             >
@@ -784,7 +770,7 @@ generatePalette(); // Initial generation
             </p>
             <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">LinkedIn</h3>
             <a
-              href="https://www.linkedin.com/in/ade-syofyan/"
+              id="contact-linkedin" href="#"
               target="_blank"
               class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
               >Profil LinkedIn</a
@@ -808,7 +794,7 @@ generatePalette(); // Initial generation
     <!-- Footer -->
     <footer class="py-8 mt-12 text-center" style="background-color: var(--bg-nav); color: var(--text-secondary); transition: background-color 0.3s ease;">
       <div class="container">
-        <p>&copy; 2025 Ade Syofyan. Hak Cipta Dilindungi Undang-Undang.</p>
+        <p id="footer-text">&copy; 2025 Ade Syofyan. Hak Cipta Dilindungi Undang-Undang.</p>
       </div>
     </footer>
 
@@ -846,6 +832,12 @@ generatePalette(); // Initial generation
           <span id="modalImpact"></span>
         </p>
       </div>
+    </div>
+
+    <!-- Lightbox Modal untuk Gambar -->
+    <div id="lightboxModal" class="lightbox-overlay">
+      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close Image Viewer">&times;</button>
+      <img class="lightbox-content" id="lightboxImage" alt="Gambar yang diperbesar">
     </div>
 
     <!-- Modal Chatbot -->
@@ -960,9 +952,9 @@ generatePalette(); // Initial generation
         "url": "https://ade-syofyan.github.io/",
         "image": "https://ade-syofyan.github.io/assets/img/foto_ade_new.jpeg",
         "sameAs": [
-          "https://www.linkedin.com/in/ade-syofyan/",
-          "mailto:ade.syofyan@gmail.com",
-          "https://wa.me/6282284955080" <!-- Menambahkan WhatsApp ke sameAs -->
+          "https://www.linkedin.com/in/ade-syofyan/", <!-- Akan diisi oleh JS -->
+          "mailto:ade.syofyan@gmail.com", <!-- Akan diisi oleh JS -->
+          "https://wa.me/6282284955080"
         ],
         "jobTitle": "Mobile & Web Developer Senior",
         "worksFor": {

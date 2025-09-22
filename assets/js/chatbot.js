@@ -181,7 +181,7 @@ async function sendChatMessage() {
       contents: conversationHistory,
       systemInstruction: { parts: [{ text: systemInstructionText }] },
     };
-    const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk";
+    const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk"; // Sebaiknya dipindahkan ke environment variable di sisi server
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
@@ -197,16 +197,15 @@ async function sendChatMessage() {
       const modelResponse = result.candidates[0].content;
       let text = modelResponse.parts[0].text;
 
-      const whatsappRegex = /\[(.*?)\]\((https:\/\/wa\.me\/.*?)\)/;
+      const whatsappRegex = new RegExp(`\\[(.*?)\\]\\((${siteConfig.social.whatsapp.replace('?','\\?')}.*?)\\)`);
       if (whatsappRegex.test(text)) {
         const encodedMessage = encodeURIComponent(
           `Halo Ade, saya tertarik dengan ${message}`
         );
-        text = text.replace(
-          /\[Rangkuman minat atau pertanyaan pengguna.*?\]/,
-          encodedMessage
-        );
-        text = text.replace(
+        const waLink = `${siteConfig.social.whatsapp}?text=${encodedMessage}`;
+        text = text.replace(whatsappRegex, `<a href="${waLink}" target="_blank" class="text-blue-400 hover:underline">WhatsApp</a>`);
+      } else {
+         text = text.replace(
           whatsappRegex,
           '<a href="$2" target="_blank" class="text-blue-400 hover:underline">$1</a>'
         );

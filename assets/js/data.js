@@ -1,4 +1,20 @@
-// --- Data-Driven UI: Central Project Data Source ---
+// --- Central Site Configuration ---
+const siteConfig = {
+  name: "Ade Syofyan",
+  jobTitle: "Programmer Senior",
+  jobTitleShort: "Mobile & Web Developer",
+  location: "Padang, Sumatera Barat, Indonesia",
+  email: "ade.syofyan@gmail.com",
+  phone: "+6282284955080",
+  phoneDisplay: "0822-8495-5080",
+  cvUrl:
+    "https://drive.google.com/file/d/1TtAS_WC3AgzFMkg8Nl9VQ211LGdm9foJ/view?usp=sharing",
+  social: {
+    linkedin: "https://www.linkedin.com/in/ade-syofyan/",
+    whatsapp: "https://wa.me/6282284955080",
+  },
+};
+
 const projectsData = [
   {
     id: "ppdb",
@@ -6,10 +22,10 @@ const projectsData = [
     type: "Website Pendaftaran Peserta Didik Baru Online",
     thumbnail: "./assets/img/project/ppdb-smakpa/ppdb-smakpa-public.png",
     tag: "Full-Stack Development",
-    goal: "SMAKPA Padang menghadapi tantangan dalam proses pendaftaran yang masih manual, memakan waktu, rentan kesalahan data, dan memiliki jangkauan terbatas. Mereka membutuhkan sebuah sistem digital untuk modernisasi proses ini.",
-    role: "Full-Stack Developer",
+    goal: "SMAKPA Padang menghadapi tantangan dalam proses pendaftaran yang **masih manual**, memakan waktu, **rentan kesalahan data**, dan memiliki jangkauan terbatas. Mereka membutuhkan sebuah sistem digital untuk modernisasi proses ini.",
+    role: "Lead Full-Stack Developer",
     process:
-      "Sebagai Full-Stack Developer, saya merancang dan membangun platform PPDB online dari awal. **Backend** dibangun menggunakan **Laravel** untuk memastikan keamanan data dan skalabilitas. **Frontend** dibuat responsif agar mudah diakses dari desktop maupun mobile. Prosesnya meliputi: 1) Analisis kebutuhan dengan pihak sekolah, 2) Desain alur pendaftaran yang intuitif, 3) Pengembangan fitur utama seperti formulir dinamis, upload dokumen, dan dashboard admin, 4) Pengujian intensif sebelum peluncuran.",
+      "Sebagai **Lead Full-Stack Developer**, saya merancang dan membangun platform PPDB online dari awal. **Backend** dibangun menggunakan **Laravel** untuk memastikan keamanan data dan skalabilitas. **Frontend** dibuat responsif agar mudah diakses dari desktop maupun mobile. Prosesnya meliputi: 1) Analisis kebutuhan dengan pihak sekolah, 2) Desain alur pendaftaran yang intuitif, 3) Pengembangan fitur utama seperti **formulir dinamis, upload dokumen, dan dashboard admin**, 4) Pengujian intensif sebelum peluncuran.",
     impact:
       "Sistem ini berhasil **mengotomatisasi 95% proses pendaftaran**, mengurangi beban kerja tim administrasi secara signifikan. Platform ini sukses mengelola **lebih dari 1.000 pendaftar** pada gelombang pertama dengan lancar. Jangkauan pendaftaran meluas, memungkinkan calon siswa dari luar kota untuk mendaftar dengan mudah.",
     images: [
@@ -28,22 +44,86 @@ const projectsData = [
     ],
   },
   {
-    id: "ai-accountant",
-    title: "Proyek Integrasi: AI Akuntan",
-    type: "Sistem Otomatisasi Input Jurnal",
-    thumbnail: "https://placehold.co/400x200/2d3748/e2e8f0?text=AI+Accountant",
-    tag: "AI Integration",
-    // ... tambahkan detail lain untuk modal di sini
+    id: "myintercom",
+    title: "Aplikasi Customer: myIntercom (Toyota)",
+    type: "Aplikasi Layanan Pelanggan Otomotif",
+    thumbnail:
+      "https://play-lh.googleusercontent.com/5-J1aWc6Pq-sYxR-9-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z=w1052-h592-rw",
+    tag: "Mobile & Backend Development",
+    goal: "Menciptakan aplikasi untuk pelanggan Toyota Intercom yang mempermudah berbagai layanan seperti **Booking Service**, **Test Drive**, hingga perpanjangan asuransi, serta memberikan **reward dan promo eksklusif**.",
+    role: "Senior Programmer",
+    process:
+      "Sebagai **pengembang utama**, saya merancang dan membangun aplikasi ini menggunakan **Flutter** untuk mobile dan **Laravel** untuk backend. Proses pengembangan mencakup implementasi fitur-fitur krusial seperti: sistem **booking service & test drive**, modul **trade-in**, **pelacakan proses** secara real-time, sistem **poin reward** untuk referral, dan manajemen **voucher & promo**.",
+    impact:
+      "Aplikasi ini berhasil **mendigitalisasi layanan pelanggan** Toyota Intercom, **meningkatkan engagement** melalui sistem reward dan promo. Pelanggan mendapatkan kemudahan dalam mengakses layanan dan melacak proses, yang pada akhirnya **meningkatkan loyalitas dan kepuasan pelanggan**.",
+    images: [
+      {
+        src: "https://play-lh.googleusercontent.com/5-J1aWc6Pq-sYxR-9-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z=w1052-h592-rw",
+        alt: "Screenshot Layanan myIntercom",
+      },
+      {
+        src: "https://play-lh.googleusercontent.com/V-zE_TXZgLq_V_-_p-Z_g_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-",
+        alt: "Screenshot Poin Reward myIntercom",
+      },
+    ],
   },
   {
-    id: "propertikita",
-    title: "Aplikasi Mobile: PropertiKita",
-    type: "Platform Jual Beli Properti",
-    thumbnail: "https://placehold.co/400x200/2d3748/e2e8f0?text=PropertiKita",
-    tag: "Mobile Development",
-    // ... tambahkan detail lain untuk modal di sini
+    id: "payoapp",
+    title: "Aplikasi Super-App: PayoKurir (PayoApp)",
+    type: "Aplikasi Ojek Online, Kuliner & Logistik",
+    thumbnail:
+      "https://play-lh.googleusercontent.com/V-zE_TXZgLq_V_-_p-Z_g_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-",
+    tag: "System Migration & Feature Dev",
+    goal: "Merevitalisasi PayoApp, sebuah **super-app lokal**, dengan melakukan **migrasi sistem besar-besaran** untuk mendukung berbagai layanan seperti transportasi online, kuliner, logistik, dan farmasi bagi masyarakat di Sumatera Barat.",
+    role: "Senior Programmer",
+    process:
+      "Saya memimpin migrasi sistem backend dari **CodeIgniter ke Laravel 11** untuk meningkatkan **skalabilitas dan performa** aplikasi. Proses ini mencakup **perancangan ulang arsitektur** untuk mendukung berbagai layanan (Ojek, Kuliner, Logistik, PayoSehat) dan memastikan transisi berjalan lancar untuk ribuan pengguna.",
+    impact:
+      "Migrasi ke Laravel 11 berhasil **meningkatkan stabilitas dan kecepatan respons** aplikasi secara signifikan, memungkinkan **ekspansi layanan ke kota-kota baru**. Aplikasi ini menjadi **fondasi teknologi yang kuat** untuk mendukung pertumbuhan 'aplikasi urang awak' ini di pasar lokal.",
+    images: [
+      {
+        src: "https://play-lh.googleusercontent.com/V-zE_TXZgLq_V_-_p-Z_g_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-",
+        alt: "Screenshot Halaman Utama PayoKurir",
+      },
+      {
+        src: "https://play-lh.googleusercontent.com/5-J1aWc6Pq-sYxR-9-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z=w1052-h592-rw",
+        alt: "Screenshot Layanan Ojek PayoKurir",
+      },
+    ],
   },
   // Untuk menambahkan proyek baru, cukup salin objek di atas dan isi datanya.
+];
+
+// --- Testimonials Data ---
+const testimonialsData = [
+  {
+    quote:
+      "Sistem PPDB online yang dibangun oleh Ade Syofyan benar-benar **mengubah cara kami bekerja**. Proses yang tadinya manual dan rumit kini menjadi **efisien dan transparan**. Kami berhasil mengelola ribuan pendaftar tanpa kendala. Sebuah solusi yang sangat kami butuhkan.",
+    name: "Drs. Nasir",
+    title: "Kepala Sekolah SMAKPA Padang",
+    location: "Padang",
+  },
+  {
+    quote:
+      "Implementasi AI Akuntan dari Ade adalah sebuah **game-changer** bagi tim keuangan kami. Waktu untuk input jurnal manual **berkurang hingga 80%**, memungkinkan kami fokus pada analisis strategis. Akurasi data pun meningkat drastis.",
+    name: "Rina Wijayanti",
+    title: "Finance Manager, PT. Logistik Cemerlang",
+    location: "Jakarta",
+  },
+  {
+    quote:
+      "Kami mempercayakan pengembangan aplikasi mobile PropertiKita kepada Ade, dan hasilnya luar biasa. Aplikasi Flutter yang ia bangun tidak hanya **cepat dan stabil** di Android & iOS, tetapi juga memiliki **desain yang sangat intuitif**. Pengguna kami menyukainya!",
+    name: "David Lee",
+    title: "Founder, PropertiKita",
+    location: "Surabaya",
+  },
+  {
+    quote:
+      "Ade memiliki pemahaman mendalam tentang proses bisnis. Sistem ERP kustom yang ia kembangkan untuk dealer kami berhasil **mengintegrasikan data penjualan, servis, dan inventaris** dalam satu platform. Efisiensi operasional kami meningkat secara signifikan.",
+    name: "Ir. Hendra Gunawan",
+    title: "Direktur Operasional, Sentra Otomotif Nusantara",
+    location: "Bandung",
+  },
 ];
 
 // --- Achievement System Data ---
@@ -101,13 +181,13 @@ Anda bisa menjelajahi informasi tentang saya menggunakan perintah-perintah dasar
 
 ## Perintah yang Tersedia:
 - \`ls\`: Menampilkan daftar file dan direktori.
-- \`cat <nama_file>\`: Menampilkan isi dari sebuah file.
+- \`cat <file>\`: Menampilkan isi dari sebuah file.
 - \`cd <nama_direktori>\`: Pindah ke direktori lain. Gunakan \`cd ..\` untuk kembali.
 - \`help\`: Menampilkan daftar semua perintah, termasuk perintah non-filesystem.
 - \`clear\`: Membersihkan layar terminal.
 - \`exit\`: Menutup terminal.
 
-Coba jelajahi direktori \`projects/\` atau baca file \`skills.json\`!
+Coba jelajahi direktori \`projects/\` atau baca file \`skills.json\`! Gunakan \`open cv\` untuk melihat CV saya.
 `,
   "about.txt": `Nama: Ade Syofyan
 Jabatan: Programmer Senior
@@ -154,11 +234,11 @@ Saya percaya bahwa teknologi terbaik adalah yang dapat memberikan dampak positif
 
 Anda bisa menghubungi saya melalui kanal berikut. Saya siap untuk diskusi proyek atau kolaborasi.
 
-- **Email**: ade.syofyan@gmail.com
-- **Telepon / WhatsApp**: +62 822-8495-5080
-- **LinkedIn**: linkedin.com/in/ade-syofyan
+- **Email**: ${siteConfig.email}
+- **Telepon / WhatsApp**: ${siteConfig.phone}
+- **LinkedIn**: ${siteConfig.social.linkedin.replace("https://www.", "")}
 
-Gunakan perintah \`open whatsapp\` atau \`open linkedin\` untuk akses cepat.
+Gunakan perintah \`open whatsapp\`, \`open linkedin\`, atau \`open cv\` untuk akses cepat.
 `,
   "services.txt": `=========================
 Layanan yang Saya Tawarkan
@@ -212,16 +292,16 @@ Testimoni: "Aplikasi Flutter yang ia bangun tidak hanya cepat dan stabil di Andr
 
 // --- Chatbot Data ---
 const adeProfileContext = `
-    Nama: Ade Syofyan
-    Jabatan: Programmer Senior
+    Nama: ${siteConfig.name}
+    Jabatan: ${siteConfig.jobTitle}
     Pengalaman: Lebih dari 7 tahun dalam pengembangan aplikasi web, mobile, dan ERP.
     Proses Kerja: Konsultasi & Perencanaan, Desain & Prototyping, Pengembangan & Pengujian, Deployment & Dukungan.
     Spesialisasi: Membangun solusi digital inovatif yang efisien dan berdampak positif. Ahli dalam integrasi AI (AI akuntan untuk input jurnal otomatis, chatbot WhatsApp AI untuk tim sales/CS).
     Tech Stack: Laravel, Flutter, Firebase, Kotlin, PHP, JavaScript, Sistem Real-time.
     Bidang Keahlian: Mobile Development, Web Development, AI Integration, ERP Systems, Firebase, Sistem Real-time, Problem Solving, Cloud Services.
     Tujuan: Memberikan solusi terbaik dengan pendekatan problem-solving yang kuat.
-    Nomor WhatsApp: 082284955080
-    CV: https://drive.google.com/file/d/1soqROMMjqd4pOTvj3nr9ANXJ4qaps7QE/view?usp=sharing
+    Nomor WhatsApp: ${siteConfig.phoneDisplay}
+    CV: ${siteConfig.cvUrl}
 `;
 
 const allQuickChatOptions = [
@@ -243,7 +323,7 @@ const systemInstructionText = `Anda adalah Ade Syofyan, seorang Programmer Senio
 
     ATURAN KHUSUS:
     1. Jika pertanyaan TIDAK terkait dengan jasa program, keahlian teknis, atau pengalaman saya yang disebutkan di profil, jawablah dengan sopan bahwa Anda tidak memiliki informasi tersebut atau itu di luar cakupan pengetahuan Anda sebagai asisten AI di portofolio ini. Contoh: "Maaf, saya hanya dapat memberikan informasi seputar keahlian dan proyek yang saya kerjakan. Untuk pertanyaan di luar itu, saya tidak memiliki datanya."
-    2. Jika ada pertanyaan mengenai HARGA atau TARIF jasa, atau jika pengguna menyatakan MINAT untuk PEMESANAN/KOLABORASI langsung, selalu arahkan mereka untuk menghubungi saya melalui WhatsApp. Respons harus mencakup tautan wa.me dengan pesan pre-filled yang merangkum pertanyaan/minat mereka. Format pesan pre-filled harus jelas dan merangkum minat pengguna. Contoh format: "Untuk informasi mengenai harga atau pemesanan/kolaborasi, mohon hubungi saya langsung melalui [WhatsApp](https://wa.me/6282284955080?text=Halo%20Ade%2C%20saya%20tertarik%20dengan%20[Rangkuman%20minat%20atau%20pertanyaan%20pengguna%2C%20contoh%3A%20pengembangan%20aplikasi%20mobile%20Flutter]). Saya akan dengan senang hati membantu Anda di sana!" Pastikan [Rangkuman minat atau pertanyaan pengguna] diisi dengan ringkasan pertanyaan terakhir pengguna, di-encode URL agar sesuai untuk tautan WhatsApp.
+    2. Jika ada pertanyaan mengenai HARGA atau TARIF jasa, atau jika pengguna menyatakan MINAT untuk PEMESANAN/KOLABORASI langsung, selalu arahkan mereka untuk menghubungi saya melalui WhatsApp. Respons harus mencakup tautan wa.me dengan pesan pre-filled yang merangkum pertanyaan/minat mereka. Format pesan pre-filled harus jelas dan merangkum minat pengguna. Contoh format: "Untuk informasi mengenai harga atau pemesanan/kolaborasi, mohon hubungi saya langsung melalui [WhatsApp](${siteConfig.social.whatsapp}?text=Halo%20Ade%2C%20saya%20tertarik%20dengan%20[Rangkuman%20minat%20atau%20pertanyaan%20pengguna%2C%20contoh%3A%20pengembangan%20aplikasi%20mobile%20Flutter]). Saya akan dengan senang hati membantu Anda di sana!" Pastikan [Rangkuman minat atau pertanyaan pengguna] diisi dengan ringkasan pertanyaan terakhir pengguna, di-encode URL agar sesuai untuk tautan WhatsApp.
     3. JANGAN mengarang jawaban atau memberikan informasi yang tidak ada dalam profil.
     4. Jaga nada bicara tetap profesional dan membantu.
 

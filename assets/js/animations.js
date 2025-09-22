@@ -1,28 +1,57 @@
 // js/animations.js
 
-// --- Hero Canvas "Plexus" Animation ---
-function initializeHeroCanvas() {
-  const canvas = document.getElementById("heroCanvas");
-  if (!canvas) return;
+// --- Plexus Animation Factory ---
+// Helper untuk mengubah warna hex menjadi objek RGB
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null; // Mengembalikan null jika format hex tidak valid
+}
+
+/**
+ * Membuat instance animasi plexus pada elemen canvas yang diberikan.
+ * @param {HTMLCanvasElement} canvas - Elemen canvas untuk digambar.
+ * @param {object} options - Opsi kustomisasi (particleCount, maxDistance).
+ */
+function createPlexusInstance(canvas, options = {}) {
+  if (!canvas) return null;
 
   const ctx = canvas.getContext("2d");
   let particles = [];
-  const numberOfParticles = 80;
-  const maxDistance = 150;
+  const config = {
+    particleCount: options.particleCount || 80,
+    maxDistance: options.maxDistance || 150,
+  };
+  let themeColors = { r: 99, g: 179, b: 237 }; // Default
+
+  function updateThemeColors() {
+    const accentColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--color-accent")
+      .trim();
+    const rgb = hexToRgb(accentColor);
+    if (rgb) themeColors = rgb;
+  }
 
   function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = document.querySelector("header").offsetHeight;
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
   }
 
   class Particle {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
       this.size = Math.random() * 3 + 1;
       this.speedX = Math.random() * 0.5 - 0.25;
       this.speedY = Math.random() * 0.5 - 0.25;
-      this.color = `rgba(99, 179, 237, ${Math.random() * 0.5 + 0.3})`;
+      this.color = `rgba(${themeColors.r}, ${themeColors.g}, ${
+        themeColors.b
+      }, ${Math.random() * 0.5 + 0.4})`;
     }
     update() {
       this.x += this.speedX;
@@ -39,14 +68,10 @@ function initializeHeroCanvas() {
   }
 
   function init() {
+    updateThemeColors();
     particles = [];
-    for (let i = 0; i < numberOfParticles; i++) {
-      particles.push(
-        new Particle(
-          Math.random() * canvas.width,
-          Math.random() * canvas.height
-        )
-      );
+    for (let i = 0; i < config.particleCount; i++) {
+      particles.push(new Particle());
     }
   }
 
@@ -57,9 +82,9 @@ function initializeHeroCanvas() {
           (particles[a].x - particles[b].x) ** 2 +
             (particles[a].y - particles[b].y) ** 2
         );
-        if (distance < maxDistance) {
-          const opacityValue = 1 - distance / maxDistance;
-          ctx.strokeStyle = `rgba(99, 179, 237, ${opacityValue})`;
+        if (distance < config.maxDistance) {
+          const opacityValue = 1 - distance / config.maxDistance;
+          ctx.strokeStyle = `rgba(${themeColors.r}, ${themeColors.g}, ${themeColors.b}, ${opacityValue})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
@@ -70,8 +95,8 @@ function initializeHeroCanvas() {
     }
   }
 
-  function animateCanvas() {
-    requestAnimationFrame(animateCanvas);
+  function animate() {
+    requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p) => {
       p.update();
@@ -80,15 +105,47 @@ function initializeHeroCanvas() {
     connect();
   }
 
-  window.addEventListener("load", () => {
-    resizeCanvas();
-    init();
-    animateCanvas();
+  // Inisialisasi instance
+  resizeCanvas();
+  init();
+  animate();
+
+  // Mengembalikan fungsi untuk reinisialisasi saat ada perubahan global
+  return {
+    reinit: () => {
+      resizeCanvas();
+      init();
+    },
+  };
+}
+
+// --- Inisialisasi Semua Animasi Plexus ---
+function initializeHeroCanvas() {
+  const allCanvases = document.querySelectorAll("#heroCanvas, .plexus-canvas");
+  if (allCanvases.length === 0) return;
+
+  const plexusInstances = [];
+
+  allCanvases.forEach((canvas) => {
+    const options =
+      canvas.id === "heroCanvas"
+        ? { particleCount: 100, maxDistance: 160 } // Opsi untuk header
+        : { particleCount: 50, maxDistance: 110 }; // Opsi lebih ringan untuk section
+    const instance = createPlexusInstance(canvas, options);
+    if (instance) plexusInstances.push(instance);
   });
-  window.addEventListener("resize", () => {
-    resizeCanvas();
-    init();
+
+  // Handler global untuk resize dan perubahan tema
+  const reinitAll = () => plexusInstances.forEach((inst) => inst.reinit());
+
+  window.addEventListener("resize", reinitAll);
+
+  const themeObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === "data-theme") reinitAll();
+    });
   });
+  themeObserver.observe(document.documentElement, { attributes: true });
 }
 
 // --- Scroll-triggered Animations ---

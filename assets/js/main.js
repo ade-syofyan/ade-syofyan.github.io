@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof projectsData !== "undefined") {
     renderProjects(projectsData);
   }
+  if (typeof testimonialsData !== "undefined") {
+    renderTestimonials(testimonialsData);
+    populateStaticData(); // Panggil fungsi untuk mengisi data statis
+  }
   if (typeof achievements !== "undefined") {
     loadAchievements();
   }

@@ -72,10 +72,10 @@ function initializeTerminal() {
     about:
       "Halo, saya Ade Syofyan. Seorang Mobile & Web Developer dengan pengalaman lebih dari 7 tahun.",
     skills:
-      "Keahlian utama: Mobile (Flutter, Kotlin), Web (Laravel, PHP, JS), AI Integration, ERP Systems, Firebase.",
-    contact: "Email: ade.syofyan@gmail.com, Telepon: 0822-8495-5080",
+      "Keahlian utama: Mobile (Flutter, Kotlin), Web (Laravel, PHP, JS), AI Integration, ERP Systems, Firebase. Baca `skills.json` untuk detail.",
+    contact: `Email: ${siteConfig.email}, Telepon: ${siteConfig.phoneDisplay}`,
     social:
-      "Anda bisa menemukan saya di: <br> - LinkedIn: `open linkedin` <br> - WhatsApp: `open whatsapp`",
+      "Anda bisa menemukan saya di: <br> - LinkedIn: `open linkedin` <br> - WhatsApp: `open whatsapp` <br> - CV: `open cv`",
     achievements: () => {
       const unlockedIds = JSON.parse(
         localStorage.getItem("portfolioAchievements") || "[]"
@@ -149,9 +149,9 @@ function initializeTerminal() {
     },
     open: (target) => {
       const links = {
-        linkedin: "https://www.linkedin.com/in/ade-syofyan/",
-        whatsapp: "https://wa.me/6282284955080",
-        cv: "https://drive.google.com/file/d/1soqROMMjqd4pOTvj3nr9ANXJ4qaps7QE/view?usp=sharing",
+        linkedin: siteConfig.social.linkedin,
+        whatsapp: siteConfig.social.whatsapp,
+        cv: siteConfig.cvUrl,
       };
       if (target && links[target]) {
         if (target === "linkedin" || target === "whatsapp")
