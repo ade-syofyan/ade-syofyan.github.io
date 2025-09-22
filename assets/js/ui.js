@@ -536,7 +536,8 @@ function renderTestimonials(testimonials) {
 
   testimonials.forEach((testimonial) => {
     const testimonialCard = document.createElement("div");
-    testimonialCard.className = "bg-card p-6 rounded-xl shadow-lg text-left";
+    // Menambahkan kelas .testimonial-card untuk styling glassmorphism
+    testimonialCard.className = "testimonial-card p-6 rounded-xl shadow-lg text-left";
 
     testimonialCard.innerHTML = `
       <p class="italic mb-4" style="color: var(--text-secondary);">
@@ -650,9 +651,9 @@ function initializeScrollToTop() {
         document.body.scrollTop > 20 ||
         document.documentElement.scrollTop > 20
       ) {
-        scrollToTopBtn.style.display = "block";
+        scrollToTopBtn.classList.add("visible");
       } else {
-        scrollToTopBtn.style.display = "none";
+        scrollToTopBtn.classList.remove("visible");
       }
     },
     { passive: true }

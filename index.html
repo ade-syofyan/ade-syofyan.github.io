@@ -105,7 +105,7 @@
   </head>
   <body class="leading-relaxed"> 
     <!-- Navbar -->
-    <nav class="py-4 shadow-lg sticky top-0 z-50" style="background-color: var(--bg-nav); transition: background-color 0.3s ease;">
+    <nav class="py-4 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
       <div
         class="container flex justify-between items-center"
         id="main-navbar"
@@ -577,7 +577,7 @@
             <p class="mb-6" style="color: var(--text-secondary);">
               Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
             </p>
-            <div id="palette-container" class="flex justify-center gap-2 mb-6 h-24">
+            <div id="palette-container" class="flex justify-center gap-2 mb-6">
               <!-- Color swatches will be generated here by JS -->
             </div>
             <button id="generate-palette-btn" class="btn-secondary w-full">
@@ -739,7 +739,7 @@
           untuk menghubungi saya melalui kontak di bawah ini.
         </p>
         <div
-          class="flex flex-col md:flex-row justify-center items-center gap-8"
+          class="flex flex-col md:flex-row justify-center items-center gap-8" id="contact-cards"
         >
           <div
             class="bg-card p-6 rounded-xl shadow-lg text-center w-full md:w-1/4"

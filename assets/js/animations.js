@@ -28,13 +28,38 @@ function createPlexusInstance(canvas, options = {}) {
     maxDistance: options.maxDistance || 150,
   };
   let themeColors = { r: 99, g: 179, b: 237 }; // Default
+  let themeTextColor = { r: 226, g: 232, b: 240 }; // Default text color (dark theme)
+
+  // Objek untuk melacak posisi mouse
+  const mouse = {
+    x: null,
+    y: null,
+    // Radius interaksi mouse
+    radius: 100,
+  };
+
+  // Palet warna yang harmonis untuk partikel
+  const PLEXUS_PALETTE = [
+    "#ffbe0b",
+    "#fb5607",
+    "#ff006e",
+    "#8338ec",
+    "#3a86ff",
+  ];
 
   function updateThemeColors() {
     const accentColor = getComputedStyle(document.documentElement)
       .getPropertyValue("--color-accent")
       .trim();
-    const rgb = hexToRgb(accentColor);
-    if (rgb) themeColors = rgb;
+    const textColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--text-primary")
+      .trim();
+
+    const accentRgb = hexToRgb(accentColor);
+    if (accentRgb) themeColors = accentRgb;
+
+    const textRgb = hexToRgb(textColor);
+    if (textRgb) themeTextColor = textRgb;
   }
 
   function resizeCanvas() {
@@ -47,17 +72,38 @@ function createPlexusInstance(canvas, options = {}) {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
       this.size = Math.random() * 3 + 1;
-      this.speedX = Math.random() * 0.5 - 0.25;
-      this.speedY = Math.random() * 0.5 - 0.25;
-      this.color = `rgba(${themeColors.r}, ${themeColors.g}, ${
-        themeColors.b
-      }, ${Math.random() * 0.5 + 0.4})`;
+      this.speedX = Math.random() * 0.2 - 0.1; // Kecepatan lebih lambat
+      this.speedY = Math.random() * 0.2 - 0.1; // Kecepatan lebih lambat
+
+      const baseColor =
+        PLEXUS_PALETTE[Math.floor(Math.random() * PLEXUS_PALETTE.length)];
+      const rgbColor = hexToRgb(baseColor);
+      this.color = `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, ${
+        Math.random() * 0.5 + 0.5
+      })`;
     }
     update() {
       this.x += this.speedX;
       this.y += this.speedY;
       if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
       if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+
+      // Efek menjauh dari mouse (repulsion)
+      if (mouse.x !== null) {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < mouse.radius) {
+          const forceDirectionX = dx / distance;
+          const forceDirectionY = dy / distance;
+          // Kekuatan dorongan berbanding terbalik dengan jarak
+          const force = (mouse.radius - distance) / mouse.radius;
+          const moveX = forceDirectionX * force * 1.5;
+          const moveY = forceDirectionY * force * 1.5;
+          this.x += moveX;
+          this.y += moveY;
+        }
+      }
     }
     draw() {
       ctx.fillStyle = this.color;
@@ -84,11 +130,31 @@ function createPlexusInstance(canvas, options = {}) {
         );
         if (distance < config.maxDistance) {
           const opacityValue = 1 - distance / config.maxDistance;
-          ctx.strokeStyle = `rgba(${themeColors.r}, ${themeColors.g}, ${themeColors.b}, ${opacityValue})`;
+          ctx.strokeStyle = `rgba(${themeTextColor.r}, ${themeTextColor.g}, ${
+            themeTextColor.b
+          }, ${opacityValue * 0.5})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
           ctx.lineTo(particles[b].x, particles[b].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Menghubungkan partikel ke mouse
+    if (mouse.x !== null) {
+      for (let i = 0; i < particles.length; i++) {
+        const distance = Math.sqrt(
+          (particles[i].x - mouse.x) ** 2 + (particles[i].y - mouse.y) ** 2
+        );
+        if (distance < config.maxDistance) {
+          const opacityValue = 1 - distance / config.maxDistance;
+          ctx.strokeStyle = `rgba(${themeColors.r}, ${themeColors.g}, ${themeColors.b}, ${opacityValue})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
       }
@@ -99,7 +165,7 @@ function createPlexusInstance(canvas, options = {}) {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p) => {
-      p.update();
+      p.update(); // Diaktifkan kembali dengan kecepatan lambat
       p.draw();
     });
     connect();
@@ -109,6 +175,19 @@ function createPlexusInstance(canvas, options = {}) {
   resizeCanvas();
   init();
   animate();
+
+  // Pindahkan event listener ke elemen parent (section) agar tidak terhalang konten
+  const parentElement = canvas.parentElement;
+  parentElement.addEventListener("mousemove", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = event.clientX - rect.left;
+    mouse.y = event.clientY - rect.top;
+  });
+
+  parentElement.addEventListener("mouseout", () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
 
   // Mengembalikan fungsi untuk reinisialisasi saat ada perubahan global
   return {
@@ -129,8 +208,8 @@ function initializeHeroCanvas() {
   allCanvases.forEach((canvas) => {
     const options =
       canvas.id === "heroCanvas"
-        ? { particleCount: 100, maxDistance: 160 } // Opsi untuk header
-        : { particleCount: 50, maxDistance: 110 }; // Opsi lebih ringan untuk section
+        ? { particleCount: 150, maxDistance: 160 } // Opsi untuk header (lebih padat)
+        : { particleCount: 75, maxDistance: 110 }; // Opsi untuk section (lebih ringan)
     const instance = createPlexusInstance(canvas, options);
     if (instance) plexusInstances.push(instance);
   });
