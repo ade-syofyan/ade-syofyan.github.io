@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeVisitorCounter();
   initializePaletteGenerator();
   initializeCodeViewers();
+  initializeTimeTravelerAchievement();
 
   // Initialize Complex Modules
   initializeTerminal();

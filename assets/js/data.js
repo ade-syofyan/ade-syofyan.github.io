@@ -202,6 +202,12 @@ const achievements = {
     description: "Menemukan cara untuk 'merusak' portofolio.",
     icon: "shield-alert",
   },
+  time_traveler: {
+    name: "Penjelajah Waktu",
+    unlocked: false,
+    description: "Kembali setelah meninggalkan tab terbuka selama 15 menit.",
+    icon: "clock",
+  },
 };
 
 // --- Virtual File System Data ---

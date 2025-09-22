@@ -170,3 +170,33 @@ function initializeCodeViewers() {
     if (e.target === modal) closeModal();
   });
 }
+
+// --- Time Traveler Achievement ---
+function initializeTimeTravelerAchievement() {
+  const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
+  let timeIsUp = false;
+
+  // Jangan jalankan jika achievement sudah terbuka
+  const savedAchievements = JSON.parse(
+    localStorage.getItem("portfolioAchievements") || "[]"
+  );
+  if (savedAchievements.includes("time_traveler")) {
+    return;
+  }
+
+  const timerId = setTimeout(() => {
+    timeIsUp = true;
+  }, FIFTEEN_MINUTES_MS);
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible" && timeIsUp) {
+      const isNewlyUnlocked = window.unlockAchievement("time_traveler");
+      if (isNewlyUnlocked) {
+        clearTimeout(timerId);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      }
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+}
