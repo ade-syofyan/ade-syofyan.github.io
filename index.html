@@ -29,7 +29,7 @@
     />
     <meta
       property="og:image"
-      content="https://placehold.co/1200x630/4a5568/e2e8f0?text=Ade+Syofyan+Portfolio"
+      content="https://ade-syofyan.github.io/assets/img/og-image.png"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -48,7 +48,7 @@
     />
     <meta
       property="twitter:image"
-      content="https://placehold.co/1200x675/4a5568/e2e8f0?text=Ade+Syofyan+Portfolio"
+      content="https://ade-syofyan.github.io/assets/img/og-image.png"
     />
     <meta property="twitter:image:width" content="1200" />
     <meta property="twitter:image:height" content="675" />
@@ -67,8 +67,8 @@
 
     <link
       rel="icon"
-      href="https://placehold.co/32x32/63b3ed/ffffff?text=AS"
-      type="image/x-icon"
+      href="./assets/img/favicon.png"
+      type="image/png"
     />
     <!-- Favicon sederhana -->
 
@@ -284,53 +284,62 @@
       /* } */
 
       .mobile-menu-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.95); /* Lebih gelap untuk fokus */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 1010; /* Lebih tinggi dari modal lain */
-        opacity: 0;
-        visibility: hidden;
-        transform: translateX(100%); /* Geser keluar dari layar */
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(26, 32, 44, 0.8); /* Warna body dengan transparansi */
+          -webkit-backdrop-filter: blur(10px); /* Efek blur untuk Safari */
+          backdrop-filter: blur(10px); /* Efek blur modern */
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start; /* Mulai dari atas */
+          align-items: center;
+          padding-top: 6rem; /* Beri ruang dari atas */
+          z-index: 1010;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-100%); /* Animasi dari atas */
+          transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       }
+
       .mobile-menu-overlay.open {
         opacity: 1;
         visibility: visible;
-        transform: translateX(0); /* Geser masuk */
+        transform: translateY(0); /* Geser masuk ke posisi normal */
       }
+
       .mobile-menu-overlay a {
-        color: #e2e8f0;
-        font-size: 0.8rem;
-        padding: 1rem 0;
-        width: 80%;
-        text-align: center;
-        transition: color 0.3s ease;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis pemisah */
+          color: #e2e8f0;
+          font-size: 1.5rem; /* Ukuran font lebih besar */
+          font-weight: 500;
+          padding: 1rem 0;
+          width: 80%;
+          max-width: 300px;
+          text-align: left;
+          transition: color 0.3s ease, transform 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 1rem; /* Jarak antara ikon dan teks */
       }
-      .mobile-menu-overlay a:last-child {
-        border-bottom: none; /* Hapus garis bawah terakhir */
-      }
+
       .mobile-menu-overlay a:hover {
         color: #63b3ed;
+        transform: translateX(5px); /* Efek geser saat hover */
       }
+
       .mobile-menu-close-btn {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 1.25rem; /* Sesuaikan posisi */
+        right: 1.25rem;
         background: none;
         border: none;
-        font-size: 2.5rem; /* Ukuran lebih besar */
         color: #e2e8f0;
         cursor: pointer;
         z-index: 1011;
         transition: color 0.3s ease;
+        padding: 0.5rem; /* Area klik lebih besar */
       }
       .mobile-menu-close-btn:hover {
         color: #63b3ed;
@@ -374,9 +383,8 @@
 
       /* Gaya untuk link navigasi aktif */
       .desktop-nav a.active {
-        color: #ffffff; /* Warna teks aktif */
-        border-bottom: 2px solid #63b3ed; /* Garis bawah biru aksen */
-        padding-bottom: 4px; /* Sedikit padding agar garis tidak terlalu dekat teks */
+        background-color: #2d3748; /* Warna bg-card */
+        color: #ffffff; /* Teks putih */
       }
 
       /* Fix for nested CSS rules */
@@ -388,6 +396,18 @@
         font-weight: 600; /* Atau gaya lain yang diinginkan */
       }
 
+      /* Tombol CTA di menu mobile */
+      .mobile-menu-cta {
+          background-color: #63b3ed;
+          color: #ffffff !important; /* Paksa warna putih */
+          padding: 1rem 1.5rem !important; /* Padding lebih besar */
+          border-radius: 0.5rem;
+          margin-top: 1.5rem;
+          justify-content: center;
+          text-align: center !important;
+          width: 80%;
+          max-width: 300px;
+      }
       /* Animasi untuk Workflow Section */
       .workflow-step {
         opacity: 0;
@@ -495,53 +515,52 @@
         <a href="#" class="text-2xl font-bold text-white tracking-wide"
           >Ade Syofyan</a
         >
-        <!-- Use Tailwind for responsive display: hidden on small, flex on medium and up -->
-        <div class="hidden md:flex space-x-6 desktop-nav">
+        <!-- Redesigned Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-2 desktop-nav">
           <a
             href="#about"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Tentang Saya</a
           >
           <a
             href="#skills"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Keahlian</a
           >
           <a
             href="#services"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Layanan</a
           >
           <a
             href="#live-demos"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Live Demos</a
           >
           <a
             href="#workflow"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Proses Kerja</a
           >
           <a
             href="#portfolio"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Portofolio</a
           >
-          
           <a
             href="#testimonials"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Testimoni</a
           >
           <a
             href="#contact"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Kontak</a
           >
           <a
             href="#"
             onclick="openChatbotModal(); return false;"
-            class="text-gray-300 hover:text-white transition duration-300"
+            class="bg-accent text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition-colors"
             >Chat ke AI</a
           >
         </div>
@@ -567,19 +586,19 @@
         onclick="toggleMobileMenu()"
         aria-label="Close Mobile Menu"
       >
-        &times;
+        <i data-lucide="x" class="w-8 h-8"></i>
       </button>
-      <a href="#about" onclick="closeMobileMenu()">Tentang Saya</a>
-      <a href="#skills" onclick="closeMobileMenu()">Keahlian</a>
-      <a href="#services" onclick="closeMobileMenu()">Layanan</a>
-      <a href="#live-demos" onclick="closeMobileMenu()">Live Demos</a>
-      <a href="#workflow" onclick="closeMobileMenu()">Proses Kerja</a>
-      <a href="#portfolio" onclick="closeMobileMenu()">Portofolio</a>
-      <a href="#testimonials" onclick="closeMobileMenu()">Testimoni</a>
-      <a href="#contact" onclick="closeMobileMenu()">Kontak</a>
-      <a href="#" onclick="openChatbotModal(); closeMobileMenu(); return false;"
-        >Chat ke AI</a
-      >
+      <a href="#about" onclick="closeMobileMenu()"><i data-lucide="user" class="w-6 h-6 text-accent"></i><span>Tentang Saya</span></a>
+      <a href="#skills" onclick="closeMobileMenu()"><i data-lucide="star" class="w-6 h-6 text-accent"></i><span>Keahlian</span></a>
+      <a href="#services" onclick="closeMobileMenu()"><i data-lucide="briefcase" class="w-6 h-6 text-accent"></i><span>Layanan</span></a>
+      <a href="#live-demos" onclick="closeMobileMenu()"><i data-lucide="play-circle" class="w-6 h-6 text-accent"></i><span>Live Demos</span></a>
+      <a href="#workflow" onclick="closeMobileMenu()"><i data-lucide="workflow" class="w-6 h-6 text-accent"></i><span>Proses Kerja</span></a>
+      <a href="#portfolio" onclick="closeMobileMenu()"><i data-lucide="folder-kanban" class="w-6 h-6 text-accent"></i><span>Portofolio</span></a>
+      <a href="#testimonials" onclick="closeMobileMenu()"><i data-lucide="quote" class="w-6 h-6 text-accent"></i><span>Testimoni</span></a>
+      <a href="#contact" onclick="closeMobileMenu()"><i data-lucide="mail" class="w-6 h-6 text-accent"></i><span>Kontak</span></a>
+      <a href="#" class="mobile-menu-cta" onclick="openChatbotModal(); closeMobileMenu(); return false;">
+        <i data-lucide="message-circle" class="w-6 h-6"></i><span>Chat ke AI</span>
+      </a>
     </div>
 
     <!-- Hero Section -->
@@ -1281,7 +1300,7 @@
         "@type": "Person",
         "name": "Ade Syofyan",
         "url": "https://ade-syofyan.github.io/",
-        "image": "https://placehold.co/300x300/4a5568/e2e8f0?text=AS", <!-- Ganti dengan URL foto profil asli -->
+        "image": "https://ade-syofyan.github.io/assets/img/foto_ade_new.jpeg",
         "sameAs": [
           "https://www.linkedin.com/in/ade-syofyan/",
           "mailto:ade.syofyan@gmail.com",
