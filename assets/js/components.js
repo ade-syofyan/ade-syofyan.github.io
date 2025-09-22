@@ -24,6 +24,185 @@ function initializeVisitorCounter() {
   }
   setTimeout(updateVisitorCount, 2500);
 }
+// --- Live Demo: Pathfinding Visualizer ---
+function initializePathfindingVisualizer() {
+  const gridContainer = document.getElementById("pathfinding-grid");
+  const controlsContainer = document.getElementById("pathfinding-controls");
+  const runBtn = document.getElementById("run-pathfinding-btn");
+  const resetBtn = document.getElementById("reset-pathfinding-btn");
+
+  if (!gridContainer || !runBtn || !resetBtn) return;
+
+  const GRID_WIDTH = 20;
+  const GRID_HEIGHT = 10;
+  let nodes = [];
+  let startNode = null;
+  let endNode = null;
+  let currentMode = "start"; // 'start', 'end', 'wall'
+  let isRunning = false;
+
+  function createGrid() {
+    gridContainer.innerHTML = "";
+    nodes = [];
+    for (let row = 0; row < GRID_HEIGHT; row++) {
+      const currentRow = [];
+      for (let col = 0; col < GRID_WIDTH; col++) {
+        const node = document.createElement("div");
+        node.className = "pathfinding-node";
+        node.dataset.row = row;
+        node.dataset.col = col;
+        node.addEventListener("click", () => handleNodeClick(row, col));
+        gridContainer.appendChild(node);
+        currentRow.push({
+          element: node,
+          isWall: false,
+          isStart: false,
+          isEnd: false,
+        });
+      }
+      nodes.push(currentRow);
+    }
+  }
+
+  function handleNodeClick(row, col) {
+    if (isRunning) return;
+    const node = nodes[row][col];
+
+    if (currentMode === "start") {
+      if (startNode) {
+        startNode.isStart = false;
+        startNode.element.classList.remove("node-start");
+      }
+      node.isStart = true;
+      node.element.classList.add("node-start");
+      startNode = node;
+    } else if (currentMode === "end") {
+      if (endNode) {
+        endNode.isEnd = false;
+        endNode.element.classList.remove("node-end");
+      }
+      node.isEnd = true;
+      node.element.classList.add("node-end");
+      endNode = node;
+    } else if (currentMode === "wall") {
+      if (!node.isStart && !node.isEnd) {
+        node.isWall = !node.isWall;
+        node.element.classList.toggle("node-wall", node.isWall);
+      }
+    }
+  }
+
+  function resetGrid(fullReset = true) {
+    isRunning = false;
+    for (let row = 0; row < GRID_HEIGHT; row++) {
+      for (let col = 0; col < GRID_WIDTH; col++) {
+        const node = nodes[row][col];
+        node.element.classList.remove("node-visited", "node-path");
+        if (fullReset) {
+          node.element.classList.remove("node-start", "node-end", "node-wall");
+          node.isStart = false;
+          node.isEnd = false;
+          node.isWall = false;
+        }
+      }
+    }
+    if (fullReset) {
+      startNode = null;
+      endNode = null;
+    }
+  }
+
+  async function runBFS() {
+    if (!startNode || !endNode || isRunning) return;
+    isRunning = true;
+    resetGrid(false);
+    unlockAchievement("navigator");
+
+    const queue = [
+      [
+        parseInt(startNode.element.dataset.row),
+        parseInt(startNode.element.dataset.col),
+      ],
+    ];
+    const visited = new Set([
+      `${startNode.element.dataset.row}-${startNode.element.dataset.col}`,
+    ]);
+    const predecessors = new Map();
+
+    const directions = [
+      [0, 1],
+      [0, -1],
+      [1, 0],
+      [-1, 0],
+    ];
+
+    let pathFound = false;
+    while (queue.length > 0) {
+      const [row, col] = queue.shift();
+
+      if (
+        row === parseInt(endNode.element.dataset.row) &&
+        col === parseInt(endNode.element.dataset.col)
+      ) {
+        pathFound = true;
+        break;
+      }
+
+      if (!nodes[row][col].isStart) {
+        nodes[row][col].element.classList.add("node-visited");
+        await new Promise((resolve) => setTimeout(resolve, 20));
+      }
+
+      for (const [dr, dc] of directions) {
+        const newRow = row + dr;
+        const newCol = col + dc;
+
+        if (
+          newRow >= 0 &&
+          newRow < GRID_HEIGHT &&
+          newCol >= 0 &&
+          newCol < GRID_WIDTH &&
+          !nodes[newRow][newCol].isWall &&
+          !visited.has(`${newRow}-${newCol}`)
+        ) {
+          visited.add(`${newRow}-${newCol}`);
+          predecessors.set(`${newRow}-${newCol}`, `${row}-${col}`);
+          queue.push([newRow, newCol]);
+        }
+      }
+    }
+
+    if (pathFound) {
+      let current = `${endNode.element.dataset.row}-${endNode.element.dataset.col}`;
+      while (
+        current &&
+        current !==
+          `${startNode.element.dataset.row}-${startNode.element.dataset.col}`
+      ) {
+        const [row, col] = current.split("-").map(Number);
+        if (!nodes[row][col].isEnd) {
+          nodes[row][col].element.classList.add("node-path");
+          await new Promise((resolve) => setTimeout(resolve, 30));
+        }
+        current = predecessors.get(current);
+      }
+    }
+    isRunning = false;
+  }
+
+  controlsContainer.querySelectorAll(".pathfinding-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      controlsContainer.querySelector(".active").classList.remove("active");
+      btn.classList.add("active");
+      currentMode = btn.dataset.mode;
+    });
+  });
+
+  runBtn.addEventListener("click", runBFS);
+  resetBtn.addEventListener("click", () => resetGrid(true));
+
+  createGrid();
+}
 
 // --- Live Demo: Color Palette Generator ---
 function initializePaletteGenerator() {

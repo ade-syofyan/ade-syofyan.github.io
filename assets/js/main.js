@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize Interactive Components
   initializeVisitorCounter();
+  initializePathfindingVisualizer();
   initializePaletteGenerator();
   initializeCodeViewers();
   initializeTimeTravelerAchievement();

@@ -214,6 +214,12 @@ const achievements = {
     description: "Mengaktifkan mode rahasia melalui DevTools.",
     icon: "bug",
   },
+  navigator: {
+    name: "Sang Navigator",
+    unlocked: false,
+    description: "Menemukan jalan menggunakan Pathfinding Visualizer.",
+    icon: "map",
+  },
 };
 
 // --- Virtual File System Data ---

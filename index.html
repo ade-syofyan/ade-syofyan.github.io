@@ -530,15 +530,15 @@
         <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <!-- Demo 1: Real-time Visitor Counter -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pengunjung Real-time (Simulasi)</h3>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pengunjung (Simulasi)</h3>
             </div>
             <p class="mb-6" style="color: var(--text-secondary);">
-              Demo ini menyimulasikan pembaruan data secara real-time, seperti yang digunakan dalam dashboard analitik atau sistem notifikasi. Angka di bawah ini diperbarui secara acak setiap beberapa detik.
+              Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
             </p>
             <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
               <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
@@ -546,29 +546,79 @@
                 ...
               </p>
             </div>
-            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
             <button class="btn-code-toggle" data-code-source="visitor-counter-code">
               Lihat Kode
             </button>
             <div id="visitor-counter-code" class="hidden" data-keep-source="true">
+              <pre class="line-numbers"><code class="language-javascript">const countEl = document.getElementById('visitor-count');
+let visitors = Math.floor(Math.random() * 151) + 150;
+setInterval(() => {
+  const fluctuation = Math.floor(Math.random() * 5) - 2;
+  visitors = Math.max(100, visitors + fluctuation);
+  countEl.textContent = visitors;
+}, Math.random() * 2000 + 2000);</code></pre>
+            </div>
+          </div>
+          <!-- Demo 2: Pathfinding Visualizer -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <div class="flex items-center justify-center gap-4 mb-4">
+              <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
+            </div>
+            <p class="mb-6" style="color: var(--text-secondary);">
+              Demo ini menunjukkan algoritma pencarian jalan (BFS). Klik untuk menempatkan titik awal, akhir, dan tembok, lalu lihat bagaimana algoritma menemukan rute terpendek.
+            </p>
+            <div id="pathfinding-grid" class="pathfinding-grid mb-4">
+              <!-- Grid akan digenerate oleh JS -->
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 mb-4 text-sm" id="pathfinding-controls">
+              <button class="pathfinding-btn active" data-mode="start">Mulai</button>
+              <button class="pathfinding-btn" data-mode="end">Akhir</button>
+              <button class="pathfinding-btn" data-mode="wall">Tembok</button>
+            </div>
+            <div class="flex gap-2">
+              <button id="run-pathfinding-btn" class="btn-primary w-full">Cari Jalan</button>
+              <button id="reset-pathfinding-btn" class="btn-secondary w-full">Reset</button>
+            </div>
+            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
+            <button class="btn-code-toggle" data-code-source="pathfinding-visualizer-code">
+              Lihat Kode
+            </button>
+            <div id="pathfinding-visualizer-code" class="hidden" data-keep-source="true">
               <pre class="line-numbers"><code class="language-javascript">
-                const visitorCountElement = document.getElementById('visitor-count');
-                let currentVisitors = Math.floor(Math.random() * 151) + 150;
-                visitorCountElement.textContent = currentVisitors;
+                // Simplified Breadth-First Search (BFS) Logic
+                async function findShortestPath(startNode, endNode, grid) {
+                  const queue = [startNode];
+                  const visited = new Set();
+                  const predecessors = new Map();
+                  visited.add(startNode);
 
-                setInterval(() => {
-                  const fluctuation = Math.floor(Math.random() * 5) - 2;
-                  currentVisitors = Math.max(100, currentVisitors + fluctuation);
-                  visitorCountElement.classList.add('pop-in');
-                  visitorCountElement.textContent = currentVisitors;
-                  setTimeout(() => visitorCountElement.classList.remove('pop-in'), 300);
-                }, Math.random() * 2000 + 2000);
+                  while (queue.length > 0) {
+                    const currentNode = queue.shift();
+
+                    if (currentNode === endNode) {
+                      // Path found! Reconstruct and animate it.
+                      return reconstructPath(predecessors, endNode);
+                    }
+
+                    // Animate the visited node
+                    currentNode.element.classList.add("node-visited");
+                    await new Promise(r => setTimeout(r, 20));
+
+                    for (const neighbor of getNeighbors(currentNode, grid)) {
+                      if (!visited.has(neighbor) && !neighbor.isWall) {
+                        visited.add(neighbor);
+                        predecessors.set(neighbor, currentNode);
+                        queue.push(neighbor);
+                      }
+                    }
+                  }
+                }
               </code></pre>
             </div>
           </div>
     
-          <!-- Demo 2: Placeholder for another demo -->
-          <!-- Demo 2: Color Palette Generator -->
+          <!-- Demo 3: Color Palette Generator -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>

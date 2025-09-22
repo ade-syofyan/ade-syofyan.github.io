@@ -1201,3 +1201,81 @@ body.hackerman-mode #achievement-toggle-btn,
 body.hackerman-mode #achievement-toast {
   transform: rotate(1deg);
 }
+
+/* Styles for Pathfinding Visualizer Demo */
+.pathfinding-grid {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr); /* 20 columns */
+  grid-template-rows: repeat(10, 1fr); /* 10 rows */
+  border: 1px solid var(--border-color);
+  aspect-ratio: 2 / 1; /* Maintain a 2:1 aspect ratio */
+}
+
+.pathfinding-node {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.pathfinding-node:hover {
+  background-color: var(--bg-card-secondary);
+}
+
+.pathfinding-node.node-start {
+  background-color: var(--color-accent);
+  animation: pulse-node 1s infinite;
+}
+
+.pathfinding-node.node-end {
+  background-color: #f43f5e; /* Tailwind's rose-500 */
+  animation: pulse-node 1s infinite;
+}
+
+.pathfinding-node.node-wall {
+  background-color: var(--text-primary);
+  transform: scale(0.9);
+  border-radius: 2px;
+}
+
+.pathfinding-node.node-visited {
+  animation: visit-node 0.5s ease-out forwards;
+}
+
+.pathfinding-node.node-path {
+  animation: path-node 0.5s ease-out forwards;
+}
+
+@keyframes visit-node {
+  0% { transform: scale(0.5); background-color: rgba(var(--color-accent-rgb), 0.2); }
+  100% { transform: scale(1); background-color: rgba(var(--color-accent-rgb), 0.4); }
+}
+
+@keyframes path-node {
+  0% { transform: scale(0.7); background-color: #facc15; /* Tailwind's amber-400 */ }
+  100% { transform: scale(1); background-color: #fde047; /* Tailwind's amber-300 */ }
+}
+
+@keyframes pulse-node {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+.pathfinding-btn {
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pathfinding-btn.active, .pathfinding-btn:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+}
