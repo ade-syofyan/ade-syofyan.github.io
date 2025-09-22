@@ -83,63 +83,89 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+      /* --- Theme Variables --- */
+      :root {
+        /* Dark Theme (Default) */
+        --bg-primary: #1a202c;
+        --bg-card: #2d3748;
+        --bg-card-secondary: #4a5568;
+        --bg-nav: #111827; /* bg-gray-900 */
+        --bg-modal: #2d3748;
+        --text-primary: #e2e8f0;
+        --text-secondary: #a0aec0; /* text-gray-400 */
+        --text-white: #ffffff;
+        --color-accent: #63b3ed;
+        --color-accent-hover: #4299e1;
+        --border-color: #4a5568;
+        --shadow-color: rgba(0, 0, 0, 0.4);
+      }
+
+      html[data-theme='light'] {
+        /* Light Theme */
+        --bg-primary: #f7fafc;
+        --bg-card: #ffffff;
+        --bg-card-secondary: #edf2f7;
+        --bg-nav: #ffffff;
+        --bg-modal: #ffffff;
+        --text-primary: #2d3748;
+        --text-secondary: #718096;
+        --text-white: #1a202c;
+        --color-accent: #3182ce;
+        --color-accent-hover: #2b6cb0;
+        --border-color: #e2e8f0;
+        --shadow-color: rgba(0, 0,0, 0.1);
+      }
+
       body {
         font-family: "Inter", sans-serif;
-        background-color: #1a202c; /* Latar belakang gelap */
-        color: #e2e8f0; /* Teks abu-abu terang */
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
         scroll-behavior: smooth;
         overflow-x: hidden; /* Prevent horizontal scrollbar */
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
       .container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 1rem;
       }
-      .text-accent {
-        color: #63b3ed; /* Warna aksen biru teknologi */
-      }
+      .text-accent { color: var(--color-accent); }
       .bg-card {
-        background-color: #2d3748; /* Warna gelap sedikit lebih terang untuk kartu */
+        background-color: var(--bg-card);
         border-radius: 0.75rem; /* Sudut membulat */
+        transition: background-color 0.3s ease;
       }
       .btn-primary {
-        background-color: #63b3ed;
-        color: #ffffff;
+        background-color: var(--color-accent);
+        color: white; /* Tetap putih untuk kontras */
         padding: 0.75rem 1.5rem;
         border-radius: 0.5rem;
         transition: background-color 0.3s ease, transform 0.3s ease;
       }
-      .btn-primary:hover {
-        background-color: #4299e1;
-        transform: translateY(-2px); /* Sedikit naik saat hover */
-      }
+      .btn-primary:hover { background-color: var(--color-accent-hover); transform: translateY(-2px); }
       .btn-secondary {
-        border: 1px solid #63b3ed;
-        color: #63b3ed;
+        border: 1px solid var(--color-accent);
+        color: var(--color-accent);
         padding: 0.75rem 1.5rem;
         border-radius: 0.5rem;
         transition: background-color 0.3s ease, color 0.3s ease,
           transform 0.3s ease;
       }
       .btn-secondary:hover {
-        background-color: #63b3ed;
-        color: #ffffff;
+        background-color: var(--color-accent);
+        color: white; /* Tetap putih untuk kontras */
         transform: translateY(-2px); /* Sedikit naik saat hover */
       }
       /* Scrollbar kustom untuk browser webkit */
       ::-webkit-scrollbar {
         width: 8px;
       }
-      ::-webkit-scrollbar-track {
-        background: #2d3748;
-      }
+      ::-webkit-scrollbar-track { background: var(--bg-card); }
       ::-webkit-scrollbar-thumb {
-        background: #63b3ed;
+        background: var(--color-accent);
         border-radius: 4px;
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #4299e1;
-      }
+      ::-webkit-scrollbar-thumb:hover { background: var(--color-accent-hover); }
 
       /* Overlay untuk modal detail proyek */
       .modal-overlay {
@@ -162,7 +188,7 @@
         visibility: visible;
       }
       .modal-content {
-        background-color: #2d3748;
+        background-color: var(--bg-modal);
         padding: 2rem;
         border-radius: 1rem;
         max-width: 90%; /* Lebar maksimal */
@@ -183,12 +209,12 @@
         background: none;
         border: none;
         font-size: 1.5rem;
-        color: #e2e8f0;
+        color: var(--text-primary);
         cursor: pointer;
         transition: color 0.3s ease;
       }
       .modal-close-btn:hover {
-        color: #63b3ed;
+        color: var(--color-accent);
       }
 
       /* Gaya kanvas untuk efek latar belakang hero */
@@ -205,7 +231,7 @@
 
       /* Gaya spesifik Chatbot */
       .chatbot-content {
-        background-color: #2d3748; /* Warna latar belakang konten chatbot */
+        background-color: var(--bg-modal);
         padding: 1.5rem; /* Padding di dalam konten chatbot */
         border-radius: 1rem; /* Sudut membulat untuk konten chatbot */
         max-width: 90%; /* Lebar maksimal 90% dari viewport */
@@ -218,7 +244,7 @@
       }
       .chat-display {
         flex-grow: 1; /* Biarkan area display chat mengambil sisa ruang vertikal */
-        background-color: #1a202c; /* Warna latar belakang area display chat */
+        background-color: var(--bg-primary);
         border-radius: 0.5rem; /* Sudut membulat untuk display chat */
         padding: 1rem; /* Padding di dalam display chat */
         overflow-y: auto; /* Aktifkan scroll vertikal jika konten melebihi area */
@@ -237,16 +263,16 @@
         gap: 0.5rem; /* Jarak antara input dan tombol saat vertikal */
       }
       .chat-input-area input {
-        background-color: #4a5568;
-        border: 1px solid #63b3ed;
+        background-color: var(--bg-card-secondary);
+        border: 1px solid var(--color-accent);
         border-radius: 0.5rem;
         padding: 0.75rem 1rem;
-        color: #e2e8f0;
+        color: var(--text-primary);
         width: 100%; /* Lebar penuh saat dalam mode kolom */
         box-sizing: border-box; /* Padding dan border termasuk dalam width */
       }
       .chat-input-area button {
-        background-color: #63b3ed;
+        background-color: var(--color-accent);
         color: #ffffff;
         padding: 0.75rem 1rem;
         border-radius: 0.5rem;
@@ -256,7 +282,7 @@
         white-space: nowrap; /* Cegah teks tombol terpotong ke baris baru */
       }
       .chat-input-area button:hover {
-        background-color: #4299e1;
+        background-color: var(--color-accent-hover);
       }
 
       /* Mobile Navigation - Awal perbaikan */
@@ -296,12 +322,14 @@
           flex-direction: column;
           justify-content: flex-start; /* Mulai dari atas */
           align-items: center;
-          padding-top: 6rem; /* Beri ruang dari atas */
+          padding-top: 5rem; /* Kurangi padding atas sedikit */
+          padding-bottom: 2rem; /* Tambahkan padding bawah untuk scrolling */
           z-index: 1010;
           opacity: 0;
           visibility: hidden;
           transform: translateY(-100%); /* Animasi dari atas */
           transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+          overflow-y: auto; /* Aktifkan scroll jika konten melebihi tinggi layar */
       }
 
       .mobile-menu-overlay.open {
@@ -311,10 +339,10 @@
       }
 
       .mobile-menu-overlay a {
-          color: #e2e8f0;
-          font-size: 1.5rem; /* Ukuran font lebih besar */
+          color: var(--text-primary);
+          font-size: 1.25rem; /* Sedikit kurangi ukuran font untuk mobile */
           font-weight: 500;
-          padding: 1rem 0;
+          padding: 0.75rem 0; /* Kurangi padding vertikal */
           width: 80%;
           max-width: 300px;
           text-align: left;
@@ -325,7 +353,7 @@
       }
 
       .mobile-menu-overlay a:hover {
-        color: #63b3ed;
+        color: var(--color-accent);
         transform: translateX(5px); /* Efek geser saat hover */
       }
 
@@ -335,15 +363,13 @@
         right: 1.25rem;
         background: none;
         border: none;
-        color: #e2e8f0;
+        color: var(--text-primary);
         cursor: pointer;
         z-index: 1011;
         transition: color 0.3s ease;
         padding: 0.5rem; /* Area klik lebih besar */
       }
-      .mobile-menu-close-btn:hover {
-        color: #63b3ed;
-      }
+      .mobile-menu-close-btn:hover { color: var(--color-accent); }
 
       /* Responsif untuk Tablet dan Desktop */
       @media (min-width: 768px) {
@@ -365,7 +391,7 @@
         z-index: 99; /* Higher than other content */
         border: none; /* Remove borders */
         outline: none; /* Remove outline */
-        background-color: #63b3ed; /* Set a background color */
+        background-color: var(--color-accent);
         color: white; /* Text color */
         cursor: pointer; /* Add a mouse pointer on hover */
         padding: 12px 15px; /* Some padding */
@@ -377,30 +403,29 @@
       }
 
       #scrollToTopBtn:hover {
-        background-color: #4299e1; /* Darker background on hover */
+        background-color: var(--color-accent-hover);
         opacity: 1;
       }
 
       /* Gaya untuk link navigasi aktif */
       .desktop-nav a.active {
-        background-color: #2d3748; /* Warna bg-card */
-        color: #ffffff; /* Teks putih */
+        background-color: var(--bg-card);
+        color: var(--text-white);
       }
 
       /* Fix for nested CSS rules */
       /* .container rule was incorrectly nested */
       /* .mobile-menu-overlay a.active rule was incorrectly nested */
 
-      .mobile-menu-overlay a.active {
-        color: #63b3ed; /* Warna teks aksen untuk mobile menu */
+      .mobile-menu-overlay a.active { color: var(--color-accent);
         font-weight: 600; /* Atau gaya lain yang diinginkan */
       }
 
       /* Tombol CTA di menu mobile */
       .mobile-menu-cta {
-          background-color: #63b3ed;
-          color: #ffffff !important; /* Paksa warna putih */
-          padding: 1rem 1.5rem !important; /* Padding lebih besar */
+          background-color: var(--color-accent);
+          color: #ffffff !important;
+          padding: 0.8rem 1.5rem !important; /* Kurangi padding vertikal */
           border-radius: 0.5rem;
           margin-top: 1.5rem;
           justify-content: center;
@@ -479,7 +504,7 @@
       }
       .color-swatch:hover {
         transform: translateY(-4px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 10px var(--shadow-color);
       }
       .color-swatch .hex-code {
         background-color: rgba(0, 0, 0, 0.6);
@@ -506,68 +531,218 @@
         transform: translateY(0);
       }
 
+      /* Animasi untuk Kartu Layanan (Staggered) */
+      .service-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      }
+
+      .service-card.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Terminal Styles */
+      #terminal-input {
+        caret-color: var(--color-accent);
+      }
+      #terminal-output .terminal-line {
+        white-space: pre-wrap; /* Agar output bisa wrap */
+      }
+      #terminal-window.light-theme {
+        background-color: #f0f0f0;
+        color: #333;
+        border-color: #ccc;
+      }
+      /* Anda bisa menambahkan lebih banyak gaya untuk light theme di sini */
+
+      /* Achievement Toast Animation */
+      #achievement-toast.show {
+        transform: translateX(0);
+      }
+
+      /* macOS-like Terminal Controls */
+      .terminal-btn {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 1px solid rgba(0,0,0,0.2);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .terminal-btn .btn-icon {
+        width: 8px;
+        height: 8px;
+        color: rgba(0,0,0,0.6);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      #terminal-window:hover .terminal-btn .btn-icon {
+        opacity: 1;
+      }
+      #terminal-window.maximized {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0; /* Hapus padding saat dimaksimalkan */
+        margin: 0;
+      }
+
+      /* Theme Switcher Dropdown */
+      .theme-switcher {
+        position: relative;
+      }
+      .theme-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px var(--shadow-color);
+        z-index: 1020;
+        width: 150px;
+        overflow: hidden;
+        display: none; /* Hidden by default */
+      }
+      .theme-dropdown.open {
+        display: block;
+      }
+      .theme-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        transition: background-color 0.2s ease;
+      }
+      .theme-option:hover {
+        background-color: var(--bg-card-secondary);
+      }
+      .theme-option.active {
+        color: var(--color-accent);
+        font-weight: 600;
+      }
+      .theme-option .lucide {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      /* Navbar link styles */
+      .nav-link {
+        color: var(--text-secondary);
+      }
+      .nav-link:hover {
+        background-color: var(--bg-card);
+        color: var(--text-white);
+      }
+
+
     </style>
+    <script>
+      // Skrip untuk mencegah flicker tema (FOUC)
+      (function() {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'light' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="leading-relaxed">
     <!-- Navbar -->
-    <nav class="bg-gray-900 py-4 shadow-lg sticky top-0 z-50">
-      <div class="container flex justify-between items-center">
-        <a href="#" class="text-2xl font-bold text-white tracking-wide"
+    <nav class="py-4 shadow-lg sticky top-0 z-50" style="background-color: var(--bg-nav); transition: background-color 0.3s ease;">
+      <div
+        class="container flex justify-between items-center"
+        id="main-navbar"
+      >
+        <a href="#" class="text-2xl font-bold tracking-wide" style="color: var(--text-white);"
           >Ade Syofyan</a
         >
         <!-- Redesigned Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-2 desktop-nav">
           <a
             href="#about"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Tentang Saya</a
           >
           <a
             href="#skills"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Keahlian</a
           >
           <a
             href="#services"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Layanan</a
           >
           <a
             href="#live-demos"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Live Demos</a
           >
           <a
             href="#workflow"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Proses Kerja</a
           >
           <a
             href="#portfolio"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Portofolio</a
           >
           <a
             href="#testimonials"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Testimoni</a
           >
           <a
             href="#contact"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >Kontak</a
           >
           <a
             href="#"
             onclick="openChatbotModal(); return false;"
-            class="bg-accent text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition-colors"
+            class="text-white px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--color-accent);" onmouseover="this.style.backgroundColor='var(--color-accent-hover)'" onmouseout="this.style.backgroundColor='var(--color-accent)'"
             >Chat ke AI</a
           >
+          <!-- Theme Switcher -->
+          <div class="theme-switcher">
+            <button id="theme-toggle-btn" class="nav-link p-2 rounded-md transition-colors" aria-label="Toggle theme">
+              <i data-lucide="sun" class="w-5 h-5 hidden" id="theme-icon-light"></i>
+              <i data-lucide="moon" class="w-5 h-5 hidden" id="theme-icon-dark"></i>
+              <i data-lucide="laptop" class="w-5 h-5 hidden" id="theme-icon-system"></i>
+            </button>
+            <div id="theme-dropdown" class="theme-dropdown">
+              <div class="theme-option" data-theme-value="light">
+                <i data-lucide="sun"></i><span>Terang</span>
+              </div>
+              <div class="theme-option" data-theme-value="dark">
+                <i data-lucide="moon"></i><span>Gelap</span>
+              </div>
+              <div class="theme-option" data-theme-value="system">
+                <i data-lucide="laptop"></i><span>Sistem</span>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- Mobile Menu Toggle Button -->
         <button
           id="mobileMenuToggleBtn"
-          class="md:hidden text-white text-3xl mobile-nav-toggle" /* Use Tailwind 'md:hidden' */
+          class="md:hidden text-3xl mobile-nav-toggle" style="color: var(--text-white);" /* Use Tailwind 'md:hidden' */
           onclick="toggleMobileMenu()"
           aria-label="Toggle Mobile Menu"
           aria-expanded="false" /* Initial accessibility state */
@@ -599,6 +774,10 @@
       <a href="#" class="mobile-menu-cta" onclick="openChatbotModal(); closeMobileMenu(); return false;">
         <i data-lucide="message-circle" class="w-6 h-6"></i><span>Chat ke AI</span>
       </a>
+      <div class="mt-8 text-center text-gray-400">
+        <p class="mb-2">Ganti Tema</p>
+        <div id="mobile-theme-switcher" class="flex justify-center gap-4"></div>
+      </div>
     </div>
 
     <!-- Hero Section -->
@@ -607,11 +786,11 @@
       <canvas id="heroCanvas"></canvas>
       <div class="container relative z-10">
         <h1
-          class="text-5xl md:text-7xl font-extrabold mb-4 text-white leading-tight"
+          class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight" style="color: var(--text-white);"
         >
           Halo, saya <span class="text-accent">Ade Syofyan</span>
         </h1>
-        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" style="color: var(--text-secondary);">
           <span class="font-semibold">Mobile & Web Developer</span> dengan
           keahlian memecahkan masalah. Membangun solusi digital inovatif dari
           ide hingga implementasi.
@@ -642,8 +821,8 @@
           />
         </div>
         <div class="md:w-2/3 text-center md:text-left">
-          <h2 class="text-4xl font-bold mb-6 text-white">Tentang Saya</h2>
-          <p class="text-lg text-gray-300 mb-4">
+          <h2 class="text-4xl font-bold mb-6" style="color: var(--text-white);">Tentang Saya</h2>
+          <p class="text-lg mb-4" style="color: var(--text-secondary);">
             Saya seorang
             <span class="font-semibold text-accent">Programmer Senior</span>
             dengan pengalaman lebih dari
@@ -652,7 +831,7 @@
             membangun solusi digital inovatif yang efisien dan berdampak
             positif.
           </p>
-          <p class="text-lg text-gray-300 mb-4">
+          <p class="text-lg mb-4" style="color: var(--text-secondary);">
             Keahlian saya mencakup pengembangan di berbagai sektor seperti
             properti, otomotif, dan layanan publik. Saya juga memiliki
             spesialisasi dalam
@@ -661,7 +840,7 @@
             otomatis dan chatbot WhatsApp AI untuk mendukung tim sales dan
             customer service.
           </p>
-          <p class="text-lg text-gray-300 mb-6">
+          <p class="text-lg mb-6" style="color: var(--text-secondary);">
             Saya mahir dalam *tech stack* seperti
             <span class="font-semibold text-accent"
               >Laravel, Flutter, Firebase</span
@@ -681,7 +860,7 @@
     <!-- Skills Section -->
     <section id="skills" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Keahlian Saya</h2>
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Keahlian Saya</h2>
         <!-- Updated grid classes for better responsiveness on small screens -->
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
@@ -694,10 +873,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="smartphone"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Mobile Development
             </h3>
-            <p class="text-gray-400">Flutter, Kotlin</p>
+            <p style="color: var(--text-secondary);">Flutter, Kotlin</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -706,10 +885,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="globe"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Web Development
             </h3>
-            <p class="text-gray-400">Laravel, PHP, JavaScript</p>
+            <p style="color: var(--text-secondary);">Laravel, PHP, JavaScript</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -718,10 +897,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="brain"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               AI Integration
             </h3>
-            <p class="text-gray-400">Chatbot AI, Akuntan AI</p>
+            <p style="color: var(--text-secondary);">Chatbot AI, Akuntan AI</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -730,8 +909,8 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="columns-3"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">ERP Systems</h3>
-            <p class="text-gray-400">Pengembangan & Integrasi</p>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">ERP Systems</h3>
+            <p style="color: var(--text-secondary);">Pengembangan & Integrasi</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -740,8 +919,8 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="flame"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">Firebase</h3>
-            <p class="text-gray-400">Backend as a Service</p>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Firebase</h3>
+            <p style="color: var(--text-secondary);">Backend as a Service</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -750,10 +929,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="zap"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Sistem Real-time
             </h3>
-            <p class="text-gray-400">Integrasi & Implementasi</p>
+            <p style="color: var(--text-secondary);">Integrasi & Implementasi</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -762,10 +941,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="puzzle"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Problem Solving
             </h3>
-            <p class="text-gray-400">Analisis & Solusi Efektif</p>
+            <p style="color: var(--text-secondary);">Analisis & Solusi Efektif</p>
           </div>
           <div
             class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
@@ -774,10 +953,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="cloud"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Cloud Services
             </h3>
-            <p class="text-gray-400">Deployment & Management</p>
+            <p style="color: var(--text-secondary);">Deployment & Management</p>
           </div>
         </div>
       </div>
@@ -786,26 +965,26 @@
     <!-- Services Section (New) -->
     <section
       id="services"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
+      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
     >
       <div class="text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Layanan Saya</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Layanan Saya</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
           <!-- Service 1: Custom Mobile App Development -->
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="smartphone-charging"></i>
             </p>
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               Pengembangan Aplikasi Mobile Kustom
             </h3>
-            <p class="text-gray-400 mb-4">
+            <p class="mb-4" style="color: var(--text-secondary);">
               Membangun aplikasi Android & iOS yang performa tinggi dan intuitif
               menggunakan Flutter & Kotlin.
             </p>
-            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
               <li>UI/UX Responsif</li>
               <li>Integrasi API</li>
               <li>Offline Capabilities</li>
@@ -813,19 +992,19 @@
           </div>
           <!-- Service 2: Web Application & ERP Development -->
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="layout-dashboard"></i>
             </p>
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               Pengembangan Web & Sistem ERP
             </h3>
-            <p class="text-gray-400 mb-4">
+            <p class="mb-4" style="color: var(--text-secondary);">
               Menciptakan aplikasi web yang skalabel dan sistem ERP khusus untuk
               efisiensi bisnis Anda.
             </p>
-            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
               <li>Laravel Backend</li>
               <li>Panel Admin Kustom</li>
               <li>Manajemen Database</li>
@@ -833,19 +1012,19 @@
           </div>
           <!-- Service 3: AI Integration & Chatbot Solutions -->
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="bot"></i>
             </p>
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               Integrasi AI & Solusi Chatbot
             </h3>
-            <p class="text-gray-400 mb-4">
+            <p class="mb-4" style="color: var(--text-secondary);">
               Mengotomatisasi proses bisnis dengan integrasi AI dan chatbot
               interaktif (mis. WhatsApp AI).
             </p>
-            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
               <li>AI Data Processing</li>
               <li>Chatbot Otomatisasi</li>
               <li>Integrasi API AI</li>
@@ -853,26 +1032,26 @@
           </div>
           <!-- Service 4: Real-time System Development -->
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="server"></i>
             </p>
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               Pengembangan Sistem Real-time
             </h3>
-            <p class="text-gray-400 mb-4">
+            <p class="mb-4" style="color: var(--text-secondary);">
               Membangun aplikasi dengan kemampuan pemrosesan data dan interaksi
               secara real-time.
             </p>
-            <ul class="text-gray-500 text-sm text-left list-disc list-inside">
+            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
               <li>WebSockets</li>
               <li>Streaming Data</li>
               <li>Push Notifications</li>
             </ul>
           </div>
         </div>
-        <p class="text-gray-400 text-xl mt-12">
+        <p class="text-xl mt-12" style="color: var(--text-secondary);">
           Punya kebutuhan spesifik?
           <span class="text-accent font-semibold"
             >Saya siap membantu mewujudkannya!</span
@@ -885,8 +1064,8 @@
     <!-- Live Demos Section (New) -->
     <section id="live-demos" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Live Demos</h2>
-        <p class="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
+        <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -894,13 +1073,13 @@
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
-              <h3 class="text-2xl font-bold text-white">Pengunjung Real-time (Simulasi)</h3>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pengunjung Real-time (Simulasi)</h3>
             </div>
-            <p class="text-gray-400 mb-6">
+            <p class="mb-6" style="color: var(--text-secondary);">
               Demo ini menyimulasikan pembaruan data secara real-time, seperti yang digunakan dalam dashboard analitik atau sistem notifikasi. Angka di bawah ini diperbarui secara acak setiap beberapa detik.
             </p>
-            <div class="bg-gray-900 p-4 rounded-lg">
-              <p class="text-gray-400 text-sm mb-2">Pengunjung Online Saat Ini:</p>
+            <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
+              <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
               <p id="visitor-count" class="text-5xl font-bold text-accent transition-transform duration-300">
                 ...
               </p>
@@ -912,9 +1091,9 @@
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
-              <h3 class="text-2xl font-bold text-white">Color Palette Generator</h3>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Color Palette Generator</h3>
             </div>
-            <p class="text-gray-400 mb-6">
+            <p class="mb-6" style="color: var(--text-secondary);">
               Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
             </p>
             <div id="palette-container" class="flex justify-center gap-2 mb-6 h-24">
@@ -933,7 +1112,7 @@
     <!-- Workflow Section -->
     <section id="workflow" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
-        <h2 class="text-4xl font-bold mb-16 text-white">
+        <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
           Bagaimana Saya Bekerja
         </h2>
         <div
@@ -941,60 +1120,56 @@
         >
           <!-- Step 1: Konsultasi & Perencanaan -->
           <div class="flex flex-col items-center workflow-step">
-            <div
-              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-            >
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
               1
             </div>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Konsultasi & Perencanaan
             </h3>
-            <p class="text-gray-400 text-sm">
+            <p class="text-sm" style="color: var(--text-secondary);">
               Memahami kebutuhan Anda, menentukan lingkup proyek, dan menyusun
               rencana kerja yang detail.
             </p>
           </div>
           <!-- Step 2: Desain & Prototyping -->
           <div class="flex flex-col items-center workflow-step">
-            <div
-              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-            >
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
               2
             </div>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Desain & Prototyping
             </h3>
-            <p class="text-gray-400 text-sm">
+            <p class="text-sm" style="color: var(--text-secondary);">
               Merancang antarmuka pengguna (UI/UX) yang intuitif dan membuat
               prototipe untuk validasi awal.
             </p>
           </div>
           <!-- Step 3: Pengembangan & Pengujian -->
           <div class="flex flex-col items-center workflow-step">
-            <div
-              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-            >
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
               3
             </div>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Pengembangan & Pengujian
             </h3>
-            <p class="text-gray-400 text-sm">
+            <p class="text-sm" style="color: var(--text-secondary);">
               Implementasi kode, integrasi fitur, dan pengujian menyeluruh
               untuk memastikan kualitas dan fungsionalitas.
             </p>
           </div>
           <!-- Step 4: Deployment & Dukungan -->
           <div class="flex flex-col items-center workflow-step">
-            <div
-              class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-            >
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
               4
             </div>
-            <h3 class="text-xl font-semibold text-white mb-2">
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
               Deployment & Dukungan
             </h3>
-            <p class="text-gray-400 text-sm">
+            <p class="text-sm" style="color: var(--text-secondary);">
               Peluncuran aplikasi ke server atau app store, serta menyediakan
               dukungan pasca-peluncuran.
             </p>
@@ -1009,11 +1184,11 @@
       class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
     >
       <div class="text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Portofolio Pilihan</h2>
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Kartu Proyek 1: PPDB SMAKPA Padang -->
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" style="background-color: var(--bg-card-secondary);"
             onclick="openModal('ppdb')"
           >
             <img
@@ -1023,59 +1198,59 @@
               class="rounded-lg mb-4 w-full h-48 object-cover"
               onerror="this.onerror=null;this.src='https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error';"
             />
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               PPDB SMAKPA Padang
             </h3>
-            <p class="text-gray-400 text-lg mb-4">
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
               Website Pendaftaran Peserta Didik Baru Online
             </p>
             <span
-              class="inline-block bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full"
+              class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);"
               >Full-Stack Development</span
             >
           </div>
 
           <!-- Tambahkan lebih banyak kartu proyek di sini mengikuti struktur yang sama -->
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300" style="background-color: var(--bg-card-secondary);"
           >
             <img
               src="https://placehold.co/400x200/4a5568/e2e8f0?text=Proyek+Selanjutnya"
               alt="Placeholder Proyek Selanjutnya"
               class="rounded-lg mb-4 w-full h-48 object-cover"
             />
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               Proyek Selanjutnya
             </h3>
-            <p class="text-gray-400 text-lg mb-4">
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
               Deskripsi singkat proyek Anda.
             </p>
             <span
-              class="inline-block bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+              class="inline-block text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--bg-card-secondary); color: var(--text-primary);"
               >Kategori Proyek</span
             >
           </div>
           <div
-            class="bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300" style="background-color: var(--bg-card-secondary);"
           >
             <img
               src="https://placehold.co/400x200/4a5568/e2e8f0?text=Proyek+Selanjutnya"
               alt="Placeholder Proyek Selanjutnya"
               class="rounded-lg mb-4 w-full h-48 object-cover"
             />
-            <h3 class="text-2xl font-bold text-white mb-2">
+            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
               Proyek Selanjutnya
             </h3>
-            <p class="text-gray-400 text-lg mb-4">
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
               Deskripsi singkat proyek Anda.
             </p>
             <span
-              class="inline-block bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+              class="inline-block text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--bg-card-secondary); color: var(--text-primary);"
               >Kategori Proyek</span
             >
           </div>
         </div>
-        <p class="text-gray-400 text-xl mt-12">
+        <p class="text-xl mt-12" style="color: var(--text-secondary);">
           <span class="text-accent font-semibold"
             >Ingin melihat lebih banyak?</span
           >
@@ -1089,46 +1264,46 @@
     <!-- Testimonials Section (New) -->
     <section id="testimonials" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Apa Kata Klien Saya</h2>
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Apa Kata Klien Saya</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Testimonial 1 -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="text-gray-300 italic mb-4">
+            <p class="italic mb-4" style="color: var(--text-secondary);">
               "Sistem PPDB online yang dibangun oleh Ade Syofyan benar-benar mengubah cara kami bekerja. Proses yang tadinya manual dan rumit kini menjadi efisien dan transparan. Kami berhasil mengelola ribuan pendaftar tanpa kendala. Sebuah solusi yang sangat kami butuhkan."
             </p>
-            <p class="font-semibold text-white">
+            <p class="font-semibold" style="color: var(--text-white);">
               - Drs. Nasir, Kepala Sekolah SMAKPA Padang
             </p>
-            <p class="text-gray-400 text-sm">Padang</p>
+            <p class="text-sm" style="color: var(--text-secondary);">Padang</p>
           </div>
           <!-- Testimonial 2 -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="text-gray-300 italic mb-4">
+            <p class="italic mb-4" style="color: var(--text-secondary);">
               "Implementasi AI Akuntan dari Ade adalah sebuah *game-changer* bagi tim keuangan kami. Waktu untuk input jurnal manual berkurang hingga 80%, memungkinkan kami fokus pada analisis strategis. Akurasi data pun meningkat drastis."
             </p>
-            <p class="font-semibold text-white">
+            <p class="font-semibold" style="color: var(--text-white);">
               - Rina Wijayanti, Finance Manager, PT. Logistik Cemerlang
             </p>
-            <p class="text-gray-400 text-sm">Jakarta</p>
+            <p class="text-sm" style="color: var(--text-secondary);">Jakarta</p>
           </div>
           <!-- Add more testimonials as needed -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="text-gray-300 italic mb-4">
+            <p class="italic mb-4" style="color: var(--text-secondary);">
               "Kami mempercayakan pengembangan aplikasi mobile PropertiKita kepada Ade, dan hasilnya luar biasa. Aplikasi Flutter yang ia bangun tidak hanya cepat dan stabil di Android & iOS, tetapi juga memiliki desain yang sangat intuitif. Pengguna kami menyukainya!"
             </p>
-            <p class="font-semibold text-white">
+            <p class="font-semibold" style="color: var(--text-white);">
               - David Lee, Founder, PropertiKita
             </p>
-            <p class="text-gray-400 text-sm">Surabaya</p>
+            <p class="text-sm" style="color: var(--text-secondary);">Surabaya</p>
           </div>
           <div class="bg-card p-6 rounded-xl shadow-lg">
-            <p class="text-gray-300 italic mb-4">
+            <p class="italic mb-4" style="color: var(--text-secondary);">
               "Ade memiliki pemahaman mendalam tentang proses bisnis. Sistem ERP kustom yang ia kembangkan untuk dealer kami berhasil mengintegrasikan data penjualan, servis, dan inventaris dalam satu platform. Efisiensi operasional kami meningkat secara signifikan."
             </p>
-            <p class="font-semibold text-white">
+            <p class="font-semibold" style="color: var(--text-white);">
               - Ir. Hendra Gunawan, Direktur Operasional, Sentra Otomotif Nusantara
             </p>
-            <p class="text-gray-400 text-sm">Bandung</p>
+            <p class="text-sm" style="color: var(--text-secondary);">Bandung</p>
           </div>
         </div>
       </div>
@@ -1137,8 +1312,8 @@
     <!-- Contact Section -->
     <section id="contact" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
-        <h2 class="text-4xl font-bold mb-10 text-white">Hubungi Saya</h2>
-        <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
+        <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Tertarik untuk berkolaborasi atau memiliki pertanyaan? Jangan ragu
           untuk menghubungi saya melalui kontak di bawah ini.
         </p>
@@ -1152,10 +1327,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="mail"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">Email</h3>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Email</h3>
             <a
               href="mailto:ade.syofyan@gmail.com"
-              class="text-gray-300 hover:text-white transition duration-300"
+              class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
               >ade.syofyan@gmail.com</a
             >
           </div>
@@ -1166,10 +1341,10 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="phone"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">Telepon</h3>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Telepon</h3>
             <a
               href="tel:+6282284955080"
-              class="text-gray-300 hover:text-white transition duration-300"
+              class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
               >0822-8495-5080</a
             >
           </div>
@@ -1180,11 +1355,11 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="linkedin"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">LinkedIn</h3>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">LinkedIn</h3>
             <a
               href="https://www.linkedin.com/in/ade-syofyan/"
               target="_blank"
-              class="text-gray-300 hover:text-white transition duration-300"
+              class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
               >Profil LinkedIn</a
             >
           </div>
@@ -1196,15 +1371,15 @@
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="message-square"></i>
             </p>
-            <h3 class="text-xl font-semibold text-white mb-2">Tanya Ade ✨</h3>
-            <p class="text-gray-400">Ajukan pertanyaan ke AI!</p>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Tanya Ade ✨</h3>
+            <p style="color: var(--text-secondary);">Ajukan pertanyaan ke AI!</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 py-8 mt-12 text-center text-gray-400">
+    <footer class="py-8 mt-12 text-center" style="background-color: var(--bg-nav); color: var(--text-secondary); transition: background-color 0.3s ease;">
       <div class="container">
         <p>&copy; 2025 Ade Syofyan. Hak Cipta Dilindungi Undang-Undang.</p>
       </div>
@@ -1220,9 +1395,9 @@
         >
           &times;
         </button>
-        <h3 id="modalTitle" class="text-3xl font-bold text-white mb-4"></h3>
-        <p id="modalType" class="text-gray-400 text-lg mb-2"></p>
-        <p id="modalRole" class="text-gray-400 text-lg mb-4"></p>
+        <h3 id="modalTitle" class="text-3xl font-bold mb-4" style="color: var(--text-white);"></h3>
+        <p id="modalType" class="text-lg mb-2" style="color: var(--text-secondary);"></p>
+        <p id="modalRole" class="text-lg mb-4" style="color: var(--text-secondary);"></p>
 
         <div
           id="modalImages"
@@ -1231,15 +1406,15 @@
           <!-- Gambar akan disuntikkan di sini -->
         </div>
 
-        <p class="text-lg text-gray-300 mb-4">
+        <p class="text-lg mb-4" style="color: var(--text-secondary);">
           <span class="font-semibold text-accent">Tujuan Proyek:</span>
           <span id="modalGoal"></span>
         </p>
-        <p class="text-lg text-gray-300 mb-4">
+        <p class="text-lg mb-4" style="color: var(--text-secondary);">
           <span class="font-semibold text-accent">Proses Kerja:</span>
           <span id="modalProcess"></span>
         </p>
-        <p class="text-lg text-gray-300 mb-4">
+        <p class="text-lg mb-4" style="color: var(--text-secondary);">
           <span class="font-semibold text-accent">Hasil/Dampak:</span>
           <span id="modalImpact"></span>
         </p>
@@ -1256,11 +1431,11 @@
         >
           &times;
         </button>
-        <h3 class="text-2xl font-bold text-white mb-4">Tanya Ade ✨</h3>
+        <h3 class="text-2xl font-bold mb-4" style="color: var(--text-white);">Tanya Ade ✨</h3>
         <div id="chatDisplay" class="chat-display">
           <div class="flex justify-start mb-2">
             <div
-              class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message"
+              class="text-white p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);"
             >
               Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian
               atau pengalaman saya?
@@ -1280,8 +1455,8 @@
 
     <!-- Custom Confirmation Modal -->
     <div id="customConfirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[1020] hidden p-4">
-        <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-sm text-center">
-            <p id="customConfirmMessage" class="text-white text-lg mb-6">Pesan konfirmasi di sini.</p>
+        <div class="p-6 rounded-lg shadow-xl w-full max-w-sm text-center" style="background-color: var(--bg-card);">
+            <p id="customConfirmMessage" class="text-lg mb-6" style="color: var(--text-white);">Pesan konfirmasi di sini.</p>
             <div class="flex justify-center space-x-4">
                 <button id="customConfirmButtonYes" class="btn-primary px-6 py-2">Ya</button>
                 <button id="customConfirmButtonNo" class="btn-secondary px-6 py-2">Tidak</button>
@@ -1293,6 +1468,62 @@
     <button onclick="scrollToTop()" id="scrollToTopBtn" title="Gulir ke atas">
       <i data-lucide="arrow-up"></i>
     </button>
+
+    <!-- Interactive Terminal -->
+    <div id="terminal" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-[1050] p-4 md:p-8">
+        <div id="terminal-window" class="w-full h-full bg-gray-900 rounded-lg shadow-2xl flex flex-col font-mono text-sm text-gray-300 border border-gray-700" style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color);">
+            <div class="bg-gray-800 p-2 rounded-t-lg flex items-center gap-2 flex-shrink-0">
+                <div class="flex gap-2 pl-1">
+                    <button id="terminal-close" class="terminal-btn bg-red-500"><i data-lucide="x" class="btn-icon"></i></button>
+                    <button id="terminal-minimize" class="terminal-btn bg-yellow-500"><i data-lucide="minus" class="btn-icon"></i></button>
+                    <button id="terminal-maximize" class="terminal-btn bg-green-500"><i data-lucide="maximize-2" class="btn-icon"></i></button>
+                </div>
+                <span class="mx-auto text-xs text-gray-400">ade-syofyan@portfolio: ~</span>
+            </div>
+            <div id="terminal-output" class="flex-grow p-4 overflow-y-auto">
+                <!-- Output will be printed here -->
+            </div>
+            <div class="p-2 flex items-center border-t border-gray-700 flex-shrink-0">
+                <span class="text-green-400">guest@ade-syofyan.dev:~$</span>
+                <input type="text" id="terminal-input" class="bg-transparent border-none flex-grow ml-2 focus:outline-none" autocomplete="off" style="color: var(--text-primary);">
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal Toggle Button -->
+    <button id="terminal-toggle-btn" class="fixed bottom-5 left-5 z-[100] text-accent p-3 rounded-full shadow-lg transition-all" style="background-color: var(--bg-card);" title="Buka Mode Terminal">
+        <i data-lucide="terminal-square" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Achievement Toggle Button -->
+    <button id="achievement-toggle-btn" class="fixed bottom-5 left-20 z-[100] text-accent p-3 rounded-full shadow-lg transition-all" style="background-color: var(--bg-card);" title="Lihat Pencapaian">
+        <i data-lucide="award" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Achievement Modal -->
+    <div id="achievementModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">&times;</button>
+            <h3 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-white);">Pencapaian</h3>
+            <div id="achievement-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Achievement cards will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Toast Notification -->
+    <div id="achievement-toast" class="hidden fixed bottom-5 right-5 bg-card border-l-4 border-accent p-4 rounded-lg shadow-2xl max-w-sm z-[2000] transform translate-x-[110%] transition-transform duration-500 ease-in-out">
+        <div class="flex items-center">
+            <div class="text-accent mr-3 flex-shrink-0">
+                <i data-lucide="award" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <p class="font-bold" style="color: var(--text-white);">Pencapaian Terbuka!</p>
+                <p id="toast-achievement-name" class="text-sm" style="color: var(--text-secondary);">Nama Pencapaian</p>
+            </div>
+        </div>
+    </div>
+
 
     <script type="application/ld+json">
       {
@@ -1387,7 +1618,191 @@
 
         // Ambil dan atur sumber gambar saat DOM siap
         document.addEventListener("DOMContentLoaded", async () => {
+          // --- Theme Management ---
+          const themeToggleBtn = document.getElementById('theme-toggle-btn');
+          const themeDropdown = document.getElementById('theme-dropdown');
+          const themeOptions = document.querySelectorAll('.theme-option');
+          const mobileThemeContainer = document.getElementById('mobile-theme-switcher');
+
+          const applyTheme = (theme) => {
+            if (theme === 'system') {
+              document.documentElement.removeAttribute('data-theme');
+              const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              updateIcons(systemTheme, true);
+            } else {
+              document.documentElement.setAttribute('data-theme', theme);
+              updateIcons(theme, false);
+            }
+            localStorage.setItem('theme', theme);
+            updateActiveState(theme);
+          };
+
+          const updateIcons = (theme, isSystem) => {
+            document.getElementById('theme-icon-light').classList.toggle('hidden', theme !== 'light' || isSystem);
+            document.getElementById('theme-icon-dark').classList.toggle('hidden', theme !== 'dark' || isSystem);
+            document.getElementById('theme-icon-system').classList.toggle('hidden', !isSystem);
+          };
+
+          const updateActiveState = (theme) => {
+            themeOptions.forEach(opt => {
+              opt.classList.toggle('active', opt.dataset.themeValue === theme);
+            });
+            // Update mobile switcher
+            const mobileButtons = mobileThemeContainer.querySelectorAll('button');
+            mobileButtons.forEach(btn => {
+              btn.classList.toggle('bg-accent', btn.dataset.themeValue === theme);
+              btn.classList.toggle('text-white', btn.dataset.themeValue === theme);
+            });
+          };
+
+          themeToggleBtn.addEventListener('click', () => {
+            themeDropdown.classList.toggle('open');
+          });
+
+          document.addEventListener('click', (e) => {
+            if (!themeToggleBtn.contains(e.target) && !themeDropdown.contains(e.target)) {
+              themeDropdown.classList.remove('open');
+            }
+          });
+
+          themeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+              const theme = option.dataset.themeValue;
+              applyTheme(theme);
+              themeDropdown.classList.remove('open');
+            });
+          });
+
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (localStorage.getItem('theme') === 'system') {
+              applyTheme('system');
+            }
+          });
+
+          const savedTheme = localStorage.getItem('theme') || 'system';
+          applyTheme(savedTheme);
+
           // Inisialisasi ikon Lucide
+          // --- Achievement System ---
+          const achievements = {
+              'explorer': { name: 'Penjelajah Sejati', unlocked: false, description: 'Menjelajahi hingga bagian akhir halaman.', icon: 'compass' },
+              'ai_challenger': { name: 'Penantang AI', unlocked: false, description: 'Mengajukan pertanyaan pertama ke chatbot AI.', icon: 'bot' },
+              'terminal_velocity': { name: 'Kecepatan Terminal', unlocked: false, description: 'Menggunakan mode terminal interaktif.', icon: 'terminal' },
+              'social_butterfly': { name: 'Kupu-kupu Sosial', unlocked: false, description: 'Membuka salah satu profil media sosial.', icon: 'share-2' },
+              'palette_picasso': { name: 'Palette Picasso', unlocked: false, description: 'Menghasilkan 5 palet warna.', icon: 'palette' }
+          };
+          let paletteGenerationCount = parseInt(localStorage.getItem('paletteCount') || '0');
+
+          function showToast(achievementName) {
+              const toast = document.getElementById('achievement-toast');
+              const nameElement = document.getElementById('toast-achievement-name');
+              if (!toast || !nameElement) return;
+
+              nameElement.textContent = achievementName;
+              toast.classList.remove('hidden');
+              toast.classList.add('show');
+
+              setTimeout(() => {
+                  toast.classList.remove('show');
+                  // Sembunyikan setelah transisi selesai
+                  setTimeout(() => toast.classList.add('hidden'), 500);
+              }, 4000); // Toast terlihat selama 4 detik
+          }
+
+          window.unlockAchievement = function(id) {
+              if (achievements[id] && !achievements[id].unlocked) {
+                  achievements[id].unlocked = true;
+                  showToast(achievements[id].name);
+                  
+                  const saved = JSON.parse(localStorage.getItem('portfolioAchievements') || '[]');
+                  if (!saved.includes(id)) {
+                      saved.push(id);
+                      localStorage.setItem('portfolioAchievements', JSON.stringify(saved));
+                  }
+              }
+          }
+
+          function loadAchievements() {
+              const saved = localStorage.getItem('portfolioAchievements');
+              if (saved) {
+                  const unlockedIds = JSON.parse(saved);
+                  unlockedIds.forEach(id => {
+                      if (achievements[id]) {
+                          achievements[id].unlocked = true;
+                      }
+                  });
+              }
+          }
+          
+          loadAchievements();
+
+          // --- Achievement Modal Logic ---
+          const achievementModal = document.getElementById('achievementModal');
+          const achievementGrid = document.getElementById('achievement-grid');
+          const achievementToggleBtn = document.getElementById('achievement-toggle-btn');
+
+          window.openAchievementModal = function() {
+              populateAchievements();
+              achievementModal.classList.add('open');
+          }
+
+          window.closeAchievementModal = function() {
+              achievementModal.classList.remove('open');
+          }
+
+          function populateAchievements() {
+              if (!achievementGrid) return;
+              achievementGrid.innerHTML = ''; // Clear previous content
+
+              const unlockedIds = JSON.parse(localStorage.getItem('portfolioAchievements') || '[]');
+
+              for (const id in achievements) {
+                  const ach = achievements[id];
+                  const isUnlocked = unlockedIds.includes(id);
+
+                  const card = document.createElement('div');
+                  card.className = 'achievement-card';
+                  if (isUnlocked) card.classList.add('unlocked');
+
+                  card.innerHTML = `
+                      <div class="ach-icon"><i data-lucide="${ach.icon || 'award'}" class="w-8 h-8"></i></div>
+                      <div>
+                          <p class="ach-name">${ach.name}</p>
+                          <p class="ach-desc">${isUnlocked ? ach.description : '???'}</p>
+                      </div>`;
+                  achievementGrid.appendChild(card);
+              }
+              lucide.createIcons();
+          }
+          if (achievementToggleBtn) achievementToggleBtn.addEventListener('click', openAchievementModal);
+          if (achievementModal) achievementModal.addEventListener('click', (e) => { if (e.target === achievementModal) closeAchievementModal(); });
+          // --- End of Achievement System ---
+
+          // --- Create Mobile Theme Switcher ---
+          if (mobileThemeContainer) {
+            const mobileThemes = [
+              { value: 'light', icon: 'sun' },
+              { value: 'dark', icon: 'moon' },
+              { value: 'system', icon: 'laptop' }
+            ];
+            mobileThemes.forEach(theme => {
+              const btn = document.createElement('button');
+              btn.dataset.themeValue = theme.value;
+              btn.className = 'p-2 rounded-full transition-colors';
+              btn.setAttribute('aria-label', `Switch to ${theme.value} theme`);
+              btn.innerHTML = `<i data-lucide="${theme.icon}" class="w-5 h-5"></i>`;
+              btn.addEventListener('click', () => {
+                applyTheme(theme.value);
+              });
+              mobileThemeContainer.appendChild(btn);
+            });
+            updateActiveState(savedTheme);
+          }
+
+
+
+
+          // Pindahkan ke sini agar tombol terminal juga diinisialisasi
           lucide.createIcons();
           // Inisialisasi mobile menu toggle button display
           
@@ -1464,6 +1879,33 @@
             skillObserver.observe(skillsGrid);
           }
 
+          // --- Animasi Staggered untuk Kartu Layanan ---
+          const servicesGrid = document.getElementById('services-grid');
+          if (servicesGrid) {
+            const serviceCards = servicesGrid.querySelectorAll('.service-card');
+            const serviceObserverOptions = {
+              root: null,
+              rootMargin: '0px',
+              threshold: 0.1 // Picu saat 10% dari grid terlihat
+            };
+
+            const serviceObserverCallback = (entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  serviceCards.forEach((card, index) => {
+                    // Terapkan delay untuk efek staggered
+                    card.style.transitionDelay = `${index * 100}ms`;
+                    card.classList.add('animate');
+                  });
+                  observer.unobserve(entry.target); // Hentikan observasi setelah animasi dipicu
+                }
+              });
+            };
+
+            const serviceObserver = new IntersectionObserver(serviceObserverCallback, serviceObserverOptions);
+            serviceObserver.observe(servicesGrid);
+          }
+
           // --- Live Demo: Real-time Visitor Counter ---
           const visitorCountElement = document.getElementById('visitor-count');
           if (visitorCountElement) {
@@ -1533,8 +1975,196 @@
           }
 
           if (generateBtn) generateBtn.addEventListener('click', generatePalette);
+          // Modifikasi untuk achievement
+          if (generateBtn) {
+              generateBtn.addEventListener('click', () => {
+                  paletteGenerationCount++;
+                  localStorage.setItem('paletteCount', paletteGenerationCount);
+                  if (paletteGenerationCount >= 5) unlockAchievement('palette_picasso');
+              });
+          }
           // Hasilkan palet awal saat halaman dimuat
           generatePalette();
+
+          // --- Interactive Terminal Logic ---
+          const terminal = document.getElementById('terminal');
+          const terminalWindow = document.getElementById('terminal-window');
+          const terminalOutput = document.getElementById('terminal-output');
+          const terminalInput = document.getElementById('terminal-input');
+          const terminalToggleBtn = document.getElementById('terminal-toggle-btn');
+
+          // macOS-like controls
+          const terminalCloseBtn = document.getElementById('terminal-close');
+          const terminalMinimizeBtn = document.getElementById('terminal-minimize');
+          const terminalMaximizeBtn = document.getElementById('terminal-maximize');
+
+          const printToTerminal = (text, isCommand = false) => {
+              const line = document.createElement('div');
+              line.className = 'terminal-line';
+              if (isCommand) {
+                  line.innerHTML = `<span class="text-green-400">guest@ade-syofyan.dev:~$</span> <span class="text-white">${text}</span>`;
+              } else {
+                  line.innerHTML = text;
+              }
+              terminalOutput.appendChild(line);
+              terminalOutput.scrollTop = terminalOutput.scrollHeight;
+          };
+
+          const printWelcomeMessage = () => {
+              printToTerminal('Selamat datang di Terminal Portofolio Ade Syofyan!');
+              printToTerminal('Ketik `help` untuk melihat daftar perintah yang tersedia.');
+              printToTerminal('');
+          };
+
+          const resetTerminal = () => {
+              terminalOutput.innerHTML = '';
+              printWelcomeMessage();
+          };
+
+          const commands = {
+              'help': 'Perintah yang tersedia: <br> `help`   - Menampilkan bantuan ini <br> `about`  - Menampilkan info tentang saya <br> `skills` - Menampilkan daftar keahlian <br> `portfolio` - Menampilkan daftar proyek <br> `contact` - Menampilkan info kontak <br> `social` - Menampilkan link media sosial <br> `achievements` - Menampilkan daftar pencapaian <br> `open <arg>` - Membuka link (e.g., `open linkedin`, `open cv`) <br> `goto <arg>` - Navigasi ke bagian (e.g., `goto skills`) <br> `clear`  - Membersihkan layar terminal <br> `exit`   - Menutup terminal',
+              'about': 'Halo, saya Ade Syofyan. Seorang Mobile & Web Developer dengan pengalaman lebih dari 7 tahun. Saya bersemangat dalam membangun solusi digital inovatif yang efisien dan berdampak positif.',
+              'skills': 'Keahlian utama saya meliputi: <br> - Mobile Development (Flutter, Kotlin) <br> - Web Development (Laravel, PHP, JS) <br> - AI Integration (Chatbot, AI Akuntan) <br> - ERP Systems <br> - Firebase & Sistem Real-time <br> - Problem Solving',
+              'portfolio': 'Proyek unggulan: <br> - PPDB SMAKPA Padang (Website Pendaftaran Online) <br> ...dan beberapa proyek lain yang sedang dalam pengembangan. Ketik `goto portfolio` untuk scroll ke bagian portofolio.',
+              'contact': 'Anda bisa menghubungi saya melalui: <br> - Email: ade.syofyan@gmail.com <br> - Telepon: 0822-8495-5080 <br> - LinkedIn: linkedin.com/in/ade-syofyan/',
+              'social': 'Anda bisa menemukan saya di: <br> - LinkedIn: `open linkedin` <br> - WhatsApp: `open whatsapp`',
+              'achievements': () => {
+                  const unlockedIds = JSON.parse(localStorage.getItem('portfolioAchievements') || '[]');
+                  let output = 'Daftar Pencapaian:<br>-------------------<br>';
+                  
+                  for (const id in achievements) {
+                      const ach = achievements[id];
+                      const isUnlocked = unlockedIds.includes(id);
+                      
+                      if (isUnlocked) {
+                          output += `<span class="text-green-400">[✓] ${ach.name}:</span> ${ach.description}<br>`;
+                      } else {
+                          output += `[✗] ${ach.name}: ???<br>`;
+                      }
+                  }
+                  return output;
+              },
+              'clear': () => { resetTerminal(); },
+              'exit': () => { closeTerminal(); },
+              'goto': (section) => {
+                  if (section) {
+                      const element = document.getElementById(section);
+                      if (element) {
+                          closeTerminal();
+                          // Beri sedikit jeda agar terminal tertutup sebelum scroll
+                          setTimeout(() => {
+                              element.scrollIntoView({ behavior: 'smooth' });
+                          }, 300);
+                          return `Navigasi ke bagian #${section}...`;
+                      } else {
+                          return `Error: Bagian #${section} tidak ditemukan.`;
+                      }
+                  }
+                  return 'Gunakan: `goto [nama-bagian]`, contoh: `goto skills`';
+              },
+              'open': (target) => {
+                  const links = {
+                      'linkedin': 'https://www.linkedin.com/in/ade-syofyan/',
+                      'whatsapp': 'https://wa.me/6282284955080',
+                      'cv': 'https://drive.google.com/file/d/1soqROMMjqd4pOTvj3nr9ANXJ4qaps7QE/view?usp=sharing'
+                  };
+                  if (target && links[target]) {
+                      if (target === 'linkedin' || target === 'whatsapp') unlockAchievement('social_butterfly');
+                      window.open(links[target], '_blank');
+                      return `Membuka ${target} di tab baru...`;
+                  }
+                  return `Error: Argumen tidak valid. Gunakan 'open [${Object.keys(links).join(' | ')}]'.`;
+              },
+              'theme': (themeName) => {
+                  const terminalWindow = document.getElementById('terminal-window');
+                  if (themeName === 'light') {
+                      terminalWindow.classList.add('light-theme');
+                      return 'Tema diubah menjadi terang.';
+                  } else if (themeName === 'dark') {
+                      terminalWindow.classList.remove('light-theme');
+                      return 'Tema diubah menjadi gelap.';
+                  }
+                  return 'Gunakan: `theme [light | dark]`';
+              }
+          };
+
+          const processCommand = (command) => {
+              printToTerminal(command, true);
+              const [cmd, ...args] = command.toLowerCase().split(' ');
+              const result = commands[cmd];
+
+              unlockAchievement('terminal_velocity'); // Unlock saat perintah pertama kali dijalankan
+              if (typeof result === 'function') {
+                  const output = result(...args);
+                  if (output) printToTerminal(output);
+              } else if (result) {
+                  printToTerminal(result);
+              } else {
+                  printToTerminal(`Perintah tidak ditemukan: ${command}. Ketik 'help' untuk daftar perintah.`);
+              }
+          };
+
+          const openTerminal = () => {
+              terminal.classList.remove('hidden');
+              terminalInput.focus();
+          };
+
+          const closeTerminal = () => {
+              terminal.classList.add('hidden');
+              // Pastikan status maximized di-reset saat ditutup
+              terminalWindow.classList.remove('maximized');
+              resetTerminal(); // Reset terminal saat ditutup
+          };
+
+          const minimizeTerminal = () => {
+              terminal.classList.add('hidden');
+              // Pastikan status maximized di-reset saat minimize
+              terminalWindow.classList.remove('maximized');
+          };
+
+          terminalInput.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') {
+                  const command = terminalInput.value.trim();
+                  if (command) {
+                      processCommand(command);
+                  }
+                  terminalInput.value = '';
+              }
+          });
+
+          terminalToggleBtn.addEventListener('click', openTerminal);
+          
+          // Event listeners untuk kontrol jendela terminal
+          terminalCloseBtn.addEventListener('click', closeTerminal);
+          terminalMinimizeBtn.addEventListener('click', minimizeTerminal); // Minimalkan tanpa mereset
+          terminalMaximizeBtn.addEventListener('click', () => {
+              terminalWindow.classList.toggle('maximized');
+          });
+
+          // Keyboard shortcuts for terminal
+          window.addEventListener('keydown', (e) => {
+              const isTerminalHidden = terminal.classList.contains('hidden');
+
+              // Always allow Escape key to close the terminal
+              if (e.key === 'Escape' && !isTerminalHidden) {
+                  closeTerminal();
+                  return; // Stop further execution
+              }
+
+              // Prevent backtick shortcut if user is typing in any input field
+              if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                  return;
+              }
+
+              // Use backtick (`) to toggle the terminal
+              if (e.key === '`') {
+                  isTerminalHidden ? openTerminal() : closeTerminal();
+              }
+          });
+
+          // Pesan selamat datang
+          resetTerminal(); // Inisialisasi terminal dengan pesan selamat datang
+
         });
 
         // Fungsionalitas Modal untuk Detail Proyek
@@ -1676,9 +2306,10 @@
           if (!message) return;
 
           // Tambahkan pesan pengguna ke tampilan
+          unlockAchievement('ai_challenger'); // Unlock saat pesan pertama dikirim
           const userMessageDiv = document.createElement("div");
-          userMessageDiv.className = "flex justify-end mb-2";
-          userMessageDiv.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`;
+          userMessageDiv.className = "flex justify-end mb-2 ";
+          userMessageDiv.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`; // Tetap biru untuk pesan pengguna
           chatDisplay.appendChild(userMessageDiv);
 
           // Tambahkan pesan pengguna ke riwayat percakapan
@@ -1688,7 +2319,7 @@
           // Tambahkan indikator loading
           const loadingDiv = document.createElement("div");
           loadingDiv.className = "flex justify-start mb-2";
-          loadingDiv.innerHTML = `<div class="bg-gray-700 text-gray-300 p-3 rounded-lg max-w-[80%] animate-pulse chat-message">Mengetik...</div>`;
+          loadingDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] animate-pulse chat-message" style="background-color: var(--bg-card-secondary); color: var(--text-secondary);">Mengetik...</div>`;
           chatDisplay.appendChild(loadingDiv);
           chatDisplay.scrollTop = chatDisplay.scrollHeight; // Gulir ke bawah
 
@@ -1744,7 +2375,7 @@
 
               const aiMessageDiv = document.createElement("div");
               aiMessageDiv.className = "flex justify-start mb-2";
-              aiMessageDiv.innerHTML = `<div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">${text}</div>`;
+              aiMessageDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);">${text}</div>`;
               chatDisplay.appendChild(aiMessageDiv);
 
               // Simpan respons AI yang sudah diproses ke riwayat
@@ -1754,7 +2385,7 @@
             } else {
               const errorMessageDiv = document.createElement("div");
               errorMessageDiv.className = "flex justify-start mb-2";
-              errorMessageDiv.innerHTML = `<div class="bg-red-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Maaf, saya tidak dapat memproses permintaan ini.</div>`;
+              errorMessageDiv.innerHTML = `<div class="bg-red-500 text-white p-3 rounded-lg max-w-[80%] chat-message">Maaf, saya tidak dapat memproses permintaan ini.</div>`;
               chatDisplay.appendChild(errorMessageDiv);
             }
           } catch (error) {
@@ -1763,7 +2394,7 @@
             chatDisplay.removeChild(loadingDiv);
             const errorMessageDiv = document.createElement("div");
             errorMessageDiv.className = "flex justify-start mb-2";
-            errorMessageDiv.innerHTML = `<div class="bg-red-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Terjadi kesalahan saat berkomunikasi dengan AI.</div>`;
+            errorMessageDiv.innerHTML = `<div class="bg-red-500 text-white p-3 rounded-lg max-w-[80%] chat-message">Terjadi kesalahan saat berkomunikasi dengan AI.</div>`;
             chatDisplay.appendChild(errorMessageDiv);
             console.error(error); // Catat kesalahan untuk debugging
           } finally {
@@ -1813,7 +2444,8 @@
             quickOptionsDiv.className = "flex flex-wrap gap-2 mt-2 mb-2 justify-start";
             selectedOptions.forEach(optionText => {
                 const button = document.createElement("button");
-                button.className = "bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm py-1 px-3 rounded-full transition-colors";
+                button.className = "text-sm py-1 px-3 rounded-full transition-colors";
+                button.style="background-color: var(--bg-card-secondary); color: var(--text-secondary);";
                 button.textContent = optionText;
                 button.onclick = () => {
                     chatInput.value = optionText;
@@ -2098,6 +2730,14 @@
             // Highlight Nav Link logic (panggil fungsi yang sudah ada)
             highlightNavLinkOnScroll();
         };
+        // Cek scroll untuk achievement 'explorer'
+        const footer = document.querySelector('footer');
+        const onScroll = () => {
+            if (window.innerHeight + window.scrollY >= footer.offsetTop) {
+                unlockAchievement('explorer');
+            }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         // Fungsi untuk menyimpan dan memuat histori chat
         function saveChatHistory() {
@@ -2111,7 +2751,7 @@
             // Reset tampilan chat ke kondisi awal
             chatDisplay.innerHTML = `
                 <div class="flex justify-start mb-2">
-                    <div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div>
+                    <div class="p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div>
                 </div>
             `;
             // Opsional: tambahkan kembali opsi cepat jika tampilan direset
@@ -2132,12 +2772,12 @@
                     const messageDiv = document.createElement("div");
                     messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} mb-2`;
                     // Gunakan innerHTML untuk merender tautan jika ada
-                    messageDiv.innerHTML = `<div class="${isUser ? 'bg-blue-600' : 'bg-gray-800'} text-white p-3 rounded-lg max-w-[80%] chat-message">${msg.parts[0].text}</div>`;
+                messageDiv.innerHTML = `<div class="${isUser ? 'bg-blue-600 text-white' : ''} p-3 rounded-lg max-w-[80%] chat-message" style="${!isUser ? 'background-color: var(--bg-card-secondary);' : ''}">${msg.parts[0].text}</div>`;
                     chatDisplay.appendChild(messageDiv);
                 });
             } else {
                  // Jika tidak ada histori sama sekali, tampilkan pesan default
-                chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] chat-message">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div></div>`;
+                chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);">Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian atau pengalaman saya?</div></div>`;
             }
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
