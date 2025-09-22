@@ -81,10 +81,12 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Prism.js for Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="./assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
 
     <script>
@@ -213,7 +215,7 @@
         <i data-lucide="message-circle" class="w-6 h-6"></i><span>Chat ke AI</span>
       </a>
       <div class="mt-8 text-center text-gray-400">
-        <p class="mb-2">Ganti Tema</p>
+        <p class="mb-2 text-black">Ganti Tema</p>
         <div id="mobile-theme-switcher" class="flex justify-center gap-4"></div>
       </div>
     </div>
@@ -255,7 +257,6 @@
             src="./assets/img/foto_ade_new.jpeg"
             alt="Foto Profil Ade Syofyan"
             class="rounded-full w-64 h-64 object-cover object-top shadow-lg border-4 border-accent"
-            loading="lazy"
             onerror="this.onerror=null;this.src='https://placehold.co/300x300/4a5568/e2e8f0?text=AS';"
           />
         </div>
@@ -547,21 +548,19 @@
             <button class="btn-code-toggle" data-code-source="visitor-counter-code">
               Lihat Kode
             </button>
-            <div class="code-viewer"></div>
-            <!-- Kode Sumber (disembunyikan) -->
-            <div id="visitor-counter-code" class="hidden">
-              <pre><code class="language-javascript">
-const visitorCountElement = document.getElementById('visitor-count');
-let currentVisitors = Math.floor(Math.random() * 151) + 150;
-visitorCountElement.textContent = currentVisitors;
+            <div id="visitor-counter-code" class="hidden" data-keep-source="true">
+              <pre class="line-numbers"><code class="language-javascript">
+                const visitorCountElement = document.getElementById('visitor-count');
+                let currentVisitors = Math.floor(Math.random() * 151) + 150;
+                visitorCountElement.textContent = currentVisitors;
 
-setInterval(() => {
-  const fluctuation = Math.floor(Math.random() * 5) - 2;
-  currentVisitors = Math.max(100, currentVisitors + fluctuation);
-  visitorCountElement.classList.add('pop-in');
-  visitorCountElement.textContent = currentVisitors;
-  setTimeout(() => visitorCountElement.classList.remove('pop-in'), 300);
-}, Math.random() * 2000 + 2000);
+                setInterval(() => {
+                  const fluctuation = Math.floor(Math.random() * 5) - 2;
+                  currentVisitors = Math.max(100, currentVisitors + fluctuation);
+                  visitorCountElement.classList.add('pop-in');
+                  visitorCountElement.textContent = currentVisitors;
+                  setTimeout(() => visitorCountElement.classList.remove('pop-in'), 300);
+                }, Math.random() * 2000 + 2000);
               </code></pre>
             </div>
           </div>
@@ -583,31 +582,34 @@ setInterval(() => {
               Buat Palet Baru
             </button>
             <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
-          </div>
-          <!-- Kode Sumber untuk Palette Generator (disembunyikan) -->
-          <div id="palette-generator-code" class="hidden">
-            <pre><code class="language-javascript">
-const paletteContainer = document.getElementById('palette-container');
-const generateBtn = document.getElementById('generate-palette-btn');
-const copyFeedback = document.getElementById('copy-feedback');
+            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
+            <button class="btn-code-toggle" data-code-source="palette-generator-code">
+              Lihat Kode
+            </button>
+          <div id="palette-generator-code" class="hidden" data-keep-source="true">
+            <pre class="line-numbers"><code class="language-javascript">
+            const paletteContainer = document.getElementById('palette-container');
+            const generateBtn = document.getElementById('generate-palette-btn');
+            const copyFeedback = document.getElementById('copy-feedback');
 
-function generatePalette() {
-  paletteContainer.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-    const swatch = document.createElement('div');
-    swatch.className = 'color-swatch';
-    swatch.style.backgroundColor = color;
-    swatch.addEventListener('click', () => {
-      navigator.clipboard.writeText(color);
-      copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
-    });
-    paletteContainer.appendChild(swatch);
-  }
-}
-generateBtn.addEventListener('click', generatePalette);
-generatePalette(); // Initial generation
+            function generatePalette() {
+              paletteContainer.innerHTML = '';
+              for (let i = 0; i < 5; i++) {
+                const color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = color;
+                swatch.addEventListener('click', () => {
+                  navigator.clipboard.writeText(color);
+                  copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
+                });
+                paletteContainer.appendChild(swatch);
+              }
+            }
+            generateBtn.addEventListener('click', generatePalette);
+            generatePalette(); // Initial generation
             </code></pre>
+          </div>
           </div>
 
         </div>
@@ -805,40 +807,34 @@ generatePalette(); // Initial generation
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
       <div class="modal-content">
-        <button
-          class="modal-close-btn"
-          onclick="closeModal()"
-          aria-label="Close Project Modal"
-        >
-          &times;
-        </button>
-        <h3 id="modalTitle" class="text-3xl font-bold mb-4" style="color: var(--text-white);"></h3>
-        <p id="modalType" class="text-lg mb-2" style="color: var(--text-secondary);"></p>
-        <p id="modalRole" class="text-lg mb-4" style="color: var(--text-secondary);"></p>
-
-        <div
-          id="modalImages"
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
-        >
-          <!-- Gambar akan disuntikkan di sini -->
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">&times;</button>
+          <h3 id="modalTitle" class="text-3xl font-bold" style="color: var(--text-white);"></h3>
+          <p id="modalType" class="text-lg" style="color: var(--text-secondary);"></p>
+          <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
         </div>
-
-        <p class="text-lg mb-4" style="color: var(--text-secondary);">
-          <span class="font-semibold text-accent">Tujuan Proyek:</span>
-          <span id="modalGoal"></span>
-        </p>
-        <p class="text-lg mb-4" style="color: var(--text-secondary);">
-          <span class="font-semibold text-accent">Proses Kerja:</span>
-          <span id="modalProcess"></span>
-        </p>
-        <p class="text-lg mb-4" style="color: var(--text-secondary);">
-          <span class="font-semibold text-accent">Hasil/Dampak:</span>
-          <span id="modalImpact"></span>
-        </p>
-
-        <!-- Container untuk tautan eksternal (Play Store, GitHub, dll.) -->
-        <div id="modalLinks" class="mt-6 flex flex-wrap gap-4">
-          <!-- Tautan akan disuntikkan di sini oleh JS -->
+        <!-- Modal Body (Scrollable) -->
+        <div class="modal-body">
+            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <!-- Gambar akan disuntikkan di sini -->
+            </div>
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                <span class="font-semibold text-accent">Tujuan Proyek:</span>
+                <span id="modalGoal"></span>
+            </p>
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                <span class="font-semibold text-accent">Proses Kerja:</span>
+                <span id="modalProcess"></span>
+            </p>
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                <span class="font-semibold text-accent">Hasil/Dampak:</span>
+                <span id="modalImpact"></span>
+            </p>
+        </div>
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div id="modalLinks" class="flex flex-wrap gap-4"></div>
         </div>
       </div>
     </div>
@@ -852,30 +848,18 @@ generatePalette(); // Initial generation
     <!-- Modal Chatbot -->
     <div id="chatbotModal" class="modal-overlay">
       <div class="chatbot-content">
-        <button
-          class="modal-close-btn"
-          onclick="closeChatbotModal()"
-          aria-label="Close Chatbot Modal"
-        >
-          &times;
-        </button>
-        <h3 class="text-2xl font-bold mb-4" style="color: var(--text-white);">Tanya Ade ✨</h3>
-        <div id="chatDisplay" class="chat-display">
-          <div class="flex justify-start mb-2">
-            <div
-              class="text-white p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);"
-            >
-              Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian
-              atau pengalaman saya?
-            </div>
-          </div>
+        <!-- Chatbot Header -->
+        <div class="modal-header">
+          <button class="modal-close-btn" onclick="closeChatbotModal()" aria-label="Close Chatbot Modal">&times;</button>
+          <h3 class="text-2xl font-bold" style="color: var(--text-white);">Tanya Ade ✨</h3>
         </div>
-        <div class="chat-input-area">
-          <input
-            type="text"
-            id="chatInput"
-            placeholder="Ketik pertanyaan Anda..."
-          />
+        <!-- Chatbot Body (Scrollable) -->
+        <div id="chatDisplay" class="chat-display">
+          <!-- Pesan chat akan muncul di sini -->
+        </div>
+        <!-- Chatbot Footer -->
+        <div class="modal-footer chat-input-area">
+          <input type="text" id="chatInput" placeholder="Ketik pertanyaan Anda..." />
           <button onclick="sendChatMessage()">Kirim</button>
         </div>
       </div>
@@ -911,9 +895,9 @@ generatePalette(); // Initial generation
             <div id="terminal-output" class="flex-grow p-4 overflow-y-auto">
                 <!-- Output will be printed here -->
             </div>
-            <div class="p-2 flex items-center border-t border-gray-700 flex-shrink-0" style="border-color: var(--border-color);">
-                <span style="color: var(--terminal-prompt-color);">guest@ade-syofyan.dev:~$</span>
-                <input type="text" id="terminal-input" class="bg-transparent border-none flex-grow ml-2 focus:outline-none" autocomplete="off" style="color: var(--text-primary);">
+            <div class="p-2 flex flex-col items-start md:flex-row md:items-baseline border-t border-gray-700 flex-shrink-0" style="border-color: var(--border-color);">
+                <span class="whitespace-nowrap" style="color: var(--terminal-prompt-color);">guest@ade-syofyan.dev:~$ </span>
+                <input type="text" id="terminal-input" class="bg-transparent border-none w-full flex-grow mt-1 md:mt-0 focus:outline-none" autocomplete="off" style="color: var(--text-primary);">
             </div>
         </div>
     </div>
@@ -931,9 +915,13 @@ generatePalette(); // Initial generation
     <!-- Achievement Modal -->
     <div id="achievementModal" class="modal-overlay">
         <div class="modal-content">
-            <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">&times;</button>
-            <h3 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-white);">Pencapaian</h3>
-            <div id="achievement-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Achievement Header -->
+            <div class="modal-header text-center">
+                <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">&times;</button>
+                <h3 class="text-3xl font-bold" style="color: var(--text-white);">Pencapaian</h3>
+            </div>
+            <!-- Achievement Body (Scrollable) -->
+            <div id="achievement-grid" class="modal-body grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Achievement cards will be injected here -->
             </div>
         </div>
@@ -952,6 +940,16 @@ generatePalette(); // Initial generation
         </div>
     </div>
 
+    <!-- Code Viewer Modal -->
+    <div id="codeViewerModal" class="modal-overlay">
+      <div class="modal-content max-w-4xl h-[85vh] flex flex-col p-0">
+        <!-- Header dan Konten akan disuntikkan oleh JavaScript -->
+        <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0"></div>
+        <div id="codeViewerContent" class="flex-grow">
+          <!-- <pre><code>...</code></pre> akan disuntikkan di sini -->
+        </div>
+      </div>
+    </div>
 
     <script type="application/ld+json">
       {

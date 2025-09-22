@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeHeroCanvas();
   initializeScrollAnimations();
   initializeParallax();
+  initializeSmoothScroll();
 
   // Initialize Interactive Components
   initializeVisitorCounter();

@@ -15,6 +15,7 @@
   --text-secondary: #a0aec0;
   /* text-gray-400 */
   --text-white: #ffffff;
+  --text-black: #000000;
   --color-accent: #63b3ed;
   --color-accent-hover: #4299e1;
   --border-color: #4a5568;
@@ -75,6 +76,11 @@ body {
   overflow-x: hidden;
   /* Prevent horizontal scrollbar */
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Mencegah body scroll saat modal terbuka */
+body.modal-open {
+  overflow: hidden;
 }
 
 .container {
@@ -190,15 +196,17 @@ body {
 
 .modal-content {
   background-color: var(--bg-modal);
-  padding: 2rem;
   border-radius: 1rem;
   max-width: 90%;
   /* Lebar maksimal */
   width: 900px;
   /* Lebar spesifik untuk desktop, diperlebar */
   max-height: 90%;
-  overflow-y: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Sembunyikan scroll di container utama */
   transform: translateY(20px);
   /* Efek jatuh sedikit awal untuk animasi */
   transition: transform 0.3s ease;
@@ -206,6 +214,28 @@ body {
 
 .modal-overlay.open .modal-content {
   transform: translateY(0);
+}
+
+.modal-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  /* Mencegah header menyusut */
+  position: relative;
+}
+
+.modal-body {
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  /* Hanya body yang bisa di-scroll */
+  flex-grow: 1;
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  /* Mencegah footer menyusut */
 }
 
 .modal-close-btn {
@@ -323,24 +353,27 @@ body {
   overflow: hidden;
   /* Sembunyikan overflow, chat-display akan menangani scroll internal */
   display: flex;
-  /* Gunakan flexbox untuk layout internal */
   flex-direction: column;
   /* Susun elemen anak secara vertikal */
+  /* Gunakan flexbox untuk layout internal */
   position: relative;
   /* Untuk positioning tombol close */
+  padding: 0;
+  /* Hapus padding dari container utama */
 }
 
 .chat-display {
   flex-grow: 1;
+  /* Biarkan area display chat mengambil sisa ruang vertikal */
   /* Biarkan area display chat mengambil sisa ruang vertikal */
   background-color: var(--bg-primary);
   border-radius: 0.5rem;
   /* Sudut membulat untuk display chat */
   padding: 1rem;
   /* Padding di dalam display chat */
+  margin: 1rem;
+  /* Beri jarak dari header dan footer */
   overflow-y: auto;
-  /* Aktifkan scroll vertikal jika konten melebihi area */
-  margin-bottom: 1rem;
   /* Jarak bawah sebelum area input */
   display: flex;
   /* Gunakan flexbox untuk pesan */
@@ -357,10 +390,10 @@ body {
 }
 
 .chat-input-area {
-  display: flex;
   /* Gunakan flexbox untuk input dan tombol */
-  flex-direction: column;
   /* Default: susun vertikal untuk layar kecil */
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   /* Jarak antara input dan tombol saat vertikal */
 }
@@ -477,19 +510,25 @@ body {
   width: 80%;
   max-width: 300px;
   text-align: left;
-  transition: color 0.3s ease, transform 0.3s ease;
   display: flex;
   align-items: center;
   gap: 1rem;
-  /* Jarak antara ikon dan teks */
 }
 
-.mobile-menu-overlay a:hover {
+.mobile-menu-overlay a, .mobile-menu-overlay .mobile-menu-cta, .mobile-menu-overlay .mt-8 {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out, color 0.3s ease;
+}
+
+.mobile-menu-overlay.open a, .mobile-menu-overlay.open .mobile-menu-cta, .mobile-menu-overlay.open .mt-8 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-menu-overlay.open a:hover {
   color: var(--color-accent);
-  transform: translateX(5px);
-  /* Efek geser saat hover */
 }
-
 .mobile-menu-close-btn {
   position: absolute;
   top: 1.25rem;
@@ -855,18 +894,60 @@ body {
 }
 
 /* Styles for "Behind the Code" feature */
-.code-viewer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease-in-out;
-  margin-top: 1rem;
-  border-radius: 0.5rem;
+/* Menghapus style .code-viewer yang lama karena sudah diganti modal */
+
+/* Jadikan kontainer konten sebagai flexbox agar elemen <pre> di dalamnya bisa memanjang */
+#codeViewerContent {
+  display: flex;
+  /* Menjadikan kontainer ini sebagai flex container */
+  flex-direction: column;
+  /* Mengatur arah item di dalamnya secara vertikal */
+  overflow: auto;
+  /* Pindahkan overflow ke sini agar scrollbar muncul jika diperlukan */
 }
 
-.code-viewer.open {
-  max-height: 500px;
-  /* Adjust as needed */
-  overflow-y: auto;
+/* Pastikan <pre> di dalam modal tidak memiliki padding ganda */
+#codeViewerContent pre[class*="language-"] {
+  margin: 0 !important;
+  padding-left: 3.8em !important;
+  flex-grow: 1;
+  /* Memastikan elemen <pre> mengisi sisa ruang vertikal yang tersedia */
+}
+
+/* Header untuk blok kode */
+.code-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  /* Sesuaikan padding agar lebih seimbang */
+  background-color: var(--bg-card-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.code-language {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.btn-copy-code {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-copy-code:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-card);
 }
 
 .btn-code-toggle {
@@ -889,11 +970,11 @@ body {
 /* Themed Prism.js styles */
 pre[class*="language-"] {
   background: var(--prism-bg) !important;
-  color: var(--prism-color) !important;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
   padding: 1em !important;
   margin: 0 !important;
+  border: none !important;
+  overflow: auto;
+  /* Tambahkan scroll jika konten terlalu lebar */
 }
 
 /* More specific Prism token styles using variables */
@@ -948,4 +1029,65 @@ pre[class*="language-"] {
 code[class*="language-"],
 pre[class*="language-"] {
   color: var(--prism-color) !important;
+}
+
+/* Animasi untuk Filter Portofolio yang Mulus */
+@keyframes fadeInPortfolio {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeOutPortfolio {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+}
+
+.project-card {
+  animation: fadeInPortfolio 0.4s ease-out forwards;
+}
+
+.project-card.fading-out {
+  animation: fadeOutPortfolio 0.3s ease-in forwards;
+}
+
+/* Neofetch Command Styles */
+.neofetch-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  font-family: monospace;
+  line-height: 1.4;
+}
+
+.neofetch-logo {
+  color: var(--color-accent);
+}
+
+.neofetch-title {
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.neofetch-label {
+  color: var(--color-accent);
+  font-weight: bold;
+}
+
+/* Utility class untuk warna putih solid yang tidak terpengaruh tema */
+.text-menu-active {
+  color: var(--color-accent);
 }

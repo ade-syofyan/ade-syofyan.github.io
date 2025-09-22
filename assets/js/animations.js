@@ -261,3 +261,44 @@ function initializeNavHighlighting() {
     passive: true,
   });
 }
+
+// --- Smooth Scrolling for Nav Links ---
+function initializeSmoothScroll() {
+  const navLinks = document.querySelectorAll('a[href^="#"]');
+  const header = document.querySelector("nav");
+
+  if (!header) return;
+
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      // Hanya proses link yang menuju ke sebuah ID di halaman ini
+      const href = this.getAttribute("href");
+      if (href.length > 1 && href.startsWith("#")) {
+        e.preventDefault(); // Mencegah lompatan instan
+
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          const headerHeight = header.offsetHeight;
+          const targetPosition =
+            targetElement.getBoundingClientRect().top +
+            window.scrollY -
+            headerHeight;
+
+          window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth",
+          });
+
+          // Tutup menu mobile jika terbuka
+          if (
+            document.getElementById("mobileMenu").classList.contains("open")
+          ) {
+            closeMobileMenu();
+          }
+        }
+      }
+    });
+  });
+}

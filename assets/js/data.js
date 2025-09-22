@@ -178,11 +178,23 @@ const achievements = {
     description: "Membuka salah satu profil media sosial.",
     icon: "share-2",
   },
+  terminal_ai_chat: {
+    name: "Terminal Talker",
+    unlocked: false,
+    description: "Berinteraksi dengan AI melalui terminal.",
+    icon: "message-square",
+  },
   palette_picasso: {
     name: "Palette Picasso",
     unlocked: false,
     description: "Menghasilkan 5 palet warna.",
     icon: "palette",
+  },
+  geek_cred: {
+    name: "Geek Cred",
+    unlocked: false,
+    description: "Menampilkan info profil dengan perintah `neofetch`.",
+    icon: "cpu",
   },
 };
 

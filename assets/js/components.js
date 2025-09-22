@@ -74,26 +74,99 @@ function initializePaletteGenerator() {
 
 // --- "Behind the Code" Logic ---
 function initializeCodeViewers() {
+  const modal = document.getElementById("codeViewerModal");
+  const modalHeader = document.getElementById("codeViewerHeader");
+  const modalContent = document.getElementById("codeViewerContent");
   const codeToggleButtons = document.querySelectorAll(".btn-code-toggle");
-  codeToggleButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const sourceId = button.dataset.codeSource;
-      const sourceElement = document.getElementById(sourceId);
-      const viewerElement = button.nextElementSibling;
 
-      if (sourceElement && viewerElement) {
-        const isOpen = viewerElement.classList.toggle("open");
-        if (isOpen) {
-          if (viewerElement.innerHTML.trim() === "") {
-            viewerElement.innerHTML = sourceElement.innerHTML;
-            Prism.highlightAllUnder(viewerElement);
-          }
-          button.textContent = "Sembunyikan Kode";
-          unlockAchievement("code_inspector");
-        } else {
-          button.textContent = "Lihat Kode";
-        }
-      }
-    });
+  if (!modal || !modalHeader || !modalContent || codeToggleButtons.length === 0)
+    return;
+
+  const closeModal = () => {
+    modal.classList.remove("open");
+    document.body.classList.remove("modal-open");
+    // Membersihkan konten untuk penggunaan berikutnya
+    modalHeader.innerHTML = "";
+    modalContent.innerHTML = "";
+  };
+
+  const openModal = (sourceId) => {
+    const sourcePreElement = document.querySelector(`#${sourceId} pre`);
+    const sourceCodeElement = sourcePreElement
+      ? sourcePreElement.querySelector("code")
+      : null;
+    if (!sourceCodeElement) return;
+
+    // --- Dedent Logic ---
+    // Menghapus spasi di awal yang disebabkan oleh indentasi HTML.
+    const rawCode = sourceCodeElement.textContent;
+    const lines = rawCode.split("\n");
+    // Temukan indentasi terkecil dari baris yang tidak kosong.
+    const minIndent = Math.min(
+      ...lines
+        .filter((line) => line.trim())
+        .map((line) => line.match(/^\s*/)[0].length)
+    );
+    // Hapus indentasi tersebut dari setiap baris dan rapikan.
+    const dedentedCode = lines
+      .map((line) => line.substring(minIndent))
+      .join("\n")
+      .trim();
+
+    // 1. Buat Header Modal
+    const language =
+      sourceCodeElement.className.replace("language-", "") || "code";
+    const codeToCopy = dedentedCode;
+
+    const copyButton = document.createElement("button");
+    copyButton.className = "btn-copy-code";
+    copyButton.innerHTML =
+      '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+    copyButton.onclick = () => {
+      navigator.clipboard.writeText(codeToCopy).then(() => {
+        copyButton.innerHTML =
+          '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
+        lucide.createIcons();
+        setTimeout(() => {
+          copyButton.innerHTML =
+            '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+          lucide.createIcons();
+        }, 2000);
+      });
+    };
+
+    const closeButton = document.createElement("button");
+    closeButton.className = "modal-close-btn static text-2xl ml-4 p-0";
+    closeButton.innerHTML = "&times;";
+    closeButton.onclick = closeModal;
+
+    modalHeader.className = "code-viewer-header";
+    modalHeader.innerHTML = `<span class="code-language">${language}</span>`;
+    const controlsDiv = document.createElement("div");
+    controlsDiv.append(copyButton, closeButton);
+    modalHeader.appendChild(controlsDiv);
+
+    // 2. Kloning dan tampilkan konten kode
+    const codeClone = sourcePreElement.cloneNode(true);
+    codeClone.querySelector("code").textContent = dedentedCode; // Ganti dengan kode yang sudah rapi
+    codeClone.classList.add("line-numbers"); // Tambahkan nomor baris
+    modalContent.appendChild(codeClone);
+
+    // 3. Highlight syntax dan tampilkan modal
+    Prism.highlightAllUnder(modalContent);
+    lucide.createIcons();
+    modal.classList.add("open");
+    document.body.classList.add("modal-open");
+    unlockAchievement("code_inspector");
+  };
+
+  codeToggleButtons.forEach((button) => {
+    button.addEventListener("click", () =>
+      openModal(button.dataset.codeSource)
+    );
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
   });
 }
