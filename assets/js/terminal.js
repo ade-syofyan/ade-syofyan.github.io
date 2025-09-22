@@ -340,6 +340,9 @@ function initializeTerminal() {
     if (isAwaitingConfirmation) {
       isAwaitingConfirmation = false;
       if (originalCommand.toLowerCase() === "y") {
+        // Sembunyikan keyboard virtual dengan menghilangkan fokus dari input
+        terminalInput.blur();
+
         // 1. Tutup (sembunyikan) terminal terlebih dahulu
         terminal.classList.add("hidden");
         terminalWindow.classList.remove("maximized");
