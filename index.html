@@ -91,6 +91,7 @@
         --bg-card-secondary: #4a5568;
         --bg-nav: #111827; /* bg-gray-900 */
         --bg-modal: #2d3748;
+        --bg-overlay: rgba(26, 32, 44, 0.8); /* Latar belakang overlay semi-transparan */
         --text-primary: #e2e8f0;
         --text-secondary: #a0aec0; /* text-gray-400 */
         --text-white: #ffffff;
@@ -107,6 +108,7 @@
         --bg-card-secondary: #edf2f7;
         --bg-nav: #ffffff;
         --bg-modal: #ffffff;
+        --bg-overlay: rgba(247, 250, 252, 0.8); /* Latar belakang overlay untuk tema terang */
         --text-primary: #2d3748;
         --text-secondary: #718096;
         --text-white: #1a202c;
@@ -314,8 +316,8 @@
           top: 0;
           left: 0;
           width: 100%;
-          height: 100%;
-          background-color: rgba(26, 32, 44, 0.8); /* Warna body dengan transparansi */
+          height: 100%;          
+          background-color: var(--bg-overlay); /* Menggunakan variabel untuk mendukung tema */
           -webkit-backdrop-filter: blur(10px); /* Efek blur untuk Safari */
           backdrop-filter: blur(10px); /* Efek blur modern */
           display: flex;
