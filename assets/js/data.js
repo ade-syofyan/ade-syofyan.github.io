@@ -42,6 +42,9 @@ const projectsData = [
         alt: "Screenshot Halaman Persyaratan PPDB SMAKPA Padang",
       },
     ],
+    links: {
+      liveSite: "https://psb.smk-smakpa.sch.id/",
+    },
   },
   {
     id: "myintercom",
@@ -66,6 +69,10 @@ const projectsData = [
         alt: "Screenshot Poin Reward myIntercom",
       },
     ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=com.sukumaya.intercomapp",
+    },
   },
   {
     id: "payoapp",
@@ -90,6 +97,10 @@ const projectsData = [
         alt: "Screenshot Layanan Ojek PayoKurir",
       },
     ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=com.payoapp.update",
+    },
   },
   // Untuk menambahkan proyek baru, cukup salin objek di atas dan isi datanya.
 ];

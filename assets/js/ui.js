@@ -186,6 +186,36 @@ function initializeModals() {
           modalImages.appendChild(imgElement);
         });
       }
+
+      // Tambahkan tautan eksternal (Play Store, dll.)
+      const modalLinks = document.getElementById("modalLinks");
+      modalLinks.innerHTML = ""; // Bersihkan tautan sebelumnya
+      if (project.links) {
+        if (project.links.playStore) {
+          const linkEl = document.createElement("a");
+          linkEl.href = project.links.playStore;
+          linkEl.target = "_blank";
+          linkEl.rel = "noopener noreferrer"; // Keamanan
+          linkEl.className = "btn-secondary inline-flex items-center gap-2";
+          linkEl.innerHTML = `<i data-lucide="play-circle"></i>Lihat di Play Store`;
+          modalLinks.appendChild(linkEl);
+        }
+        if (project.links.liveSite) {
+          const linkEl = document.createElement("a");
+          linkEl.href = project.links.liveSite;
+          linkEl.target = "_blank";
+          linkEl.rel = "noopener noreferrer"; // Keamanan
+          linkEl.className = "btn-secondary inline-flex items-center gap-2";
+          linkEl.innerHTML = `<i data-lucide="external-link"></i>Kunjungi Situs`;
+          modalLinks.appendChild(linkEl);
+        }
+        // Anda bisa menambahkan jenis tautan lain di sini (misal: appStore, github)
+
+        // Panggil kembali createIcons karena kita menambahkan ikon baru secara dinamis
+        if (typeof lucide !== "undefined") {
+          lucide.createIcons();
+        }
+      }
       projectModal.classList.add("open");
     }
   };
