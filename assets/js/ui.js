@@ -365,7 +365,7 @@ function initializeBSOD() {
   };
 
   window.triggerBSOD = function () {
-    unlockAchievement("system_crasher");
+    const isNewlyUnlocked = unlockAchievement("system_crasher");
 
     let targetBsod = bsodViews.linux; // Default
     const userAgent = navigator.userAgent.toLowerCase();
@@ -385,7 +385,9 @@ function initializeBSOD() {
 
     const completeSequence = () => {
       hideAllBSOD();
-      showSuccess();
+      if (isNewlyUnlocked) {
+        showSuccess();
+      }
     };
 
     // Untuk Windows, tunggu progress bar selesai.
@@ -583,7 +585,9 @@ window.unlockAchievement = function (id) {
       saved.push(id);
       localStorage.setItem("portfolioAchievements", JSON.stringify(saved));
     }
+    return true; // Berhasil membuka achievement baru
   }
+  return false; // Achievement sudah terbuka sebelumnya
 };
 
 function loadAchievements() {

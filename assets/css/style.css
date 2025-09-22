@@ -456,17 +456,8 @@ body.modal-open {
 }
 
 /* iOS BSOD Styles */
-#apple-logo-bsod {
-    fill: #ffffff;
-}
-
-#ios-progress-bar {
-    background-color: #444;
-}
-
 #ios-progress-bar-inner {
-    background-color: #ffffff;
-    transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
 }
 
 /* .desktop-nav { */

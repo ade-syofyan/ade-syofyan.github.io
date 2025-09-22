@@ -303,6 +303,9 @@ function initializeTerminal() {
     "rm -rf /": function () {
       return this.reboot();
     },
+    "sudo rm -rf /": function () {
+      return this.reboot();
+    },
   };
 
   const handleTerminalChat = async (message) => {
@@ -361,9 +364,13 @@ function initializeTerminal() {
       return;
     }
 
-    // Khusus untuk perintah 'rm -rf /' yang mengandung spasi
-    if (originalCommand.toLowerCase() === "rm -rf /") {
-      commands["rm -rf /"]();
+    // Khusus untuk perintah berbahaya yang mengandung spasi
+    const lowerCaseCommand = originalCommand.toLowerCase();
+    if (
+      lowerCaseCommand === "rm -rf /" ||
+      lowerCaseCommand === "sudo rm -rf /"
+    ) {
+      commands[lowerCaseCommand]();
       return;
     }
 
