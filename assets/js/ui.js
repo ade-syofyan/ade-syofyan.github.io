@@ -185,41 +185,44 @@ function initializeModals() {
 
       // Tambahkan Tech Stack
       const modalTechStack = document.getElementById("modalTechStack");
-      modalTechStack.innerHTML = "";
-      if (project.techStack && project.techStack.length > 0) {
-        project.techStack.forEach((tech) => {
-          const tagEl = document.createElement("div");
-          tagEl.className = "tech-tag";
-          tagEl.textContent = tech.name;
+      if (modalTechStack) {
+        modalTechStack.innerHTML = "";
+        if (project.techStack && project.techStack.length > 0) {
+          project.techStack.forEach((tech) => {
+            const tagEl = document.createElement("div");
+            tagEl.className = "tech-tag";
+            tagEl.textContent = tech.name;
 
-          // --- New Tooltip Logic ---
-          const tooltip = document.getElementById("global-tooltip");
-          tagEl.addEventListener("mouseenter", () => {
-            tooltip.textContent = tech.reason;
-            tooltip.classList.add("visible");
+            // --- New Tooltip Logic ---
+            const tooltip = document.getElementById("global-tooltip");
+            tagEl.addEventListener("mouseenter", () => {
+              tooltip.textContent = tech.reason;
+              tooltip.classList.add("visible");
 
-            const tagRect = tagEl.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
+              const tagRect = tagEl.getBoundingClientRect();
+              const tooltipRect = tooltip.getBoundingClientRect();
 
-            // Position tooltip above the tag
-            let top = tagRect.top - tooltipRect.height - 8; // 8px gap
-            let left = tagRect.left + tagRect.width / 2 - tooltipRect.width / 2;
+              // Position tooltip above the tag
+              let top = tagRect.top - tooltipRect.height - 8; // 8px gap
+              let left =
+                tagRect.left + tagRect.width / 2 - tooltipRect.width / 2;
 
-            // Adjust if it goes off-screen
-            if (left < 10) left = 10;
-            if (left + tooltipRect.width > window.innerWidth - 10)
-              left = window.innerWidth - tooltipRect.width - 10;
+              // Adjust if it goes off-screen
+              if (left < 10) left = 10;
+              if (left + tooltipRect.width > window.innerWidth - 10)
+                left = window.innerWidth - tooltipRect.width - 10;
 
-            tooltip.style.top = `${top}px`;
-            tooltip.style.left = `${left}px`;
+              tooltip.style.top = `${top}px`;
+              tooltip.style.left = `${left}px`;
+            });
+
+            tagEl.addEventListener("mouseleave", () => {
+              tooltip.classList.remove("visible");
+            });
+
+            modalTechStack.appendChild(tagEl);
           });
-
-          tagEl.addEventListener("mouseleave", () => {
-            tooltip.classList.remove("visible");
-          });
-
-          modalTechStack.appendChild(tagEl);
-        });
+        }
       }
 
       const modalImages = document.getElementById("modalImages");
@@ -232,9 +235,9 @@ function initializeModals() {
           imgElement.className =
             "rounded-lg w-full h-auto object-cover shadow-md transition-transform duration-200 hover:scale-105";
           imgElement.onerror = function () {
-            this.onerror = null;
+            this.onerror = null; // Mencegah loop jika placeholder juga gagal
             this.src =
-              "https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error";
+              "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+";
           };
           // Tambahkan event listener untuk membuka lightbox saat gambar diklik
           imgElement.addEventListener("click", () => openLightbox(imgData.src));
@@ -485,17 +488,18 @@ function renderProjects(projects, filter = "all") {
     return;
   }
 
-  filteredProjects.forEach((project) => {
+  filteredProjects.forEach((project, index) => {
     const projectCard = document.createElement("div");
     // Gunakan kelas .project-card yang konsisten untuk styling dan animasi
     projectCard.className = `
       project-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
     `;
+    projectCard.style.animationDelay = `${index * 75}ms`; // Staggered delay untuk fade-in
     projectCard.style.backgroundColor = "var(--bg-card-secondary)";
     projectCard.setAttribute("onclick", `openModal('${project.id}')`);
 
     projectCard.innerHTML = `
-      <img src="${project.thumbnail}" alt="Thumbnail untuk ${project.title}" class="rounded-lg mb-4 w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error';">
+      <img src="${project.thumbnail}" alt="Thumbnail untuk ${project.title}" class="rounded-lg mb-4 w-full h-48 object-cover" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
       <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">${project.title}</h3>
       <p class="text-lg mb-4" style="color: var(--text-secondary);">${project.type}</p>
       <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${project.tag}</span>
@@ -549,13 +553,18 @@ function renderProjectFilters(projects) {
       const portfolioGrid = document.getElementById("portfolio-grid");
       const existingCards = portfolioGrid.querySelectorAll(".project-card");
 
-      // 1. Pudar keluar item yang ada
-      existingCards.forEach((card) => card.classList.add("fading-out"));
+      // 1. Pudar keluar item yang ada dengan efek staggered
+      existingCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 50}ms`; // Staggered delay
+        card.classList.add("fading-out");
+      });
 
       // 2. Setelah animasi pudar selesai, render item baru
+      const totalFadeOutTime =
+        300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
       setTimeout(() => {
         renderProjects(projects, categoryKey);
-      }, 300); // Durasi harus cocok dengan animasi fade-out di CSS
+      }, totalFadeOutTime); // Sesuaikan timeout untuk memperhitungkan stagger
     });
 
     filtersContainer.appendChild(button);
@@ -601,7 +610,8 @@ function renderTestimonials(testimonials) {
   testimonials.forEach((testimonial) => {
     const testimonialCard = document.createElement("div");
     // Menambahkan kelas .testimonial-card untuk styling glassmorphism
-    testimonialCard.className = "testimonial-card p-6 rounded-xl shadow-lg text-left";
+    testimonialCard.className =
+      "testimonial-card p-6 rounded-xl shadow-lg text-left";
 
     testimonialCard.innerHTML = `
       <p class="italic mb-4" style="color: var(--text-secondary);">

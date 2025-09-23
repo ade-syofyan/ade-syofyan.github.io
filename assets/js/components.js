@@ -24,85 +24,170 @@ function initializeVisitorCounter() {
   }
   setTimeout(updateVisitorCount, 2500);
 }
+
+class PriorityQueue {
+  constructor() {
+    this.elements = [];
+  }
+  enqueue(element, priority) {
+    this.elements.push({ element, priority });
+    this.elements.sort((a, b) => a.priority - b.priority);
+  }
+  dequeue() {
+    return this.elements.shift().element;
+  }
+  isEmpty() {
+    return this.elements.length === 0;
+  }
+}
+
+function heuristic(a, b) {
+  // Manhattan distance
+  return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
+}
+
 // --- Live Demo: Pathfinding Visualizer ---
 function initializePathfindingVisualizer() {
+  // 1. SETUP: Get all necessary DOM elements
   const gridContainer = document.getElementById("pathfinding-grid");
   const controlsContainer = document.getElementById("pathfinding-controls");
   const runBtn = document.getElementById("run-pathfinding-btn");
   const resetBtn = document.getElementById("reset-pathfinding-btn");
+  const algorithmSelect = document.getElementById("algorithm-select");
 
-  if (!gridContainer || !runBtn || !resetBtn) return;
+  // Exit if any element is missing to prevent errors
+  if (!gridContainer || !controlsContainer || !runBtn || !resetBtn) {
+    return; // Silently fail if the component is not on the page
+  }
 
-  const GRID_WIDTH = 20;
-  const GRID_HEIGHT = 10;
+  // 2. STATE & CONFIGURATION
+  const GRID_WIDTH = 30;
+  const GRID_HEIGHT = 15;
   let nodes = [];
   let startNode = null;
   let endNode = null;
-  let currentMode = "start"; // 'start', 'end', 'wall'
+  let currentMode = "start"; // Modes: 'start', 'end', 'wall'
   let isRunning = false;
+  let isMouseDown = false;
 
+  // 3. CORE LOGIC
+
+  /**
+   * Creates the grid of nodes.
+   */
   function createGrid() {
     gridContainer.innerHTML = "";
     nodes = [];
     for (let row = 0; row < GRID_HEIGHT; row++) {
       const currentRow = [];
       for (let col = 0; col < GRID_WIDTH; col++) {
-        const node = document.createElement("div");
-        node.className = "pathfinding-node";
-        node.dataset.row = row;
-        node.dataset.col = col;
-        node.addEventListener("click", () => handleNodeClick(row, col));
-        gridContainer.appendChild(node);
+        const nodeEl = document.createElement("div");
+        nodeEl.className = "pathfinding-node";
+        nodeEl.id = `node-${row}-${col}`;
+        const costEl = document.createElement("span");
+        costEl.className = "node-cost";
+        nodeEl.appendChild(costEl);
+        gridContainer.appendChild(nodeEl);
         currentRow.push({
-          element: node,
+          element: nodeEl,
+          costElement: costEl,
+          row,
+          col,
           isWall: false,
           isStart: false,
           isEnd: false,
+          isWater: false,
         });
       }
       nodes.push(currentRow);
     }
   }
 
-  function handleNodeClick(row, col) {
-    if (isRunning) return;
+  /**
+   * Handles all user interactions with the grid nodes (click or drag).
+   * @param {HTMLElement} target - The grid node element that was interacted with.
+   */
+  function handleInteraction(target) {
+    if (isRunning || !target.id || !target.id.startsWith("node-")) return;
+
+    const [_, row, col] = target.id.split("-").map(Number);
     const node = nodes[row][col];
 
-    if (currentMode === "start") {
-      if (startNode) {
-        startNode.isStart = false;
-        startNode.element.classList.remove("node-start");
-      }
-      node.isStart = true;
-      node.element.classList.add("node-start");
-      startNode = node;
-    } else if (currentMode === "end") {
-      if (endNode) {
-        endNode.isEnd = false;
-        endNode.element.classList.remove("node-end");
-      }
-      node.isEnd = true;
-      node.element.classList.add("node-end");
-      endNode = node;
-    } else if (currentMode === "wall") {
-      if (!node.isStart && !node.isEnd) {
+    if (currentMode === "wall") {
+      if (!node.isStart && !node.isEnd && !node.isWater) {
         node.isWall = !node.isWall;
         node.element.classList.toggle("node-wall", node.isWall);
+      }
+    } else if (currentMode === "water") {
+      if (!node.isStart && !node.isEnd && !node.isWall) {
+        node.isWater = !node.isWater;
+        node.element.classList.toggle("node-water", node.isWater);
+      }
+    } else {
+      // Clear wall status before setting start/end
+      if (node.isWater) {
+        node.isWater = false;
+        node.element.classList.remove("node-water");
+      }
+      if (node.isWall) {
+        node.isWall = false;
+        node.element.classList.remove("node-wall");
+      }
+
+      if (currentMode === "start") {
+        if (node.isEnd) return; // Can't place start on end
+        if (startNode) {
+          startNode.isStart = false;
+          startNode.element.classList.remove("node-start");
+        }
+        node.isStart = true;
+        node.element.classList.add("node-start");
+        startNode = node;
+      } else if (currentMode === "end") {
+        if (node.isStart) return; // Can't place end on start
+        if (endNode) {
+          endNode.isEnd = false;
+          endNode.element.classList.remove("node-end");
+        }
+        node.isEnd = true;
+        node.element.classList.add("node-end");
+        endNode = node;
       }
     }
   }
 
+  /**
+   * Resets the grid to its initial state or just clears the path visualization.
+   * @param {boolean} fullReset - If true, clears walls, start, and end points.
+   */
   function resetGrid(fullReset = true) {
     isRunning = false;
+    // Pastikan semua tombol aktif saat reset
+    runBtn.disabled = false;
+    resetBtn.disabled = false;
+    controlsContainer
+      .querySelectorAll(".pathfinding-btn")
+      .forEach((btn) => (btn.disabled = false));
+    algorithmSelect.disabled = false;
+
+    gridContainer.classList.remove("shake-animation");
     for (let row = 0; row < GRID_HEIGHT; row++) {
       for (let col = 0; col < GRID_WIDTH; col++) {
         const node = nodes[row][col];
         node.element.classList.remove("node-visited", "node-path");
+        node.element.classList.remove("is-drawing"); // Hapus kelas drawing juga
+        node.costElement.textContent = ""; // Hapus teks biaya
         if (fullReset) {
-          node.element.classList.remove("node-start", "node-end", "node-wall");
+          node.element.classList.remove(
+            "node-start",
+            "node-end",
+            "node-wall",
+            "node-water"
+          );
           node.isStart = false;
           node.isEnd = false;
           node.isWall = false;
+          node.isWater = false;
         }
       }
     }
@@ -112,23 +197,26 @@ function initializePathfindingVisualizer() {
     }
   }
 
-  async function runBFS() {
+  /**
+   * Runs the Breadth-First Search (BFS) algorithm to find the shortest path.
+   */
+  async function runSelectedAlgorithm() {
     if (!startNode || !endNode || isRunning) return;
     isRunning = true;
-    resetGrid(false);
+    // Nonaktifkan semua tombol saat algoritma berjalan
+    runBtn.disabled = true;
+    resetBtn.disabled = true;
+    controlsContainer
+      .querySelectorAll(".pathfinding-btn")
+      .forEach((btn) => (btn.disabled = true));
+    algorithmSelect.disabled = true;
+
+    resetGrid(false); // Clear previous path visualization
     unlockAchievement("navigator");
 
-    const queue = [
-      [
-        parseInt(startNode.element.dataset.row),
-        parseInt(startNode.element.dataset.col),
-      ],
-    ];
-    const visited = new Set([
-      `${startNode.element.dataset.row}-${startNode.element.dataset.col}`,
-    ]);
     const predecessors = new Map();
-
+    let pathFound = false;
+    const algorithm = algorithmSelect.value;
     const directions = [
       [0, 1],
       [0, -1],
@@ -136,59 +224,128 @@ function initializePathfindingVisualizer() {
       [-1, 0],
     ];
 
-    let pathFound = false;
-    while (queue.length > 0) {
-      const [row, col] = queue.shift();
-
-      if (
-        row === parseInt(endNode.element.dataset.row) &&
-        col === parseInt(endNode.element.dataset.col)
-      ) {
-        pathFound = true;
-        break;
+    if (algorithm === "bfs") {
+      const queue = [startNode];
+      const visited = new Set([startNode]);
+      while (queue.length > 0) {
+        const current = queue.shift();
+        if (current === endNode) {
+          pathFound = true;
+          break;
+        }
+        if (!current.isStart) {
+          current.element.classList.add("node-visited");
+          await new Promise((r) => setTimeout(r, 20));
+        }
+        for (const [dr, dc] of directions) {
+          const newRow = current.row + dr,
+            newCol = current.col + dc;
+          if (
+            newRow >= 0 &&
+            newRow < GRID_HEIGHT &&
+            newCol >= 0 &&
+            newCol < GRID_WIDTH
+          ) {
+            const neighbor = nodes[newRow][newCol];
+            if (!neighbor.isWall && !visited.has(neighbor)) {
+              visited.add(neighbor);
+              predecessors.set(neighbor, current);
+              queue.push(neighbor);
+            }
+          }
+        }
       }
+    } else {
+      // Dijkstra and A*
+      const distances = new Map();
+      const pq = new PriorityQueue();
+      for (const row of nodes)
+        for (const node of row) distances.set(node, Infinity);
 
-      if (!nodes[row][col].isStart) {
-        nodes[row][col].element.classList.add("node-visited");
-        await new Promise((resolve) => setTimeout(resolve, 20));
-      }
+      distances.set(startNode, 0);
+      pq.enqueue(startNode, 0);
 
-      for (const [dr, dc] of directions) {
-        const newRow = row + dr;
-        const newCol = col + dc;
+      while (!pq.isEmpty()) {
+        const current = pq.dequeue();
+        if (current === endNode) {
+          pathFound = true;
+          break;
+        }
+        if (distances.get(current) === Infinity) continue;
 
-        if (
-          newRow >= 0 &&
-          newRow < GRID_HEIGHT &&
-          newCol >= 0 &&
-          newCol < GRID_WIDTH &&
-          !nodes[newRow][newCol].isWall &&
-          !visited.has(`${newRow}-${newCol}`)
-        ) {
-          visited.add(`${newRow}-${newCol}`);
-          predecessors.set(`${newRow}-${newCol}`, `${row}-${col}`);
-          queue.push([newRow, newCol]);
+        if (!current.isStart) {
+          current.element.classList.add("node-visited");
+          current.costElement.textContent = distances.get(current); // Tampilkan biaya
+          await new Promise((r) => setTimeout(r, 20));
+        }
+
+        for (const [dr, dc] of directions) {
+          const newRow = current.row + dr,
+            newCol = current.col + dc;
+          if (
+            newRow >= 0 &&
+            newRow < GRID_HEIGHT &&
+            newCol >= 0 &&
+            newCol < GRID_WIDTH
+          ) {
+            const neighbor = nodes[newRow][newCol];
+            if (neighbor.isWall) continue;
+
+            const weight = neighbor.isWater ? 15 : 1; // Water has a higher weight
+            const distanceToNeighbor = distances.get(current) + weight;
+
+            if (distanceToNeighbor < distances.get(neighbor)) {
+              distances.set(neighbor, distanceToNeighbor);
+              predecessors.set(neighbor, current);
+              let priority = distanceToNeighbor;
+              if (algorithm === "a-star") {
+                priority += heuristic(neighbor, endNode);
+              }
+              pq.enqueue(neighbor, priority);
+            }
+          }
         }
       }
     }
 
     if (pathFound) {
-      let current = `${endNode.element.dataset.row}-${endNode.element.dataset.col}`;
-      while (
-        current &&
-        current !==
-          `${startNode.element.dataset.row}-${startNode.element.dataset.col}`
-      ) {
-        const [row, col] = current.split("-").map(Number);
-        if (!nodes[row][col].isEnd) {
-          nodes[row][col].element.classList.add("node-path");
-          await new Promise((resolve) => setTimeout(resolve, 30));
+      let current = endNode;
+      while (current && current !== startNode) {
+        if (!current.isEnd) {
+          current.element.classList.add("is-drawing");
+          await new Promise((resolve) => setTimeout(resolve, 35));
+          current.element.classList.remove("is-drawing");
+          current.element.classList.add("node-path");
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, 35));
         }
         current = predecessors.get(current);
       }
+    } else {
+      gridContainer.classList.add("shake-animation");
     }
     isRunning = false;
+    runBtn.disabled = false;
+    resetBtn.disabled = false;
+    controlsContainer
+      .querySelectorAll(".pathfinding-btn")
+      .forEach((btn) => (btn.disabled = false));
+    algorithmSelect.disabled = false;
   }
+
+  // 4. EVENT LISTENERS
+  gridContainer.addEventListener("mousedown", (e) => {
+    isMouseDown = true;
+    handleInteraction(e.target);
+  });
+  gridContainer.addEventListener("mouseover", (e) => {
+    if (isMouseDown && (currentMode === "wall" || currentMode === "water")) {
+      handleInteraction(e.target);
+    }
+  });
+  document.addEventListener("mouseup", () => {
+    isMouseDown = false;
+  });
 
   controlsContainer.querySelectorAll(".pathfinding-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -198,9 +355,10 @@ function initializePathfindingVisualizer() {
     });
   });
 
-  runBtn.addEventListener("click", runBFS);
+  runBtn.addEventListener("click", runSelectedAlgorithm);
   resetBtn.addEventListener("click", () => resetGrid(true));
 
+  // 5. INITIALIZATION
   createGrid();
 }
 
@@ -264,78 +422,149 @@ function initializeCodeViewers() {
   const closeModal = () => {
     modal.classList.remove("open");
     document.body.classList.remove("modal-open");
-    // Membersihkan konten untuk penggunaan berikutnya
     modalHeader.innerHTML = "";
     modalContent.innerHTML = "";
   };
 
   const openModal = (sourceId) => {
-    const sourcePreElement = document.querySelector(`#${sourceId} pre`);
-    const sourceCodeElement = sourcePreElement
-      ? sourcePreElement.querySelector("code")
-      : null;
-    if (!sourceCodeElement) return;
+    const sourceContainer = document.getElementById(sourceId);
+    const sourcePreElements =
+      sourceContainer.querySelectorAll("pre[data-lang]");
+    if (sourcePreElements.length === 0) return;
 
-    // --- Dedent Logic ---
-    // Menghapus spasi di awal yang disebabkan oleh indentasi HTML.
-    const rawCode = sourceCodeElement.textContent;
-    const lines = rawCode.split("\n");
-    // Temukan indentasi terkecil dari baris yang tidak kosong.
-    const minIndent = Math.min(
-      ...lines
-        .filter((line) => line.trim())
-        .map((line) => line.match(/^\s*/)[0].length)
-    );
-    // Hapus indentasi tersebut dari setiap baris dan rapikan.
-    const dedentedCode = lines
-      .map((line) => line.substring(minIndent))
-      .join("\n")
-      .trim();
+    // --- Get selected algorithm if it's the pathfinder demo ---
+    let selectedAlgorithm = null;
+    if (sourceId === "pathfinding-visualizer-code") {
+      const algorithmSelect = document.getElementById("algorithm-select");
+      if (algorithmSelect) {
+        selectedAlgorithm = algorithmSelect.value;
+      }
+    }
 
-    // 1. Buat Header Modal
-    const language =
-      sourceCodeElement.className.replace("language-", "") || "code";
-    const codeToCopy = dedentedCode;
+    // --- Clear previous content ---
+    modalHeader.innerHTML = "";
+    modalContent.innerHTML = "";
 
+    // --- Create Header Elements ---
+    const tabContainer = document.createElement("div");
+    tabContainer.className = "code-viewer-tabs";
+
+    const controlsContainer = document.createElement("div");
+    controlsContainer.className = "code-viewer-controls";
+
+    // --- Create Copy Button ---
     const copyButton = document.createElement("button");
     copyButton.className = "btn-copy-code";
     copyButton.innerHTML =
       '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
-    copyButton.onclick = () => {
-      navigator.clipboard.writeText(codeToCopy).then(() => {
-        copyButton.innerHTML =
-          '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
-        lucide.createIcons();
-        setTimeout(() => {
-          copyButton.innerHTML =
-            '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
-          lucide.createIcons();
-        }, 2000);
-      });
-    };
 
+    // --- Create Close Button ---
     const closeButton = document.createElement("button");
     closeButton.className = "modal-close-btn static text-2xl ml-4 p-0";
     closeButton.innerHTML = "&times;";
     closeButton.onclick = closeModal;
 
-    modalHeader.className = "code-viewer-header";
-    modalHeader.innerHTML = `<span class="code-language">${language}</span>`;
-    const controlsDiv = document.createElement("div");
-    controlsDiv.append(copyButton, closeButton);
-    modalHeader.appendChild(controlsDiv);
+    controlsContainer.append(copyButton, closeButton);
+    modalHeader.append(tabContainer, controlsContainer);
 
-    // 2. Kloning dan tampilkan konten kode
-    const codeClone = sourcePreElement.cloneNode(true);
-    codeClone.querySelector("code").textContent = dedentedCode; // Ganti dengan kode yang sudah rapi
-    codeClone.classList.add("line-numbers"); // Tambahkan nomor baris
-    modalContent.appendChild(codeClone);
+    // --- Process and append code blocks ---
+    sourcePreElements.forEach((preEl, index) => {
+      const lang = preEl.dataset.lang;
+      const codeEl = preEl.querySelector("code");
+      const algo = preEl.dataset.algo;
 
-    // 3. Highlight syntax dan tampilkan modal
+      // --- Dynamic filtering for JS blocks in pathfinder ---
+      if (
+        lang === "js" &&
+        selectedAlgorithm &&
+        algo &&
+        algo !== selectedAlgorithm
+      ) {
+        // Skip this JS block if it doesn't match the selected algorithm
+        return;
+      }
+
+      if (!codeEl) return;
+
+      // Dedent logic
+      const lines = codeEl.textContent.split("\n");
+      const minIndent = Math.min(
+        ...lines
+          .filter((line) => line.trim())
+          .map((line) => line.match(/^\s*/)[0].length)
+      );
+      const dedentedCode = lines
+        .map((line) => line.substring(minIndent))
+        .join("\n")
+        .trim();
+
+      // Create tab button
+      const tabButton = document.createElement("button");
+      tabButton.className = "code-viewer-tab";
+      tabButton.textContent = lang.toUpperCase();
+      tabButton.dataset.target = `code-block-${lang}`;
+      tabContainer.appendChild(tabButton);
+
+      // Create code block content
+      const codeBlockWrapper = document.createElement("div");
+      codeBlockWrapper.id = `code-block-${lang}`;
+      codeBlockWrapper.className = "code-block-wrapper hidden";
+      const newPre = document.createElement("pre");
+      newPre.className = `language-${lang} line-numbers`;
+      const newCode = document.createElement("code");
+      newCode.textContent = dedentedCode;
+      newPre.appendChild(newCode);
+      codeBlockWrapper.appendChild(newPre);
+
+      // Tab switching logic
+      tabButton.addEventListener("click", () => {
+        // Jangan lakukan apa-apa jika tab sudah aktif
+        if (tabButton.classList.contains("active")) return;
+
+        tabContainer.querySelector(".active").classList.remove("active");
+        tabButton.classList.add("active");
+        modalContent
+          .querySelector(".code-block-wrapper:not(.hidden)")
+          .classList.add("hidden");
+        codeBlockWrapper.classList.remove("hidden");
+      });
+
+      // Hanya tambahkan elemen jika belum ada tab dengan bahasa yang sama
+      // Ini penting untuk kasus JS dengan beberapa algoritma
+      if (!modalContent.querySelector(`#code-block-${lang}`)) {
+        modalContent.appendChild(codeBlockWrapper);
+      }
+
+      // Aktifkan tab pertama yang diproses
+      if (modalContent.children.length === 1) {
+        tabButton.classList.add("active");
+        codeBlockWrapper.classList.remove("hidden");
+      }
+    });
+
+    // Update copy button logic
+    copyButton.onclick = () => {
+      const activeCodeBlock = modalContent.querySelector(
+        ".code-block-wrapper:not(.hidden) code"
+      );
+      if (activeCodeBlock) {
+        navigator.clipboard.writeText(activeCodeBlock.textContent).then(() => {
+          copyButton.innerHTML =
+            '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
+          lucide.createIcons();
+          setTimeout(() => {
+            copyButton.innerHTML =
+              '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+            lucide.createIcons();
+          }, 2000);
+        });
+      }
+    };
+
+    // --- Finalize and show modal ---
     Prism.highlightAllUnder(modalContent);
     lucide.createIcons();
     modal.classList.add("open");
-    document.body.classList.add("modal-open");
     unlockAchievement("code_inspector");
   };
 

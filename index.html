@@ -258,8 +258,8 @@
             id="profile-img"
             src="./assets/img/foto_ade_new.jpeg"
             alt="Foto Profil Ade Syofyan"
-            class="rounded-full w-64 h-64 object-cover object-top shadow-lg border-4 border-accent"
-            onerror="this.onerror=null;this.src='https://placehold.co/300x300/4a5568/e2e8f0?text=AS';"
+            class="rounded-full w-64 h-64 object-cover object-top shadow-lg border-4 border-accent" style="background-color: #4a5568;"
+            onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjQwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5BUzwvdGV4dD48L3N2Zz4=';"
           />
         </div>
         <div class="md:w-2/3 text-center md:text-left">
@@ -530,7 +530,7 @@
         <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           <!-- Demo 1: Real-time Visitor Counter -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
@@ -547,73 +547,32 @@
               </p>
             </div>
             <button class="btn-code-toggle" data-code-source="visitor-counter-code">
-              Lihat Kode
+              <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
             </button>
             <div id="visitor-counter-code" class="hidden" data-keep-source="true">
-              <pre class="line-numbers"><code class="language-javascript">const countEl = document.getElementById('visitor-count');
+              <pre data-lang="html" class="language-html"><code>
+                &lt;div class="p-4 rounded-lg"&gt;
+                  &lt;p class="text-sm mb-2"&gt;Pengunjung Online Saat Ini:&lt;/p&gt;
+                  &lt;p id="visitor-count" class="text-5xl font-bold text-accent"&gt;...&lt;/p&gt;
+                &lt;/div&gt;
+              </code></pre>
+              <pre data-lang="css" class="language-css"><code>
+                #visitor-count.pop-in {
+                  animation: popIn 0.3s ease-out;
+                }
+                @keyframes popIn {
+                  0% { transform: scale(0.8); opacity: 0.5; }
+                  50% { transform: scale(1.1); opacity: 1; }
+                  100% { transform: scale(1); }
+                }
+              </code></pre>
+              <pre data-lang="js" class="language-javascript"><code>const countEl = document.getElementById('visitor-count');
 let visitors = Math.floor(Math.random() * 151) + 150;
 setInterval(() => {
   const fluctuation = Math.floor(Math.random() * 5) - 2;
   visitors = Math.max(100, visitors + fluctuation);
   countEl.textContent = visitors;
-}, Math.random() * 2000 + 2000);</code></pre>
-            </div>
-          </div>
-          <!-- Demo 2: Pathfinding Visualizer -->
-          <div class="bg-card p-6 rounded-xl shadow-lg">
-            <div class="flex items-center justify-center gap-4 mb-4">
-              <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
-            </div>
-            <p class="mb-6" style="color: var(--text-secondary);">
-              Demo ini menunjukkan algoritma pencarian jalan (BFS). Klik untuk menempatkan titik awal, akhir, dan tembok, lalu lihat bagaimana algoritma menemukan rute terpendek.
-            </p>
-            <div id="pathfinding-grid" class="pathfinding-grid mb-4">
-              <!-- Grid akan digenerate oleh JS -->
-            </div>
-            <div class="flex flex-wrap justify-center gap-2 mb-4 text-sm" id="pathfinding-controls">
-              <button class="pathfinding-btn active" data-mode="start">Mulai</button>
-              <button class="pathfinding-btn" data-mode="end">Akhir</button>
-              <button class="pathfinding-btn" data-mode="wall">Tembok</button>
-            </div>
-            <div class="flex gap-2">
-              <button id="run-pathfinding-btn" class="btn-primary w-full">Cari Jalan</button>
-              <button id="reset-pathfinding-btn" class="btn-secondary w-full">Reset</button>
-            </div>
-            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
-            <button class="btn-code-toggle" data-code-source="pathfinding-visualizer-code">
-              Lihat Kode
-            </button>
-            <div id="pathfinding-visualizer-code" class="hidden" data-keep-source="true">
-              <pre class="line-numbers"><code class="language-javascript">
-                // Simplified Breadth-First Search (BFS) Logic
-                async function findShortestPath(startNode, endNode, grid) {
-                  const queue = [startNode];
-                  const visited = new Set();
-                  const predecessors = new Map();
-                  visited.add(startNode);
-
-                  while (queue.length > 0) {
-                    const currentNode = queue.shift();
-
-                    if (currentNode === endNode) {
-                      // Path found! Reconstruct and animate it.
-                      return reconstructPath(predecessors, endNode);
-                    }
-
-                    // Animate the visited node
-                    currentNode.element.classList.add("node-visited");
-                    await new Promise(r => setTimeout(r, 20));
-
-                    for (const neighbor of getNeighbors(currentNode, grid)) {
-                      if (!visited.has(neighbor) && !neighbor.isWall) {
-                        visited.add(neighbor);
-                        predecessors.set(neighbor, currentNode);
-                        queue.push(neighbor);
-                      }
-                    }
-                  }
-                }
+}, Math.random() * 2000 + 2000);
               </code></pre>
             </div>
           </div>
@@ -636,33 +595,119 @@ setInterval(() => {
             <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
             <!-- Tombol dan Kontainer untuk "Behind the Code" -->
             <button class="btn-code-toggle" data-code-source="palette-generator-code">
-              Lihat Kode
+              <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
             </button>
-          <div id="palette-generator-code" class="hidden" data-keep-source="true">
-            <pre class="line-numbers"><code class="language-javascript">
-            const paletteContainer = document.getElementById('palette-container');
-            const generateBtn = document.getElementById('generate-palette-btn');
-            const copyFeedback = document.getElementById('copy-feedback');
+            <div id="palette-generator-code" class="hidden" data-keep-source="true">
+              <pre data-lang="html" class="language-html"><code>
+                &lt;div id="palette-container" class="flex justify-center gap-2 mb-6"&gt;
+                  &lt;!-- Swatches generated here --&gt;
+                &lt;/div&gt;
+                &lt;button id="generate-palette-btn" class="btn-secondary w-full"&gt;
+                  Buat Palet Baru
+                &lt;/button&gt;
+              </code></pre>
+              <pre data-lang="css" class="language-css"><code>
+                .color-swatch {
+                  flex: 1 1 38px;
+                  aspect-ratio: 1 / 1;
+                  border-radius: 0.5rem;
+                  cursor: pointer;
+                  transition: transform 0.2s ease;
+                }
+                .color-swatch:hover {
+                  transform: translateY(-4px);
+                }
+              </code></pre>
+              <pre data-lang="js" class="language-javascript"><code>function generatePalette() {
+  paletteContainer.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+    const swatch = document.createElement('div');
+    swatch.className = 'color-swatch';
+    swatch.style.backgroundColor = color;
+    swatch.addEventListener('click', () => copyColor(color));
+    paletteContainer.appendChild(swatch);
+  }
+}</code></pre>
+            </div>
+          </div>
 
-            function generatePalette() {
-              paletteContainer.innerHTML = '';
-              for (let i = 0; i < 5; i++) {
-                const color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-                const swatch = document.createElement('div');
-                swatch.className = 'color-swatch';
-                swatch.style.backgroundColor = color;
-                swatch.addEventListener('click', () => {
-                  navigator.clipboard.writeText(color);
-                  copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
-                });
-                paletteContainer.appendChild(swatch);
-              }
-            }
-            generateBtn.addEventListener('click', generatePalette);
-            generatePalette(); // Initial generation
-            </code></pre>
+          <!-- Demo 2: Pathfinding Visualizer (Redesigned to be wider) -->
+          <div class="bg-card p-6 rounded-xl shadow-lg md:col-span-2">
+            <div class="flex items-center justify-center gap-4 mb-4">
+              <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
+            </div>
+            <p class="mb-6 text-center" style="color: var(--text-secondary);">
+              Visualisasi perbandingan algoritma pencarian jalan. Pilih mode, gambar rintangan, dan lihat cara kerjanya.
+            </p>
+            <!-- Main container for grid and controls -->
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
+              <!-- Grid takes up more space -->
+              <div id="pathfinding-grid" class="pathfinding-grid w-full lg:flex-grow"></div>
+              <!-- Controls are on the side -->
+              <div class="w-full lg:w-auto lg:min-w-[220px] flex flex-col gap-4">
+                <div class="flex flex-col gap-2 text-sm">
+                  <label for="algorithm-select" class="text-secondary text-left font-semibold">Algoritma</label>
+                  <select id="algorithm-select" class="pathfinding-select">
+                    <option value="bfs">BFS (Tak Berbobot)</option>
+                    <option value="dijkstra">Dijkstra (Berbobot)</option>
+                    <option value="a-star">A* (Heuristik)</option>
+                  </select>
+                </div>
+                <div class="flex flex-col gap-2 text-sm">
+                  <span class="text-secondary text-left font-semibold">Mode Gambar</span>
+                  <div id="pathfinding-controls" class="grid grid-cols-2 gap-2">
+                    <button class="pathfinding-btn active" data-mode="start" title="Tempatkan titik awal"><i data-lucide="flag-triangle-right" class="w-4 h-4"></i><span>Mulai</span></button>
+                    <button class="pathfinding-btn" data-mode="end" title="Tempatkan titik akhir"><i data-lucide="flag-triangle-left" class="w-4 h-4"></i><span>Akhir</span></button>
+                    <button class="pathfinding-btn" data-mode="wall" title="Gambar tembok penghalang"><i data-lucide="brick-wall" class="w-4 h-4"></i><span>Tembok</span></button>
+                    <button class="pathfinding-btn" data-mode="water" title="Gambar area air (beban lebih berat)"><i data-lucide="waves" class="w-4 h-4"></i><span>Air</span></button>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2 mt-2">
+                  <button id="run-pathfinding-btn" class="btn-primary w-full flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i><span id="run-btn-text">Cari Jalan</span></button>
+                  <button id="reset-pathfinding-btn" class="btn-secondary w-full flex items-center justify-center gap-2"><i data-lucide="rotate-cw" class="w-4 h-4"></i><span>Reset</span></button>
+                </div>
+              </div>
+            </div>
+            <button class="btn-code-toggle" data-code-source="pathfinding-visualizer-code">
+              <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+            </button>
+            <div id="pathfinding-visualizer-code" class="hidden" data-keep-source="true">
+              <pre data-lang="html" class="language-html"><code>
+                &lt;div id="pathfinding-grid" class="pathfinding-grid"&gt;&lt;/div&gt;
+                &lt;div id="pathfinding-controls"&gt;
+                  &lt;!-- Tombol-tombol kontrol --&gt;
+                &lt;/div&gt;
+                &lt;select id="algorithm-select"&gt;
+                  &lt;!-- Opsi algoritma --&gt;
+                &lt;/select&gt;
+              </code></pre>
+              <pre data-lang="css" class="language-css"><code>
+                .pathfinding-grid {
+                  display: grid;
+                  grid-template-columns: repeat(30, 1fr);
+                  grid-template-rows: repeat(15, 1fr);
+                }
+                .pathfinding-node.node-water {
+                  background-color: blue; /* Beban lebih berat */
+                }
+              </code></pre>
+              <pre data-lang="js" data-algo="bfs" class="language-javascript"><code>
+                // BFS: Unweighted search (finds shortest path in terms of steps)
+                async function runBFS(startNode, endNode) { ... }
+              </code></pre>
+              <pre data-lang="js" data-algo="dijkstra" class="language-javascript"><code>
+                // Dijkstra: Weighted search (finds cheapest path)
+                async function runDijkstra(startNode, endNode) { ... }
+              </code></pre>
+              <pre data-lang="js" data-algo="a-star" class="language-javascript"><code>
+                // A*: Weighted search with heuristic (more efficient)
+                async function runAStar(startNode, endNode) { ... }
+              </code></pre>
+            </div>
           </div>
-          </div>
+
 
         </div>
       </div>
@@ -905,6 +950,13 @@ setInterval(() => {
                 <span class="font-semibold text-accent">Hasil/Dampak:</span>
                 <span id="modalImpact"></span>
             </p>
+            <!-- Container untuk Tech Stack -->
+            <div class="mb-4">
+                <p class="text-lg mb-2"><span class="font-semibold text-accent">Teknologi yang Digunakan:</span></p>
+                <div id="modalTechStack" class="flex flex-wrap gap-3">
+                    <!-- Tech stack tags will be injected here by ui.js -->
+                </div>
+            </div>
         </div>
         <!-- Modal Footer -->
         <div class="modal-footer">
