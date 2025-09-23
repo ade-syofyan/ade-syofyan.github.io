@@ -92,7 +92,6 @@
 
 
     <script>
-      // Skrip untuk mencegah flicker tema (FOUC)
       (function() {
         try {
           var theme = localStorage.getItem('theme');
@@ -424,7 +423,6 @@
       </div>
     </section>
 
-    <!-- Services Section (New) -->
     <section
       id="services"
       class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
@@ -432,7 +430,6 @@
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Layanan Saya</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
-          <!-- Service 1: Custom Mobile App Development -->
           <div
             class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
@@ -452,7 +449,7 @@
               <li>Offline Capabilities</li>
             </ul>
           </div>
-          <!-- Service 2: Web Application & ERP Development -->
+
           <div
             class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
@@ -472,7 +469,7 @@
               <li>Manajemen Database</li>
             </ul>
           </div>
-          <!-- Service 3: AI Integration & Chatbot Solutions -->
+
           <div
             class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
@@ -492,7 +489,7 @@
               <li>Integrasi API AI</li>
             </ul>
           </div>
-          <!-- Service 4: Real-time System Development -->
+
           <div
             class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
           >
@@ -523,7 +520,7 @@
       </div>
     </section>
 
-    <!-- Live Demos Section (New) -->
+
     <section id="live-demos" class="py-20 fade-in-on-scroll">
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
@@ -531,7 +528,7 @@
           Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          <!-- Demo 1: Real-time Visitor Counter -->
+
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
@@ -577,7 +574,7 @@ setInterval(() => {
             </div>
           </div>
     
-          <!-- Demo 3: Color Palette Generator -->
+  
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
@@ -587,13 +584,13 @@ setInterval(() => {
               Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
             </p>
             <div id="palette-container" class="flex justify-center gap-2 mb-6">
-              <!-- Color swatches will be generated here by JS -->
+
             </div>
             <button id="generate-palette-btn" class="btn-secondary w-full">
               Buat Palet Baru
             </button>
             <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
-            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
+
             <button class="btn-code-toggle" data-code-source="palette-generator-code">
               <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
             </button>
@@ -632,7 +629,7 @@ setInterval(() => {
             </div>
           </div>
 
-          <!-- Demo 2: Pathfinding Visualizer (Redesigned to be wider) -->
+
           <div class="bg-card p-6 rounded-xl shadow-lg md:col-span-2">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
@@ -641,11 +638,11 @@ setInterval(() => {
             <p class="mb-6 text-center" style="color: var(--text-secondary);">
               Visualisasi perbandingan algoritma pencarian jalan. Pilih mode, gambar rintangan, dan lihat cara kerjanya.
             </p>
-            <!-- Main container for grid and controls -->
+
             <div class="flex flex-col lg:flex-row gap-6 items-start">
-              <!-- Grid takes up more space -->
+
               <div id="pathfinding-grid" class="pathfinding-grid w-full lg:flex-grow"></div>
-              <!-- Controls are on the side -->
+
               <div class="w-full lg:w-auto lg:min-w-[220px] flex flex-col gap-4">
                 <div class="flex flex-col gap-2 text-sm">
                   <label for="algorithm-select" class="text-secondary text-left font-semibold">Algoritma</label>
@@ -713,11 +710,11 @@ setInterval(() => {
       </div>
     </section>
 
-    <!-- Workflow Section -->
+
     <section id="workflow" class="py-20 fade-in-on-scroll relative">
-      <!-- Canvas untuk efek plexus di background -->
+
       <canvas class="plexus-canvas"></canvas>
-      <!-- Konten harus memiliki z-index agar di atas canvas -->
+
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
           Bagaimana Saya Bekerja
@@ -725,7 +722,7 @@ setInterval(() => {
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="workflowSteps"
         >
-          <!-- Step 1: Konsultasi & Perencanaan -->
+
           <div class="flex flex-col items-center workflow-step">
             <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
               style="background-color: var(--color-accent);">
@@ -739,7 +736,7 @@ setInterval(() => {
               rencana kerja yang detail.
             </p>
           </div>
-          <!-- Step 2: Desain & Prototyping -->
+
           <div class="flex flex-col items-center workflow-step">
             <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
               style="background-color: var(--color-accent);">
@@ -753,7 +750,7 @@ setInterval(() => {
               prototipe untuk validasi awal.
             </p>
           </div>
-          <!-- Step 3: Pengembangan & Pengujian -->
+
           <div class="flex flex-col items-center workflow-step">
             <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
               style="background-color: var(--color-accent);">
@@ -767,7 +764,7 @@ setInterval(() => {
               untuk memastikan kualitas dan fungsionalitas.
             </p>
           </div>
-          <!-- Step 4: Deployment & Dukungan -->
+
           <div class="flex flex-col items-center workflow-step">
             <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
               style="background-color: var(--color-accent);">
@@ -792,11 +789,11 @@ setInterval(() => {
     >
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
-        <!-- Kontainer untuk tombol filter -->
+
         <div id="portfolio-filters" class="flex justify-center flex-wrap gap-2 mb-8">
-          <!-- Tombol filter akan disuntikkan di sini oleh JS -->
+  
         </div>
-        <!-- Kontainer ini akan diisi secara dinamis oleh JavaScript -->
+
         <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         <p class="text-xl mt-12" style="color: var(--text-secondary);">
           <span class="text-accent font-semibold"
@@ -811,22 +808,22 @@ setInterval(() => {
 
     <!-- Testimonials Section (New) -->
     <section id="testimonials" class="py-20 fade-in-on-scroll relative">
-      <!-- Canvas untuk efek plexus di background -->
+
       <canvas class="plexus-canvas"></canvas>
-      <!-- Konten harus memiliki z-index agar di atas canvas -->
+
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Apa Kata Klien Saya</h2>
         <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Testimonials will be injected here by JavaScript -->
+
         </div>
       </div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 fade-in-on-scroll relative">
-      <!-- Canvas untuk efek plexus di background -->
+
       <canvas class="plexus-canvas"></canvas>
-      <!-- Konten harus memiliki z-index agar di atas canvas -->
+
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
@@ -891,11 +888,11 @@ setInterval(() => {
             <p style="color: var(--text-secondary);">Ajukan pertanyaan ke AI!</p>
           </div>
         </div>
-        <!-- New Contact Form -->
+        <!-- Contact Form -->
         <div class="max-w-2xl mx-auto mt-16 text-left">
             <h3 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-white);">Atau Kirim Pesan Langsung</h3>
             <form id="contact-form" method="POST" class="space-y-6" novalidate>
-                <!-- Honeypot field untuk mencegah spam tanpa CAPTCHA yang mengganggu -->
+
                 <input type="text" name="_gotcha" style="display:none">
                 <div>
                     <label for="name" class="sr-only">Nama</label>
@@ -951,7 +948,7 @@ setInterval(() => {
         </div>
         <!-- Modal Body (Scrollable) -->
         <div id="caseStudyBody" class="modal-body">
-          <!-- Content will be injected here by JavaScript -->
+
           <p style="color: var(--text-secondary);">Menganalisis permintaan Anda dan menghasilkan studi kasus yang relevan...</p>
         </div>
         <!-- Modal Footer -->
@@ -973,10 +970,10 @@ setInterval(() => {
           <p id="modalType" class="text-lg" style="color: var(--text-secondary);"></p>
           <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
         </div>
-        <!-- Modal Body (Scrollable) -->
+
         <div class="modal-body">
             <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <!-- Gambar akan disuntikkan di sini -->
+             
             </div>
             <p class="text-lg mb-4" style="color: var(--text-secondary);">
                 <span class="font-semibold text-accent">Tujuan Proyek:</span>
@@ -994,7 +991,7 @@ setInterval(() => {
             <div class="mb-4">
                 <p class="text-lg mb-2"><span class="font-semibold text-accent">Teknologi yang Digunakan:</span></p>
                 <div id="modalTechStack" class="flex flex-wrap gap-3">
-                    <!-- Tech stack tags will be injected here by ui.js -->
+                    
                 </div>
             </div>
         </div>
@@ -1260,9 +1257,8 @@ setInterval(() => {
     </script>
 
     <!-- Scripts -->
-    <script src="./assets/js/config.js" defer></script> <!-- Muat konfigurasi terlebih dahulu -->
+    <script src="./assets/js/config.js" defer></script>
     <script src="./assets/js/data.js" defer></script>
-    <!-- Karena file lain bergantung pada data ini, file ini bisa dimuat lebih awal jika diperlukan, tapi defer sudah cukup baik -->
     <script src="./assets/js/caseStudyGenerator.js" defer></script>
     <script src="./assets/js/ui.js" defer></script>
     <script src="./assets/js/animations.js" defer></script>
