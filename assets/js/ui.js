@@ -824,6 +824,22 @@ function initializeContactForm() {
   const emailInput = document.getElementById("email");
   const messageInput = document.getElementById("message");
   const submitButton = document.getElementById("submit-contact-form");
+  const COOLDOWN_MINUTES = 5;
+  const lastSubmission = parseInt(
+    localStorage.getItem("lastContactSubmission") || "0"
+  );
+  const timeSinceLastSubmission = Date.now() - lastSubmission;
+
+  if (timeSinceLastSubmission < COOLDOWN_MINUTES * 60 * 1000) {
+    const minutesRemaining = Math.ceil(
+      (COOLDOWN_MINUTES * 60 * 1000 - timeSinceLastSubmission) / 60000
+    );
+    form.innerHTML = `<div class="text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
+        <h4 class="text-xl font-bold text-accent">Terlalu Cepat!</h4>
+        <p style="color: var(--text-secondary);">Anda baru saja mengirim pesan. Silakan coba lagi dalam ${minutesRemaining} menit.</p>
+      </div>`;
+    return;
+  }
 
   const validators = {
     name: (value) => value.trim() !== "",
@@ -841,7 +857,7 @@ function initializeContactForm() {
 
   function validateField(input) {
     const isValid = validators[input.id](input.value);
-    const errorElement = input.nextElementSibling;
+    const errorElement = input.parentElement.nextElementSibling;
     validationState[input.id] = isValid;
 
     input.classList.toggle("valid", isValid);
@@ -859,8 +875,12 @@ function initializeContactForm() {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     if (Object.values(validationState).every(Boolean)) {
-      submitButton.textContent = "Mengirim...";
+      const submitText = submitButton.querySelector(".submit-text");
+      const submitSpinner = submitButton.querySelector(".submit-spinner");
+      submitText.classList.add("hidden");
+      submitSpinner.classList.remove("hidden");
       submitButton.disabled = true;
+      lucide.createIcons(); // Render spinner icon
 
       const formData = new FormData(form);
       const formAction = `https://formspree.io/f/${FORMSPREE_ID}`;
@@ -874,6 +894,10 @@ function initializeContactForm() {
       })
         .then((response) => {
           if (response.ok) {
+            localStorage.setItem(
+              "lastContactSubmission",
+              Date.now().toString()
+            );
             form.innerHTML = `<div class="text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
               <h4 class="text-xl font-bold text-accent">Terima Kasih!</h4>
               <p style="color: var(--text-secondary);">Pesan Anda telah berhasil dikirim. Saya akan segera merespons.</p>
