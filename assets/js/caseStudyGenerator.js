@@ -1,5 +1,3 @@
-// js/caseStudyGenerator.js
-
 function initializeCaseStudyGenerator() {
   const modal = document.getElementById("caseStudyModal");
   if (!modal) return;
@@ -16,14 +14,13 @@ function initializeCaseStudyGenerator() {
 
 function extractRelevantSentences(text, keywords) {
   if (!text) return [];
-  // Split text into sentences. This is a simple split, might not be perfect for all cases.
+
   const sentences = text.split(/(?<=[.?!])\s+/);
-  const relevantSentences = new Set(); // Use a Set to avoid duplicate sentences
+  const relevantSentences = new Set(); 
 
   keywords.forEach((keyword) => {
     sentences.forEach((sentence) => {
       if (sentence.toLowerCase().includes(keyword.toLowerCase())) {
-        // Clean up the sentence from markdown
         const cleanedSentence = sentence.replace(/\*\*(.*?)\*\*/g, "$1");
         relevantSentences.add(cleanedSentence.trim());
       }
@@ -44,7 +41,6 @@ function renderCaseStudy(title, content, textContentForPdf) {
   titleEl.textContent = title;
   bodyEl.innerHTML = content;
 
-  // Re-attach event listener to avoid issues with old closures
   const newDownloadBtn = downloadBtn.cloneNode(true);
   downloadBtn.parentNode.replaceChild(newDownloadBtn, downloadBtn);
   newDownloadBtn.addEventListener("click", () =>
@@ -101,7 +97,6 @@ window.generateCaseStudy = function (topic) {
     if (features.length > 0 || impacts.length > 0) {
       features.forEach((f) => relevantFeatures.add(f));
       impacts.forEach((i) => relevantImpacts.add(i));
-      // Simple tech extraction from tags for now
       if (project.tag.includes("Mobile")) relevantTech.add("Flutter");
       if (project.tag.includes("Stack") || project.tag.includes("Backend"))
         relevantTech.add("Laravel");

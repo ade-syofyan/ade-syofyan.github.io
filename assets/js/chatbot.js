@@ -1,5 +1,3 @@
-// js/chatbot.js
-
 let conversationHistory = [];
 
 function initializeChatbot() {
@@ -86,7 +84,6 @@ function addQuickOptions() {
     quickOptionsDiv.appendChild(button);
   });
   chatDisplay.appendChild(quickOptionsDiv);
-  // Render ikon yang baru ditambahkan
   if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
@@ -95,12 +92,11 @@ function addQuickOptions() {
 
 function analyzeAndHighlight(text, source = "chatbot") {
   const lowerText = text.toLowerCase();
-  // Peta untuk Project Spotlight (fitur lama)
   const projectSpotlightMap = {
     flutter: "myintercom",
     toyota: "myintercom",
     intercom: "myintercom",
-    laravel: "payoapp", // atau 'ppdb'
+    laravel: "payoapp",
     ppdb: "ppdb",
     smakpa: "ppdb",
     "super-app": "payoapp",
@@ -111,7 +107,7 @@ function analyzeAndHighlight(text, source = "chatbot") {
     if (lowerText.includes(keyword)) {
       const projectId = projectSpotlightMap[keyword];
       if (window.spotlightProject) window.spotlightProject(projectId);
-      break; // Sorot hanya proyek pertama yang cocok
+      break; 
     }
   }
 
@@ -131,21 +127,19 @@ function analyzeAndHighlight(text, source = "chatbot") {
       if (window.generateCaseStudy) {
         unlockAchievement("case_study_analyst");
         window.generateCaseStudy(topic);
-        // Minimalkan jendela chat setelah studi kasus dipicu
         if (source === "chatbot" && window.actuallyCloseChatbot) {
-          setTimeout(window.actuallyCloseChatbot, 300); // Tutup modal chatbot
+          setTimeout(window.actuallyCloseChatbot, 300);
         } else if (source === "terminal" && window.minimizeTerminal) {
-          setTimeout(window.minimizeTerminal, 300); // Minimalkan terminal
+          setTimeout(window.minimizeTerminal, 300);
         }
       }
-      break; // Hasilkan hanya satu studi kasus per pesan untuk mencegah beberapa modal muncul
+      break;
     }
   }
 }
 
 function typeMessage(element, text, delay = 20) {
-  // The element is the outer bubble container (e.g., .ai-bubble)
-  // We create the inner message structure and append it.
+
   const messageBubble = document.createElement("div");
   messageBubble.className = "p-3 rounded-lg max-w-[80%] chat-message";
   element.appendChild(messageBubble);
@@ -175,7 +169,7 @@ async function sendChatMessage() {
   userMessageDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`;
   chatDisplay.appendChild(userMessageDiv);
 
-  conversationHistory.push({ role: "user", parts: [{ text: message }] }); // Pass 'chatbot' as source
+  conversationHistory.push({ role: "user", parts: [{ text: message }] });
   analyzeAndHighlight(message);
   chatInput.value = "";
 
@@ -190,7 +184,7 @@ async function sendChatMessage() {
       contents: conversationHistory,
       systemInstruction: { parts: [{ text: systemInstructionText }] },
     };
-    const apiKey = typeof API_KEY !== "undefined" ? API_KEY : ""; // Ambil dari config.js
+    const apiKey = typeof API_KEY !== "undefined" ? API_KEY : "";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
@@ -206,7 +200,6 @@ async function sendChatMessage() {
       const modelResponse = result.candidates[0].content;
       let text = modelResponse.parts[0].text;
 
-      // --- IDE BRILIAN: Analisis respons AI dan sorot keahlian yang relevan ---
       analyzeAndHighlight(text);
 
       const whatsappRegex = new RegExp(
@@ -319,12 +312,10 @@ window.getTerminalChatResponse = async function (message, outputCallback) {
           `Halo Ade, saya tertarik dengan ${message}`
         );
         const waLink = `${siteConfig.social.whatsapp}?text=${encodedMessage}`;
-        return `${linkText} ( ${waLink} )`; // Make link visible in terminal
+        return `${linkText} ( ${waLink} )`;
       });
 
-      // Handle other markdown links
       text = text.replace(/\[(.*?)\]\((.*?)\)/g, "$1 ( $2 )");
-      // Handle bold
       text = text.replace(/\*\*(.*?)\*\*/g, "$1");
 
       conversationHistory.push({ role: "model", parts: [{ text: text }] });

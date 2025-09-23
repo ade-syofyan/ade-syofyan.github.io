@@ -1,5 +1,3 @@
-// js/ui.js
-
 // --- Theme Management ---
 function initializeTheme() {
   const themeToggleBtn = document.getElementById("theme-toggle-btn");
@@ -71,12 +69,10 @@ function initializeTheme() {
       const mobileButtons = mobileThemeContainer.querySelectorAll("button");
       mobileButtons.forEach((btn) => {
         const isActive = btn.dataset.themeValue === theme;
-        // Atur background untuk tombol aktif
+
         btn.classList.toggle("bg-accent", isActive);
-        // Atur warna ikon: putih jika aktif, default (text-secondary) jika tidak
-        btn.classList.toggle("text-menu-active", isActive); // Gunakan warna putih solid
+        btn.classList.toggle("text-menu-active", isActive); 
         btn.classList.toggle("text-secondary", !isActive);
-        // Atur background untuk tombol tidak aktif
         btn.classList.toggle("bg-card-secondary", !isActive);
       });
     }
@@ -146,7 +142,6 @@ function initializeMobileMenu() {
   const setAnimationDelays = (isOpen) => {
     const menuItems = mobileMenu.querySelectorAll("a, .mt-8");
     menuItems.forEach((item, index) => {
-      // Terapkan delay berurutan saat membuka, hapus saat menutup
       item.style.transitionDelay = isOpen ? `${100 + index * 40}ms` : "0ms";
     });
   };
@@ -176,7 +171,6 @@ function initializeMobileMenu() {
 // --- Helper Functions ---
 function parseMarkdownBold(text) {
   if (!text) return "";
-  // Mengganti **teks** dengan tag <strong> yang diberi gaya
   return text.replace(
     /\*\*(.*?)\*\*/g,
     '<strong class="font-semibold text-accent">$1</strong>'
@@ -230,12 +224,10 @@ function initializeModals() {
               const tagRect = tagEl.getBoundingClientRect();
               const tooltipRect = tooltip.getBoundingClientRect();
 
-              // Position tooltip above the tag
-              let top = tagRect.top - tooltipRect.height - 8; // 8px gap
+              let top = tagRect.top - tooltipRect.height - 8;
               let left =
                 tagRect.left + tagRect.width / 2 - tooltipRect.width / 2;
 
-              // Adjust if it goes off-screen
               if (left < 10) left = 10;
               if (left + tooltipRect.width > window.innerWidth - 10)
                 left = window.innerWidth - tooltipRect.width - 10;
@@ -263,25 +255,23 @@ function initializeModals() {
           imgElement.className =
             "rounded-lg w-full h-auto object-cover shadow-md transition-transform duration-200 hover:scale-105";
           imgElement.onerror = function () {
-            this.onerror = null; // Mencegah loop jika placeholder juga gagal
+            this.onerror = null;
             this.src =
               "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+";
           };
-          // Tambahkan event listener untuk membuka lightbox saat gambar diklik
           imgElement.addEventListener("click", () => openLightbox(imgData.src));
           modalImages.appendChild(imgElement);
         });
       }
 
-      // Tambahkan tautan eksternal (Play Store, dll.)
       const modalLinks = document.getElementById("modalLinks");
-      modalLinks.innerHTML = ""; // Bersihkan tautan sebelumnya
+      modalLinks.innerHTML = "";
       if (project.links) {
         if (project.links.playStore) {
           const linkEl = document.createElement("a");
           linkEl.href = project.links.playStore;
           linkEl.target = "_blank";
-          linkEl.rel = "noopener noreferrer"; // Keamanan
+          linkEl.rel = "noopener noreferrer";
           linkEl.className = "btn-secondary inline-flex items-center gap-2";
           linkEl.innerHTML = `<i data-lucide="play-circle"></i>Lihat di Play Store`;
           modalLinks.appendChild(linkEl);
@@ -290,14 +280,12 @@ function initializeModals() {
           const linkEl = document.createElement("a");
           linkEl.href = project.links.liveSite;
           linkEl.target = "_blank";
-          linkEl.rel = "noopener noreferrer"; // Keamanan
+          linkEl.rel = "noopener noreferrer";
           linkEl.className = "btn-secondary inline-flex items-center gap-2";
           linkEl.innerHTML = `<i data-lucide="external-link"></i>Kunjungi Situs`;
           modalLinks.appendChild(linkEl);
         }
-        // Anda bisa menambahkan jenis tautan lain di sini (misal: appStore, github)
 
-        // Panggil kembali createIcons karena kita menambahkan ikon baru secara dinamis
         if (typeof lucide !== "undefined") {
           lucide.createIcons();
         }
@@ -336,7 +324,6 @@ function initializeModals() {
   };
 
   if (lightboxModal) {
-    // Tutup lightbox saat mengklik area overlay (di luar gambar)
     lightboxModal.addEventListener("click", (e) => {
       if (e.target.id === "lightboxModal") closeLightbox();
     });
@@ -417,7 +404,7 @@ function initializeBSOD() {
 
   const closeSuccessModal = () => {
     successModal.classList.add("hidden");
-    lucide.createIcons(); // Re-render icons if any were changed
+    lucide.createIcons();
   };
 
   document
@@ -426,7 +413,7 @@ function initializeBSOD() {
 
   const showSuccess = () => {
     successModal.classList.remove("hidden");
-    lucide.createIcons(); // Ensure popper icon is rendered
+    lucide.createIcons();
   };
 
   const hideAllBSOD = () => {
@@ -437,7 +424,7 @@ function initializeBSOD() {
   window.triggerBSOD = function () {
     const isNewlyUnlocked = unlockAchievement("system_crasher");
 
-    let targetBsod = bsodViews.linux; // Default
+    let targetBsod = bsodViews.linux;
     const userAgent = navigator.userAgent.toLowerCase();
 
     if (userAgent.includes("windows nt")) {
@@ -460,20 +447,17 @@ function initializeBSOD() {
       }
     };
 
-    // Untuk Windows, tunggu progress bar selesai.
-    // Untuk yang lain, gunakan timeout tetap.
     if (targetBsod === bsodViews.win) {
       const progressEl = document.getElementById("bsod-win-progress");
       let progress = 0;
-      progressEl.textContent = progress; // Reset progress ke 0
+      progressEl.textContent = progress;
 
       const interval = setInterval(() => {
-        progress += Math.floor(Math.random() * 15) + 5; // Increment acak
+        progress += Math.floor(Math.random() * 15) + 5;
         if (progress >= 100) {
           progress = 100;
           progressEl.textContent = progress;
           clearInterval(interval);
-          // Tunggu sejenak setelah 100% ditampilkan sebelum menutup
           setTimeout(completeSequence, 500);
         } else {
           progressEl.textContent = progress;
@@ -482,7 +466,7 @@ function initializeBSOD() {
     } else if (targetBsod === bsodViews.ios) {
       const progressInner = document.getElementById("ios-progress-bar-inner");
       let progress = 0;
-      progressInner.style.width = "0%"; // Reset progress
+      progressInner.style.width = "0%";
 
       const interval = setInterval(() => {
         progress += Math.floor(Math.random() * 10) + 5;
@@ -496,7 +480,6 @@ function initializeBSOD() {
         }
       }, 400);
     } else {
-      // Untuk Mac/Linux, gunakan timeout 3 detik seperti semula
       setTimeout(completeSequence, 3000);
     }
   };
@@ -518,11 +501,10 @@ function renderProjects(projects, filter = "all") {
 
   filteredProjects.forEach((project, index) => {
     const projectCard = document.createElement("div");
-    // Gunakan kelas .project-card yang konsisten untuk styling dan animasi
     projectCard.className = `
       project-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
     `;
-    projectCard.style.animationDelay = `${index * 75}ms`; // Staggered delay untuk fade-in
+    projectCard.style.animationDelay = `${index * 75}ms`;
     projectCard.style.backgroundColor = "var(--bg-card-secondary)";
     projectCard.setAttribute("onclick", `openModal('${project.id}')`);
 
@@ -541,14 +523,12 @@ function renderProjectFilters(projects) {
   const filtersContainer = document.getElementById("portfolio-filters");
   if (!filtersContainer) return;
 
-  // Definisikan detail untuk setiap kategori, termasuk ikon
   const categoryDetails = {
     all: { name: "Semua", icon: "layout-grid" },
     web: { name: "Web", icon: "globe" },
     mobile: { name: "Mobile", icon: "smartphone" },
   };
 
-  // Ambil kategori unik dari data proyek dan pastikan 'all' ada di urutan pertama
   const projectCategories = [...new Set(projects.map((p) => p.category))];
   const orderedCategories = [
     "all",
@@ -557,7 +537,7 @@ function renderProjectFilters(projects) {
 
   orderedCategories.forEach((categoryKey) => {
     const details = categoryDetails[categoryKey];
-    if (!details) return; // Lewati jika kategori tidak terdefinisi
+    if (!details) return;
 
     const button = document.createElement("button");
     button.className = "filter-btn";
@@ -569,10 +549,8 @@ function renderProjectFilters(projects) {
     }
 
     button.addEventListener("click", () => {
-      // Jangan lakukan apa-apa jika filter yang sama diklik lagi
       if (button.classList.contains("active")) return;
 
-      // Update tombol aktif
       filtersContainer
         .querySelectorAll(".filter-btn")
         .forEach((btn) => btn.classList.remove("active"));
@@ -581,24 +559,21 @@ function renderProjectFilters(projects) {
       const portfolioGrid = document.getElementById("portfolio-grid");
       const existingCards = portfolioGrid.querySelectorAll(".project-card");
 
-      // 1. Pudar keluar item yang ada dengan efek staggered
       existingCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 50}ms`; // Staggered delay
+        card.style.animationDelay = `${index * 50}ms`;
         card.classList.add("fading-out");
       });
 
-      // 2. Setelah animasi pudar selesai, render item baru
       const totalFadeOutTime =
         300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
       setTimeout(() => {
         renderProjects(projects, categoryKey);
-      }, totalFadeOutTime); // Sesuaikan timeout untuk memperhitungkan stagger
+      }, totalFadeOutTime);
     });
 
     filtersContainer.appendChild(button);
   });
 
-  // Panggil kembali createIcons untuk merender ikon yang baru ditambahkan
   if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
@@ -613,16 +588,12 @@ function initializeSkillFiltering() {
     card.addEventListener("click", () => {
       const skill = card.dataset.skill;
 
-      // Cari tombol filter yang sesuai di bagian portofolio
       const filterButton = document.querySelector(
         `#portfolio-filters .filter-btn[data-filter="${skill}"]`
       );
 
       if (filterButton) {
-        // Gulir ke bagian portofolio
         portfolioSection.scrollIntoView({ behavior: "smooth" });
-
-        // Tunggu sebentar agar scroll selesai, lalu klik tombol filter
         setTimeout(() => filterButton.click(), 500);
       }
     });
@@ -637,10 +608,8 @@ function renderTestimonials(testimonials) {
 
   testimonials.forEach((testimonial) => {
     const testimonialCard = document.createElement("div");
-    // Menambahkan kelas .testimonial-card untuk styling glassmorphism
     testimonialCard.className =
       "testimonial-card p-6 rounded-xl shadow-lg text-left";
-
     testimonialCard.innerHTML = `
       <p class="italic mb-4" style="color: var(--text-secondary);">
         "${parseMarkdownBold(testimonial.quote)}"
@@ -688,9 +657,9 @@ window.unlockAchievement = function (id) {
       saved.push(id);
       localStorage.setItem("portfolioAchievements", JSON.stringify(saved));
     }
-    return true; // Berhasil membuka achievement baru
+    return true;
   }
-  return false; // Achievement sudah terbuka sebelumnya
+  return false;
 };
 
 function loadAchievements() {
@@ -719,7 +688,6 @@ function populateAchievements() {
   const totalAchievements = Object.keys(achievements).length;
   const unlockedCount = unlockedIds.length;
 
-  // Update progress bar and text
   if (progressBar && progressText) {
     const percentage =
       totalAchievements > 0 ? (unlockedCount / totalAchievements) * 100 : 0;
@@ -810,9 +778,6 @@ function populateStaticData() {
   document.getElementById(
     "footer-text"
   ).textContent = `© ${currentYear} ${siteConfig.name}. Hak Cipta Dilindungi Undang-Undang.`;
-
-  // JSON-LD Schema
-  // (Implementasi lebih lanjut bisa dilakukan di sini jika diperlukan)
 }
 
 // --- Contact Form with Real-time Validation ---
@@ -880,7 +845,7 @@ function initializeContactForm() {
       submitText.classList.add("hidden");
       submitSpinner.classList.remove("hidden");
       submitButton.disabled = true;
-      lucide.createIcons(); // Render spinner icon
+      lucide.createIcons();
 
       const formData = new FormData(form);
       const formAction = `https://formspree.io/f/${FORMSPREE_ID}`;

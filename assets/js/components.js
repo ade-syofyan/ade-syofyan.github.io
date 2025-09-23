@@ -1,5 +1,3 @@
-// js/components.js
-
 // --- Live Demo: Real-time Visitor Counter ---
 function initializeVisitorCounter() {
   const visitorCountElement = document.getElementById("visitor-count");
@@ -42,7 +40,6 @@ class PriorityQueue {
 }
 
 function heuristic(a, b) {
-  // Manhattan distance
   return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
 }
 
@@ -57,7 +54,7 @@ function initializePathfindingVisualizer() {
 
   // Exit if any element is missing to prevent errors
   if (!gridContainer || !controlsContainer || !runBtn || !resetBtn) {
-    return; // Silently fail if the component is not on the page
+    return;
   }
 
   // 2. STATE & CONFIGURATION
@@ -124,7 +121,6 @@ function initializePathfindingVisualizer() {
         node.element.classList.toggle("node-water", node.isWater);
       }
     } else {
-      // Clear wall status before setting start/end
       if (node.isWater) {
         node.isWater = false;
         node.element.classList.remove("node-water");
@@ -135,7 +131,7 @@ function initializePathfindingVisualizer() {
       }
 
       if (currentMode === "start") {
-        if (node.isEnd) return; // Can't place start on end
+        if (node.isEnd) return;
         if (startNode) {
           startNode.isStart = false;
           startNode.element.classList.remove("node-start");
@@ -144,7 +140,7 @@ function initializePathfindingVisualizer() {
         node.element.classList.add("node-start");
         startNode = node;
       } else if (currentMode === "end") {
-        if (node.isStart) return; // Can't place end on start
+        if (node.isStart) return;
         if (endNode) {
           endNode.isEnd = false;
           endNode.element.classList.remove("node-end");
@@ -162,7 +158,6 @@ function initializePathfindingVisualizer() {
    */
   function resetGrid(fullReset = true) {
     isRunning = false;
-    // Pastikan semua tombol aktif saat reset
     runBtn.disabled = false;
     resetBtn.disabled = false;
     controlsContainer
@@ -175,8 +170,8 @@ function initializePathfindingVisualizer() {
       for (let col = 0; col < GRID_WIDTH; col++) {
         const node = nodes[row][col];
         node.element.classList.remove("node-visited", "node-path");
-        node.element.classList.remove("is-drawing"); // Hapus kelas drawing juga
-        node.costElement.textContent = ""; // Hapus teks biaya
+        node.element.classList.remove("is-drawing"); 
+        node.costElement.textContent = ""; 
         if (fullReset) {
           node.element.classList.remove(
             "node-start",
@@ -203,7 +198,6 @@ function initializePathfindingVisualizer() {
   async function runSelectedAlgorithm() {
     if (!startNode || !endNode || isRunning) return;
     isRunning = true;
-    // Nonaktifkan semua tombol saat algoritma berjalan
     runBtn.disabled = true;
     resetBtn.disabled = true;
     controlsContainer
@@ -211,7 +205,7 @@ function initializePathfindingVisualizer() {
       .forEach((btn) => (btn.disabled = true));
     algorithmSelect.disabled = true;
 
-    resetGrid(false); // Clear previous path visualization
+    resetGrid(false);
     unlockAchievement("navigator");
 
     const predecessors = new Map();
@@ -275,7 +269,7 @@ function initializePathfindingVisualizer() {
 
         if (!current.isStart) {
           current.element.classList.add("node-visited");
-          current.costElement.textContent = distances.get(current); // Tampilkan biaya
+          current.costElement.textContent = distances.get(current); 
           await new Promise((r) => setTimeout(r, 20));
         }
 
@@ -291,7 +285,7 @@ function initializePathfindingVisualizer() {
             const neighbor = nodes[newRow][newCol];
             if (neighbor.isWall) continue;
 
-            const weight = neighbor.isWater ? 15 : 1; // Water has a higher weight
+            const weight = neighbor.isWater ? 15 : 1; 
             const distanceToNeighbor = distances.get(current) + weight;
 
             if (distanceToNeighbor < distances.get(neighbor)) {
@@ -518,7 +512,7 @@ function initializeCodeViewers() {
 
       // Tab switching logic
       tabButton.addEventListener("click", () => {
-        // Jangan lakukan apa-apa jika tab sudah aktif
+
         if (tabButton.classList.contains("active")) return;
 
         tabContainer.querySelector(".active").classList.remove("active");
@@ -529,13 +523,10 @@ function initializeCodeViewers() {
         codeBlockWrapper.classList.remove("hidden");
       });
 
-      // Hanya tambahkan elemen jika belum ada tab dengan bahasa yang sama
-      // Ini penting untuk kasus JS dengan beberapa algoritma
       if (!modalContent.querySelector(`#code-block-${lang}`)) {
         modalContent.appendChild(codeBlockWrapper);
       }
 
-      // Aktifkan tab pertama yang diproses
       if (modalContent.children.length === 1) {
         tabButton.classList.add("active");
         codeBlockWrapper.classList.remove("hidden");
@@ -638,7 +629,7 @@ function initializeCssHackerAchievement() {
           );
           const isNewlyUnlocked = window.unlockAchievement("css_hacker");
           if (isNewlyUnlocked) {
-            observer.disconnect(); // Stop observing once unlocked
+            observer.disconnect();
           }
         }
       }

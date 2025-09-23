@@ -1,5 +1,3 @@
-// js/animations.js
-
 // --- Plexus Animation Factory ---
 // Helper untuk mengubah warna hex menjadi objek RGB
 function hexToRgb(hex) {
@@ -10,7 +8,7 @@ function hexToRgb(hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16),
       }
-    : null; // Mengembalikan null jika format hex tidak valid
+    : null;
 }
 
 /**
@@ -27,15 +25,13 @@ function createPlexusInstance(canvas, options = {}) {
     particleCount: options.particleCount || 80,
     maxDistance: options.maxDistance || 150,
   };
-  let themeColors = { r: 99, g: 179, b: 237 }; // Default
-  let themeTextColor = { r: 226, g: 232, b: 240 }; // Default text color (dark theme)
-  let interactionTriggered = false; // Flag untuk achievement
+  let themeColors = { r: 99, g: 179, b: 237 };
+  let themeTextColor = { r: 226, g: 232, b: 240 };
+  let interactionTriggered = false;
 
-  // Objek untuk melacak posisi mouse
   const mouse = {
     x: null,
     y: null,
-    // Radius interaksi mouse
     radius: 100,
   };
 
@@ -73,8 +69,8 @@ function createPlexusInstance(canvas, options = {}) {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
       this.size = Math.random() * 3 + 1;
-      this.speedX = Math.random() * 0.2 - 0.1; // Kecepatan lebih lambat
-      this.speedY = Math.random() * 0.2 - 0.1; // Kecepatan lebih lambat
+      this.speedX = Math.random() * 0.2 - 0.1;
+      this.speedY = Math.random() * 0.2 - 0.1;
 
       const baseColor =
         PLEXUS_PALETTE[Math.floor(Math.random() * PLEXUS_PALETTE.length)];
@@ -166,7 +162,7 @@ function createPlexusInstance(canvas, options = {}) {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p) => {
-      p.update(); // Diaktifkan kembali dengan kecepatan lambat
+      p.update();
       p.draw();
     });
     connect();
@@ -217,8 +213,8 @@ function initializeHeroCanvas() {
   allCanvases.forEach((canvas) => {
     const options =
       canvas.id === "heroCanvas"
-        ? { particleCount: 150, maxDistance: 160 } // Opsi untuk header (lebih padat)
-        : { particleCount: 75, maxDistance: 110 }; // Opsi untuk section (lebih ringan)
+        ? { particleCount: 150, maxDistance: 160 }
+        : { particleCount: 75, maxDistance: 110 };
     const instance = createPlexusInstance(canvas, options);
     if (instance) plexusInstances.push(instance);
   });
@@ -252,7 +248,6 @@ function initializeScrollAnimations() {
   const observerCallback = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        // Handle staggered animations for grids
         if (
           entry.target.id === "skills-grid" ||
           entry.target.id === "services-grid"
@@ -364,10 +359,9 @@ function initializeSmoothScroll() {
 
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
-      // Hanya proses link yang menuju ke sebuah ID di halaman ini
       const href = this.getAttribute("href");
       if (href.length > 1 && href.startsWith("#")) {
-        e.preventDefault(); // Mencegah lompatan instan
+        e.preventDefault();
 
         const targetId = href.substring(1);
         const targetElement = document.getElementById(targetId);
@@ -384,7 +378,6 @@ function initializeSmoothScroll() {
             behavior: "smooth",
           });
 
-          // Tutup menu mobile jika terbuka
           if (
             document.getElementById("mobileMenu").classList.contains("open")
           ) {

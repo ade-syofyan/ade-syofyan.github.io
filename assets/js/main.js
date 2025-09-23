@@ -1,5 +1,3 @@
-// js/main.js
-
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI elements
   initializeTheme();
@@ -37,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (typeof testimonialsData !== "undefined") {
     renderTestimonials(testimonialsData);
-    populateStaticData(); // Panggil fungsi untuk mengisi data statis
+    populateStaticData(); 
   }
   if (typeof achievements !== "undefined") {
     loadAchievements();

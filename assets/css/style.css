@@ -7,15 +7,11 @@
 	--bg-card-secondary: rgba(74, 85, 104, 0.6);
 	--bg-nav: #111827;
 	--bg-nav-rgb: 17, 24, 39;
-	/* bg-gray-900 */
 	--bg-modal: #2d3748;
 	--bg-nav-link-hover: var(--bg-card);
-	/* Latar belakang hover/active untuk link nav */
 	--bg-overlay: rgba(26, 32, 44, 0.8);
-	/* Latar belakang overlay semi-transparan */
 	--text-primary: #e2e8f0;
 	--text-secondary: #a0aec0;
-	/* text-gray-400 */
 	--text-white: #ffffff;
 	--text-black: #000000;
 	--color-accent: #63b3ed;
@@ -24,7 +20,6 @@
 	--border-color: #4a5568;
 	--border-color-rgb: 74, 85, 104;
 	--shadow-color: rgba(0, 0, 0, 0.4);
-	/* Prism.js Dark Theme Overrides */
 	--prism-bg: #2d3748;
 	--prism-color: #f8f8f2;
 	--prism-token-comment: #6272a4;
@@ -35,7 +30,6 @@
 	--prism-token-number: #bd93f9;
 	--prism-token-operator: #ff79c6;
 	--terminal-prompt-color: #4ade80;
-	/* Tailwind green-400 */
 	--prism-token-class-name: #8be9fd;
 }
 
@@ -49,9 +43,7 @@ html[data-theme='light'] {
 	--bg-nav-rgb: 255, 255, 255;
 	--bg-modal: #ffffff;
 	--bg-nav-link-hover: var(--bg-card-secondary);
-	/* Latar belakang hover/active untuk link nav */
 	--bg-overlay: rgba(247, 250, 252, 0.8);
-	/* Latar belakang overlay untuk tema terang */
 	--text-primary: #2d3748;
 	--text-secondary: #718096;
 	--text-white: #1a202c;
@@ -61,7 +53,6 @@ html[data-theme='light'] {
 	--border-color: #e2e8f0;
 	--border-color-rgb: 226, 232, 240;
 	--shadow-color: rgba(0, 0, 0, 0.1);
-	/* Prism.js Light Theme Overrides */
 	--prism-bg: #f5f2f0;
 	--prism-color: #393a34;
 	--prism-token-comment: #999988;
@@ -72,7 +63,6 @@ html[data-theme='light'] {
 	--prism-token-number: #990055;
 	--prism-token-operator: #a67f59;
 	--terminal-prompt-color: #008000;
-	/* Darker green for light theme */
 	--prism-token-class-name: #22863a;
 }
 
@@ -82,7 +72,6 @@ body {
 	color: var(--text-primary);
 	scroll-behavior: smooth;
 	overflow-x: hidden;
-	/* Prevent horizontal scrollbar */
 	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -108,7 +97,6 @@ body.modal-open {
 .bg-card {
 	background-color: var(--bg-card);
 	border-radius: 0.75rem;
-	/* Sudut membulat */
 	transition: background-color 0.3s ease;
 }
 
@@ -117,27 +105,21 @@ body.modal-open {
 .testimonial-card,
 .contact-card {
 	background-color: rgba(var(--bg-card-rgb), 0.25);
-	/* Lebih transparan */
 	-webkit-backdrop-filter: blur(15px);
-	/* Blur lebih kuat */
 	backdrop-filter: blur(15px);
 	border: 1px solid rgba(var(--border-color-rgb), 0.15);
-	/* Border lebih halus */
 }
 
 /* Glassmorphism for Navbar */
 nav {
 	background-color: rgba(var(--bg-nav-rgb), 0.4) !important;
-	/* Lebih transparan */
 	-webkit-backdrop-filter: blur(15px);
-	/* Blur lebih kuat */
 	backdrop-filter: blur(15px);
 }
 
 .btn-primary {
 	background-color: var(--color-accent);
 	color: white;
-	/* Tetap putih untuk kontras */
 	padding: 0.75rem 1.5rem;
 	border-radius: 0.5rem;
 	transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
@@ -162,9 +144,7 @@ nav {
 .btn-secondary:hover {
 	background-color: var(--color-accent);
 	color: white;
-	/* Tetap putih untuk kontras */
 	transform: translateY(-2px);
-	/* Sedikit naik saat hover */
 }
 
 /* Gaya untuk tombol filter portofolio */
@@ -176,7 +156,6 @@ nav {
 	color: var(--text-secondary);
 	padding: 0.5rem 1rem;
 	border-radius: 9999px;
-	/* Pill shape */
 	border: 1px solid var(--border-color);
 	transition: all 0.3s ease;
 	font-size: 0.875rem;
@@ -234,17 +213,13 @@ nav {
 	background-color: var(--bg-modal);
 	border-radius: 1rem;
 	max-width: 90%;
-	/* Lebar maksimal */
 	width: 900px;
-	/* Lebar spesifik untuk desktop, diperlebar */
 	max-height: 90%;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	/* Sembunyikan scroll di container utama */
 	transform: translateY(20px);
-	/* Efek jatuh sedikit awal untuk animasi */
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
 }
@@ -257,14 +232,12 @@ nav {
 	padding: 1.5rem 2rem;
 	border-bottom: 1px solid var(--border-color);
 	flex-shrink: 0;
-	/* Mencegah header menyusut */
 	position: relative;
 }
 
 .modal-body {
 	padding: 1.5rem 2rem;
 	overflow-y: auto;
-	/* Hanya body yang bisa di-scroll */
 	flex-grow: 1;
 }
 
@@ -272,7 +245,6 @@ nav {
 	padding: 1.5rem 2rem;
 	border-top: 1px solid var(--border-color);
 	flex-shrink: 0;
-	/* Mencegah footer menyusut */
 }
 
 .modal-close-btn {
@@ -299,13 +271,10 @@ nav {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.9);
-	/* Overlay lebih gelap */
 	display: none;
-	/* Sembunyi secara default */
 	justify-content: center;
 	align-items: center;
 	z-index: 1050;
-	/* Pastikan di atas modal proyek */
 	padding: 20px;
 	box-sizing: border-box;
 }
@@ -352,11 +321,8 @@ nav {
 	width: 100%;
 	height: 100%;
 	z-index: 0;
-	/* Pastikan di belakang konten hero */
 	background-color: transparent;
-	/* Pastikan tidak menutupi warna latar belakang header */
 	opacity: 0.3;
-	/* Sedikit transparan agar tidak terlalu mendominasi */
 }
 
 /* Gaya untuk canvas plexus di setiap section */
@@ -368,35 +334,21 @@ nav {
 	height: 100%;
 	z-index: 0;
 	opacity: 0.15;
-	/* Lebih subtil dari header */
 	background-color: transparent;
-	/* pointer-events: none; Dihapus agar interaksi mouse berfungsi */
 }
 
 /* Gaya spesifik Chatbot */
 .chatbot-content {
 	background-color: var(--bg-modal);
-	/* padding: 1.5rem; */
-	/* Padding di dalam konten chatbot */
-	/* Padding di dalam konten chatbot */
 	border-radius: 1rem;
-	/* Sudut membulat untuk konten chatbot */
 	max-width: 90%;
-	/* Lebar maksimal 90% dari viewport */
 	width: 100%;
-	/* Gunakan lebar penuh dari parent (modal-overlay yang sudah di tengah) */
 	max-height: 80%;
-	/* Tinggi maksimal 80% dari viewport */
 	overflow: hidden;
-	/* Sembunyikan overflow, chat-display akan menangani scroll internal */
 	display: flex;
 	flex-direction: column;
-	/* Susun elemen anak secara vertikal */
-	/* Gunakan flexbox untuk layout internal */
 	position: relative;
-	/* Untuk positioning tombol close */
 	padding: 0;
-	/* Hapus padding dari container utama */
 	box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
 	transform: translateY(20px);
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -404,13 +356,10 @@ nav {
 
 .chat-display {
 	flex-grow: 1;
-	/* Biarkan area display chat mengambil sisa ruang vertikal */
 	background-color: var(--bg-primary);
-	/* Menambahkan pola latar belakang modern yang subtil */
 	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
 	background-size: 32px 32px;
 	padding: 1rem;
-	/* Hapus margin agar menyatu dengan header/footer */
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
@@ -419,30 +368,24 @@ nav {
 /* Gaya untuk pesan chat agar teks membungkus */
 .chat-message {
 	word-wrap: break-word;
-	/* Bungkus kata yang panjang */
 	overflow-wrap: break-word;
-	/* Alternatif untuk word-wrap */
 }
 
 /* Gaya baru untuk gelembung chat yang lebih otentik */
 .user-bubble .chat-message {
 	background-color: #3b82f6;
-	/* Warna biru yang lebih cerah */
 	color: white;
 	border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
-	/* Sudut kanan bawah lebih tajam */
 }
 
 .ai-bubble .chat-message {
 	background-color: var(--bg-card-secondary);
 	color: var(--text-primary);
 	border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
-	/* Sudut kiri bawah lebih tajam */
 }
 
 .error-bubble .chat-message {
 	background-color: #ef4444;
-	/* Tailwind's red-500 */
 	color: white;
 }
 
@@ -452,7 +395,6 @@ nav {
 	align-items: center;
 	gap: 0.5rem;
 	font-size: 0.8rem;
-	/* Sedikit lebih kecil */
 	padding: 0.35rem 0.85rem;
 	border-radius: 9999px;
 	transition: all 0.2s ease-out;
@@ -468,12 +410,9 @@ nav {
 }
 
 .chat-input-area {
-	/* Gunakan flexbox untuk input dan tombol */
-	/* Default: susun vertikal untuk layar kecil */
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
-	/* Jarak antara input dan tombol saat vertikal */
 }
 
 .chat-input-area input {
@@ -483,9 +422,7 @@ nav {
 	padding: 0.75rem 1rem;
 	color: var(--text-primary);
 	width: 100%;
-	/* Lebar penuh saat dalam mode kolom */
 	box-sizing: border-box;
-	/* Padding dan border termasuk dalam width */
 }
 
 .chat-input-area button {
@@ -495,41 +432,29 @@ nav {
 	border-radius: 0.5rem;
 	transition: background-color 0.3s ease;
 	width: 100%;
-	/* Lebar penuh saat dalam mode kolom */
 	box-sizing: border-box;
-	/* Padding dan border termasuk dalam width */
 	white-space: nowrap;
-	/* Cegah teks tombol terpotong ke baris baru */
 }
 
 .chat-input-area button:hover {
 	background-color: var(--color-accent-hover);
 }
 
-/* Mobile Navigation - Awal perbaikan */
-/* Sembunyikan desktop nav dan tampilkan mobile toggle secara default untuk mobile-first */
-
 /* Media query untuk chat input area pada layar yang lebih lebar */
 @media (min-width: 380px) {
 
-	/* Anda bisa menyesuaikan breakpoint ini */
 	.chat-input-area {
 		flex-direction: row;
-		/* Kembali ke layout horizontal */
 	}
 
 	.chat-input-area input {
 		flex-grow: 1;
-		/* Biarkan input mengambil sisa ruang */
 		width: auto;
-		/* Reset lebar dari mode kolom */
 	}
 
 	.chat-input-area button {
 		width: auto;
-		/* Lebar tombol berdasarkan konten & padding */
 		flex-shrink: 0;
-		/* Cegah tombol menyusut */
 	}
 }
 
@@ -538,13 +463,6 @@ nav {
 	transition: width 0.4s ease-in-out;
 }
 
-/* .desktop-nav { */
-/* display: none; /* Now handled by Tailwind 'hidden md:flex' */
-/* } */
-/* .mobile-nav-toggle { */
-/* display: block; /* Now handled by Tailwind 'md:hidden' (button is inline-block by default) */
-/* } */
-
 .mobile-menu-overlay {
 	position: fixed;
 	top: 0;
@@ -552,44 +470,33 @@ nav {
 	width: 100%;
 	height: 100%;
 	background-color: var(--bg-overlay);
-	/* Menggunakan variabel untuk mendukung tema */
 	-webkit-backdrop-filter: blur(10px);
-	/* Efek blur untuk Safari */
 	backdrop-filter: blur(10px);
-	/* Efek blur modern */
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	/* Mulai dari atas */
 	align-items: center;
 	padding-top: 5rem;
-	/* Kurangi padding atas sedikit */
 	padding-bottom: 2rem;
-	/* Tambahkan padding bawah untuk scrolling */
 	z-index: 1010;
 	opacity: 0;
 	visibility: hidden;
 	transform: translateY(-100%);
-	/* Animasi dari atas */
 	transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 	overflow-y: auto;
-	/* Aktifkan scroll jika konten melebihi tinggi layar */
 }
 
 .mobile-menu-overlay.open {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0);
-	/* Geser masuk ke posisi normal */
 }
 
 .mobile-menu-overlay a {
 	color: var(--text-primary);
 	font-size: 1.25rem;
-	/* Sedikit kurangi ukuran font untuk mobile */
 	font-weight: 500;
 	padding: 0.75rem 0;
-	/* Kurangi padding vertikal */
 	width: 80%;
 	max-width: 300px;
 	text-align: left;
@@ -620,7 +527,6 @@ nav {
 .mobile-menu-close-btn {
 	position: absolute;
 	top: 1.25rem;
-	/* Sesuaikan posisi */
 	right: 1.25rem;
 	background: none;
 	border: none;
@@ -629,24 +535,10 @@ nav {
 	z-index: 1011;
 	transition: color 0.3s ease;
 	padding: 0.5rem;
-	/* Area klik lebih besar */
 }
 
 .mobile-menu-close-btn:hover {
 	color: var(--color-accent);
-}
-
-/* Responsif untuk Tablet dan Desktop */
-@media (min-width: 768px) {
-	/* .desktop-nav { */
-	/* display: flex; /* Tampilkan desktop nav */
-	/* Now handled by Tailwind 'hidden md:flex' */
-	/* } */
-	/* .mobile-nav-toggle, */
-	/* .mobile-menu-overlay { */
-	/* display: none; /* Sembunyikan mobile toggle dan overlay */
-	/* Now handled by Tailwind 'md:hidden' for these elements */
-	/* } */
 }
 
 /* Scroll to Top Button */
@@ -655,13 +547,9 @@ nav {
 	visibility: hidden;
 	transform: translateY(20px);
 	position: fixed;
-	/* Fixed position */
 	bottom: 20px;
-	/* Place at the bottom */
 	right: 20px;
-	/* Place at the right */
 	z-index: 99;
-	/* Higher than other content */
 	border: none;
 	outline: none;
 	background-color: var(--color-accent);
@@ -669,7 +557,6 @@ nav {
 	cursor: pointer;
 	padding: 12px;
 	border-radius: 0.75rem;
-	/* Squircle shape */
 	box-shadow: 0 4px 10px var(--shadow-color);
 	transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s;
 }
@@ -685,7 +572,6 @@ nav {
 	background-color: var(--color-accent-hover);
 	transform: scale(1.1) translateY(0);
 	animation-play-state: paused;
-	/* Hentikan pulsasi saat hover */
 }
 
 @keyframes pulse {
@@ -708,14 +594,9 @@ nav {
 	color: var(--text-white);
 }
 
-/* Fix for nested CSS rules */
-/* .container rule was incorrectly nested */
-/* .mobile-menu-overlay a.active rule was incorrectly nested */
-
 .mobile-menu-overlay a.active {
 	color: var(--color-accent);
 	font-weight: 600;
-	/* Atau gaya lain yang diinginkan */
 }
 
 /* Tombol CTA di menu mobile */
@@ -723,7 +604,6 @@ nav {
 	background-color: var(--color-accent);
 	color: #ffffff !important;
 	padding: 0.8rem 1.5rem !important;
-	/* Kurangi padding vertikal */
 	border-radius: 0.5rem;
 	margin-top: 1.5rem;
 	justify-content: center;
@@ -765,7 +645,6 @@ nav {
 .fade-in-on-scroll {
 	opacity: 0;
 	transform: translateY(50px);
-	/* Mulai sedikit lebih bawah */
 	transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
@@ -811,11 +690,8 @@ nav {
 /* Styles for Color Palette Demo */
 .color-swatch {
 	flex: 1 1 38px;
-	/* Basis disesuaikan agar mendekati 50px di mobile */
 	max-width: 60px;
-	/* Batas lebar maksimal agar tidak terlalu besar */
 	aspect-ratio: 1 / 1;
-	/* Pastikan bentuknya selalu persegi */
 	border-radius: 0.5rem;
 	position: relative;
 	cursor: pointer;
@@ -861,8 +737,6 @@ nav {
 .skill-card:hover,
 .service-card:hover {
 	transform: translateY(-5px) scale(1.03);
-	/* Efek mengangkat yang halus */
-	/* Bayangan pertama untuk kedalaman, bayangan kedua untuk warna aksen halus */
 	box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
 }
 
@@ -885,7 +759,6 @@ nav {
 
 #terminal-output .terminal-line {
 	white-space: pre-wrap;
-	/* Agar output bisa wrap */
 }
 
 #terminal-window.light-theme {
@@ -893,8 +766,6 @@ nav {
 	color: #333;
 	border-color: #ccc;
 }
-
-/* Anda bisa menambahkan lebih banyak gaya untuk light theme di sini */
 
 /* Achievement Toast Animation */
 #achievement-toast.show {
@@ -934,7 +805,6 @@ nav {
 	height: 100vh;
 	border-radius: 0;
 	padding: 0;
-	/* Hapus padding saat dimaksimalkan */
 	margin: 0;
 }
 
@@ -956,7 +826,6 @@ nav {
 	width: 150px;
 	overflow: hidden;
 	display: none;
-	/* Hidden by default */
 }
 
 .theme-dropdown.open {
@@ -1007,7 +876,6 @@ nav {
 }
 
 .skill-card {
-	/* Tambahkan transisi pada skill-card agar kembali ke normal dengan mulus */
 	transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.5s ease-out, border 0.5s ease-out;
 }
 
@@ -1015,31 +883,20 @@ nav {
 .skill-card[data-skill] {
 	cursor: pointer;
 	border: 1px solid transparent;
-	/* Siapkan untuk transisi border */
 }
 
-/* Styles for "Behind the Code" feature */
-/* Menghapus style .code-viewer yang lama karena sudah diganti modal */
-
-/* Jadikan kontainer konten sebagai flexbox agar elemen <pre> di dalamnya bisa memanjang */
 #codeViewerContent {
 	display: flex;
-	/* Menjadikan kontainer ini sebagai flex container */
 	flex-direction: column;
-	/* Mengatur arah item di dalamnya secara vertikal */
 	overflow: auto;
-	/* Pindahkan overflow ke sini agar scrollbar muncul jika diperlukan */
 }
 
-/* Pastikan <pre> di dalam modal tidak memiliki padding ganda */
 #codeViewerContent pre[class*="language-"] {
 	margin: 0 !important;
 	padding-left: 3.8em !important;
 	flex-grow: 1;
-	/* Memastikan elemen <pre> mengisi sisa ruang vertikal yang tersedia */
 }
 
-/* Header untuk blok kode */
 .code-viewer-header {
 	display: flex;
 	justify-content: space-between;
@@ -1115,7 +972,6 @@ nav {
 	transition: all 0.3s ease;
 	font-size: 0.875rem;
 	margin-top: 1.25rem;
-	/* Sedikit menambah jarak dari elemen di atasnya */
 }
 
 .btn-code-toggle:hover {
@@ -1124,17 +980,14 @@ nav {
 	border-color: var(--border-color);
 }
 
-/* Themed Prism.js styles */
 pre[class*="language-"] {
 	background: var(--prism-bg) !important;
 	padding: 1em !important;
 	margin: 0 !important;
 	border: none !important;
 	overflow: auto;
-	/* Tambahkan scroll jika konten terlalu lebar */
 }
 
-/* More specific Prism token styles using variables */
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -1182,13 +1035,11 @@ pre[class*="language-"] {
 	color: var(--prism-token-function);
 }
 
-/* Pastikan warna teks dasar juga menggunakan variabel */
 code[class*="language-"],
 pre[class*="language-"] {
 	color: var(--prism-color) !important;
 }
 
-/* Gaya untuk Tech Stack di Modal */
 .tech-tag {
 	position: relative;
 	background-color: var(--bg-card-secondary);
@@ -1208,10 +1059,8 @@ pre[class*="language-"] {
 	border-color: var(--color-accent-hover);
 }
 
-/* Global Tooltip for Tech Stack (New and Improved) */
 #global-tooltip {
 	position: fixed;
-	/* Use fixed positioning to escape containers */
 	background-color: var(--bg-primary);
 	color: var(--text-primary);
 	padding: 0.5rem 1rem;
@@ -1221,12 +1070,10 @@ pre[class*="language-"] {
 	text-align: center;
 	box-shadow: 0 4px 10px var(--shadow-color);
 	z-index: 2000;
-	/* High z-index to be on top of everything */
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity 0.2s ease;
 	pointer-events: none;
-	/* Prevent tooltip from blocking mouse events */
 }
 
 #global-tooltip.visible {
@@ -1262,7 +1109,6 @@ pre[class*="language-"] {
 .project-card {
 	animation: fadeInPortfolio 0.4s ease-out forwards;
 	opacity: 0;
-	/* Mulai dalam keadaan tidak terlihat */
 }
 
 .project-card.fading-out {
@@ -1344,7 +1190,6 @@ body.hackerman-mode #achievement-toast {
 	width: 100%;
 	height: 100%;
 	position: relative;
-	/* Diperlukan untuk positioning absolut anak */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1364,7 +1209,6 @@ body.hackerman-mode #achievement-toast {
 
 .pathfinding-node.node-end {
 	background-color: #f43f5e;
-	/* Tailwind's rose-500 */
 	animation: pulse-node 1s infinite;
 }
 
@@ -1390,7 +1234,6 @@ body.hackerman-mode #achievement-toast {
 /* New class for the drawing animation */
 .pathfinding-node.is-drawing {
 	background-color: #fde047;
-	/* Lighter yellow */
 	transform: scale(1.2);
 	border-radius: 50%;
 	transition: transform 0.1s ease-out, background-color 0.1s ease-out, border-radius 0.1s ease-out;
@@ -1402,9 +1245,7 @@ body.hackerman-mode #achievement-toast {
 	color: var(--text-primary);
 	opacity: 0.7;
 	pointer-events: none;
-	/* Agar tidak mengganggu klik pada node */
 	text-shadow: 0 0 2px var(--bg-primary);
-	/* Bayangan agar lebih terbaca */
 }
 
 @keyframes visit-node {
@@ -1423,13 +1264,11 @@ body.hackerman-mode #achievement-toast {
 	0% {
 		transform: scale(0.7);
 		background-color: #facc15;
-		/* Tailwind's amber-400 */
 	}
 
 	100% {
 		transform: scale(1);
 		background-color: #fde047;
-		/* Tailwind's amber-300 */
 	}
 }
 
@@ -1639,7 +1478,6 @@ body.hackerman-mode #achievement-toast {
 	border: 1px solid var(--border-color);
 	color: var(--text-primary);
 	padding: 1rem 1rem 1rem 3.5rem;
-	/* Tambahkan padding kiri untuk ikon */
 	border-radius: 0.5rem;
 	transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -1661,7 +1499,6 @@ body.hackerman-mode #achievement-toast {
 
 .form-input.invalid {
 	border-color: #ef4444;
-	/* red-500 */
 }
 
 .form-input.invalid:focus {
@@ -1675,13 +1512,11 @@ body.hackerman-mode #achievement-toast {
 
 .form-input.valid {
 	border-color: #22c55e;
-	/* green-500 */
 }
 
 .form-error-message {
 	font-size: 0.8rem;
 	color: #f87171;
-	/* red-400 */
 }
 
 #submit-contact-form:disabled {

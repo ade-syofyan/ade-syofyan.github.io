@@ -1,5 +1,3 @@
-// js/terminal.js
-
 function initializeTerminal() {
   const terminal = document.getElementById("terminal");
   if (!terminal) return;
@@ -18,8 +16,8 @@ function initializeTerminal() {
   let commandHistory = [];
   let historyIndex = 0;
   let currentPath = [];
-  let chatMode = false; // State untuk mode chat
-  // State untuk konfirmasi perintah berbahaya
+  let chatMode = false;
+
   let isAwaitingConfirmation = false;
   let confirmationCallback = null;
   let activeTypingAbortController = null;
@@ -75,7 +73,6 @@ function initializeTerminal() {
 
   // Fungsi untuk menampilkan teks dengan efek mengetik di terminal
   const typeTerminalMessage = (element, text, delay = 20) => {
-    // Batalkan proses mengetik sebelumnya jika ada
     if (activeTypingAbortController) {
       activeTypingAbortController.abort();
     }
@@ -84,10 +81,9 @@ function initializeTerminal() {
     activeTypingAbortController = controller;
 
     let i = 0;
-    element.innerHTML = ""; // Pastikan elemen kosong sebelum mengetik
+    element.innerHTML = "";
     function typing() {
       if (controller.signal.aborted) {
-        // Jika dibatalkan, tampilkan sisa teks secara instan
         element.innerHTML += text.substring(i).replace(/<[^>]*>?/gm, "");
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
         activeTypingAbortController = null;
@@ -95,13 +91,12 @@ function initializeTerminal() {
       }
 
       if (i < text.length) {
-        // Tangani tag HTML agar tidak diketik karakter demi karakter
         if (text.charAt(i) === "<") {
           const tagEndIndex = text.indexOf(">", i);
           if (tagEndIndex !== -1) {
             element.innerHTML += text.substring(i, tagEndIndex + 1);
             i = tagEndIndex + 1;
-            setTimeout(typing, 0); // Lanjutkan segera
+            setTimeout(typing, 0);
             return;
           }
         }
@@ -143,7 +138,6 @@ function initializeTerminal() {
       );
       let output = "Daftar Pencapaian:<br>-------------------<br>";
       for (const id in window.achievements) {
-        // Use window.achievements to be explicit
         const ach = window.achievements[id];
         output += `<span style="color: ${
           unlockedIds.includes(id) ? "var(--terminal-prompt-color)" : "inherit"
@@ -195,10 +189,10 @@ function initializeTerminal() {
         }
       }
       updatePrompt();
-      return ""; // No output on success
+      return "";
     },
     exit: () => {
-      minimizeTerminal(); // 'exit' should hide the terminal
+      minimizeTerminal();
     },
     goto: (section) => {
       const element = document.getElementById(section);
@@ -327,16 +321,15 @@ function initializeTerminal() {
   };
 
   const handleTerminalChat = async (message) => {
-    unlockAchievement("terminal_ai_chat"); // Buka achievement saat AI chat digunakan
+    unlockAchievement("terminal_ai_chat");
 
     const typingIndicator = document.createElement("div");
     typingIndicator.className = "terminal-line";
-    typingIndicator.innerHTML = `<span class="animate-pulse">AI sedang mengetik...</span>`; // Indikator mengetik
+    typingIndicator.innerHTML = `<span class="animate-pulse">AI sedang mengetik...</span>`;
     terminalOutput.appendChild(typingIndicator);
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
 
     const outputCallback = (responseText, isError = false) => {
-      // Hapus indikator mengetik setelah respons diterima
       terminalOutput.removeChild(typingIndicator);
 
       const aiResponseLine = document.createElement("div");
@@ -347,7 +340,7 @@ function initializeTerminal() {
         ? `<span style="color: #ef4444;">Error:</span> ${responseText}`
         : `<span style="color: var(--color-accent);">AI:</span> ${responseText}`;
 
-      typeTerminalMessage(aiResponseLine, formattedResponse); // Tampilkan respons dengan efek mengetik
+      typeTerminalMessage(aiResponseLine, formattedResponse);
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
     };
 
@@ -361,19 +354,15 @@ function initializeTerminal() {
     if (isAwaitingConfirmation) {
       isAwaitingConfirmation = false;
       if (originalCommand.toLowerCase() === "y") {
-        // Sembunyikan keyboard virtual dengan menghilangkan fokus dari input
         terminalInput.blur();
 
-        // 1. Tutup (sembunyikan) terminal terlebih dahulu
         terminal.classList.add("hidden");
         terminalWindow.classList.remove("maximized");
 
-        // 2. Jalankan callback (trigger BSOD) setelah jeda singkat
         if (confirmationCallback) {
-          setTimeout(confirmationCallback, 200); // Jeda 200ms untuk transisi visual
+          setTimeout(confirmationCallback, 200);
         }
 
-        // 3. Reset state terminal untuk penggunaan berikutnya
         fullResetTerminal();
       } else {
         printToTerminal("Aksi dibatalkan.");
@@ -420,7 +409,6 @@ function initializeTerminal() {
     const result = commands[cmd];
     unlockAchievement("terminal_velocity");
     if (typeof result === "function") {
-      // Gunakan .apply() untuk menjaga konteks 'this' ke objek 'commands'
       const output = result.apply(commands, args);
       if (output) printToTerminal(output);
     } else if (result && args.length === 0) {
@@ -447,13 +435,11 @@ function initializeTerminal() {
     terminalInput.focus();
   };
   const closeTerminal = () => {
-    // Repurposed: Close button now RESETS and HIDES the terminal
     fullResetTerminal();
     terminal.classList.add("hidden");
     terminalWindow.classList.remove("maximized");
   };
   const minimizeTerminal = () => {
-    // Minimize button HIDES the terminal
     terminal.classList.add("hidden");
     terminalWindow.classList.remove("maximized");
   };
@@ -471,10 +457,8 @@ function initializeTerminal() {
         confirmationCallback = null;
         printToTerminal("Aksi dibatalkan.");
       } else if (activeTypingAbortController) {
-        // Hentikan efek mengetik AI
         activeTypingAbortController.abort();
         activeTypingAbortController = null;
-        // Hapus indikator "sedang mengetik" jika masih ada
         const typingIndicator = terminalOutput.querySelector(".animate-pulse");
         if (
           typingIndicator &&
@@ -483,7 +467,6 @@ function initializeTerminal() {
           terminalOutput.removeChild(typingIndicator.parentElement);
         }
       }
-      // Fokus kembali ke input setelah membatalkan
       terminalInput.focus();
       return;
     }
@@ -547,5 +530,5 @@ function initializeTerminal() {
   });
 
   updatePrompt();
-  fullResetTerminal(); // Initial setup
+  fullResetTerminal();
 }
