@@ -29,6 +29,7 @@ function createPlexusInstance(canvas, options = {}) {
   };
   let themeColors = { r: 99, g: 179, b: 237 }; // Default
   let themeTextColor = { r: 226, g: 232, b: 240 }; // Default text color (dark theme)
+  let interactionTriggered = false; // Flag untuk achievement
 
   // Objek untuk melacak posisi mouse
   const mouse = {
@@ -182,6 +183,14 @@ function createPlexusInstance(canvas, options = {}) {
     const rect = canvas.getBoundingClientRect();
     mouse.x = event.clientX - rect.left;
     mouse.y = event.clientY - rect.top;
+
+    // Trigger achievement on first interaction with hero canvas
+    if (canvas.id === "heroCanvas" && !interactionTriggered) {
+      if (window.unlockAchievement) {
+        unlockAchievement("animation_conductor");
+      }
+      interactionTriggered = true;
+    }
   });
 
   parentElement.addEventListener("mouseout", () => {

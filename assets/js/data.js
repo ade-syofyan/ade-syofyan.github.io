@@ -279,6 +279,24 @@ const achievements = {
     description: "Menemukan jalan menggunakan Pathfinding Visualizer.",
     icon: "map",
   },
+  case_study_analyst: {
+    name: "Analis Studi Kasus",
+    unlocked: false,
+    description: "Memicu pembuatan studi kasus dinamis melalui AI.",
+    icon: "file-text",
+  },
+  theme_connoisseur: {
+    name: "Pakar Tema",
+    unlocked: false,
+    description: "Mencoba semua tema visual (Terang, Gelap, Sistem).",
+    icon: "paintbrush-2",
+  },
+  animation_conductor: {
+    name: "Konduktor Animasi",
+    unlocked: false,
+    description: "Berinteraksi dengan animasi partikel di header.",
+    icon: "mouse-pointer-click",
+  },
 };
 
 // --- Virtual File System Data ---

@@ -6,8 +6,14 @@ function initializeTheme() {
   const themeDropdown = document.getElementById("theme-dropdown");
   const themeOptions = document.querySelectorAll(".theme-option");
   const mobileThemeContainer = document.getElementById("mobile-theme-switcher");
+  const THEME_ACHIEVEMENT_ID = "theme_connoisseur";
+  let appliedThemes = new Set(
+    JSON.parse(localStorage.getItem("appliedThemes") || "[]")
+  );
 
   const applyTheme = (theme) => {
+    if (!theme) return;
+
     if (theme === "system") {
       document.documentElement.removeAttribute("data-theme");
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -20,6 +26,18 @@ function initializeTheme() {
       updateIcons(theme, false);
     }
     localStorage.setItem("theme", theme);
+
+    // --- New Achievement Logic ---
+    if (window.achievements && !window.achievements[THEME_ACHIEVEMENT_ID]?.unlocked) {
+      if (!appliedThemes.has(theme)) {
+        appliedThemes.add(theme);
+        localStorage.setItem("appliedThemes", JSON.stringify([...appliedThemes]));
+      }
+      if (appliedThemes.has("light") && appliedThemes.has("dark") && appliedThemes.has("system")) {
+        unlockAchievement(THEME_ACHIEVEMENT_ID);
+      }
+    }
+
     updateActiveState(theme);
   };
 

@@ -129,6 +129,7 @@ function analyzeAndHighlight(text, source = "chatbot") {
     if (lowerText.includes(keyword)) {
       const topic = caseStudyKeywordMap[keyword];
       if (window.generateCaseStudy) {
+        unlockAchievement("case_study_analyst");
         window.generateCaseStudy(topic);
         // Minimalkan jendela chat setelah studi kasus dipicu
         if (source === "chatbot" && window.actuallyCloseChatbot) {
