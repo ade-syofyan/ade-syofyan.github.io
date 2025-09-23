@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI elements
   initializeTheme();
   initializeMobileMenu();
+  initializeBSOD();
   initializeModals();
   initializeScrollToTop();
   initializeSkillFiltering();
@@ -13,11 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeHeroCanvas();
   initializeScrollAnimations();
   initializeParallax();
+  initializeSmoothScroll();
 
   // Initialize Interactive Components
   initializeVisitorCounter();
+  initializePathfindingVisualizer();
   initializePaletteGenerator();
   initializeCodeViewers();
+  initializeTimeTravelerAchievement();
+  initializeCssHackerAchievement();
+  initializeCaseStudyGenerator();
 
   // Initialize Complex Modules
   initializeTerminal();

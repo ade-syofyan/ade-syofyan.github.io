@@ -229,11 +229,47 @@ const achievements = {
     description: "Membuka salah satu profil media sosial.",
     icon: "share-2",
   },
+  terminal_ai_chat: {
+    name: "Terminal Talker",
+    unlocked: false,
+    description: "Berinteraksi dengan AI melalui terminal.",
+    icon: "message-square",
+  },
   palette_picasso: {
     name: "Palette Picasso",
     unlocked: false,
     description: "Menghasilkan 5 palet warna.",
     icon: "palette",
+  },
+  geek_cred: {
+    name: "Geek Cred",
+    unlocked: false,
+    description: "Menampilkan info profil dengan perintah `neofetch`.",
+    icon: "cpu",
+  },
+  system_crasher: {
+    name: "System Crasher",
+    unlocked: false,
+    description: "Menemukan cara untuk 'merusak' portofolio.",
+    icon: "shield-alert",
+  },
+  time_traveler: {
+    name: "Penjelajah Waktu",
+    unlocked: false,
+    description: "Kembali setelah meninggalkan tab terbuka selama 15 menit.",
+    icon: "clock",
+  },
+  css_hacker: {
+    name: "Peretas CSS",
+    unlocked: false,
+    description: "Mengaktifkan mode rahasia melalui DevTools.",
+    icon: "bug",
+  },
+  navigator: {
+    name: "Sang Navigator",
+    unlocked: false,
+    description: "Menemukan jalan menggunakan Pathfinding Visualizer.",
+    icon: "map",
   },
 };
 

@@ -81,10 +81,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Prism.js for Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- jsPDF for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
 
     <script>
@@ -101,7 +105,7 @@
   </head>
   <body class="leading-relaxed"> 
     <!-- Navbar -->
-    <nav class="py-4 shadow-lg sticky top-0 z-50" style="background-color: var(--bg-nav); transition: background-color 0.3s ease;">
+    <nav class="py-4 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
       <div
         class="container flex justify-between items-center"
         id="main-navbar"
@@ -213,7 +217,7 @@
         <i data-lucide="message-circle" class="w-6 h-6"></i><span>Chat ke AI</span>
       </a>
       <div class="mt-8 text-center text-gray-400">
-        <p class="mb-2">Ganti Tema</p>
+        <p class="mb-2 text-black">Ganti Tema</p>
         <div id="mobile-theme-switcher" class="flex justify-center gap-4"></div>
       </div>
     </div>
@@ -255,7 +259,6 @@
             src="./assets/img/foto_ade_new.jpeg"
             alt="Foto Profil Ade Syofyan"
             class="rounded-full w-64 h-64 object-cover object-top shadow-lg border-4 border-accent"
-            loading="lazy"
             onerror="this.onerror=null;this.src='https://placehold.co/300x300/4a5568/e2e8f0?text=AS';"
           />
         </div>
@@ -527,15 +530,15 @@
         <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <!-- Demo 1: Real-time Visitor Counter -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pengunjung Real-time (Simulasi)</h3>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pengunjung (Simulasi)</h3>
             </div>
             <p class="mb-6" style="color: var(--text-secondary);">
-              Demo ini menyimulasikan pembaruan data secara real-time, seperti yang digunakan dalam dashboard analitik atau sistem notifikasi. Angka di bawah ini diperbarui secara acak setiap beberapa detik.
+              Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
             </p>
             <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
               <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
@@ -543,31 +546,79 @@
                 ...
               </p>
             </div>
-            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
             <button class="btn-code-toggle" data-code-source="visitor-counter-code">
               Lihat Kode
             </button>
-            <div class="code-viewer"></div>
-            <!-- Kode Sumber (disembunyikan) -->
-            <div id="visitor-counter-code" class="hidden">
-              <pre><code class="language-javascript">
-const visitorCountElement = document.getElementById('visitor-count');
-let currentVisitors = Math.floor(Math.random() * 151) + 150;
-visitorCountElement.textContent = currentVisitors;
-
+            <div id="visitor-counter-code" class="hidden" data-keep-source="true">
+              <pre class="line-numbers"><code class="language-javascript">const countEl = document.getElementById('visitor-count');
+let visitors = Math.floor(Math.random() * 151) + 150;
 setInterval(() => {
   const fluctuation = Math.floor(Math.random() * 5) - 2;
-  currentVisitors = Math.max(100, currentVisitors + fluctuation);
-  visitorCountElement.classList.add('pop-in');
-  visitorCountElement.textContent = currentVisitors;
-  setTimeout(() => visitorCountElement.classList.remove('pop-in'), 300);
-}, Math.random() * 2000 + 2000);
+  visitors = Math.max(100, visitors + fluctuation);
+  countEl.textContent = visitors;
+}, Math.random() * 2000 + 2000);</code></pre>
+            </div>
+          </div>
+          <!-- Demo 2: Pathfinding Visualizer -->
+          <div class="bg-card p-6 rounded-xl shadow-lg">
+            <div class="flex items-center justify-center gap-4 mb-4">
+              <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
+            </div>
+            <p class="mb-6" style="color: var(--text-secondary);">
+              Demo ini menunjukkan algoritma pencarian jalan (BFS). Klik untuk menempatkan titik awal, akhir, dan tembok, lalu lihat bagaimana algoritma menemukan rute terpendek.
+            </p>
+            <div id="pathfinding-grid" class="pathfinding-grid mb-4">
+              <!-- Grid akan digenerate oleh JS -->
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 mb-4 text-sm" id="pathfinding-controls">
+              <button class="pathfinding-btn active" data-mode="start">Mulai</button>
+              <button class="pathfinding-btn" data-mode="end">Akhir</button>
+              <button class="pathfinding-btn" data-mode="wall">Tembok</button>
+            </div>
+            <div class="flex gap-2">
+              <button id="run-pathfinding-btn" class="btn-primary w-full">Cari Jalan</button>
+              <button id="reset-pathfinding-btn" class="btn-secondary w-full">Reset</button>
+            </div>
+            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
+            <button class="btn-code-toggle" data-code-source="pathfinding-visualizer-code">
+              Lihat Kode
+            </button>
+            <div id="pathfinding-visualizer-code" class="hidden" data-keep-source="true">
+              <pre class="line-numbers"><code class="language-javascript">
+                // Simplified Breadth-First Search (BFS) Logic
+                async function findShortestPath(startNode, endNode, grid) {
+                  const queue = [startNode];
+                  const visited = new Set();
+                  const predecessors = new Map();
+                  visited.add(startNode);
+
+                  while (queue.length > 0) {
+                    const currentNode = queue.shift();
+
+                    if (currentNode === endNode) {
+                      // Path found! Reconstruct and animate it.
+                      return reconstructPath(predecessors, endNode);
+                    }
+
+                    // Animate the visited node
+                    currentNode.element.classList.add("node-visited");
+                    await new Promise(r => setTimeout(r, 20));
+
+                    for (const neighbor of getNeighbors(currentNode, grid)) {
+                      if (!visited.has(neighbor) && !neighbor.isWall) {
+                        visited.add(neighbor);
+                        predecessors.set(neighbor, currentNode);
+                        queue.push(neighbor);
+                      }
+                    }
+                  }
+                }
               </code></pre>
             </div>
           </div>
     
-          <!-- Demo 2: Placeholder for another demo -->
-          <!-- Demo 2: Color Palette Generator -->
+          <!-- Demo 3: Color Palette Generator -->
           <div class="bg-card p-6 rounded-xl shadow-lg">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
@@ -576,38 +627,41 @@ setInterval(() => {
             <p class="mb-6" style="color: var(--text-secondary);">
               Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
             </p>
-            <div id="palette-container" class="flex justify-center gap-2 mb-6 h-24">
+            <div id="palette-container" class="flex justify-center gap-2 mb-6">
               <!-- Color swatches will be generated here by JS -->
             </div>
             <button id="generate-palette-btn" class="btn-secondary w-full">
               Buat Palet Baru
             </button>
             <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
-          </div>
-          <!-- Kode Sumber untuk Palette Generator (disembunyikan) -->
-          <div id="palette-generator-code" class="hidden">
-            <pre><code class="language-javascript">
-const paletteContainer = document.getElementById('palette-container');
-const generateBtn = document.getElementById('generate-palette-btn');
-const copyFeedback = document.getElementById('copy-feedback');
+            <!-- Tombol dan Kontainer untuk "Behind the Code" -->
+            <button class="btn-code-toggle" data-code-source="palette-generator-code">
+              Lihat Kode
+            </button>
+          <div id="palette-generator-code" class="hidden" data-keep-source="true">
+            <pre class="line-numbers"><code class="language-javascript">
+            const paletteContainer = document.getElementById('palette-container');
+            const generateBtn = document.getElementById('generate-palette-btn');
+            const copyFeedback = document.getElementById('copy-feedback');
 
-function generatePalette() {
-  paletteContainer.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-    const swatch = document.createElement('div');
-    swatch.className = 'color-swatch';
-    swatch.style.backgroundColor = color;
-    swatch.addEventListener('click', () => {
-      navigator.clipboard.writeText(color);
-      copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
-    });
-    paletteContainer.appendChild(swatch);
-  }
-}
-generateBtn.addEventListener('click', generatePalette);
-generatePalette(); // Initial generation
+            function generatePalette() {
+              paletteContainer.innerHTML = '';
+              for (let i = 0; i < 5; i++) {
+                const color = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = color;
+                swatch.addEventListener('click', () => {
+                  navigator.clipboard.writeText(color);
+                  copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
+                });
+                paletteContainer.appendChild(swatch);
+              }
+            }
+            generateBtn.addEventListener('click', generatePalette);
+            generatePalette(); // Initial generation
             </code></pre>
+          </div>
           </div>
 
         </div>
@@ -735,7 +789,7 @@ generatePalette(); // Initial generation
           untuk menghubungi saya melalui kontak di bawah ini.
         </p>
         <div
-          class="flex flex-col md:flex-row justify-center items-center gap-8"
+          class="flex flex-col md:flex-row justify-center items-center gap-8" id="contact-cards"
         >
           <div
             class="bg-card p-6 rounded-xl shadow-lg text-center w-full md:w-1/4"
@@ -802,49 +856,59 @@ generatePalette(); // Initial generation
       </div>
     </footer>
 
+    <!-- Dynamic Case Study Modal -->
+    <div id="caseStudyModal" class="modal-overlay">
+      <div class="modal-content max-w-3xl">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">&times;</button>
+          <h3 id="caseStudyTitle" class="text-3xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
+        </div>
+        <!-- Modal Body (Scrollable) -->
+        <div id="caseStudyBody" class="modal-body">
+          <!-- Content will be injected here by JavaScript -->
+          <p style="color: var(--text-secondary);">Menganalisis permintaan Anda dan menghasilkan studi kasus yang relevan...</p>
+        </div>
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button id="downloadCaseStudyPdfBtn" class="btn-primary inline-flex items-center gap-2">
+            <i data-lucide="download"></i>Unduh sebagai PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
       <div class="modal-content">
-        <button
-          class="modal-close-btn"
-          onclick="closeModal()"
-          aria-label="Close Project Modal"
-        >
-          &times;
-        </button>
-        <h3 id="modalTitle" class="text-3xl font-bold mb-4" style="color: var(--text-white);"></h3>
-        <p id="modalType" class="text-lg mb-2" style="color: var(--text-secondary);"></p>
-        <p id="modalRole" class="text-lg mb-4" style="color: var(--text-secondary);"></p>
-
-        <!-- Tech Stack Section -->
-        <div class="mb-6">
-          <p class="font-semibold text-accent mb-2">Teknologi yang Digunakan:</p>
-          <div id="modalTechStack" class="flex flex-wrap gap-2"></div>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">&times;</button>
+          <h3 id="modalTitle" class="text-3xl font-bold" style="color: var(--text-white);"></h3>
+          <p id="modalType" class="text-lg" style="color: var(--text-secondary);"></p>
+          <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
         </div>
-
-        <div
-          id="modalImages"
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
-        >
-          <!-- Gambar akan disuntikkan di sini -->
+        <!-- Modal Body (Scrollable) -->
+        <div class="modal-body">
+            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <!-- Gambar akan disuntikkan di sini -->
+            </div>
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                <span class="font-semibold text-accent">Tujuan Proyek:</span>
+                <span id="modalGoal"></span>
+            </p>
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                <span class="font-semibold text-accent">Proses Kerja:</span>
+                <span id="modalProcess"></span>
+            </p>
+            <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                <span class="font-semibold text-accent">Hasil/Dampak:</span>
+                <span id="modalImpact"></span>
+            </p>
         </div>
-
-        <p class="text-lg mb-4" style="color: var(--text-secondary);">
-          <span class="font-semibold text-accent">Tujuan Proyek:</span>
-          <span id="modalGoal"></span>
-        </p>
-        <p class="text-lg mb-4" style="color: var(--text-secondary);">
-          <span class="font-semibold text-accent">Proses Kerja:</span>
-          <span id="modalProcess"></span>
-        </p>
-        <p class="text-lg mb-4" style="color: var(--text-secondary);">
-          <span class="font-semibold text-accent">Hasil/Dampak:</span>
-          <span id="modalImpact"></span>
-        </p>
-
-        <!-- Container untuk tautan eksternal (Play Store, GitHub, dll.) -->
-        <div id="modalLinks" class="mt-6 flex flex-wrap gap-4">
-          <!-- Tautan akan disuntikkan di sini oleh JS -->
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div id="modalLinks" class="flex flex-wrap gap-4"></div>
         </div>
       </div>
     </div>
@@ -858,30 +922,18 @@ generatePalette(); // Initial generation
     <!-- Modal Chatbot -->
     <div id="chatbotModal" class="modal-overlay">
       <div class="chatbot-content">
-        <button
-          class="modal-close-btn"
-          onclick="closeChatbotModal()"
-          aria-label="Close Chatbot Modal"
-        >
-          &times;
-        </button>
-        <h3 class="text-2xl font-bold mb-4" style="color: var(--text-white);">Tanya Ade ✨</h3>
-        <div id="chatDisplay" class="chat-display">
-          <div class="flex justify-start mb-2">
-            <div
-              class="text-white p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);"
-            >
-              Halo! Saya Ade Syofyan. Ada yang bisa saya bantu tentang keahlian
-              atau pengalaman saya?
-            </div>
-          </div>
+        <!-- Chatbot Header -->
+        <div class="modal-header">
+          <button class="modal-close-btn" onclick="closeChatbotModal()" aria-label="Close Chatbot Modal">&times;</button>
+          <h3 class="text-2xl font-bold" style="color: var(--text-white);">Tanya Ade ✨</h3>
         </div>
-        <div class="chat-input-area">
-          <input
-            type="text"
-            id="chatInput"
-            placeholder="Ketik pertanyaan Anda..."
-          />
+        <!-- Chatbot Body (Scrollable) -->
+        <div id="chatDisplay" class="chat-display">
+          <!-- Pesan chat akan muncul di sini -->
+        </div>
+        <!-- Chatbot Footer -->
+        <div class="modal-footer chat-input-area">
+          <input type="text" id="chatInput" placeholder="Ketik pertanyaan Anda..." />
           <button onclick="sendChatMessage()">Kirim</button>
         </div>
       </div>
@@ -920,9 +972,9 @@ generatePalette(); // Initial generation
             <div id="terminal-output" class="flex-grow p-4 overflow-y-auto">
                 <!-- Output will be printed here -->
             </div>
-            <div class="p-2 flex items-center border-t border-gray-700 flex-shrink-0" style="border-color: var(--border-color);">
-                <span style="color: var(--terminal-prompt-color);">guest@ade-syofyan.dev:~$</span>
-                <input type="text" id="terminal-input" class="bg-transparent border-none flex-grow ml-2 focus:outline-none" autocomplete="off" style="color: var(--text-primary);">
+            <div class="p-2 flex flex-col items-start md:flex-row md:items-baseline border-t border-gray-700 flex-shrink-0" style="border-color: var(--border-color);">
+                <span class="whitespace-nowrap" style="color: var(--terminal-prompt-color);">guest@ade-syofyan.dev:~$ </span>
+                <input type="text" id="terminal-input" class="bg-transparent border-none w-full flex-grow mt-1 md:mt-0 focus:outline-none" autocomplete="off" style="color: var(--text-primary);">
             </div>
         </div>
     </div>
@@ -940,9 +992,13 @@ generatePalette(); // Initial generation
     <!-- Achievement Modal -->
     <div id="achievementModal" class="modal-overlay">
         <div class="modal-content">
-            <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">&times;</button>
-            <h3 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-white);">Pencapaian</h3>
-            <div id="achievement-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Achievement Header -->
+            <div class="modal-header text-center">
+                <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">&times;</button>
+                <h3 class="text-3xl font-bold" style="color: var(--text-white);">Pencapaian</h3>
+            </div>
+            <!-- Achievement Body (Scrollable) -->
+            <div id="achievement-grid" class="modal-body grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Achievement cards will be injected here -->
             </div>
         </div>
@@ -961,6 +1017,89 @@ generatePalette(); // Initial generation
         </div>
     </div>
 
+    <!-- Code Viewer Modal -->
+    <div id="codeViewerModal" class="modal-overlay">
+      <div class="modal-content max-w-4xl h-[85vh] flex flex-col p-0">
+        <!-- Header dan Konten akan disuntikkan oleh JavaScript -->
+        <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0"></div>
+        <div id="codeViewerContent" class="flex-grow">
+          <!-- <pre><code>...</code></pre> akan disuntikkan di sini -->
+        </div>
+      </div>
+    </div>
+
+    <!-- BSOD Success Modal -->
+    <div id="bsodSuccessModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[1020] hidden p-4">
+        <div class="p-8 rounded-lg shadow-xl w-full max-w-md text-center" style="background-color: var(--bg-card);">
+            <div class="text-accent mx-auto mb-4 w-24 h-24 flex items-center justify-center">
+                <i data-lucide="party-popper" class="w-16 h-16"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4" style="color: var(--text-white);">Selamat!</h3>
+            <p id="bsodSuccessMessage" class="text-lg mb-6" style="color: var(--text-secondary);">Anda telah menemukan easter egg dan membuka sebuah achievement!</p>
+            <button id="bsodSuccessCloseBtn" class="btn-primary px-6 py-2">Keren!</button>
+        </div>
+    </div>
+
+    <!-- BSOD Easter Egg -->
+    <div id="bsod-container" class="hidden fixed inset-0 z-[9999]">
+        <!-- Windows BSOD -->
+        <div id="bsod-win" class="hidden w-full h-full bg-[#0078D6] text-white font-['Segoe_UI',_sans-serif] p-8 flex flex-col justify-center items-center">
+            <div class="w-full max-w-4xl">
+                <p class="text-9xl font-thin mb-8">:(</p>
+                <p class="text-2xl mb-8">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</p>
+                <p class="text-2xl mb-8"><span id="bsod-win-progress">0</span>% complete</p>
+                <p class="text-sm mt-12">For more information about this issue and possible fixes, you've just found a cool easter egg!</p>
+                <p class="text-sm">If you call support, give them this info:<br>Stop Code: TOO_MUCH_AWESOMENESS</p>
+            </div>
+        </div>
+
+        <!-- macOS Kernel Panic -->
+        <div id="bsod-mac" class="hidden w-full h-full bg-black text-gray-300 font-mono p-8 flex flex-col justify-center items-center text-sm">
+            <div class="w-full max-w-4xl">
+                <p class="mb-4">panic(cpu 0 caller 0xffffff8000c2aadd): "A user initiated a kernel panic. This is not a bug."@/System/Library/Kernels/kernel</p>
+                <p class="mb-4">Debugger called: &lt;panic&gt;</p>
+                <p class="mb-4">Backtrace (CPU 0), Frame : Return Address</p>
+                <p>0xffffff8000c2aadd : 0xffffff8000c2ab5f ...</p>
+                <p>0xffffff8000c2ab5f : 0xffffff8000c2ac4f ...</p>
+                <p class="mt-8">You need to restart your computer. Hold down the Power button for several seconds or press the Restart button.</p>
+                <p class="mt-2">Just kidding! Press any key to continue.</p>
+            </div>
+        </div>
+
+        <!-- iOS "Spinning Wheel" Screen -->
+        <div id="bsod-ios" class="hidden w-full h-full bg-black text-white flex flex-col justify-center items-center gap-8">
+            <svg class="h-24" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C39.2 141.1 0 184.2 0 241.7c0 63.6 58.2 157.4 117.4 157.4 20.5 0 43.3-18.2 62.3-18.2 20.5 0 45.2 19.2 63.8 19.2 28.2 0 55.2-23.2 68.6-43.9-21.7-12.8-30.2-36.6-30.2-62.3zM224 96c0-17.7-14.3-32-32-32s-32 14.3-32 32 14.3 32 32 32 32-14.3 32-32z"/>
+            </svg>
+            <div class="w-48 h-1.5 bg-gray-700 rounded-full">
+                <div id="ios-progress-bar-inner" class="h-full bg-gray-300 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Android Recovery Mode Screen -->
+        <div id="bsod-android" class="hidden w-full h-full bg-black text-gray-300 font-mono p-4 text-xs flex flex-col justify-center items-center">
+            <div class="w-full max-w-md border-2 border-yellow-500 p-2">
+                <p class="bg-yellow-500 text-black font-bold text-center mb-2">Android Recovery</p>
+                <p>ade-syofyan/portfolio/1.0</p>
+                <p class="mt-4 text-red-500">Can't load portfolio...<br>You've found a cool easter egg!</p>
+                <p class="mt-4">Try rebooting the system now...</p>
+            </div>
+        </div>
+
+        <!-- Linux Kernel Panic -->
+        <div id="bsod-linux" class="hidden w-full h-full bg-black text-white font-mono p-8 text-xs overflow-y-auto">
+            <p>[ 1234.567890] Kernel panic - not syncing: A user-forced panic has occurred!</p>
+            <p>[ 1234.567891] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-generic #42-Ubuntu</p>
+            <p>[ 1234.567892] Hardware name: Ade Syofyan's Portfolio / Awesome-VM, BIOS 1.0.0 04/01/2024</p>
+            <p>[ 1234.567893] Call Trace:</p>
+            <p>[ 1234.567894]  dump_stack_lvl+0x46/0x5a</p>
+            <p>[ 1234.567895]  panic+0x101/0x2e3</p>
+            <p>[ 1234.567896]  user_force_panic+0x1/0x1</p>
+            <p>[ 1234.567897] ... (just a cool easter egg)</p>
+            <p>[ 1234.567898] ---[ end Kernel panic - not syncing: A user-forced panic has occurred! ]---</p>
+            <p class="mt-8 animate-pulse">Rebooting in 3... 2... 1... (or just press any key)</p>
+        </div>
+    </div>
 
     <script type="application/ld+json">
       {
@@ -1021,6 +1160,7 @@ generatePalette(); // Initial generation
     <!-- Scripts -->
     <script src="./assets/js/data.js" defer></script>
     <!-- Karena file lain bergantung pada data ini, file ini bisa dimuat lebih awal jika diperlukan, tapi defer sudah cukup baik -->
+    <script src="./assets/js/caseStudyGenerator.js" defer></script>
     <script src="./assets/js/ui.js" defer></script>
     <script src="./assets/js/animations.js" defer></script>
     <script src="./assets/js/components.js" defer></script>

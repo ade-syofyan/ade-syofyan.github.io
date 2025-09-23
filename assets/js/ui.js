@@ -42,8 +42,14 @@ function initializeTheme() {
     if (mobileThemeContainer) {
       const mobileButtons = mobileThemeContainer.querySelectorAll("button");
       mobileButtons.forEach((btn) => {
-        btn.classList.toggle("bg-accent", btn.dataset.themeValue === theme);
-        btn.classList.toggle("text-white", btn.dataset.themeValue === theme);
+        const isActive = btn.dataset.themeValue === theme;
+        // Atur background untuk tombol aktif
+        btn.classList.toggle("bg-accent", isActive);
+        // Atur warna ikon: putih jika aktif, default (text-secondary) jika tidak
+        btn.classList.toggle("text-menu-active", isActive); // Gunakan warna putih solid
+        btn.classList.toggle("text-secondary", !isActive);
+        // Atur background untuk tombol tidak aktif
+        btn.classList.toggle("bg-card-secondary", !isActive);
       });
     }
   };
@@ -109,20 +115,30 @@ function initializeMobileMenu() {
   const mobileMenu = document.getElementById("mobileMenu");
   const mobileMenuToggleBtn = document.getElementById("mobileMenuToggleBtn");
 
+  const setAnimationDelays = (isOpen) => {
+    const menuItems = mobileMenu.querySelectorAll("a, .mt-8");
+    menuItems.forEach((item, index) => {
+      // Terapkan delay berurutan saat membuka, hapus saat menutup
+      item.style.transitionDelay = isOpen ? `${100 + index * 40}ms` : "0ms";
+    });
+  };
+
   window.toggleMobileMenu = function () {
     const isOpen = mobileMenu.classList.toggle("open");
     if (mobileMenuToggleBtn) {
       mobileMenuToggleBtn.setAttribute("aria-expanded", isOpen.toString());
     }
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    document.body.classList.toggle("modal-open", isOpen);
+    setAnimationDelays(isOpen);
   };
 
   window.closeMobileMenu = function () {
     mobileMenu.classList.remove("open");
-    document.body.style.overflow = "";
     if (mobileMenuToggleBtn) {
       mobileMenuToggleBtn.setAttribute("aria-expanded", "false");
     }
+    document.body.classList.remove("modal-open");
+    setAnimationDelays(false);
     setTimeout(() => {
       highlightNavLinkOnScroll();
     }, 100);
@@ -256,11 +272,13 @@ function initializeModals() {
         }
       }
       projectModal.classList.add("open");
+      document.body.classList.add("modal-open");
     }
   };
 
   window.closeModal = function () {
     if (projectModal) projectModal.classList.remove("open");
+    document.body.classList.remove("modal-open");
   };
 
   if (projectModal) {
@@ -275,12 +293,14 @@ function initializeModals() {
     if (lightboxModal && lightboxImage) {
       lightboxImage.src = imageUrl;
       lightboxModal.classList.add("open");
+      document.body.classList.add("modal-open");
     }
   };
 
   window.closeLightbox = function () {
     if (lightboxModal) {
       lightboxModal.classList.remove("open");
+      document.body.classList.remove("modal-open");
     }
   };
 
@@ -295,10 +315,12 @@ function initializeModals() {
   window.openAchievementModal = function () {
     populateAchievements();
     if (achievementModal) achievementModal.classList.add("open");
+    document.body.classList.add("modal-open");
   };
 
   window.closeAchievementModal = function () {
     if (achievementModal) achievementModal.classList.remove("open");
+    document.body.classList.remove("modal-open");
   };
 
   const achievementToggleBtn = document.getElementById(
@@ -348,6 +370,107 @@ function initializeModals() {
   };
 }
 
+// --- BSOD Easter Egg ---
+function initializeBSOD() {
+  const container = document.getElementById("bsod-container");
+  const successModal = document.getElementById("bsodSuccessModal");
+  if (!container || !successModal) return;
+
+  const bsodViews = {
+    win: document.getElementById("bsod-win"),
+    mac: document.getElementById("bsod-mac"),
+    linux: document.getElementById("bsod-linux"),
+    ios: document.getElementById("bsod-ios"),
+    android: document.getElementById("bsod-android"),
+  };
+
+  const closeSuccessModal = () => {
+    successModal.classList.add("hidden");
+    lucide.createIcons(); // Re-render icons if any were changed
+  };
+
+  document
+    .getElementById("bsodSuccessCloseBtn")
+    .addEventListener("click", closeSuccessModal);
+
+  const showSuccess = () => {
+    successModal.classList.remove("hidden");
+    lucide.createIcons(); // Ensure popper icon is rendered
+  };
+
+  const hideAllBSOD = () => {
+    container.classList.add("hidden");
+    Object.values(bsodViews).forEach((view) => view.classList.add("hidden"));
+  };
+
+  window.triggerBSOD = function () {
+    const isNewlyUnlocked = unlockAchievement("system_crasher");
+
+    let targetBsod = bsodViews.linux; // Default
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    if (userAgent.includes("windows nt")) {
+      targetBsod = bsodViews.win;
+    } else if (userAgent.includes("macintosh")) {
+      targetBsod = bsodViews.mac;
+    } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+      targetBsod = bsodViews.ios;
+    } else if (userAgent.includes("android")) {
+      targetBsod = bsodViews.android;
+    }
+
+    container.classList.remove("hidden");
+    targetBsod.classList.remove("hidden");
+
+    const completeSequence = () => {
+      hideAllBSOD();
+      if (isNewlyUnlocked) {
+        showSuccess();
+      }
+    };
+
+    // Untuk Windows, tunggu progress bar selesai.
+    // Untuk yang lain, gunakan timeout tetap.
+    if (targetBsod === bsodViews.win) {
+      const progressEl = document.getElementById("bsod-win-progress");
+      let progress = 0;
+      progressEl.textContent = progress; // Reset progress ke 0
+
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5; // Increment acak
+        if (progress >= 100) {
+          progress = 100;
+          progressEl.textContent = progress;
+          clearInterval(interval);
+          // Tunggu sejenak setelah 100% ditampilkan sebelum menutup
+          setTimeout(completeSequence, 500);
+        } else {
+          progressEl.textContent = progress;
+        }
+      }, 300);
+    } else if (targetBsod === bsodViews.ios) {
+      const progressInner = document.getElementById("ios-progress-bar-inner");
+      let progress = 0;
+      progressInner.style.width = "0%"; // Reset progress
+
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 10) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          progressInner.style.width = `${progress}%`;
+          clearInterval(interval);
+          setTimeout(completeSequence, 500);
+        } else {
+          progressInner.style.width = `${progress}%`;
+        }
+      }, 400);
+    } else {
+      // Untuk Mac/Linux, gunakan timeout 3 detik seperti semula
+      setTimeout(completeSequence, 3000);
+    }
+  };
+}
+
 // --- Project Rendering ---
 function renderProjects(projects, filter = "all") {
   const portfolioGrid = document.getElementById("portfolio-grid");
@@ -364,32 +487,21 @@ function renderProjects(projects, filter = "all") {
 
   filteredProjects.forEach((project) => {
     const projectCard = document.createElement("div");
-    // Tambahkan animasi fade-in
+    // Gunakan kelas .project-card yang konsisten untuk styling dan animasi
     projectCard.className = `
-      p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
-      opacity-0 animate-fade-in
+      project-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
     `;
     projectCard.style.backgroundColor = "var(--bg-card-secondary)";
     projectCard.setAttribute("onclick", `openModal('${project.id}')`);
 
     projectCard.innerHTML = `
-            <img
-            src="${project.thumbnail}"
-            alt="Thumbnail untuk ${project.title}"
-            class="rounded-lg mb-4 w-full h-48 object-cover"
-            onerror="this.onerror=null;this.src='https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error';"
-            />
-            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">${project.title}</h3>
-            <p class="text-lg mb-4" style="color: var(--text-secondary);">${project.type}</p>
-            <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${project.tag}</span>
-        `;
+      <img src="${project.thumbnail}" alt="Thumbnail untuk ${project.title}" class="rounded-lg mb-4 w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x200/4a5568/e2e8f0?text=Image+Error';">
+      <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">${project.title}</h3>
+      <p class="text-lg mb-4" style="color: var(--text-secondary);">${project.type}</p>
+      <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${project.tag}</span>
+    `;
     portfolioGrid.appendChild(projectCard);
   });
-  // Memicu reflow untuk memastikan animasi berjalan
-  void portfolioGrid.offsetWidth;
-  portfolioGrid
-    .querySelectorAll(".animate-fade-in")
-    .forEach((card) => card.classList.remove("opacity-0"));
 }
 
 // --- Project Filter Rendering ---
@@ -425,11 +537,25 @@ function renderProjectFilters(projects) {
     }
 
     button.addEventListener("click", () => {
+      // Jangan lakukan apa-apa jika filter yang sama diklik lagi
+      if (button.classList.contains("active")) return;
+
+      // Update tombol aktif
       filtersContainer
         .querySelectorAll(".filter-btn")
         .forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
-      renderProjects(projects, categoryKey);
+
+      const portfolioGrid = document.getElementById("portfolio-grid");
+      const existingCards = portfolioGrid.querySelectorAll(".project-card");
+
+      // 1. Pudar keluar item yang ada
+      existingCards.forEach((card) => card.classList.add("fading-out"));
+
+      // 2. Setelah animasi pudar selesai, render item baru
+      setTimeout(() => {
+        renderProjects(projects, categoryKey);
+      }, 300); // Durasi harus cocok dengan animasi fade-out di CSS
     });
 
     filtersContainer.appendChild(button);
@@ -474,7 +600,8 @@ function renderTestimonials(testimonials) {
 
   testimonials.forEach((testimonial) => {
     const testimonialCard = document.createElement("div");
-    testimonialCard.className = "bg-card p-6 rounded-xl shadow-lg text-left";
+    // Menambahkan kelas .testimonial-card untuk styling glassmorphism
+    testimonialCard.className = "testimonial-card p-6 rounded-xl shadow-lg text-left";
 
     testimonialCard.innerHTML = `
       <p class="italic mb-4" style="color: var(--text-secondary);">
@@ -523,7 +650,9 @@ window.unlockAchievement = function (id) {
       saved.push(id);
       localStorage.setItem("portfolioAchievements", JSON.stringify(saved));
     }
+    return true; // Berhasil membuka achievement baru
   }
+  return false; // Achievement sudah terbuka sebelumnya
 };
 
 function loadAchievements() {
@@ -586,9 +715,9 @@ function initializeScrollToTop() {
         document.body.scrollTop > 20 ||
         document.documentElement.scrollTop > 20
       ) {
-        scrollToTopBtn.style.display = "block";
+        scrollToTopBtn.classList.add("visible");
       } else {
-        scrollToTopBtn.style.display = "none";
+        scrollToTopBtn.classList.remove("visible");
       }
     },
     { passive: true }
