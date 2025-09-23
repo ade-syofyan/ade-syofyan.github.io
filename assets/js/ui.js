@@ -697,36 +697,49 @@ function loadAchievements() {
 
 function populateAchievements() {
   const achievementGrid = document.getElementById("achievement-grid");
+  const progressBar = document.getElementById("achievement-progress-bar");
+  const progressText = document.getElementById("achievement-progress-text");
+
   if (!achievementGrid) return;
   achievementGrid.innerHTML = "";
 
   const unlockedIds = JSON.parse(
     localStorage.getItem("portfolioAchievements") || "[]"
   );
+  const totalAchievements = Object.keys(achievements).length;
+  const unlockedCount = unlockedIds.length;
+
+  // Update progress bar and text
+  if (progressBar && progressText) {
+    const percentage =
+      totalAchievements > 0
+        ? (unlockedCount / totalAchievements) * 100
+        : 0;
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = `${unlockedCount}/${totalAchievements}`;
+  }
 
   for (const id in achievements) {
     const ach = achievements[id];
     const isUnlocked = unlockedIds.includes(id);
+    const item = document.createElement("div");
+    item.className = "achievement-item";
+    item.title = isUnlocked ? ach.description : "Pencapaian Terkunci";
 
-    const card = document.createElement("div");
-    card.className = `p-4 rounded-lg flex items-center gap-4 transition-all duration-300 ${
-      isUnlocked ? "opacity-100" : "opacity-40"
-    }`;
-    card.style.backgroundColor = "var(--bg-card-secondary)";
-
-    card.innerHTML = `
-            <div class="text-accent"><i data-lucide="${
-              ach.icon || "award"
-            }" class="w-8 h-8"></i></div>
-            <div>
-                <p class="font-semibold" style="color: var(--text-white);">${
-                  ach.name
-                }</p>
-                <p class="text-sm" style="color: var(--text-secondary);">${
-                  isUnlocked ? ach.description : "???"
-                }</p>
-            </div>`;
-    achievementGrid.appendChild(card);
+    item.innerHTML = `
+      <div class="achievement-badge ${isUnlocked ? "unlocked" : "locked"}">
+        <i data-lucide="${
+          isUnlocked ? ach.icon || "award" : "lock"
+        }" class="w-8 h-8"></i>
+      </div>
+      <div class="achievement-info">
+        <p class="achievement-name">${ach.name}</p>
+        <p class="achievement-desc">${
+          isUnlocked ? ach.description : "???"
+        }</p>
+      </div>
+    `;
+    achievementGrid.appendChild(item);
   }
   lucide.createIcons();
 }
