@@ -140,20 +140,22 @@ function analyzeAndHighlight(text, source = "chatbot") {
 }
 
 function typeMessage(element, text, delay = 20) {
+  // Create a temporary container to parse the HTML string
+  const tempContainer = document.createElement("div");
+  tempContainer.innerHTML = text;
+
+  // The target for typing is the innermost element
+  const typingTarget = tempContainer.querySelector(".chat-message");
+  if (!typingTarget) return; // Failsafe
+
+  const originalText = typingTarget.innerHTML;
+  typingTarget.innerHTML = ""; // Clear the text to be typed
+  element.appendChild(tempContainer.firstChild); // Append the whole structure
+
   let i = 0;
-  element.innerHTML = "";
   function typing() {
-    if (i < text.length) {
-      if (text.charAt(i) === "<") {
-        const tagEndIndex = text.indexOf(">", i);
-        if (tagEndIndex !== -1) {
-          element.innerHTML += text.substring(i, tagEndIndex + 1);
-          i = tagEndIndex + 1;
-          typing();
-          return;
-        }
-      }
-      element.innerHTML += text.charAt(i);
+    if (i < originalText.length) {
+      typingTarget.innerHTML += originalText.charAt(i);
       i++;
       document.getElementById("chatDisplay").scrollTop =
         document.getElementById("chatDisplay").scrollHeight;

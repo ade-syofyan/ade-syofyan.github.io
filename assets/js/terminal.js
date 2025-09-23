@@ -22,6 +22,7 @@ function initializeTerminal() {
   // State untuk konfirmasi perintah berbahaya
   let isAwaitingConfirmation = false;
   let confirmationCallback = null;
+  let activeTypingAbortController = null;
 
   const getCurrentDirectory = () => {
     let current = fileSystem;
@@ -378,7 +379,6 @@ function initializeTerminal() {
         printToTerminal("Aksi dibatalkan.");
       }
       confirmationCallback = null;
-      let activeTypingAbortController = null;
 
       return;
     }
