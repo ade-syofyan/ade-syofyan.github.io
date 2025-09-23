@@ -140,22 +140,16 @@ function analyzeAndHighlight(text, source = "chatbot") {
 }
 
 function typeMessage(element, text, delay = 20) {
-  // Create a temporary container to parse the HTML string
-  const tempContainer = document.createElement("div");
-  tempContainer.innerHTML = text;
-
-  // The target for typing is the innermost element
-  const typingTarget = tempContainer.querySelector(".chat-message");
-  if (!typingTarget) return; // Failsafe
-
-  const originalText = typingTarget.innerHTML;
-  typingTarget.innerHTML = ""; // Clear the text to be typed
-  element.appendChild(tempContainer.firstChild); // Append the whole structure
+  // The element is the outer bubble container (e.g., .ai-bubble)
+  // We create the inner message structure and append it.
+  const messageBubble = document.createElement("div");
+  messageBubble.className = "p-3 rounded-lg max-w-[80%] chat-message";
+  element.appendChild(messageBubble);
 
   let i = 0;
   function typing() {
-    if (i < originalText.length) {
-      typingTarget.innerHTML += originalText.charAt(i);
+    if (i < text.length) {
+      messageBubble.innerHTML += text.charAt(i);
       i++;
       document.getElementById("chatDisplay").scrollTop =
         document.getElementById("chatDisplay").scrollHeight;
@@ -173,8 +167,8 @@ async function sendChatMessage() {
 
   unlockAchievement("ai_challenger");
   const userMessageDiv = document.createElement("div");
-  userMessageDiv.className = "flex justify-end mb-2 ";
-  userMessageDiv.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`;
+  userMessageDiv.className = "flex justify-end mb-2 user-bubble";
+  userMessageDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] chat-message">${message}</div>`;
   chatDisplay.appendChild(userMessageDiv);
 
   conversationHistory.push({ role: "user", parts: [{ text: message }] }); // Pass 'chatbot' as source
@@ -235,13 +229,10 @@ async function sendChatMessage() {
       }
 
       const aiMessageDiv = document.createElement("div");
-      aiMessageDiv.className = "flex justify-start mb-2";
+      aiMessageDiv.className = "flex justify-start mb-2 ai-bubble";
       chatDisplay.appendChild(aiMessageDiv);
       conversationHistory.push({ role: "model", parts: [{ text: text }] });
-      typeMessage(
-        aiMessageDiv,
-        `<div class="p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);">${text}</div>`
-      );
+      typeMessage(aiMessageDiv, text);
     } else {
       throw new Error("Invalid response from API");
     }
@@ -249,8 +240,9 @@ async function sendChatMessage() {
     console.error("Error calling Gemini API:", error);
     if (chatDisplay.contains(loadingDiv)) chatDisplay.removeChild(loadingDiv);
     const errorMessageDiv = document.createElement("div");
-    errorMessageDiv.className = "flex justify-start mb-2";
-    errorMessageDiv.innerHTML = `<div class="bg-red-500 text-white p-3 rounded-lg max-w-[80%] chat-message">Terjadi kesalahan. Coba lagi nanti.</div>`;
+    errorMessageDiv.className =
+      "flex justify-start mb-2 ai-bubble error-bubble";
+    errorMessageDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] chat-message">Terjadi kesalahan. Coba lagi nanti.</div>`;
     chatDisplay.appendChild(errorMessageDiv);
   } finally {
     chatDisplay.scrollTop = chatDisplay.scrollHeight;
@@ -278,17 +270,15 @@ function loadChatHistory() {
       const isUser = msg.role === "user";
       const messageDiv = document.createElement("div");
       messageDiv.className = `flex ${
-        isUser ? "justify-end" : "justify-start"
+        isUser ? "justify-end user-bubble" : "justify-start ai-bubble"
       } mb-2`;
-      messageDiv.innerHTML = `<div class="${
-        isUser ? "bg-blue-600 text-white" : ""
-      } p-3 rounded-lg max-w-[80%] chat-message" style="${
-        !isUser ? "background-color: var(--bg-card-secondary);" : ""
-      }">${msg.parts[0].text}</div>`;
+      messageDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] chat-message">${msg.parts[0].text}</div>`;
       chatDisplay.appendChild(messageDiv);
     });
   } else {
-    chatDisplay.innerHTML = `<div class="flex justify-start mb-2"><div class="p-3 rounded-lg max-w-[80%] chat-message" style="background-color: var(--bg-card-secondary);">Halo! Ada yang bisa saya bantu?</div></div>`;
+    chatDisplay.innerHTML = `<div class="flex justify-start mb-2 ai-bubble">
+      <div class="p-3 rounded-lg max-w-[80%] chat-message">Halo! Ada yang bisa saya bantu?</div>
+    </div>`;
   }
   chatDisplay.scrollTop = chatDisplay.scrollHeight;
 }

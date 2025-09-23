@@ -404,17 +404,11 @@ nav {
 	/* Biarkan area display chat mengambil sisa ruang vertikal */
 	background-color: var(--bg-primary);
 	border-radius: 0.5rem;
-	/* Sudut membulat untuk display chat */
 	padding: 1rem;
-	/* Padding di dalam display chat */
-	margin: 1rem;
-	/* Beri jarak dari header dan footer */
+	/* Hapus margin agar menyatu dengan header/footer */
 	overflow-y: auto;
-	/* Jarak bawah sebelum area input */
 	display: flex;
-	/* Gunakan flexbox untuk pesan */
 	flex-direction: column;
-	/* Susun pesan secara vertikal */
 }
 
 /* Gaya untuk pesan chat agar teks membungkus */
@@ -423,6 +417,28 @@ nav {
 	/* Bungkus kata yang panjang */
 	overflow-wrap: break-word;
 	/* Alternatif untuk word-wrap */
+}
+
+/* Gaya baru untuk gelembung chat yang lebih otentik */
+.user-bubble .chat-message {
+	background-color: #3b82f6;
+	/* Warna biru yang lebih cerah */
+	color: white;
+	border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+	/* Sudut kanan bawah lebih tajam */
+}
+
+.ai-bubble .chat-message {
+	background-color: var(--bg-card-secondary);
+	color: var(--text-primary);
+	border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+	/* Sudut kiri bawah lebih tajam */
+}
+
+.error-bubble .chat-message {
+	background-color: #ef4444;
+	/* Tailwind's red-500 */
+	color: white;
 }
 
 .chat-input-area {
@@ -1072,7 +1088,8 @@ nav {
 	border-radius: 0.5rem;
 	transition: all 0.3s ease;
 	font-size: 0.875rem;
-	margin-top: 1.25rem; /* Sedikit menambah jarak dari elemen di atasnya */
+	margin-top: 1.25rem;
+	/* Sedikit menambah jarak dari elemen di atasnya */
 }
 
 .btn-code-toggle:hover {
@@ -1218,7 +1235,8 @@ pre[class*="language-"] {
 
 .project-card {
 	animation: fadeInPortfolio 0.4s ease-out forwards;
-	opacity: 0; /* Mulai dalam keadaan tidak terlihat */
+	opacity: 0;
+	/* Mulai dalam keadaan tidak terlihat */
 }
 
 .project-card.fading-out {
@@ -1299,7 +1317,8 @@ body.hackerman-mode #achievement-toast {
 .pathfinding-node {
 	width: 100%;
 	height: 100%;
-	position: relative; /* Diperlukan untuk positioning absolut anak */
+	position: relative;
+	/* Diperlukan untuk positioning absolut anak */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1344,7 +1363,8 @@ body.hackerman-mode #achievement-toast {
 
 /* New class for the drawing animation */
 .pathfinding-node.is-drawing {
-	background-color: #fde047; /* Lighter yellow */
+	background-color: #fde047;
+	/* Lighter yellow */
 	transform: scale(1.2);
 	border-radius: 50%;
 	transition: transform 0.1s ease-out, background-color 0.1s ease-out, border-radius 0.1s ease-out;
@@ -1355,8 +1375,10 @@ body.hackerman-mode #achievement-toast {
 	font-size: 0.6rem;
 	color: var(--text-primary);
 	opacity: 0.7;
-	pointer-events: none; /* Agar tidak mengganggu klik pada node */
-	text-shadow: 0 0 2px var(--bg-primary); /* Bayangan agar lebih terbaca */
+	pointer-events: none;
+	/* Agar tidak mengganggu klik pada node */
+	text-shadow: 0 0 2px var(--bg-primary);
+	/* Bayangan agar lebih terbaca */
 }
 
 @keyframes visit-node {
@@ -1484,9 +1506,12 @@ body.hackerman-mode #achievement-toast {
 }
 
 @keyframes wave {
-	0%, 100% {
+
+	0%,
+	100% {
 		border-radius: 45% 55% 70% 30% / 30% 50% 50% 70%;
 	}
+
 	50% {
 		border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%;
 	}
