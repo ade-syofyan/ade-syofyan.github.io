@@ -1595,3 +1595,35 @@ body.hackerman-mode #achievement-toast {
 	font-size: 0.8rem;
 	color: var(--text-secondary);
 }
+
+/* New Contact Form Styles */
+.form-input {
+	width: 100%;
+	background-color: var(--bg-card-secondary);
+	border: 1px solid var(--border-color);
+	color: var(--text-primary);
+	padding: 0.75rem 1rem;
+	border-radius: 0.5rem;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: var(--color-accent);
+	box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.3);
+}
+
+.form-input.invalid {
+	border-color: #ef4444; /* red-500 */
+}
+
+.form-input.valid {
+	border-color: #22c55e; /* green-500 */
+}
+
+#submit-contact-form:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	transform: none;
+	background-color: var(--color-accent);
+}

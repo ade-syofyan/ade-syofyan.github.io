@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTimeTravelerAchievement();
   initializeCssHackerAchievement();
   initializeCaseStudyGenerator();
+  initializeContactForm();
 
   // Initialize Complex Modules
   initializeTerminal();

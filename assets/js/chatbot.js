@@ -190,7 +190,7 @@ async function sendChatMessage() {
       contents: conversationHistory,
       systemInstruction: { parts: [{ text: systemInstructionText }] },
     };
-    const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk"; // Sebaiknya dipindahkan ke environment variable di sisi server
+    const apiKey = typeof API_KEY !== "undefined" ? API_KEY : ""; // Ambil dari config.js
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
@@ -298,7 +298,7 @@ window.getTerminalChatResponse = async function (message, outputCallback) {
       contents: conversationHistory,
       systemInstruction: { parts: [{ text: systemInstructionText }] },
     };
-    const apiKey = "AIzaSyAYoqmGxZT9FwG2obC3-xpxSN6orVxi0Wk";
+    const apiKey = typeof API_KEY !== "undefined" ? API_KEY : "";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {

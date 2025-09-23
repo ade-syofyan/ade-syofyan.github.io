@@ -891,6 +891,30 @@ setInterval(() => {
             <p style="color: var(--text-secondary);">Ajukan pertanyaan ke AI!</p>
           </div>
         </div>
+        <!-- New Contact Form -->
+        <div class="max-w-2xl mx-auto mt-16 text-left">
+            <h3 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-white);">Atau Kirim Pesan Langsung</h3>
+            <form id="contact-form" method="POST" class="space-y-6" novalidate>
+                <div>
+                    <label for="name" class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Nama</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Nama Anda" required>
+                    <p class="form-error-message h-4 mt-1"></p>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="email@example.com" required>
+                    <p class="form-error-message h-4 mt-1"></p>
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium mb-2" style="color: var(--text-secondary);">Pesan</label>
+                    <textarea id="message" name="message" rows="4" class="form-input" placeholder="Pesan Anda..." required minlength="10"></textarea>
+                    <p class="form-error-message h-4 mt-1"></p>
+                </div>
+                <div class="text-center">
+                    <button type="submit" id="submit-contact-form" class="btn-primary w-full md:w-auto" disabled>Kirim Pesan</button>
+                </div>
+            </form>
+        </div>
       </div>
     </section>
 
@@ -1220,6 +1244,7 @@ setInterval(() => {
     </script>
 
     <!-- Scripts -->
+    <script src="./assets/js/config.js" defer></script> <!-- Muat konfigurasi terlebih dahulu -->
     <script src="./assets/js/data.js" defer></script>
     <!-- Karena file lain bergantung pada data ini, file ini bisa dimuat lebih awal jika diperlukan, tapi defer sudah cukup baik -->
     <script src="./assets/js/caseStudyGenerator.js" defer></script>

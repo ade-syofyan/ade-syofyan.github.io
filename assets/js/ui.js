@@ -28,12 +28,22 @@ function initializeTheme() {
     localStorage.setItem("theme", theme);
 
     // --- New Achievement Logic ---
-    if (window.achievements && !window.achievements[THEME_ACHIEVEMENT_ID]?.unlocked) {
+    if (
+      window.achievements &&
+      !window.achievements[THEME_ACHIEVEMENT_ID]?.unlocked
+    ) {
       if (!appliedThemes.has(theme)) {
         appliedThemes.add(theme);
-        localStorage.setItem("appliedThemes", JSON.stringify([...appliedThemes]));
+        localStorage.setItem(
+          "appliedThemes",
+          JSON.stringify([...appliedThemes])
+        );
       }
-      if (appliedThemes.has("light") && appliedThemes.has("dark") && appliedThemes.has("system")) {
+      if (
+        appliedThemes.has("light") &&
+        appliedThemes.has("dark") &&
+        appliedThemes.has("system")
+      ) {
         unlockAchievement(THEME_ACHIEVEMENT_ID);
       }
     }
@@ -712,9 +722,7 @@ function populateAchievements() {
   // Update progress bar and text
   if (progressBar && progressText) {
     const percentage =
-      totalAchievements > 0
-        ? (unlockedCount / totalAchievements) * 100
-        : 0;
+      totalAchievements > 0 ? (unlockedCount / totalAchievements) * 100 : 0;
     progressBar.style.width = `${percentage}%`;
     progressText.textContent = `${unlockedCount}/${totalAchievements}`;
   }
@@ -734,9 +742,7 @@ function populateAchievements() {
       </div>
       <div class="achievement-info">
         <p class="achievement-name">${ach.name}</p>
-        <p class="achievement-desc">${
-          isUnlocked ? ach.description : "???"
-        }</p>
+        <p class="achievement-desc">${isUnlocked ? ach.description : "???"}</p>
       </div>
     `;
     achievementGrid.appendChild(item);
@@ -807,4 +813,82 @@ function populateStaticData() {
 
   // JSON-LD Schema
   // (Implementasi lebih lanjut bisa dilakukan di sini jika diperlukan)
+}
+
+// --- Contact Form with Real-time Validation ---
+function initializeContactForm() {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
+
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const messageInput = document.getElementById("message");
+  const submitButton = document.getElementById("submit-contact-form");
+
+  const validators = {
+    name: (value) => value.trim() !== "",
+    email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    message: (value) => value.trim().length >= 10,
+  };
+
+  const errorMessages = {
+    name: "Nama tidak boleh kosong.",
+    email: "Format email tidak valid.",
+    message: "Pesan harus berisi minimal 10 karakter.",
+  };
+
+  const validationState = { name: false, email: false, message: false };
+
+  function validateField(input) {
+    const isValid = validators[input.id](input.value);
+    const errorElement = input.nextElementSibling;
+    validationState[input.id] = isValid;
+
+    input.classList.toggle("valid", isValid);
+    input.classList.toggle("invalid", !isValid && input.value.length > 0);
+    errorElement.textContent =
+      !isValid && input.value.length > 0 ? errorMessages[input.id] : "";
+
+    submitButton.disabled = !Object.values(validationState).every(Boolean);
+  }
+
+  [nameInput, emailInput, messageInput].forEach((input) => {
+    input.addEventListener("input", () => validateField(input));
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (Object.values(validationState).every(Boolean)) {
+      submitButton.textContent = "Mengirim...";
+      submitButton.disabled = true;
+
+      const formData = new FormData(form);
+      const formAction = `https://formspree.io/f/${FORMSPREE_ID}`;
+
+      fetch(formAction, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            form.innerHTML = `<div class="text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
+              <h4 class="text-xl font-bold text-accent">Terima Kasih!</h4>
+              <p style="color: var(--text-secondary);">Pesan Anda telah berhasil dikirim. Saya akan segera merespons.</p>
+            </div>`;
+          } else {
+            throw new Error("Network response was not ok.");
+          }
+        })
+        .catch((error) => {
+          submitButton.textContent = "Kirim Pesan";
+          submitButton.disabled = false;
+          alert(
+            "Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi."
+          );
+        });
+    }
+  });
 }
