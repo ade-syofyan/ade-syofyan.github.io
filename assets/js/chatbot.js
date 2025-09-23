@@ -70,13 +70,12 @@ function addQuickOptions() {
   const selectedOptions = shuffleArray([...allQuickChatOptions]).slice(0, 3);
 
   const quickOptionsDiv = document.createElement("div");
-  quickOptionsDiv.className = "flex flex-wrap gap-2 mt-2 mb-2 justify-start";
+  quickOptionsDiv.className =
+    "quick-options-container flex flex-wrap gap-2 mt-2 mb-2 justify-start";
   selectedOptions.forEach((optionText) => {
     const button = document.createElement("button");
-    button.className = "text-sm py-1 px-3 rounded-full transition-colors";
-    button.style =
-      "background-color: var(--bg-card-secondary); color: var(--text-secondary);";
-    button.textContent = optionText;
+    button.className = "quick-chat-btn";
+    button.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3 opacity-70"></i><span>${optionText}</span>`;
     button.onclick = () => {
       document.getElementById("chatInput").value = optionText;
       sendChatMessage();
@@ -87,6 +86,10 @@ function addQuickOptions() {
     quickOptionsDiv.appendChild(button);
   });
   chatDisplay.appendChild(quickOptionsDiv);
+  // Render ikon yang baru ditambahkan
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons();
+  }
   chatDisplay.scrollTop = chatDisplay.scrollHeight;
 }
 
