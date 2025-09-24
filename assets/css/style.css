@@ -107,6 +107,23 @@ body.modal-open {
   transition: background-color 0.3s ease;
 }
 
+/* Efek Liquid Glass untuk kontainer section utama */
+.liquid-glass-card {
+  background-color: rgba(var(--bg-card-rgb), 0.15);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.15);
+  border-radius: 1.5rem;
+  /* Sudut membulat yang lebih besar untuk section */
+}
+
+/* Menambahkan tekstur grid HANYA ke section "Tentang Saya" */
+#about.liquid-glass-card {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  background-size: 32px 32px;
+  background-blend-mode: overlay;
+}
+
 /* Glassmorphism Effect for cards on top of plexus canvas */
 .skill-card,
 .testimonial-card,
@@ -115,6 +132,12 @@ body.modal-open {
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
+  border-radius: 0.75rem;
+  /* Menambahkan sudut membulat (rounded-xl) */
+  /* Menambahkan efek kertas (grid) seperti pada chat */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  background-size: 32px 32px;
+  background-blend-mode: overlay;
 }
 
 /* Glassmorphism for Navbar */
@@ -184,8 +207,8 @@ nav.nav-scrolled {
 
 /* Gaya untuk membuat tombol selalu terlihat aktif */
 .btn-primary.always-active {
-  transform: scale(1.05) translateY(-2px);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)), var(--color-accent-hover);
+  transform: scale(.8) translateY(-2px);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05)), var(--color-accent);
   box-shadow: 0 8px 20px -4px rgba(var(--color-accent-rgb), 0.5), 0 4px 10px -2px var(--shadow-color);
 }
 
@@ -1051,15 +1074,18 @@ button#achievement-toggle-btn:hover {
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 0.5rem;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  margin-top: 0.75rem;
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px var(--shadow-color);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
   z-index: 1020;
   width: 150px;
   overflow: hidden;
   display: none;
+  /* Menambahkan efek Liquid Glass */
+  background: rgba(var(--bg-card-rgb), 0.25);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.15);
 }
 
 .theme-dropdown.open {

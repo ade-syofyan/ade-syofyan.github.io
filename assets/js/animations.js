@@ -380,7 +380,7 @@ function initializeParallax() {
 function initializeNavHighlighting() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(
-    ".desktop-nav a, .mobile-menu-overlay a"
+    ".desktop-nav a.nav-link-anchor, .mobile-menu-overlay a"
   );
   const headerHeight = document.querySelector("nav").offsetHeight;
 
