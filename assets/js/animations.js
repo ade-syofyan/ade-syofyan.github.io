@@ -211,10 +211,16 @@ function initializeHeroCanvas() {
   const plexusInstances = [];
 
   allCanvases.forEach((canvas) => {
-    const options =
-      canvas.id === "heroCanvas"
-        ? { particleCount: 150, maxDistance: 160 }
-        : { particleCount: 75, maxDistance: 110 };
+    let options;
+    if (canvas.id === "heroCanvas") {
+      const isMobile = window.innerWidth < 768;
+      options = {
+        particleCount: isMobile ? 60 : 150, // Kurangi partikel di mobile
+        maxDistance: isMobile ? 120 : 160,
+      };
+    } else {
+      options = { particleCount: 75, maxDistance: 110 };
+    }
     const instance = createPlexusInstance(canvas, options);
     if (instance) plexusInstances.push(instance);
   });
@@ -235,7 +241,7 @@ function initializeHeroCanvas() {
 // --- Scroll-triggered Animations ---
 function initializeScrollAnimations() {
   const animatedElements = document.querySelectorAll(
-    ".fade-in-on-scroll, #skills-grid, #services-grid, #workflowSteps"
+    ".fade-in-on-scroll, #skills-grid, #services-grid, #workflowSteps, .fade-in-title, .live-demo" // Pastikan tidak ada koma atau tanda kurung yang salah di sini
   );
   if (animatedElements.length === 0) return;
 
@@ -274,6 +280,59 @@ function initializeScrollAnimations() {
 
   const observer = new IntersectionObserver(observerCallback, observerOptions);
   animatedElements.forEach((el) => observer.observe(el));
+}
+
+// --- Hero Subtitle Typing Effect ---
+function initializeTypingEffect() {
+  const subtitleElement = document.querySelector("#hero-subtitle .typing-text");
+  if (!subtitleElement) {
+    console.warn(
+      "Elemen .typing-text tidak ditemukan. Animasi ketikan dibatalkan."
+    );
+    return;
+  }
+
+  const textsToType = [
+    "Mobile & Web Developer dengan keahlian memecahkan masalah.",
+    "Membangun solusi digital inovatif dari ide hingga implementasi.",
+    "Spesialis dalam integrasi AI untuk efisiensi bisnis.",
+    "Mahir dalam teknologi modern seperti Flutter, Laravel, dan Firebase.",
+    "Berpengalaman lebih dari 7 tahun di industri teknologi.",
+    "Mengembangkan solusi untuk sektor properti, otomotif, dan layanan publik.",
+    "Spesialis dalam migrasi sistem backend untuk skalabilitas yang lebih baik.",
+  ];
+
+  let textIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function type() {
+    const currentText = textsToType[textIndex];
+    let typeSpeed = 100;
+
+    if (isDeleting) {
+      typeSpeed = 50;
+      subtitleElement.textContent = currentText.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      subtitleElement.textContent = currentText.substring(0, charIndex + 1);
+      charIndex++;
+    }
+
+    if (!isDeleting && charIndex === currentText.length) {
+      typeSpeed = 2000; // Jeda setelah selesai mengetik
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      typeSpeed = 500; // Jeda sebelum mengetik teks baru
+      isDeleting = false;
+      textIndex = (textIndex + 1) % textsToType.length;
+    }
+
+    setTimeout(type, typeSpeed);
+  }
+
+  // Mulai animasi setelah jeda singkat saat halaman dimuat
+  setTimeout(type, 1500);
 }
 
 // --- Parallax Effects ---

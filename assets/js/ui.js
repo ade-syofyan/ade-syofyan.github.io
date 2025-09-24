@@ -1,3 +1,54 @@
+// --- Navbar Scroll Effect ---
+function initializeNavbarScrollEffect() {
+  const navbar = document.querySelector("nav");
+  if (!navbar) return;
+
+  const handleScroll = () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add("nav-scrolled");
+    } else {
+      navbar.classList.remove("nav-scrolled");
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+}
+
+// --- Full Height Hero Section Adjustment ---
+function initializeFullHeightHero() {
+  const hero = document.querySelector(".hero-full-height");
+  const navbar = document.querySelector("nav");
+  if (!hero || !navbar) return;
+
+  let resizeTimeout;
+
+  const setHeroHeight = () => {
+    const navbarHeight = navbar.offsetHeight;
+    // Menggunakan window.innerHeight untuk mendapatkan tinggi viewport yang sebenarnya.
+    // Ini berfungsi sebagai fallback jika 100svh tidak didukung.
+    const actualHeight = window.innerHeight - navbarHeight;
+    hero.style.setProperty("--svh", `${actualHeight}px`);
+  };
+
+  // Panggil saat pertama kali dimuat
+  setHeroHeight();
+
+  // Panggil saat ukuran jendela berubah (dengan debounce)
+  window.addEventListener(
+    "resize",
+    () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(setHeroHeight, 100);
+    },
+    { passive: true }
+  );
+
+  // Panggil saat orientasi layar berubah (penting untuk mobile)
+  if (window.screen.orientation) {
+    window.screen.orientation.addEventListener("change", setHeroHeight);
+  }
+}
+
 // --- Theme Management ---
 function initializeTheme() {
   const themeToggleBtn = document.getElementById("theme-toggle-btn");
@@ -71,7 +122,7 @@ function initializeTheme() {
         const isActive = btn.dataset.themeValue === theme;
 
         btn.classList.toggle("bg-accent", isActive);
-        btn.classList.toggle("text-menu-active", isActive); 
+        btn.classList.toggle("text-menu-active", isActive);
         btn.classList.toggle("text-secondary", !isActive);
         btn.classList.toggle("bg-card-secondary", !isActive);
       });
@@ -503,6 +554,7 @@ function renderProjects(projects, filter = "all") {
     const projectCard = document.createElement("div");
     projectCard.className = `
       project-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
+      project-card p-6 transform hover:scale-105 transition-all duration-300 cursor-pointer liquid-glass-card
     `;
     projectCard.style.animationDelay = `${index * 75}ms`;
     projectCard.style.backgroundColor = "var(--bg-card-secondary)";
@@ -609,7 +661,7 @@ function renderTestimonials(testimonials) {
   testimonials.forEach((testimonial) => {
     const testimonialCard = document.createElement("div");
     testimonialCard.className =
-      "testimonial-card p-6 rounded-xl shadow-lg text-left";
+      "testimonial-card p-6 text-left liquid-glass-card shadow-lg";
     testimonialCard.innerHTML = `
       <p class="italic mb-4" style="color: var(--text-secondary);">
         "${parseMarkdownBold(testimonial.quote)}"
@@ -748,15 +800,15 @@ function populateStaticData() {
   if (typeof siteConfig === "undefined") return;
 
   // Navbar
-  document.getElementById("nav-brand").textContent = siteConfig.name;
+  const navBrand = document.getElementById("nav-brand");
+  if (navBrand) {
+    navBrand.textContent = siteConfig.name;
+  }
 
   // Hero Section
   document.getElementById(
     "hero-title"
   ).innerHTML = `Halo, saya <span class="text-accent">${siteConfig.name}</span>`;
-  document.getElementById(
-    "hero-subtitle"
-  ).innerHTML = `<span class="font-semibold">${siteConfig.jobTitleShort}</span> dengan keahlian memecahkan masalah. Membangun solusi digital inovatif dari ide hingga implementasi.`;
 
   // About Section
   document.getElementById("cv-link-about").href = siteConfig.cvUrl;

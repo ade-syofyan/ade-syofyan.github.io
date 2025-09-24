@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI elements
   initializeTheme();
   initializeMobileMenu();
+  initializeNavbarScrollEffect();
+  initializeFullHeightHero();
   initializeBSOD();
   initializeModals();
   initializeScrollToTop();
@@ -12,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeHeroCanvas();
   initializeScrollAnimations();
   initializeParallax();
+  initializeTypingEffect(); // Pastikan ini dipanggil
   initializeSmoothScroll();
 
   // Initialize Interactive Components
@@ -35,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (typeof testimonialsData !== "undefined") {
     renderTestimonials(testimonialsData);
-    populateStaticData(); 
+    // populateStaticData(); // Dinonaktifkan untuk mencegah penimpaan hero-subtitle
   }
   if (typeof achievements !== "undefined") {
     loadAchievements();
@@ -54,4 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     { passive: true, once: true }
   );
+});
+
+// Panggil populateStaticData setelah DOMContentLoaded, tapi pastikan tidak menimpa hero-subtitle
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof populateStaticData === "function") {
+    populateStaticData();
+  }
 });

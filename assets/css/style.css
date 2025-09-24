@@ -1,1002 +1,1322 @@
 /* --- Theme Variables --- */
 :root {
-	/* Dark Theme (Default) */
-	--bg-primary: #1a202c;
-	--bg-card: #2d3748;
-	--bg-card-rgb: 45, 55, 72;
-	--bg-card-secondary: rgba(74, 85, 104, 0.6);
-	--bg-nav: #111827;
-	--bg-nav-rgb: 17, 24, 39;
-	--bg-modal: #2d3748;
-	--bg-nav-link-hover: var(--bg-card);
-	--bg-overlay: rgba(26, 32, 44, 0.8);
-	--text-primary: #e2e8f0;
-	--text-secondary: #a0aec0;
-	--text-white: #ffffff;
-	--text-black: #000000;
-	--color-accent: #63b3ed;
-	--color-accent-rgb: 99, 179, 237;
-	--color-accent-hover: #4299e1;
-	--border-color: #4a5568;
-	--border-color-rgb: 74, 85, 104;
-	--shadow-color: rgba(0, 0, 0, 0.4);
-	--prism-bg: #2d3748;
-	--prism-color: #f8f8f2;
-	--prism-token-comment: #6272a4;
-	--prism-token-punctuation: #f8f8f2;
-	--prism-token-keyword: #ff79c6;
-	--prism-token-function: #50fa7b;
-	--prism-token-string: #f1fa8c;
-	--prism-token-number: #bd93f9;
-	--prism-token-operator: #ff79c6;
-	--terminal-prompt-color: #4ade80;
-	--prism-token-class-name: #8be9fd;
+  /* Dark Theme (Default) */
+  --bg-primary: #1a202c;
+  --bg-card: #2d3748;
+  --bg-card-rgb: 45, 55, 72;
+  --bg-card-secondary: rgba(74, 85, 104, 0.6);
+  --bg-nav: #111827;
+  --bg-nav-rgb: 17, 24, 39;
+  --bg-modal: #2d3748;
+  --bg-nav-link-hover: var(--bg-card);
+  --bg-overlay: rgba(26, 32, 44, 0.8);
+  --text-primary: #e2e8f0;
+  --text-secondary: #a0aec0;
+  --text-white: #ffffff;
+  --text-black: #000000;
+  --color-white: #ffffff;
+  --color-accent: #63b3ed;
+  --color-accent-rgb: 99, 179, 237;
+  --color-accent-hover: #4299e1;
+  --border-color: #4a5568;
+  --border-color-rgb: 74, 85, 104;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --prism-bg: #2d3748;
+  --prism-color: #f8f8f2;
+  --prism-token-comment: #6272a4;
+  --prism-token-punctuation: #f8f8f2;
+  --prism-token-keyword: #ff79c6;
+  --prism-token-function: #50fa7b;
+  --prism-token-string: #f1fa8c;
+  --prism-token-number: #bd93f9;
+  --prism-token-operator: #ff79c6;
+  --terminal-prompt-color: #4ade80;
+  --prism-token-class-name: #8be9fd;
 }
 
 html[data-theme='light'] {
-	/* Light Theme */
-	--bg-primary: #f7fafc;
-	--bg-card: #ffffff;
-	--bg-card-rgb: 255, 255, 255;
-	--bg-card-secondary: rgba(237, 242, 247, 0.6);
-	--bg-nav: #ffffff;
-	--bg-nav-rgb: 255, 255, 255;
-	--bg-modal: #ffffff;
-	--bg-nav-link-hover: var(--bg-card-secondary);
-	--bg-overlay: rgba(247, 250, 252, 0.8);
-	--text-primary: #2d3748;
-	--text-secondary: #718096;
-	--text-white: #1a202c;
-	--color-accent: #3182ce;
-	--color-accent-rgb: 49, 130, 206;
-	--color-accent-hover: #2b6cb0;
-	--border-color: #e2e8f0;
-	--border-color-rgb: 226, 232, 240;
-	--shadow-color: rgba(0, 0, 0, 0.1);
-	--prism-bg: #f5f2f0;
-	--prism-color: #393a34;
-	--prism-token-comment: #999988;
-	--prism-token-punctuation: #999;
-	--prism-token-keyword: #0077aa;
-	--prism-token-function: #d73a49;
-	--prism-token-string: #669900;
-	--prism-token-number: #990055;
-	--prism-token-operator: #a67f59;
-	--terminal-prompt-color: #008000;
-	--prism-token-class-name: #22863a;
+  /* Light Theme */
+  --bg-primary: #f0f2f5;
+  /* Sedikit lebih gelap dari putih */
+  --bg-card: #f8f9fa;
+  /* Off-white untuk kartu */
+  --bg-card-rgb: 248, 249, 250;
+  --bg-card-secondary: rgba(233, 236, 239, 0.6);
+  --bg-nav: #f8f9fa;
+  --bg-nav-rgb: 248, 249, 250;
+  --bg-modal: #f8f9fa;
+  --bg-nav-link-hover: var(--bg-card-secondary);
+  --bg-overlay: rgba(247, 250, 252, 0.8);
+  --text-primary: #343a40;
+  /* Hitam yang lebih lembut */
+  --text-secondary: #6c757d;
+  /* Abu-abu yang lebih lembut */
+  --text-white: #212529;
+  /* Teks "putih" di mode terang (sebenarnya hitam) */
+  --color-accent: #3182ce;
+  --color-accent-rgb: 49, 130, 206;
+  --color-accent-hover: #2b6cb0;
+  --border-color: #dee2e6;
+  /* Border yang lebih lembut */
+  --border-color-rgb: 222, 226, 230;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --prism-bg: #f5f2f0;
+  --prism-color: #393a34;
+  --prism-token-comment: #999988;
+  --prism-token-punctuation: #999;
+  --prism-token-keyword: #0077aa;
+  --prism-token-function: #d73a49;
+  --prism-token-string: #669900;
+  --prism-token-number: #990055;
+  --prism-token-operator: #a67f59;
+  --terminal-prompt-color: #008000;
+  --prism-token-class-name: #22863a;
 }
 
 body {
-	font-family: "Inter", sans-serif;
-	background-color: var(--bg-primary);
-	color: var(--text-primary);
-	scroll-behavior: smooth;
-	overflow-x: hidden;
-	transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Mencegah body scroll saat modal terbuka */
 body.modal-open {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .text-accent {
-	color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .bg-accent {
-	background-color: var(--color-accent);
+  background-color: var(--color-accent);
 }
 
 .bg-card {
-	background-color: var(--bg-card);
-	border-radius: 0.75rem;
-	transition: background-color 0.3s ease;
+  background-color: var(--bg-card);
+  border-radius: 0.75rem;
+  transition: background-color 0.3s ease;
 }
 
 /* Glassmorphism Effect for cards on top of plexus canvas */
 .skill-card,
 .testimonial-card,
 .contact-card {
-	background-color: rgba(var(--bg-card-rgb), 0.25);
-	-webkit-backdrop-filter: blur(15px);
-	backdrop-filter: blur(15px);
-	border: 1px solid rgba(var(--border-color-rgb), 0.15);
+  background-color: rgba(var(--bg-card-rgb), 0.25);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.15);
 }
 
 /* Glassmorphism for Navbar */
 nav {
-	background-color: rgba(var(--bg-nav-rgb), 0.4) !important;
-	-webkit-backdrop-filter: blur(15px);
-	backdrop-filter: blur(15px);
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, -webkit-backdrop-filter 0.4s ease, backdrop-filter 0.4s ease !important;
+  background-color: transparent !important;
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
 }
 
+nav.nav-scrolled {
+  /* Efek "Liquid Glass" */
+  background: linear-gradient(135deg, rgba(var(--bg-nav-rgb), 0.3), rgba(var(--bg-nav-rgb), 0.2)) !important;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.15);
+}
+
+/* Tombol Aksi Utama */
 .btn-primary {
-	background-color: var(--color-accent);
-	color: white;
-	padding: 0.75rem 1.5rem;
-	border-radius: 0.5rem;
-	transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-	box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px rgba(var(--color-accent-rgb), 0.4);
+  padding: 0.75rem 1.5rem;
+  display: inline-flex;
+  /* Memastikan konsistensi layout */
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--color-white);
+  /* Lapisan dasar warna primer, dengan gradien kilau di atasnya */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05)), var(--color-accent);
+  border-radius: 1.1rem 1.2rem 1.1rem 1.2rem;
+  box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px -2px rgba(var(--color-accent-rgb), 0.4), 0 2px 8px -1px var(--shadow-color);
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  cursor: pointer;
+  border: 1px solid rgba(var(--color-accent-rgb), 0.5);
+}
+
+/* Tombol Aksi Sekunder (Liquid Glass) */
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  color: var(--text-white);
+  background: rgba(var(--bg-card-rgb), 0.1);
+  backdrop-filter: blur(4px);
+  border-radius: 1.2rem 1.1rem 1.2rem 1.1rem;
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15),
+    0 4px 8px 0 var(--shadow-color);
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  cursor: pointer;
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
 }
 
 .btn-primary:hover {
-	background-color: var(--color-accent-hover);
-	transform: translateY(-2px);
-}
-
-.btn-secondary {
-	border: 1px solid var(--color-accent);
-	color: var(--color-accent);
-	padding: 0.75rem 1.5rem;
-	border-radius: 0.5rem;
-	transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease,
-		box-shadow 0.3s ease;
-	box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px rgba(var(--color-accent-rgb), 0.2);
+  transform: scale(1.05) translateY(-2px);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)), var(--color-accent-hover);
+  box-shadow: 0 8px 20px -4px rgba(var(--color-accent-rgb), 0.5), 0 4px 10px -2px var(--shadow-color);
 }
 
 .btn-secondary:hover {
-	background-color: var(--color-accent);
-	color: white;
-	transform: translateY(-2px);
+  transform: scale(1.05);
+  border-radius: 1.1rem 1.2rem 1.1rem 1.2rem;
+  color: var(--text-white);
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15),
+    0 6px 15px 0 var(--shadow-color);
+}
+
+/* Gaya untuk membuat tombol selalu terlihat aktif */
+.btn-primary.always-active {
+  transform: scale(1.05) translateY(-2px);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)), var(--color-accent-hover);
+  box-shadow: 0 8px 20px -4px rgba(var(--color-accent-rgb), 0.5), 0 4px 10px -2px var(--shadow-color);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+  transform: scale(0.98);
 }
 
 /* Gaya untuk tombol filter portofolio */
 .filter-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	background-color: var(--bg-card);
-	color: var(--text-secondary);
-	padding: 0.5rem 1rem;
-	border-radius: 9999px;
-	border: 1px solid var(--border-color);
-	transition: all 0.3s ease;
-	font-size: 0.875rem;
-	cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  cursor: pointer;
 }
 
 .filter-btn.active,
 .filter-btn:hover {
-	background-color: var(--color-accent);
-	color: white;
-	border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
 }
 
 /* Scrollbar kustom untuk browser webkit */
 ::-webkit-scrollbar {
-	width: 8px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--bg-card);
+  background: var(--bg-card);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--color-accent);
-	border-radius: 4px;
+  background: var(--color-accent);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--color-accent-hover);
+  background: var(--color-accent-hover);
 }
 
 /* Overlay untuk modal detail proyek */
 .modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.7);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 1000;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal-overlay.open {
-	opacity: 1;
-	visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
-	background-color: var(--bg-modal);
-	border-radius: 1rem;
-	max-width: 90%;
-	width: 900px;
-	max-height: 90%;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	transform: translateY(20px);
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-	box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
+  /* Menerapkan Liquid Glass Effect */
+  background: rgba(var(--bg-card-rgb), 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1.4rem 1.2rem 1.5rem 1.2rem;
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  max-width: 90%;
+  width: 900px;
+  max-height: 90%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
 }
 
 .modal-overlay.open .modal-content {
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .modal-header {
-	padding: 1.5rem 2rem;
-	border-bottom: 1px solid var(--border-color);
-	flex-shrink: 0;
-	position: relative;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  position: relative;
 }
 
 .modal-body {
-	padding: 1.5rem 2rem;
-	overflow-y: auto;
-	flex-grow: 1;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  flex-grow: 1;
 }
 
 .modal-footer {
-	padding: 1.5rem 2rem;
-	border-top: 1px solid var(--border-color);
-	flex-shrink: 0;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .modal-close-btn {
-	position: absolute;
-	top: 1rem;
-	right: 1rem;
-	background: none;
-	border: none;
-	font-size: 1.5rem;
-	color: var(--text-primary);
-	cursor: pointer;
-	transition: color 0.3s ease;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .modal-close-btn:hover {
-	color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 /* Gaya untuk Lightbox Gambar */
 .lightbox-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.9);
-	display: none;
-	justify-content: center;
-	align-items: center;
-	z-index: 1050;
-	padding: 20px;
-	box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .lightbox-overlay.open {
-	display: flex;
+  display: flex;
 }
 
 .lightbox-content {
-	max-width: 90%;
-	max-height: 90%;
-	object-fit: contain;
-	animation: zoomIn 0.3s ease-out;
-	border-radius: 0.5rem;
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  animation: zoomIn 0.3s ease-out;
+  border-radius: 0.5rem;
 }
 
 .lightbox-close-btn {
-	position: absolute;
-	top: 20px;
-	right: 35px;
-	color: #fff;
-	font-size: 40px;
-	font-weight: bold;
-	cursor: pointer;
-	transition: color 0.3s ease;
-	background: none;
-	border: none;
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
 }
 
 .lightbox-close-btn:hover {
-	color: #bbb;
+  color: #bbb;
 }
 
 /* Tambahkan kursor 'zoom-in' pada gambar di modal proyek */
 #modalImages img {
-	cursor: zoom-in;
+  cursor: zoom-in;
 }
 
 /* Gaya kanvas untuk efek latar belakang hero */
 #heroCanvas {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 0;
-	background-color: transparent;
-	opacity: 0.3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: transparent;
+  opacity: 0.3;
 }
 
 /* Gaya untuk canvas plexus di setiap section */
 .plexus-canvas {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 0;
-	opacity: 0.15;
-	background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.15;
+  background-color: transparent;
 }
 
 /* Gaya spesifik Chatbot */
 .chatbot-content {
-	background-color: var(--bg-modal);
-	border-radius: 1rem;
-	max-width: 90%;
-	width: 100%;
-	max-height: 80%;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	padding: 0;
-	box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
-	transform: translateY(20px);
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Menerapkan Liquid Glass Effect */
+  background: rgba(var(--bg-card-rgb), 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1.4rem 1.2rem 1.5rem 1.2rem;
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  max-width: 90%;
+  width: 100%;
+  max-height: 80%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
 }
 
 .chat-display {
-	flex-grow: 1;
-	background-color: var(--bg-primary);
-	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
-	background-size: 32px 32px;
-	padding: 1rem;
-	overflow-y: auto;
-	display: flex;
-	flex-direction: column;
+  flex-grow: 1;
+  background-color: var(--bg-primary);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  background-size: 32px 32px;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Gaya untuk pesan chat agar teks membungkus */
 .chat-message {
-	word-wrap: break-word;
-	overflow-wrap: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Gaya baru untuk gelembung chat yang lebih otentik */
 .user-bubble .chat-message {
-	background-color: #3b82f6;
-	color: white;
-	border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
 }
 
 .ai-bubble .chat-message {
-	background-color: var(--bg-card-secondary);
-	color: var(--text-primary);
-	border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-primary);
+  border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
 }
 
 .error-bubble .chat-message {
-	background-color: #ef4444;
-	color: white;
+  background-color: #ef4444;
+  color: white;
 }
 
 /* Gaya baru untuk tombol opsi cepat di chatbot */
 .quick-chat-btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	font-size: 0.8rem;
-	padding: 0.35rem 0.85rem;
-	border-radius: 9999px;
-	transition: all 0.2s ease-out;
-	background-color: transparent;
-	color: var(--text-secondary);
-	border: 1px solid var(--border-color);
-	cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease-out;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
 }
 
 .quick-chat-btn:hover {
-	background-color: var(--bg-card-secondary);
-	color: var(--text-white);
+  background-color: var(--bg-card-secondary);
+  color: var(--text-white);
 }
 
 .chat-input-area {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .chat-input-area input {
-	background-color: var(--bg-card-secondary);
-	border: 1px solid var(--color-accent);
-	border-radius: 0.5rem;
-	padding: 0.75rem 1rem;
-	color: var(--text-primary);
-	width: 100%;
-	box-sizing: border-box;
+  background-color: var(--bg-card-secondary);
+  border: 1px solid var(--color-accent);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .chat-input-area button {
-	background-color: var(--color-accent);
-	color: #ffffff;
-	padding: 0.75rem 1rem;
-	border-radius: 0.5rem;
-	transition: background-color 0.3s ease;
-	width: 100%;
-	box-sizing: border-box;
-	white-space: nowrap;
+  background-color: var(--color-accent);
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .chat-input-area button:hover {
-	background-color: var(--color-accent-hover);
+  background-color: var(--color-accent-hover);
 }
 
 /* Media query untuk chat input area pada layar yang lebih lebar */
 @media (min-width: 380px) {
 
-	.chat-input-area {
-		flex-direction: row;
-	}
+  .chat-input-area {
+    flex-direction: row;
+  }
 
-	.chat-input-area input {
-		flex-grow: 1;
-		width: auto;
-	}
+  .chat-input-area input {
+    flex-grow: 1;
+    width: auto;
+  }
 
-	.chat-input-area button {
-		width: auto;
-		flex-shrink: 0;
-	}
+  .chat-input-area button {
+    width: auto;
+    flex-shrink: 0;
+  }
 }
 
 /* iOS BSOD Styles */
 #ios-progress-bar-inner {
-	transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
 }
 
 .mobile-menu-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: var(--bg-overlay);
-	-webkit-backdrop-filter: blur(10px);
-	backdrop-filter: blur(10px);
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	padding-top: 5rem;
-	padding-bottom: 2rem;
-	z-index: 1010;
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(-100%);
-	transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-	overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-overlay);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 5rem;
+  padding-bottom: 2rem;
+  z-index: 1010;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  overflow-y: auto;
 }
 
 .mobile-menu-overlay.open {
-	opacity: 1;
-	visibility: visible;
-	transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .mobile-menu-overlay a {
-	color: var(--text-primary);
-	font-size: 1.25rem;
-	font-weight: 500;
-	padding: 0.75rem 0;
-	width: 80%;
-	max-width: 300px;
-	text-align: left;
-	display: flex;
-	align-items: center;
-	gap: 1rem;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 500;
+  padding: 0.75rem 0;
+  width: 80%;
+  max-width: 300px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .mobile-menu-overlay a,
 .mobile-menu-overlay .mobile-menu-cta,
 .mobile-menu-overlay .mt-8 {
-	opacity: 0;
-	transform: translateY(20px);
-	transition: opacity 0.3s ease-out, transform 0.3s ease-out, color 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out, color 0.3s ease;
 }
 
 .mobile-menu-overlay.open a,
 .mobile-menu-overlay.open .mobile-menu-cta,
 .mobile-menu-overlay.open .mt-8 {
-	opacity: 1;
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .mobile-menu-overlay.open a:hover {
-	color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .mobile-menu-close-btn {
-	position: absolute;
-	top: 1.25rem;
-	right: 1.25rem;
-	background: none;
-	border: none;
-	color: var(--text-primary);
-	cursor: pointer;
-	z-index: 1011;
-	transition: color 0.3s ease;
-	padding: 0.5rem;
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 1011;
+  transition: color 0.3s ease;
+  padding: 0.5rem;
 }
 
 .mobile-menu-close-btn:hover {
-	color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 /* Scroll to Top Button */
 #scrollToTopBtn {
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(20px);
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	z-index: 99;
-	border: none;
-	outline: none;
-	background-color: var(--color-accent);
-	color: white;
-	cursor: pointer;
-	padding: 12px;
-	border-radius: 0.75rem;
-	box-shadow: 0 4px 10px var(--shadow-color);
-	transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  border: 1px solid rgba(var(--border-color-rgb), 0.15);
+  outline: none;
+  color: var(--text-white);
+  cursor: pointer;
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s, box-shadow 0.3s;
 }
 
 #scrollToTopBtn.visible {
-	opacity: 1;
-	visibility: visible;
-	transform: translateY(0);
-	animation: pulse 2.5s infinite;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  animation: pulse 2.5s infinite;
 }
 
-#scrollToTopBtn:hover {
-	background-color: var(--color-accent-hover);
-	transform: scale(1.1) translateY(0);
-	animation-play-state: paused;
+button#scrollToTopBtn,
+button#terminal-toggle-btn,
+button#achievement-toggle-btn {
+  /* Menyeragamkan ukuran dan memastikan ikon di tengah */
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--bg-card-rgb), 0.1);
+  backdrop-filter: blur(4px);
+  /* Menerapkan gaya Liquid Glass dari .btn-secondary */
+  border-radius: 1.6rem 1.5rem 1.6rem 1.5rem;
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15),
+    0 4px 8px 0 var(--shadow-color);
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  color: var(--text-white);
 }
+
+button#scrollToTopBtn:hover,
+button#terminal-toggle-btn:hover,
+button#achievement-toggle-btn:hover {
+  transform: scale(1.1);
+  animation-play-state: paused;
+  /* Menghentikan animasi pulse pada tombol scroll-to-top */
+  /* Animasikan border-radius untuk efek cair */
+  border-radius: 1.5rem 1.6rem 1.5rem 1.6rem;
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15),
+    0 6px 15px 0 var(--shadow-color);
+}
+
+.blink {
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
 
 @keyframes pulse {
-	0% {
-		box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb), 0.5);
-	}
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb), 0.5);
+  }
 
-	70% {
-		box-shadow: 0 0 0 10px rgba(var(--color-accent-rgb), 0);
-	}
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--color-accent-rgb), 0);
+  }
 
-	100% {
-		box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb), 0);
-	}
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb), 0);
+  }
 }
 
 /* Gaya untuk link navigasi aktif */
 .desktop-nav a.active {
-	background-color: var(--bg-nav-link-hover);
-	color: var(--text-white);
+  background-color: var(--bg-nav-link-hover);
+  color: var(--text-white);
 }
 
 .mobile-menu-overlay a.active {
-	color: var(--color-accent);
-	font-weight: 600;
+  color: var(--color-accent);
+  font-weight: 600;
 }
 
 /* Tombol CTA di menu mobile */
 .mobile-menu-cta {
-	background-color: var(--color-accent);
-	color: #ffffff !important;
-	padding: 0.8rem 1.5rem !important;
-	border-radius: 0.5rem;
-	margin-top: 1.5rem;
-	justify-content: center;
-	text-align: center !important;
-	width: 80%;
-	max-width: 300px;
+  /* Menerapkan gaya Liquid Glass dari .btn-primary */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05)), var(--color-accent);
+  color: var(--color-white) !important;
+  padding: 0.8rem 1.5rem !important;
+  border-radius: 1.1rem 1.2rem 1.1rem 1.2rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+  text-align: center !important;
+  width: 80%;
+  max-width: 300px;
+  box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px -2px rgba(var(--color-accent-rgb), 0.4);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.5);
 }
 
 /* Animasi untuk Workflow Section */
 .workflow-step {
-	opacity: 0;
-	transform: translateY(30px);
-	transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .workflow-step.animate {
-	opacity: 1;
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Tambahkan delay animasi untuk setiap step agar muncul berurutan */
 .workflow-step:nth-child(1).animate {
-	transition-delay: 0.1s;
+  transition-delay: 0.1s;
 }
 
 .workflow-step:nth-child(2).animate {
-	transition-delay: 0.2s;
+  transition-delay: 0.2s;
 }
 
 .workflow-step:nth-child(3).animate {
-	transition-delay: 0.3s;
+  transition-delay: 0.3s;
 }
 
 .workflow-step:nth-child(4).animate {
-	transition-delay: 0.4s;
+  transition-delay: 0.4s;
 }
 
 /* Animasi umum untuk section saat di-scroll */
 .fade-in-on-scroll {
-	opacity: 0;
-	transform: translateY(50px);
-	transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.live-demo {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.live-demo.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.fade-in-title {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-title.animate {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .fade-in-on-scroll.animate {
-	opacity: 1;
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-on-scroll#services {
+  transition-delay: 0.2s;
+  /* Tambahkan delay untuk section Layanan */
+}
+
+.fade-in-on-scroll#live-demos {
+  transition-delay: 0.3s;
+  /* Tambahkan delay untuk section Live Demos */
+}
+
+/* Typing Effect Cursor */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.5rem;
+  /* Sesuaikan dengan ukuran font */
+  background-color: var(--color-accent);
+  animation: blink-caret 0.85s step-end infinite;
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: var(--color-accent);
+  }
+}
+
+/* Efek Gradien Berkilau untuk Teks */
+.text-gradient-shiny {
+  display: inline-block;
+  /* Penting agar gradien dapat dirender */
+  background: linear-gradient(90deg, var(--color-accent), var(--text-white), var(--color-accent));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+  /* Fallback untuk browser yang tidak mendukung */
+  color: var(--color-accent);
+}
+
+@keyframes shine {
+  to {
+    background-position: -200% center;
+  }
+}
+
+/* Hero Full Height */
+.hero-full-height {
+  /* Menggunakan 100svh (small viewport height) untuk mengatasi masalah address bar mobile */
+  /* Fallback ke variabel --svh dari JS, lalu ke 100vh */
+  height: 100svh;
+  height: var(--svh);
+  min-height: 600px;
+  /* Minimum height for smaller screens */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animated Scroll Down Arrow */
+.scroll-down-container {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scroll-down-arrow {
+  color: var(--text-white);
+  width: 32px;
+  height: 32px;
+  animation: chevron-bounce 2.5s infinite;
+  opacity: 0;
+  margin-top: -14px;
+  /* Overlap the chevrons slightly */
+}
+
+.scroll-down-arrow:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.scroll-down-arrow:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes chevron-bounce {
+
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Animation for visitor count update */
 #visitor-count.pop-in {
-	animation: popIn 0.3s ease-out;
+  animation: popIn 0.3s ease-out;
 }
 
 @keyframes popIn {
-	0% {
-		transform: scale(0.8);
-		opacity: 0.5;
-	}
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 
-	50% {
-		transform: scale(1.1);
-		opacity: 1;
-	}
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 
-	100% {
-		transform: scale(1);
-	}
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Keyframe untuk animasi zoom lightbox */
 @keyframes zoomIn {
-	from {
-		transform: scale(0.8);
-		opacity: 0;
-	}
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
 
-	to {
-		transform: scale(1);
-		opacity: 1;
-	}
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Styles for Color Palette Demo */
 .color-swatch {
-	flex: 1 1 38px;
-	max-width: 60px;
-	aspect-ratio: 1 / 1;
-	border-radius: 0.5rem;
-	position: relative;
-	cursor: pointer;
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
-	display: flex;
-	align-items: flex-end;
-	justify-content: center;
-	padding-bottom: 4px;
+  flex: 1 1 38px;
+  max-width: 60px;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
 }
 
 .color-swatch:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 4px 10px var(--shadow-color);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px var(--shadow-color);
 }
 
 .color-swatch .hex-code {
-	background-color: rgba(0, 0, 0, 0.6);
-	color: white;
-	font-size: 0.75rem;
-	padding: 2px 6px;
-	border-radius: 0.25rem;
-	opacity: 0;
-	transition: opacity 0.2s ease;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .color-swatch:hover .hex-code {
-	opacity: 1;
+  opacity: 1;
 }
 
 /* Animasi untuk Kartu Keahlian (Staggered) */
 .skill-card {
-	opacity: 0;
-	transform: translateY(30px);
-	transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .skill-card.animate {
-	opacity: 1;
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Efek hover modern untuk kartu dengan bayangan berlapis */
 .skill-card:hover,
 .service-card:hover {
-	transform: translateY(-5px) scale(1.03);
-	box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
 }
 
 /* Animasi untuk Kartu Layanan (Staggered) */
 .service-card {
-	opacity: 0;
-	transform: translateY(30px);
-	transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .service-card.animate {
-	opacity: 1;
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Terminal Styles */
 #terminal-input {
-	caret-color: var(--color-accent);
+  caret-color: var(--color-accent);
 }
 
 #terminal-output .terminal-line {
-	white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 #terminal-window.light-theme {
-	background-color: #f0f0f0;
-	color: #333;
-	border-color: #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  border-color: #ccc;
 }
 
 /* Achievement Toast Animation */
 #achievement-toast.show {
-	transform: translateX(0);
+  transform: translateX(0);
 }
 
 /* macOS-like Terminal Controls */
 .terminal-btn {
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .terminal-btn .btn-icon {
-	width: 8px;
-	height: 8px;
-	color: rgba(0, 0, 0, 0.6);
-	opacity: 0;
-	transition: opacity 0.2s ease;
+  width: 8px;
+  height: 8px;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 #terminal-window:hover .terminal-btn .btn-icon {
-	opacity: 1;
+  opacity: 1;
 }
 
 #terminal-window.maximized {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	border-radius: 0;
-	padding: 0;
-	margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* Theme Switcher Dropdown */
 .theme-switcher {
-	position: relative;
+  position: relative;
 }
 
 .theme-dropdown {
-	position: absolute;
-	top: 100%;
-	right: 0;
-	margin-top: 0.5rem;
-	background-color: var(--bg-card);
-	border: 1px solid var(--border-color);
-	border-radius: 0.5rem;
-	box-shadow: 0 4px 6px var(--shadow-color);
-	z-index: 1020;
-	width: 150px;
-	overflow: hidden;
-	display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  z-index: 1020;
+  width: 150px;
+  overflow: hidden;
+  display: none;
 }
 
 .theme-dropdown.open {
-	display: block;
+  display: block;
 }
 
 .theme-option {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	padding: 0.5rem 1rem;
-	cursor: pointer;
-	font-size: 0.875rem;
-	color: var(--text-primary);
-	transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease;
 }
 
 .theme-option:hover {
-	background-color: var(--bg-card-secondary);
+  background-color: var(--bg-card-secondary);
 }
 
 .theme-option.active {
-	color: var(--color-accent);
-	font-weight: 600;
+  color: var(--color-accent);
+  font-weight: 600;
 }
 
 .theme-option .lucide {
-	width: 1rem;
-	height: 1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
-/* Navbar link styles */
-.nav-link {
-	color: var(--text-secondary);
+/* --- LIQUID GLASS STYLES for Navbar Links --- */
+.nav-link-anchor {
+  padding: 0.1rem;
+  /* Padding luar untuk ruang transisi */
+  border-radius: 1.5rem;
+  transition: padding 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
 }
 
-.nav-link:hover {
-	background-color: var(--bg-nav-link-hover);
-	color: var(--text-white);
+.desktop-nav a:hover.nav-link-anchor {
+  padding: 0.2rem;
+}
+
+.liquid-glass-wrapper {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  border-radius: 1rem 0.9rem 1rem 0.9rem;
+  /* Wobbly border-radius */
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+
+.desktop-nav a:hover .liquid-glass-wrapper {
+  box-shadow: 0 6px 12px var(--shadow-color), 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 0.9rem 1rem 0.9rem 1rem;
+  /* Animate border-radius on hover */
+}
+
+.liquid-glass-effect {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  backdrop-filter: blur(3px);
+  filter: url(#glass-distortion);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.liquid-glass-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(var(--bg-card-rgb), 0.25);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.liquid-glass-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.2), inset -1px -1px 1px 0 rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.liquid-glass-text {
+  position: relative;
+  z-index: 3;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+/* Gaya untuk hover state */
+.desktop-nav a:hover .liquid-glass-text {
+  color: var(--text-white);
+}
+
+.desktop-nav a:hover .liquid-glass-effect,
+.desktop-nav a:hover .liquid-glass-tint,
+.desktop-nav a:hover .liquid-glass-shine {
+  opacity: 1;
+}
+
+/* Gaya BARU yang lebih jelas untuk link aktif */
+.desktop-nav a.active .liquid-glass-wrapper {
+  background-color: var(--color-accent);
+  box-shadow: 0 4px 10px -2px rgba(var(--color-accent-rgb), 0.4);
+  /* Nonaktifkan efek liquid glass saat aktif untuk tampilan bersih */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.desktop-nav a.active .liquid-glass-effect,
+.desktop-nav a.active .liquid-glass-tint,
+.desktop-nav a.active .liquid-glass-shine {
+  opacity: 0;
+}
+
+.desktop-nav a.active .liquid-glass-text {
+  color: var(--color-white);
 }
 
 /* Gaya untuk menyorot fitur secara dinamis */
 .highlight-feature {
-	transform: scale(1.05);
-	box-shadow: 0 0 20px var(--color-accent), 0 0 5px var(--color-accent) inset;
-	border: 1px solid var(--color-accent);
-	transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--color-accent), 0 0 5px var(--color-accent) inset;
+  border: 1px solid var(--color-accent);
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
 }
 
 .skill-card {
-	transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.5s ease-out, border 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.5s ease-out, border 0.5s ease-out;
 }
 
 /* Tambahkan isyarat interaktif untuk kartu keahlian yang dapat difilter */
 .skill-card[data-skill] {
-	cursor: pointer;
-	border: 1px solid transparent;
+  cursor: pointer;
+  border: 1px solid transparent;
 }
 
 #codeViewerContent {
-	display: flex;
-	flex-direction: column;
-	overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 #codeViewerContent pre[class*="language-"] {
-	margin: 0 !important;
-	padding-left: 3.8em !important;
-	flex-grow: 1;
+  margin: 0 !important;
+  padding-left: 3.8em !important;
+  flex-grow: 1;
 }
 
 .code-viewer-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0.5rem 1rem 0.5rem 1.5rem;
-	background-color: var(--bg-card-secondary);
-	border-bottom: 1px solid var(--border-color);
-	gap: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
+  background-color: var(--bg-card-secondary);
+  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
 }
 
 .code-viewer-tabs {
-	display: flex;
-	gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .code-viewer-tab {
-	background-color: transparent;
-	border: none;
-	padding: 0.5rem 1rem;
-	border-radius: 0.375rem;
-	color: var(--text-secondary);
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	border: 1px solid transparent;
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .code-viewer-tab:hover {
-	background-color: var(--bg-card);
-	color: var(--text-white);
+  background-color: var(--bg-card);
+  color: var(--text-white);
 }
 
 .code-viewer-tab.active {
-	background-color: var(--bg-primary);
-	color: var(--text-white);
-	border-color: var(--border-color);
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  border-color: var(--border-color);
 }
 
 .code-viewer-controls {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .btn-copy-code {
-	display: inline-flex;
-	align-items: center;
-	background: none;
-	border: none;
-	color: var(--text-secondary);
-	font-size: 0.875rem;
-	cursor: pointer;
-	padding: 0.25rem 0.5rem;
-	border-radius: 0.25rem;
-	transition: color 0.2s ease, background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .btn-copy-code:hover {
-	color: var(--text-primary);
-	background-color: var(--bg-card);
+  color: var(--text-primary);
+  background-color: var(--bg-card);
 }
 
 .btn-code-toggle {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.5rem;
-	width: 100%;
-	background-color: transparent;
-	color: var(--text-secondary);
-	border: 1px solid var(--border-color);
-	padding: 0.5rem 1rem;
-	border-radius: 0.5rem;
-	transition: all 0.3s ease;
-	font-size: 0.875rem;
-	margin-top: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  margin-top: 1.25rem;
 }
 
 .btn-code-toggle:hover {
-	background-color: var(--bg-card-secondary);
-	color: var(--text-white);
-	border-color: var(--border-color);
+  background-color: var(--bg-card-secondary);
+  color: var(--text-white);
+  border-color: var(--border-color);
 }
 
 pre[class*="language-"] {
-	background: var(--prism-bg) !important;
-	padding: 1em !important;
-	margin: 0 !important;
-	border: none !important;
-	overflow: auto;
+  background: var(--prism-bg) !important;
+  padding: 1em !important;
+  margin: 0 !important;
+  border: none !important;
+  overflow: auto;
 }
 
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: var(--prism-token-comment);
+  color: var(--prism-token-comment);
 }
 
 .token.punctuation {
-	color: var(--prism-token-punctuation);
+  color: var(--prism-token-punctuation);
 }
 
 .token.property,
@@ -1006,7 +1326,7 @@ pre[class*="language-"] {
 .token.constant,
 .token.symbol,
 .token.deleted {
-	color: var(--prism-token-number);
+  color: var(--prism-token-number);
 }
 
 .token.selector,
@@ -1015,156 +1335,161 @@ pre[class*="language-"] {
 .token.char,
 .token.builtin,
 .token.inserted {
-	color: var(--prism-token-string);
+  color: var(--prism-token-string);
 }
 
 .token.operator,
 .token.entity,
 .token.url {
-	color: var(--prism-token-operator);
+  color: var(--prism-token-operator);
 }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword {
-	color: var(--prism-token-keyword);
+  color: var(--prism-token-keyword);
 }
 
 .token.function,
 .token.class-name {
-	color: var(--prism-token-function);
+  color: var(--prism-token-function);
 }
 
 code[class*="language-"],
 pre[class*="language-"] {
-	color: var(--prism-color) !important;
+  color: var(--prism-color) !important;
 }
 
 .tech-tag {
-	position: relative;
-	background-color: var(--bg-card-secondary);
-	color: var(--text-secondary);
-	padding: 0.25rem 0.75rem;
-	border-radius: 9999px;
-	font-size: 0.8rem;
-	font-weight: 500;
-	border: 1px solid var(--border-color);
-	cursor: help;
-	transition: all 0.2s ease;
+  position: relative;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  cursor: help;
+  transition: all 0.2s ease;
 }
 
 .tech-tag:hover {
-	background-color: var(--color-accent);
-	color: white;
-	border-color: var(--color-accent-hover);
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent-hover);
 }
 
 #global-tooltip {
-	position: fixed;
-	background-color: var(--bg-primary);
-	color: var(--text-primary);
-	padding: 0.5rem 1rem;
-	border-radius: 0.5rem;
-	font-size: 0.8rem;
-	max-width: 250px;
-	text-align: center;
-	box-shadow: 0 4px 10px var(--shadow-color);
-	z-index: 2000;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0.2s ease;
-	pointer-events: none;
+  position: fixed;
+  background: rgba(var(--bg-card-rgb), 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.6rem 0.5rem 0.7rem 0.5rem;
+  font-size: 0.8rem;
+  max-width: 250px;
+  text-align: center;
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.1), 0 4px 12px 0 var(--shadow-color);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  pointer-events: none;
+  transform: scale(0.95);
 }
 
 #global-tooltip.visible {
-	opacity: 1;
-	visibility: visible;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
 }
 
 /* Animasi untuk Filter Portofolio yang Mulus */
 @keyframes fadeInPortfolio {
-	from {
-		opacity: 0;
-		transform: translateY(15px) scale(0.98);
-	}
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
 
-	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes fadeOutPortfolio {
-	from {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 
-	to {
-		opacity: 0;
-		transform: translateY(-15px) scale(0.98);
-	}
+  to {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
 }
 
 .project-card {
-	animation: fadeInPortfolio 0.4s ease-out forwards;
-	opacity: 0;
+  animation: fadeInPortfolio 0.4s ease-out forwards;
+  opacity: 0;
 }
 
 .project-card.fading-out {
-	animation: fadeOutPortfolio 0.3s ease-in forwards;
+  animation: fadeOutPortfolio 0.3s ease-in forwards;
 }
 
 /* Neofetch Command Styles */
 .neofetch-container {
-	display: flex;
-	align-items: flex-start;
-	gap: 1.5rem;
-	font-family: monospace;
-	line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  font-family: monospace;
+  line-height: 1.4;
 }
 
 .neofetch-logo {
-	color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .neofetch-title {
-	color: var(--text-white);
-	font-weight: bold;
+  color: var(--text-white);
+  font-weight: bold;
 }
 
 .neofetch-label {
-	color: var(--color-accent);
-	font-weight: bold;
+  color: var(--color-accent);
+  font-weight: bold;
 }
 
 /* Utility class untuk warna putih solid yang tidak terpengaruh tema */
 .text-menu-active {
-	color: var(--color-accent);
+  color: var(--color-white);
 }
 
 /* BSOD Easter Egg Cursor Blink */
 #bsod p:last-child {
-	animation: blink 1s step-end infinite;
+  animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
 
-	from,
-	to {
-		color: transparent;
-	}
+  from,
+  to {
+    color: transparent;
+  }
 
-	50% {
-		color: white;
-	}
+  50% {
+    color: white;
+  }
 }
 
 /* CSS Hacker Mode Easter Egg */
 body.hackerman-mode {
-	transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
-	transform: rotate(-1deg) scale(0.99);
-	filter: hue-rotate(45deg) contrast(1.1);
+  transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
+  transform: rotate(-1deg) scale(0.99);
+  filter: hue-rotate(45deg) contrast(1.1);
 }
 
 /* Counter-rotate fixed elements so they stay aligned */
@@ -1174,354 +1499,354 @@ body.hackerman-mode #scrollToTopBtn,
 body.hackerman-mode #terminal-toggle-btn,
 body.hackerman-mode #achievement-toggle-btn,
 body.hackerman-mode #achievement-toast {
-	transform: rotate(1deg);
+  transform: rotate(1deg);
 }
 
 /* Styles for Pathfinding Visualizer Demo */
 .pathfinding-grid {
-	display: grid;
-	grid-template-columns: repeat(30, 1fr);
-	grid-template-rows: repeat(15, 1fr);
-	border: 1px solid var(--border-color);
-	aspect-ratio: 2 / 1;
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  border: 1px solid var(--border-color);
+  aspect-ratio: 2 / 1;
 }
 
 .pathfinding-node {
-	width: 100%;
-	height: 100%;
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 1px solid var(--border-color);
-	transition: background-color 0.2s ease, transform 0.2s ease;
-	cursor: pointer;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
 .pathfinding-node:hover {
-	background-color: var(--bg-card-secondary);
+  background-color: var(--bg-card-secondary);
 }
 
 .pathfinding-node.node-start {
-	background-color: var(--color-accent);
-	animation: pulse-node 1s infinite;
+  background-color: var(--color-accent);
+  animation: pulse-node 1s infinite;
 }
 
 .pathfinding-node.node-end {
-	background-color: #f43f5e;
-	animation: pulse-node 1s infinite;
+  background-color: #f43f5e;
+  animation: pulse-node 1s infinite;
 }
 
 .pathfinding-node.node-wall {
-	background-color: var(--text-primary);
-	transform: scale(0.9);
-	border-radius: 2px;
+  background-color: var(--text-primary);
+  transform: scale(0.9);
+  border-radius: 2px;
 }
 
 .pathfinding-node.node-visited {
-	animation: visit-node 0.5s ease-out forwards;
+  animation: visit-node 0.5s ease-out forwards;
 }
 
 .pathfinding-node.node-path {
-	animation: path-node 0.5s ease-out forwards;
+  animation: path-node 0.5s ease-out forwards;
 }
 
 .pathfinding-node.node-water {
-	background-color: rgba(var(--color-accent-rgb), 0.3);
-	animation: wave 2s ease-in-out infinite;
+  background-color: rgba(var(--color-accent-rgb), 0.3);
+  animation: wave 2s ease-in-out infinite;
 }
 
 /* New class for the drawing animation */
 .pathfinding-node.is-drawing {
-	background-color: #fde047;
-	transform: scale(1.2);
-	border-radius: 50%;
-	transition: transform 0.1s ease-out, background-color 0.1s ease-out, border-radius 0.1s ease-out;
+  background-color: #fde047;
+  transform: scale(1.2);
+  border-radius: 50%;
+  transition: transform 0.1s ease-out, background-color 0.1s ease-out, border-radius 0.1s ease-out;
 }
 
 .node-cost {
-	position: absolute;
-	font-size: 0.6rem;
-	color: var(--text-primary);
-	opacity: 0.7;
-	pointer-events: none;
-	text-shadow: 0 0 2px var(--bg-primary);
+  position: absolute;
+  font-size: 0.6rem;
+  color: var(--text-primary);
+  opacity: 0.7;
+  pointer-events: none;
+  text-shadow: 0 0 2px var(--bg-primary);
 }
 
 @keyframes visit-node {
-	0% {
-		transform: scale(0.5);
-		background-color: rgba(var(--color-accent-rgb), 0.2);
-	}
+  0% {
+    transform: scale(0.5);
+    background-color: rgba(var(--color-accent-rgb), 0.2);
+  }
 
-	100% {
-		transform: scale(1);
-		background-color: rgba(var(--color-accent-rgb), 0.4);
-	}
+  100% {
+    transform: scale(1);
+    background-color: rgba(var(--color-accent-rgb), 0.4);
+  }
 }
 
 @keyframes path-node {
-	0% {
-		transform: scale(0.7);
-		background-color: #facc15;
-	}
+  0% {
+    transform: scale(0.7);
+    background-color: #facc15;
+  }
 
-	100% {
-		transform: scale(1);
-		background-color: #fde047;
-	}
+  100% {
+    transform: scale(1);
+    background-color: #fde047;
+  }
 }
 
 @keyframes pulse-node {
-	0% {
-		transform: scale(1);
-	}
+  0% {
+    transform: scale(1);
+  }
 
-	50% {
-		transform: scale(0.8);
-	}
+  50% {
+    transform: scale(0.8);
+  }
 
-	100% {
-		transform: scale(1);
-	}
+  100% {
+    transform: scale(1);
+  }
 }
 
 .pathfinding-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.5rem;
-	border: 1px solid var(--border-color);
-	padding: 0.5rem 1rem;
-	border-radius: 0.5rem;
-	background-color: var(--bg-card-secondary);
-	color: var(--text-secondary);
-	cursor: pointer;
-	transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .pathfinding-btn.active,
 .pathfinding-btn:hover {
-	background-color: var(--color-accent);
-	color: white;
-	border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
 }
 
 .pathfinding-select {
-	background-color: var(--bg-card-secondary);
-	color: var(--text-secondary);
-	border: 1px solid var(--border-color);
-	border-radius: 0.5rem;
-	padding: 0.4rem 0.8rem;
-	font-size: 0.875rem;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	-webkit-appearance: none;
-	appearance: none;
-	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a0aec0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-	background-position: right 0.5rem center;
-	background-repeat: no-repeat;
-	background-size: 1.5em 1.5em;
-	padding-right: 2.5rem;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a0aec0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
 }
 
 .pathfinding-select:focus {
-	outline: none;
-	border-color: var(--color-accent);
-	box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.3);
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.3);
 }
 
 .pathfinding-btn:disabled,
 #run-pathfinding-btn:disabled,
 #reset-pathfinding-btn:disabled {
-	cursor: not-allowed;
-	opacity: 0.6;
-	background-color: var(--bg-card-secondary) !important;
-	color: var(--text-secondary) !important;
-	border-color: var(--border-color) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  background-color: var(--bg-card-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-color) !important;
 }
 
 /* Animasi "gagal" untuk pathfinding */
 .shake-animation {
-	animation: shake 0.5s ease-in-out;
+  animation: shake 0.5s ease-in-out;
 }
 
 @keyframes shake {
 
-	10%,
-	90% {
-		transform: translateX(-1px);
-	}
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
 
-	20%,
-	80% {
-		transform: translateX(2px);
-	}
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
 
-	30%,
-	50%,
-	70% {
-		transform: translateX(-4px);
-	}
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
 
-	40%,
-	60% {
-		transform: translateX(4px);
-	}
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
 }
 
 @keyframes wave {
 
-	0%,
-	100% {
-		border-radius: 45% 55% 70% 30% / 30% 50% 50% 70%;
-	}
+  0%,
+  100% {
+    border-radius: 45% 55% 70% 30% / 30% 50% 50% 70%;
+  }
 
-	50% {
-		border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%;
-	}
+  50% {
+    border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%;
+  }
 }
 
 /* Gaya baru untuk modal pencapaian */
 .achievement-item {
-	display: flex;
-	align-items: center;
-	gap: 1rem;
-	padding: 0.75rem;
-	background-color: var(--bg-card-secondary);
-	border-radius: 0.75rem;
-	border: 1px solid transparent;
-	transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: var(--bg-card-secondary);
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .achievement-badge {
-	flex-shrink: 0;
-	width: 64px;
-	height: 64px;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 2px solid;
-	transition: all 0.3s ease;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  transition: all 0.3s ease;
 }
 
 .achievement-badge.locked {
-	background-color: var(--bg-primary);
-	border-color: var(--border-color);
-	color: var(--text-secondary);
-	filter: grayscale(80%);
-	opacity: 0.6;
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  filter: grayscale(80%);
+  opacity: 0.6;
 }
 
 .achievement-badge.unlocked {
-	background-color: rgba(var(--color-accent-rgb), 0.15);
-	border-color: var(--color-accent);
-	color: var(--color-accent);
-	box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.3), 0 0 5px rgba(var(--color-accent-rgb), 0.2) inset;
+  background-color: rgba(var(--color-accent-rgb), 0.15);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.3), 0 0 5px rgba(var(--color-accent-rgb), 0.2) inset;
 }
 
 .achievement-item:hover .achievement-badge.unlocked {
-	transform: scale(1.1) rotate(-10deg);
+  transform: scale(1.1) rotate(-10deg);
 }
 
 .achievement-name {
-	font-weight: 600;
-	color: var(--text-white);
+  font-weight: 600;
+  color: var(--text-white);
 }
 
 .achievement-desc {
-	font-size: 0.8rem;
-	color: var(--text-secondary);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
 }
 
 /* Redesigned Contact Form Styles v2 */
 .sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border-width: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .form-input-wrapper {
-	position: relative;
-	display: flex;
-	align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .input-icon {
-	position: absolute;
-	left: 1rem;
-	top: 50%;
-	transform: translateY(-50%);
-	color: var(--text-secondary);
-	width: 1.25rem;
-	height: 1.25rem;
-	pointer-events: none;
-	transition: color 0.3s ease;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  width: 1.25rem;
+  height: 1.25rem;
+  pointer-events: none;
+  transition: color 0.3s ease;
 }
 
 /* Atur ulang posisi ikon khusus untuk textarea agar sejajar di atas */
 .form-input-wrapper:has(textarea) .input-icon {
-	top: 1.3rem;
-	transform: translateY(0);
+  top: 1.3rem;
+  transform: translateY(0);
 }
 
 .form-input {
-	width: 100%;
-	background-color: var(--bg-card-secondary);
-	border: 1px solid var(--border-color);
-	color: var(--text-primary);
-	padding: 1rem 1rem 1rem 3.5rem;
-	border-radius: 0.5rem;
-	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  background-color: var(--bg-card-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 1rem 1rem 1rem 3.5rem;
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hapus warna placeholder default */
 .form-input::placeholder {
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 }
 
 .form-input:focus {
-	outline: none;
-	border-color: var(--color-accent);
-	box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.3);
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.3);
 }
 
 .form-input:focus~.input-icon {
-	color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .form-input.invalid {
-	border-color: #ef4444;
+  border-color: #ef4444;
 }
 
 .form-input.invalid:focus {
-	border-color: #ef4444;
-	box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
 }
 
 .form-input.invalid~.input-icon {
-	color: #ef4444;
+  color: #ef4444;
 }
 
 .form-input.valid {
-	border-color: #22c55e;
+  border-color: #22c55e;
 }
 
 .form-error-message {
-	font-size: 0.8rem;
-	color: #f87171;
+  font-size: 0.8rem;
+  color: #f87171;
 }
 
 #submit-contact-form:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
-	transform: none;
-	background-color: var(--color-accent);
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  background-color: var(--color-accent);
 }

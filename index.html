@@ -109,55 +109,93 @@
         class="container flex justify-between items-center"
         id="main-navbar"
       >
-        <a href="#" id="nav-brand" class="text-2xl font-bold tracking-wide" style="color: var(--text-white);"
-          >Ade Syofyan</a
-        >
+        <a href="#" id="nav-brand" class="text-2xl font-bold tracking-wide" style="color: var(--text-white);">Ade Syofyan</a>
         <!-- Redesigned Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-2 desktop-nav">
           <a
             href="#about"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Tentang Saya</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Tentang Saya</span>
+            </div></a
           >
           <a
             href="#skills"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Keahlian</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Keahlian</span>
+            </div></a
           >
           <a
             href="#services"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Layanan</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Layanan</span>
+            </div></a
           >
           <a
             href="#live-demos"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Live Demos</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Live Demos</span>
+            </div></a
           >
           <a
             href="#workflow"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Proses Kerja</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Proses Kerja</span>
+            </div></a
           >
           <a
             href="#portfolio"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Portofolio</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Portofolio</span>
+            </div></a
           >
           <a
             href="#testimonials"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Testimoni</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Testimoni</span>
+            </div></a
           >
           <a
             href="#contact"
-            class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >Kontak</a
+            class="nav-link-anchor"
+            ><div class="liquid-glass-wrapper">
+              <div class="liquid-glass-effect"></div>
+              <div class="liquid-glass-tint"></div>
+              <div class="liquid-glass-shine"></div>
+              <span class="liquid-glass-text">Kontak</span>
+            </div></a
           >
           <a
             href="#"
             onclick="openChatbotModal(); return false;"
-            class="text-white px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--color-accent);" onmouseover="this.style.backgroundColor='var(--color-accent-hover)'" onmouseout="this.style.backgroundColor='var(--color-accent)'"
+            class="btn-primary always-active"
             >Chat ke AI</a
           >
           <!-- Theme Switcher -->
@@ -222,34 +260,36 @@
     </div>
 
     <!-- Hero Section -->
-    <header class="py-20 text-center relative overflow-hidden">
+    <header class="hero-full-height text-center relative overflow-hidden">
       <!-- Kanvas untuk efek latar belakang "plexus" -->
       <canvas id="heroCanvas"></canvas>
-      <div class="container relative z-10">
+      <div class="container relative z-10 flex flex-col justify-center items-center h-full">
         <h1
-          id="hero-title" class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight" style="color: var(--text-white);"
+          id="hero-title" class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight fade-in-title" style="color: var(--text-white);"
         >
-          Halo, saya <span class="text-accent">Ade Syofyan</span>
+          Halo, saya <span class="text-gradient-shiny">Ade Syofyan</span>
         </h1>
-        <p id="hero-subtitle" class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" style="color: var(--text-secondary);">
-          <span class="font-semibold">Mobile & Web Developer</span> dengan
-          keahlian memecahkan masalah. Membangun solusi digital inovatif dari
-          ide hingga implementasi.
+        <p id="hero-subtitle" class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" style="color: var(--text-secondary); min-height: 120px;">
+          <span class="typing-text"></span><span class="typing-cursor"></span>
         </p>
         <!-- Added flex and flex-wrap for better button responsiveness -->
         <div class="flex flex-wrap justify-center space-x-4">
-          <a href="#portfolio" class="btn-primary inline-block"
-            >Lihat Portofolio</a
-          >
-          <a href="#contact" class="btn-secondary inline-block">Hubungi Saya</a>
+          <a href="#portfolio" class="btn-primary inline-block">Lihat Portofolio</a>
+          <a href="#contact" class="btn-secondary inline-block blink">Hubungi Saya</a>
         </div>
+        <!-- Animated Scroll Down Arrow -->
+        <a href="#about" class="scroll-down-container" aria-label="Scroll down">
+          <i data-lucide="chevron-down" class="scroll-down-arrow"></i>
+          <i data-lucide="chevron-down" class="scroll-down-arrow"></i>
+          <i data-lucide="chevron-down" class="scroll-down-arrow"></i>
+        </a>
       </div>
     </header>
 
     <!-- About Me Section -->
     <section
       id="about"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
+      class="py-20 shadow-lg my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
     >
       <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
         <div class="md:w-1/3 flex justify-center">
@@ -311,7 +351,7 @@
           id="skills-grid"
         >
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
             data-skill="mobile"
           >
             <!-- Ikon Pengembangan Mobile -->
@@ -324,7 +364,7 @@
             <p style="color: var(--text-secondary);">Flutter, Kotlin</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
             data-skill="web"
           >
             <!-- Ikon Pengembangan Web -->
@@ -337,7 +377,7 @@
             <p style="color: var(--text-secondary);">Laravel, PHP, JavaScript</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
             data-skill="ai"
           >
             <!-- Ikon Integrasi AI -->
@@ -350,7 +390,7 @@
             <p style="color: var(--text-secondary);">Chatbot AI, Akuntan AI</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
             data-skill="erp"
           >
             <!-- Ikon Sistem ERP -->
@@ -361,7 +401,7 @@
             <p style="color: var(--text-secondary);">Pengembangan & Integrasi</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
             data-skill="firebase"
           >
             <!-- Ikon Firebase -->
@@ -372,7 +412,7 @@
             <p style="color: var(--text-secondary);">Backend as a Service</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
           >
             <!-- Ikon Sistem Real-time -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -384,7 +424,7 @@
             <p style="color: var(--text-secondary);">Integrasi & Implementasi</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
           >
             <!-- Ikon Pemecahan Masalah -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -396,7 +436,7 @@
             <p style="color: var(--text-secondary);">Analisis & Solusi Efektif</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
           >
             <!-- Ikon Layanan Cloud -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -408,7 +448,7 @@
             <p style="color: var(--text-secondary);">Deployment & Management</p>
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
           >
             <!-- Ikon DevOps -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -425,13 +465,16 @@
 
     <section
       id="services"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container"
+      class="py-20 shadow-lg my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
     >
+
+    <canvas class="plexus-canvas"></canvas>
+    
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Layanan Saya</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
           <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="smartphone-charging"></i>
@@ -451,7 +494,7 @@
           </div>
 
           <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="layout-dashboard"></i>
@@ -471,7 +514,7 @@
           </div>
 
           <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="bot"></i>
@@ -491,7 +534,7 @@
           </div>
 
           <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card" style="background-color: var(--bg-card-secondary);"
+            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
               <i data-lucide="server"></i>
@@ -520,8 +563,8 @@
       </div>
     </section>
 
-
     <section id="live-demos" class="py-20 fade-in-on-scroll">
+      <canvas class="plexus-canvas"></canvas>
       <div class="container text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
         <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
@@ -529,10 +572,10 @@
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
-          <div class="bg-card p-6 rounded-xl shadow-lg">
+          <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pengunjung (Simulasi)</h3>
+              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Simulasi Pengunjung</h3>
             </div>
             <p class="mb-6" style="color: var(--text-secondary);">
               Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
@@ -575,7 +618,7 @@ setInterval(() => {
           </div>
     
   
-          <div class="bg-card p-6 rounded-xl shadow-lg">
+          <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
               <h3 class="text-2xl font-bold" style="color: var(--text-white);">Color Palette Generator</h3>
@@ -630,7 +673,7 @@ setInterval(() => {
           </div>
 
 
-          <div class="bg-card p-6 rounded-xl shadow-lg md:col-span-2">
+          <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
             <div class="flex items-center justify-center gap-4 mb-4">
               <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
               <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
@@ -710,11 +753,8 @@ setInterval(() => {
       </div>
     </section>
 
-
     <section id="workflow" class="py-20 fade-in-on-scroll relative">
-
       <canvas class="plexus-canvas"></canvas>
-
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
           Bagaimana Saya Bekerja
@@ -785,8 +825,9 @@ setInterval(() => {
     <!-- Portfolio Section -->
     <section
       id="portfolio"
-      class="py-20 bg-card shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
+      class="py-20 shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
     >
+      <canvas class="plexus-canvas"></canvas>
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
 
@@ -807,11 +848,9 @@ setInterval(() => {
     </section>
 
     <!-- Testimonials Section (New) -->
-    <section id="testimonials" class="py-20 fade-in-on-scroll relative">
-
+    <section id="testimonials" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container liquid-glass-card">
       <canvas class="plexus-canvas"></canvas>
-
-      <div class="container text-center relative z-10">
+      <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Apa Kata Klien Saya</h2>
         <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
@@ -821,9 +860,7 @@ setInterval(() => {
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 fade-in-on-scroll relative">
-
       <canvas class="plexus-canvas"></canvas>
-
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
@@ -834,7 +871,7 @@ setInterval(() => {
           class="flex flex-col md:flex-row justify-center items-center gap-8" id="contact-cards"
         >
           <div
-            class="bg-card p-6 rounded-xl shadow-lg text-center w-full md:w-1/4"
+            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 liquid-glass-card"
           >
             <!-- Ikon Email -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -848,7 +885,7 @@ setInterval(() => {
             >
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg text-center w-full md:w-1/4"
+            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 liquid-glass-card"
           >
             <!-- Ikon Telepon -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -862,7 +899,7 @@ setInterval(() => {
             >
           </div>
           <div
-            class="bg-card p-6 rounded-xl shadow-lg text-center w-full md:w-1/4"
+            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 liquid-glass-card"
           >
             <!-- Ikon LinkedIn -->
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -878,7 +915,7 @@ setInterval(() => {
           </div>
           <!-- Kartu Chatbot -->
           <div
-            class="bg-card p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 cursor-pointer transform hover:scale-105 transition duration-300"
+            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 cursor-pointer transform hover:scale-105 transition duration-300 liquid-glass-card"
             onclick="openChatbotModal()"
           >
             <p class="text-accent text-5xl mb-4 flex justify-center">
@@ -1069,12 +1106,12 @@ setInterval(() => {
     </div>
 
     <!-- Terminal Toggle Button -->
-    <button id="terminal-toggle-btn" class="fixed bottom-5 left-5 z-[100] text-accent p-3 rounded-full shadow-lg transition-all" style="background-color: var(--bg-card);" title="Buka Mode Terminal">
+    <button id="terminal-toggle-btn" class="fixed bottom-5 left-5 z-[100]" title="Buka Mode Terminal">
         <i data-lucide="terminal-square" class="w-6 h-6"></i>
     </button>
 
     <!-- Achievement Toggle Button -->
-    <button id="achievement-toggle-btn" class="fixed bottom-5 left-20 z-[100] text-accent p-3 rounded-full shadow-lg transition-all" style="background-color: var(--bg-card);" title="Lihat Pencapaian">
+    <button id="achievement-toggle-btn" class="fixed bottom-5 left-20 z-[100]" title="Lihat Pencapaian">
         <i data-lucide="award" class="w-6 h-6"></i>
     </button>
 
