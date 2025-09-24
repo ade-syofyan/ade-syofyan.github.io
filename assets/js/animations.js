@@ -359,7 +359,7 @@ function initializeParallax() {
         const sectionTop = aboutSection.offsetTop;
         const sectionHeight = aboutSection.offsetHeight;
         const scrollRelativeToSection = scrollY - sectionTop;
-        const parallaxSpeedImg = 0.1;
+        const parallaxSpeedImg = 0.2; // Meningkatkan kecepatan paralaks agar lebih terlihat
 
         if (
           scrollY + window.innerHeight > sectionTop &&

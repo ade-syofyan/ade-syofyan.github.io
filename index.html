@@ -93,9 +93,15 @@
 
     <script>
       (function() {
+        // Skrip ini dijalankan lebih awal untuk mencegah "flicker" tema.
         try {
-          var theme = localStorage.getItem('theme');
-          if (theme === 'light' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+          const theme = localStorage.getItem('theme') || 'system';
+          const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const isDark = theme === 'dark' || (theme === 'system' && isSystemDark);
+
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
             document.documentElement.setAttribute('data-theme', 'light');
           }
         } catch (e) {}
