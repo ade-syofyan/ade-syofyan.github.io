@@ -153,6 +153,8 @@ nav {
   backdrop-filter: blur(0px);
   /* Fix untuk bug 'position: sticky' di Chrome iOS */
   transform: translateZ(0);
+  /* Petunjuk optimisasi tambahan untuk browser */
+  will-change: background-color, backdrop-filter, box-shadow;
 }
 
 nav.nav-scrolled {
