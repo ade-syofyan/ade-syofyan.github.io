@@ -114,6 +114,8 @@ body.modal-open {
   backdrop-filter: blur(15px);
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
   border-radius: 1.5rem;
+  /* Bayangan halus untuk kontainer utama */
+  box-shadow: 0 10px 30px -10px var(--shadow-color);
   /* Sudut membulat yang lebih besar untuk section */
 }
 
@@ -138,6 +140,8 @@ body.modal-open {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
   background-size: 32px 32px;
   background-blend-mode: overlay;
+  /* Bayangan halus untuk kartu-kartu kecil */
+  box-shadow: 0 8px 20px -8px var(--shadow-color);
 }
 
 /* Glassmorphism for Navbar */
@@ -147,6 +151,8 @@ nav {
   box-shadow: none;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
+  /* Fix untuk bug 'position: sticky' di Chrome iOS */
+  transform: translateZ(0);
 }
 
 nav.nav-scrolled {
