@@ -107,7 +107,7 @@ function analyzeAndHighlight(text, source = "chatbot") {
     if (lowerText.includes(keyword)) {
       const projectId = projectSpotlightMap[keyword];
       if (window.spotlightProject) window.spotlightProject(projectId);
-      break; 
+      break;
     }
   }
 
@@ -138,8 +138,7 @@ function analyzeAndHighlight(text, source = "chatbot") {
   }
 }
 
-function typeMessage(element, text, delay = 20) {
-
+function typeMessage(element, text, delay = 20, onComplete = null) {
   const messageBubble = document.createElement("div");
   messageBubble.className = "p-3 rounded-lg max-w-[80%] chat-message";
   element.appendChild(messageBubble);
@@ -147,11 +146,28 @@ function typeMessage(element, text, delay = 20) {
   let i = 0;
   function typing() {
     if (i < text.length) {
+      // Cek jika ada tag HTML
+      if (text.charAt(i) === "<") {
+        const tagEndIndex = text.indexOf(">", i);
+        if (tagEndIndex !== -1) {
+          // Langsung tambahkan seluruh tag HTML tanpa efek ketik
+          messageBubble.innerHTML += text.substring(i, tagEndIndex + 1);
+          i = tagEndIndex + 1;
+          setTimeout(typing, 0); // Lanjutkan segera
+          return;
+        }
+      }
+      // Ketik karakter biasa
       messageBubble.innerHTML += text.charAt(i);
       i++;
       document.getElementById("chatDisplay").scrollTop =
         document.getElementById("chatDisplay").scrollHeight;
       setTimeout(typing, delay);
+    } else {
+      // Panggil callback jika ada setelah selesai
+      if (onComplete) {
+        onComplete();
+      }
     }
   }
   typing();
@@ -200,36 +216,54 @@ async function sendChatMessage() {
       const modelResponse = result.candidates[0].content;
       let text = modelResponse.parts[0].text;
 
-      analyzeAndHighlight(text);
-
       const whatsappRegex = new RegExp(
         `\\[(.*?)\\]\\((${siteConfig.social.whatsapp.replace(
           "?",
           "\\?"
         )}.*?)\\)`
       );
+      const whatsappMatch = text.match(whatsappRegex);
+      let whatsappButtonHTML = null;
 
-      if (whatsappRegex.test(text)) {
+      if (whatsappMatch) {
+        // Ekstrak dan hapus markdown link dari teks utama
+        text = text.replace(whatsappRegex, "").trim();
+
+        // Buat link WhatsApp yang benar
         const encodedMessage = encodeURIComponent(
           `Halo Ade, saya tertarik dengan ${message}`
         );
         const waLink = `${siteConfig.social.whatsapp}?text=${encodedMessage}`;
-        text = text.replace(
-          whatsappRegex,
-          `<a href="${waLink}" target="_blank" class="text-blue-400 hover:underline">WhatsApp</a>`
-        );
-      } else {
-        text = text.replace(
-          whatsappRegex,
-          '<a href="$2" target="_blank" class="text-blue-400 hover:underline">$1</a>'
-        );
+
+        // Buat HTML untuk tombol WhatsApp yang lebih menarik
+        whatsappButtonHTML = `
+          <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-primary inline-flex items-center gap-2 mt-3 animate-pulse">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Hubungi via WhatsApp</span>
+          </a>
+        `;
       }
+
+      // Analisis teks yang tersisa
+      analyzeAndHighlight(text);
 
       const aiMessageDiv = document.createElement("div");
       aiMessageDiv.className = "flex justify-start mb-2 ai-bubble";
       chatDisplay.appendChild(aiMessageDiv);
       conversationHistory.push({ role: "model", parts: [{ text: text }] });
-      typeMessage(aiMessageDiv, text);
+
+      // Fungsi yang akan dijalankan setelah teks selesai diketik
+      const onTypingComplete = () => {
+        if (whatsappButtonHTML) {
+          const buttonContainer = document.createElement("div");
+          buttonContainer.innerHTML = whatsappButtonHTML;
+          aiMessageDiv.appendChild(buttonContainer);
+          lucide.createIcons(); // Inisialisasi ikon pada tombol baru
+          chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+      };
+
+      typeMessage(aiMessageDiv, text, 20, onTypingComplete);
     } else {
       throw new Error("Invalid response from API");
     }
@@ -307,15 +341,25 @@ window.getTerminalChatResponse = async function (message, outputCallback) {
 
       // Handle WhatsApp link specifically for terminal
       const whatsappRegex = /\[(.*?)\]\((https?:\/\/wa\.me.*?)\)/g;
-      text = text.replace(whatsappRegex, (match, linkText, url) => {
-        const encodedMessage = encodeURIComponent(
-          `Halo Ade, saya tertarik dengan ${message}`
-        );
-        const waLink = `${siteConfig.social.whatsapp}?text=${encodedMessage}`;
-        return `${linkText} ( ${waLink} )`;
-      });
+      const whatsappMatch = text.match(whatsappRegex);
 
-      text = text.replace(/\[(.*?)\]\((.*?)\)/g, "$1 ( $2 )");
+      if (whatsappMatch) {
+        text = text.replace(whatsappRegex, (match, linkText, url) => {
+          const encodedMessage = encodeURIComponent(
+            `Halo Ade, saya tertarik dengan ${message}`
+          );
+          const waLink = `${siteConfig.social.whatsapp}?text=${encodedMessage}`;
+          // Membuat link HTML yang bisa diklik dengan gaya teks terminal
+          return `<a href="${waLink}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">${linkText}</a>`;
+        });
+      }
+
+      // Mengubah markdown link umum menjadi teks biasa dengan URL di dalam kurung
+      text = text.replace(
+        /\[(.*?)\]\((?!https?:\/\/wa\.me)(.*?)\)/g,
+        "$1 ( $2 )"
+      );
+      // Menghapus sisa format bold
       text = text.replace(/\*\*(.*?)\*\*/g, "$1");
 
       conversationHistory.push({ role: "model", parts: [{ text: text }] });
