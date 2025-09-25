@@ -24,8 +24,6 @@ function initializeFullHeightHero() {
 
   const setHeroHeight = () => {
     const navbarHeight = navbar.offsetHeight;
-    // Menggunakan window.innerHeight untuk mendapatkan tinggi viewport yang sebenarnya.
-    // Ini berfungsi sebagai fallback jika 100svh tidak didukung.
     const actualHeight = window.innerHeight - navbarHeight;
     hero.style.setProperty("--svh", `${actualHeight}px`);
   };
@@ -804,11 +802,6 @@ function populateStaticData() {
   if (navBrand) {
     navBrand.textContent = siteConfig.name;
   }
-
-  // Hero Section
-  document.getElementById(
-    "hero-title"
-  ).innerHTML = `Halo, saya <span class="text-accent">${siteConfig.name}</span>`;
 
   // About Section
   document.getElementById("cv-link-about").href = siteConfig.cvUrl;

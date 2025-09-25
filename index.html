@@ -93,7 +93,6 @@
 
     <script>
       (function() {
-        // Skrip ini dijalankan lebih awal untuk mencegah "flicker" tema.
         try {
           const theme = localStorage.getItem('theme') || 'system';
           const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -269,9 +268,13 @@
     <header class="hero-full-height text-center relative overflow-hidden">
       <!-- Kanvas untuk efek latar belakang "plexus" -->
       <canvas id="heroCanvas"></canvas>
-      <div class="container relative z-10 flex flex-col justify-center items-center h-full">
+      <div
+        class="container relative z-10 flex flex-col justify-center items-center h-full"
+      >
         <h1
-          id="hero-title" class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight fade-in-title" style="color: var(--text-white);"
+          id="hero-title"
+          class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight fade-in-title"
+          style="color: var(--text-white);"
         >
           Halo, saya <span class="text-gradient-shiny">Ade Syofyan</span>
         </h1>

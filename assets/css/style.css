@@ -37,9 +37,7 @@
 html[data-theme='light'] {
   /* Light Theme */
   --bg-primary: #f0f2f5;
-  /* Sedikit lebih gelap dari putih */
   --bg-card: #f8f9fa;
-  /* Off-white untuk kartu */
   --bg-card-rgb: 248, 249, 250;
   --bg-card-secondary: rgba(233, 236, 239, 0.6);
   --bg-nav: #f8f9fa;
@@ -48,16 +46,12 @@ html[data-theme='light'] {
   --bg-nav-link-hover: var(--bg-card-secondary);
   --bg-overlay: rgba(247, 250, 252, 0.8);
   --text-primary: #343a40;
-  /* Hitam yang lebih lembut */
   --text-secondary: #6c757d;
-  /* Abu-abu yang lebih lembut */
   --text-white: #212529;
-  /* Teks "putih" di mode terang (sebenarnya hitam) */
   --color-accent: #3182ce;
   --color-accent-rgb: 49, 130, 206;
   --color-accent-hover: #2b6cb0;
   --border-color: #dee2e6;
-  /* Border yang lebih lembut */
   --border-color-rgb: 222, 226, 230;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --prism-bg: #f5f2f0;
@@ -114,9 +108,7 @@ body.modal-open {
   backdrop-filter: blur(15px);
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
   border-radius: 1.5rem;
-  /* Bayangan halus untuk kontainer utama */
   box-shadow: 0 10px 30px -10px var(--shadow-color);
-  /* Sudut membulat yang lebih besar untuk section */
 }
 
 /* Menambahkan tekstur grid HANYA ke section "Tentang Saya" */
@@ -135,12 +127,9 @@ body.modal-open {
   backdrop-filter: blur(15px);
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
   border-radius: 0.75rem;
-  /* Menambahkan sudut membulat (rounded-xl) */
-  /* Menambahkan efek kertas (grid) seperti pada chat */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(74 85 104 / 0.15)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
   background-size: 32px 32px;
   background-blend-mode: overlay;
-  /* Bayangan halus untuk kartu-kartu kecil */
   box-shadow: 0 8px 20px -8px var(--shadow-color);
 }
 
@@ -151,14 +140,11 @@ nav {
   box-shadow: none;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
-  /* Fix untuk bug 'position: sticky' di Chrome iOS */
   transform: translateZ(0);
-  /* Petunjuk optimisasi tambahan untuk browser */
   will-change: background-color, backdrop-filter, box-shadow;
 }
 
 nav.nav-scrolled {
-  /* Efek "Liquid Glass" */
   background: linear-gradient(135deg, rgba(var(--bg-nav-rgb), 0.3), rgba(var(--bg-nav-rgb), 0.2)) !important;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
@@ -170,12 +156,10 @@ nav.nav-scrolled {
 .btn-primary {
   padding: 0.75rem 1.5rem;
   display: inline-flex;
-  /* Memastikan konsistensi layout */
   align-items: center;
   justify-content: center;
   font-weight: 600;
   color: var(--color-white);
-  /* Lapisan dasar warna primer, dengan gradien kilau di atasnya */
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05)), var(--color-accent);
   border-radius: 1.1rem 1.2rem 1.1rem 1.2rem;
   box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px -2px rgba(var(--color-accent-rgb), 0.4), 0 2px 8px -1px var(--shadow-color);
@@ -288,7 +272,6 @@ nav.nav-scrolled {
 }
 
 .modal-content {
-  /* Menerapkan Liquid Glass Effect */
   background: rgba(var(--bg-card-rgb), 0.15);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -419,12 +402,12 @@ nav.nav-scrolled {
   z-index: 0;
   opacity: 0.15;
   background-color: transparent;
-  pointer-events: none; /* Memungkinkan klik menembus canvas */
+  pointer-events: none;
+  /* Memungkinkan klik menembus canvas */
 }
 
 /* Gaya spesifik Chatbot */
 .chatbot-content {
-  /* Menerapkan Liquid Glass Effect */
   background: rgba(var(--bg-card-rgb), 0.15);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -656,7 +639,6 @@ nav.nav-scrolled {
 button#scrollToTopBtn,
 button#terminal-toggle-btn,
 button#achievement-toggle-btn {
-  /* Menyeragamkan ukuran dan memastikan ikon di tengah */
   width: 48px;
   height: 48px;
   display: inline-flex;
@@ -664,7 +646,6 @@ button#achievement-toggle-btn {
   justify-content: center;
   background: rgba(var(--bg-card-rgb), 0.1);
   backdrop-filter: blur(4px);
-  /* Menerapkan gaya Liquid Glass dari .btn-secondary */
   border-radius: 1.6rem 1.5rem 1.6rem 1.5rem;
   box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15),
     0 4px 8px 0 var(--shadow-color);
@@ -678,8 +659,6 @@ button#terminal-toggle-btn:hover,
 button#achievement-toggle-btn:hover {
   transform: scale(1.1);
   animation-play-state: paused;
-  /* Menghentikan animasi pulse pada tombol scroll-to-top */
-  /* Animasikan border-radius untuk efek cair */
   border-radius: 1.5rem 1.6rem 1.5rem 1.6rem;
   box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15),
     0 6px 15px 0 var(--shadow-color);
@@ -732,7 +711,6 @@ button#achievement-toggle-btn:hover {
 
 /* Tombol CTA di menu mobile */
 .mobile-menu-cta {
-  /* Menerapkan gaya Liquid Glass dari .btn-primary */
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05)), var(--color-accent);
   color: var(--color-white) !important;
   padding: 0.8rem 1.5rem !important;
@@ -845,15 +823,14 @@ button#achievement-toggle-btn:hover {
 /* Efek Gradien Berkilau untuk Teks */
 .text-gradient-shiny {
   display: inline-block;
-  /* Penting agar gradien dapat dirender */
   background: linear-gradient(90deg, var(--color-accent), var(--text-white), var(--color-accent));
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 4s linear infinite;
-  /* Fallback untuk browser yang tidak mendukung */
   color: var(--color-accent);
+  padding-bottom: 15px;
 }
 
 @keyframes shine {
@@ -864,12 +841,9 @@ button#achievement-toggle-btn:hover {
 
 /* Hero Full Height */
 .hero-full-height {
-  /* Menggunakan 100svh (small viewport height) untuk mengatasi masalah address bar mobile */
-  /* Fallback ke variabel --svh dari JS, lalu ke 100vh */
   height: 100svh;
   height: var(--svh);
   min-height: 600px;
-  /* Minimum height for smaller screens */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -893,7 +867,6 @@ button#achievement-toggle-btn:hover {
   animation: chevron-bounce 2.5s infinite;
   opacity: 0;
   margin-top: -14px;
-  /* Overlap the chevrons slightly */
 }
 
 .scroll-down-arrow:nth-child(2) {
@@ -1094,12 +1067,10 @@ button#achievement-toggle-btn:hover {
   z-index: 1020;
   width: 150px;
   overflow: hidden;
-  /* Menambahkan efek Liquid Glass */
   background: rgba(var(--bg-card-rgb), 0.25);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
-  /* Properti untuk animasi */
   opacity: 0;
   visibility: hidden;
   transform-origin: top right;
@@ -1141,7 +1112,6 @@ button#achievement-toggle-btn:hover {
 /* --- LIQUID GLASS STYLES for Navbar Links --- */
 .nav-link-anchor {
   padding: 0.1rem;
-  /* Padding luar untuk ruang transisi */
   border-radius: 1.5rem;
   transition: padding 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
 }
@@ -1155,7 +1125,6 @@ button#achievement-toggle-btn:hover {
   display: flex;
   overflow: hidden;
   border-radius: 1rem 0.9rem 1rem 0.9rem;
-  /* Wobbly border-radius */
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
@@ -1165,7 +1134,6 @@ button#achievement-toggle-btn:hover {
   content: '';
   position: absolute;
   inset: 0;
-  /* Efek liquid glass yang beradaptasi dengan tema */
   background: rgba(var(--border-color-rgb), 0.1);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -1177,7 +1145,6 @@ button#achievement-toggle-btn:hover {
 .desktop-nav a:hover .liquid-glass-wrapper {
   box-shadow: 0 6px 12px var(--shadow-color), 0 0 20px rgba(0, 0, 0, 0.1);
   border-radius: 0.9rem 1rem 0.9rem 1rem;
-  /* Animate border-radius on hover */
 }
 
 .liquid-glass-tint {
@@ -1203,7 +1170,6 @@ button#achievement-toggle-btn:hover {
 .desktop-nav a.active .liquid-glass-wrapper {
   background-color: var(--color-accent);
   box-shadow: 0 4px 10px -2px rgba(var(--color-accent-rgb), 0.4);
-  /* Nonaktifkan efek liquid glass saat aktif untuk tampilan bersih */
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -1218,7 +1184,7 @@ button#achievement-toggle-btn:hover {
 
 .desktop-nav a:hover .liquid-glass-text {
   color: var(--color-white);
-  transition-delay: 0.1s; /* Sedikit delay agar warna berubah setelah liquid lewat */
+  transition-delay: 0.1s;
 }
 
 /* Gaya untuk menyorot fitur secara dinamis */
@@ -1882,5 +1848,93 @@ body.hackerman-mode #achievement-toast {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
-  background-color: var(--color-accent);
+  /* CSS Aurora Effect */
+}
+
+:root {
+  --bg: #1a202c;
+  --clr-1: #00c2ff;
+  --clr-2: #33ff8c;
+  --clr-3: #ffc640;
+  --clr-4: #e54cff;
+
+  --blur: 1rem;
+  --fs: clamp(3rem, 8vw, 7rem);
+  --ls: clamp(-1.75px, -0.25vw, -3.5px);
+}
+
+.title {
+  font-size: var(--fs);
+  font-weight: 800;
+  letter-spacing: var(--ls);
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  margin: 0;
+}
+
+.aurora {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  mix-blend-mode: darken;
+  pointer-events: none;
+}
+
+.aurora__item {
+  overflow: hidden;
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  background-color: var(--clr-1);
+  border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  filter: blur(var(--blur));
+  mix-blend-mode: overlay;
+}
+
+.aurora__item:nth-of-type(1) {
+  top: -50%;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-1 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(2) {
+  background-color: var(--clr-3);
+  right: 0;
+  top: 0;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-2 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(3) {
+  background-color: var(--clr-2);
+  left: 0;
+  bottom: 0;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-3 8s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(4) {
+  background-color: var(--clr-4);
+  right: 0;
+  bottom: -50%;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-4 24s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-border {
+  0% {
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
+
+  50% {
+    border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+  }
+
+  100% {
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
 }
