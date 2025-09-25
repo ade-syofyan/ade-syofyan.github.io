@@ -383,10 +383,18 @@ function initializePaletteGenerator() {
 
       swatch.addEventListener("click", () => {
         navigator.clipboard.writeText(color).then(() => {
-          copyFeedback.textContent = `Warna ${color.toUpperCase()} disalin!`;
-          setTimeout(() => {
-            copyFeedback.textContent = "";
-          }, 2000);
+          // Menggunakan Swal Toast untuk feedback
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: `Warna ${color.toUpperCase()} disalin!`
+          });
         });
       });
       paletteContainer.appendChild(swatch);
@@ -419,7 +427,11 @@ function initializeCertificateGenerator() {
   const generate = () => {
     const originalName = nameInput.value.trim();
     if (!originalName) {
-      alert("Silakan masukkan nama Anda terlebih dahulu.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Silakan masukkan nama Anda terlebih dahulu.',
+      });
       nameInput.focus();
       return;
     }
@@ -431,55 +443,61 @@ function initializeCertificateGenerator() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
-    // Set name and date
-    recipientNameEl.textContent = formattedName;
-    if (dateEl) {
-      dateEl.textContent = new Date().toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-    }
+    // Tampilkan dialog konfirmasi sebelum melanjutkan
+    Swal.fire({
+      title: 'Konfirmasi Pembuatan Sertifikat',
+      html: `
+        <div class="text-left space-y-3 p-4" style="color: var(--text-secondary);">
+          <p>Sertifikat ini hanya dapat dibuat <strong>satu kali</strong>.</p>
+          <p>Setelah dibuat, semua pencapaian Anda akan <strong>direset</strong>.</p>
+          <p class="mt-4 pt-4 border-t" style="border-color: var(--border-color);">Pastikan nama yang tercantum sudah benar:</p>
+          <p class="text-center text-xl font-bold text-accent">${formattedName}</p>
+        </div>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Buat & Reset',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Lanjutkan proses jika dikonfirmasi
+        if (window.resetAchievements) {
+          window.resetAchievements();
+        }
 
-    // Generate and set Credential ID and Source
-    if (credentialIdEl) {
-      const credentialId = `AS-${Date.now()}-${Math.random()
-        .toString(36)
-        .substr(2, 9)
-        .toUpperCase()}`;
-      credentialIdEl.textContent = credentialId;
-    }
-    if (sourceUrlEl) {
-      const sourceUrl = window.location.origin + window.location.pathname;
-      sourceUrlEl.href = sourceUrl;
-      sourceUrlEl.textContent = sourceUrl.replace(
-        /^(https?:\/\/)?(www\.)?/,
-        ""
-      );
-    }
+        // Set name and date
+        recipientNameEl.textContent = formattedName;
+        if (dateEl) {
+          dateEl.textContent = new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+        }
 
-    // Tutup modal pencapaian terlebih dahulu
-    if (window.closeAchievementModal) {
-      window.closeAchievementModal();
-    }
+        // Generate and set Credential ID and Source
+        if (credentialIdEl) {
+          const credentialId = `AS-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+          credentialIdEl.textContent = credentialId;
+        }
+        if (sourceUrlEl) {
+          const sourceUrl = window.location.origin + window.location.pathname;
+          sourceUrlEl.href = sourceUrl;
+          sourceUrlEl.textContent = sourceUrl.replace(/^(https?:\/\/)?(www\.)?/, "");
+        }
 
-    // Tampilkan modal sertifikat setelah jeda singkat untuk transisi yang mulus
-    setTimeout(() => {
-      modal.classList.add("open");
-      document.body.classList.add("modal-open");
+        // Tutup modal pencapaian terlebih dahulu
+        if (window.closeAchievementModal) {
+          window.closeAchievementModal();
+        }
 
-      // Inisialisasi plexus pada kanvas sertifikat
-      const certCanvas = modal.querySelector(".certificate-plexus-bg");
-      if (certCanvas && typeof createPlexusInstance === "function") {
-        // Gunakan timeout untuk memastikan kanvas terlihat dan memiliki dimensi
+        // Tampilkan modal sertifikat setelah jeda singkat untuk transisi yang mulus
         setTimeout(() => {
-          createPlexusInstance(certCanvas, {
-            particleCount: 40,
-            maxDistance: 100,
-          });
-        }, 100);
+          modal.classList.add("open");
+          document.body.classList.add("modal-open");
+          const certCanvas = modal.querySelector(".certificate-plexus-bg");
+          if (certCanvas && typeof createPlexusInstance === "function") {
+            setTimeout(() => { createPlexusInstance(certCanvas, { particleCount: 40, maxDistance: 100 }); }, 100);
+          }
+        }, 300);
       }
-    }, 300); // Jeda ini sesuai dengan durasi transisi modal
+    });
   };
 
   if (downloadBtn) {
@@ -608,7 +626,11 @@ function initializeCertificateGenerator() {
         link.click();
       } catch (error) {
         console.error("Gagal membuat gambar sertifikat:", error);
-        alert("Maaf, terjadi kesalahan saat mencoba mengunduh sertifikat.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Mengunduh',
+          text: 'Maaf, terjadi kesalahan saat mencoba membuat gambar sertifikat. Silakan coba lagi.',
+        });
       } finally {
         // --- NEW: Restore the filter after download ---
         if (signatureImg) signatureImg.style.filter = "";

@@ -27,19 +27,23 @@ function initializeChatbot() {
     if (!hasUserInteracted) {
       window.actuallyCloseChatbot();
     } else {
-      showCustomConfirm(
-        "Simpan sesi chat ini?",
-        () => {
+      // Menggunakan Swal untuk konfirmasi
+      Swal.fire({
+        title: "Simpan Sesi Chat?",
+        text: "Apakah Anda ingin menyimpan riwayat percakapan ini untuk dilanjutkan nanti?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Simpan",
+        cancelButtonText: "Tidak, Hapus",
+      }).then((result) => {
+        if (result.isConfirmed) {
           saveChatHistory();
           window.actuallyCloseChatbot();
-        },
-        () => {
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           deleteChatHistory();
           window.actuallyCloseChatbot();
-        },
-        "Simpan",
-        "Jangan Simpan"
-      );
+        }
+      });
     }
   };
 
@@ -270,11 +274,11 @@ async function sendChatMessage() {
   } catch (error) {
     console.error("Error calling Gemini API:", error);
     if (chatDisplay.contains(loadingDiv)) chatDisplay.removeChild(loadingDiv);
-    const errorMessageDiv = document.createElement("div");
-    errorMessageDiv.className =
-      "flex justify-start mb-2 ai-bubble error-bubble";
-    errorMessageDiv.innerHTML = `<div class="p-3 rounded-lg max-w-[80%] chat-message">Terjadi kesalahan. Coba lagi nanti.</div>`;
-    chatDisplay.appendChild(errorMessageDiv);
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal Menghubungi AI',
+      text: 'Terjadi masalah koneksi atau pada server. Silakan coba lagi beberapa saat.',
+    });
   } finally {
     chatDisplay.scrollTop = chatDisplay.scrollHeight;
   }

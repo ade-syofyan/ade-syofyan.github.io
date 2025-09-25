@@ -1,0 +1,85 @@
+/* Custom SweetAlert2 Theme */
+.swal2-popup {
+    background: rgba(var(--bg-card-rgb), 0.5) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(var(--border-color-rgb), 0.15) !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 10px 30px -10px var(--shadow-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.swal2-title {
+    color: var(--text-white) !important;
+}
+
+.swal2-html-container {
+    color: var(--text-secondary) !important;
+}
+
+.swal2-confirm {
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    color: var(--color-white) !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05)), var(--color-accent) !important;
+    border-radius: 1.1rem 1.2rem 1.1rem 1.2rem !important;
+    box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px -2px rgba(var(--color-accent-rgb), 0.4), 0 2px 8px -1px var(--shadow-color) !important;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5) !important;
+    border: 1px solid rgba(var(--color-accent-rgb), 0.5) !important;
+}
+
+.swal2-confirm:hover {
+    transform: scale(1.05) translateY(-2px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)), var(--color-accent-hover) !important;
+    box-shadow: 0 8px 20px -4px rgba(var(--color-accent-rgb), 0.5), 0 4px 10px -2px var(--shadow-color) !important;
+}
+
+.swal2-cancel {
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    color: var(--text-white) !important;
+    background: rgba(var(--bg-card-rgb), 0.1) !important;
+    backdrop-filter: blur(4px) !important;
+    border-radius: 1.2rem 1.1rem 1.2rem 1.1rem !important;
+    box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15), 0 4px 8px 0 var(--shadow-color) !important;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5) !important;
+    border: 1px solid rgba(var(--border-color-rgb), 0.1) !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-line-tip,
+.swal2-icon.swal2-success .swal2-success-line-long {
+    background-color: var(--color-accent) !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border-color: rgba(var(--color-accent-rgb), 0.3) !important;
+}
+
+.swal2-icon.swal2-warning {
+    border-color: #f8bb86 !important;
+    color: #f8bb86 !important;
+}
+
+.swal2-icon.swal2-error {
+    border-color: #f27474 !important;
+}
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    background-color: #f27474 !important;
+}
+
+.swal2-toast {
+    box-shadow: 0 10px 30px -10px var(--shadow-color) !important;
+    background: rgba(var(--bg-card-rgb), 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.swal2-toast .swal2-title {
+    color: var(--text-white) !important;
+    font-size: 1rem !important;
+}
+
+.swal2-toast .swal2-html-container {
+    color: var(--text-secondary) !important;
+    font-size: 0.875rem !important;
+}

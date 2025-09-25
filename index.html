@@ -107,6 +107,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     <!-- Custom Stylesheet -->
+    <!-- SweetAlert2 for modern alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="./assets/css/swal-theme.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <!-- jsPDF for PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1139,17 +1142,6 @@ setInterval(() => {
       </div>
     </div>
 
-    <!-- Custom Confirmation Modal -->
-    <div id="customConfirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[1020] hidden p-4">
-        <div class="p-6 rounded-lg shadow-xl w-full max-w-sm text-center" style="background-color: var(--bg-card);">
-            <p id="customConfirmMessage" class="text-lg mb-6" style="color: var(--text-white);">Pesan konfirmasi di sini.</p>
-            <div class="flex justify-center space-x-4">
-                <button id="customConfirmButtonYes" class="btn-primary px-6 py-2">Ya</button>
-                <button id="customConfirmButtonNo" class="btn-secondary px-6 py-2">Tidak</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Global Tooltip Element -->
     <div id="global-tooltip"></div>
 
@@ -1211,31 +1203,25 @@ setInterval(() => {
             <div id="achievement-grid" class="modal-body grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Achievement cards will be injected here -->
             </div>
-            <!-- Minimized Certificate Generator Reward Section -->
-            <div id="achievement-reward-section" class="p-3 mt-4 border-t" style="border-color: var(--border-color); background-color: rgba(var(--color-accent-rgb), 0.05);">
+            <!-- Hint for the final reward (visible by default) -->
+            <div id="achievement-hint-section" class="p-3 mt-4 border-t text-center" style="border-color: var(--border-color);">
+                <div class="flex items-center justify-center gap-3 opacity-60">
+                    <i data-lucide="lock" class="w-6 h-6 text-accent"></i>
+                    <p class="text-sm" style="color: var(--text-secondary);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
+                </div>
+            </div>
+            <!-- Certificate Generator Reward Section (hidden by default) -->
+            <div id="achievement-reward-section" class="p-3 mt-4 border-t" style="border-color: var(--border-color); background-color: rgba(var(--color-accent-rgb), 0.05); display: none;">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-3">
                     <div class="flex items-center gap-3 text-left">
                         <i data-lucide="gift" class="w-8 h-8 text-accent flex-shrink-0"></i>
                         <div>
                             <h4 class="font-bold text-base" style="color: var(--text-white);">Klaim Hadiah Spesial Anda</h4>
-                            <p class="text-xs" style="color: var(--text-secondary);">Buat sertifikat apresiasi setelah semua pencapaian terbuka.</p>
+                            <p class="text-xs" style="color: var(--text-secondary);">Selamat! Anda telah membuka semua pencapaian.</p>
                         </div>
                     </div>
                     <div class="flex-shrink-0 w-full md:w-auto"><div class="flex gap-2"><input type="text" id="certificate-name-input" class="form-input !py-2 !pl-3 text-sm flex-grow" placeholder="Nama Anda..."><button id="generate-certificate-btn" class="btn-primary !py-2 !px-4 text-sm whitespace-nowrap">Buat</button></div></div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Achievement Toast Notification -->
-    <div id="achievement-toast" class="hidden fixed bottom-5 right-5 bg-card border-l-4 border-accent p-4 rounded-lg shadow-2xl max-w-sm z-[2000] transform translate-x-[110%] transition-transform duration-500 ease-in-out">
-        <div class="flex items-center">
-            <div class="text-accent mr-3 flex-shrink-0">
-                <i data-lucide="award" class="w-8 h-8"></i>
-            </div>
-            <div>
-                <p class="font-bold" style="color: var(--text-white);">Pencapaian Terbuka!</p>
-                <p id="toast-achievement-name" class="text-sm" style="color: var(--text-secondary);">Nama Pencapaian</p>
             </div>
         </div>
     </div>

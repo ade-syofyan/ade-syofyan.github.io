@@ -231,8 +231,6 @@ function parseMarkdownBold(text) {
 // --- Modals (Project, Achievement, Confirm) ---
 function initializeModals() {
   const projectModal = document.getElementById("projectModal");
-  const achievementModal = document.getElementById("achievementModal");
-  const lightboxModal = document.getElementById("lightboxModal");
 
   // Project Modal
   window.openModal = function (projectId) {
@@ -357,6 +355,9 @@ function initializeModals() {
     });
   }
 
+  const achievementModal = document.getElementById("achievementModal");
+  const lightboxModal = document.getElementById("lightboxModal");
+
   // Lightbox Modal
   window.openLightbox = function (imageUrl) {
     const lightboxImage = document.getElementById("lightboxImage");
@@ -401,42 +402,6 @@ function initializeModals() {
     achievementModal.addEventListener("click", (e) => {
       if (e.target === achievementModal) closeAchievementModal();
     });
-
-  // Custom Confirm Modal
-  window.showCustomConfirm = function (
-    message,
-    yesCallback,
-    noCallback,
-    yesText = "Ya",
-    noText = "Tidak"
-  ) {
-    const modal = document.getElementById("customConfirmModal");
-    const msgElement = document.getElementById("customConfirmMessage");
-    const btnYes = document.getElementById("customConfirmButtonYes");
-    const btnNo = document.getElementById("customConfirmButtonNo");
-
-    msgElement.textContent = message;
-    btnYes.textContent = yesText;
-    btnNo.textContent = noText;
-
-    const newBtnYes = btnYes.cloneNode(true);
-    btnYes.parentNode.replaceChild(newBtnYes, btnYes);
-
-    const newBtnNo = btnNo.cloneNode(true);
-    btnNo.parentNode.replaceChild(newBtnNo, btnNo);
-
-    newBtnYes.onclick = () => {
-      modal.classList.add("hidden");
-      if (yesCallback) yesCallback();
-    };
-
-    newBtnNo.onclick = () => {
-      modal.classList.add("hidden");
-      if (noCallback) noCallback();
-    };
-
-    modal.classList.remove("hidden");
-  };
 }
 
 // --- BSOD Easter Egg ---
@@ -683,19 +648,50 @@ let paletteGenerationCount = parseInt(
 );
 
 function showToast(achievementName) {
-  const toast = document.getElementById("achievement-toast");
-  const nameElement = document.getElementById("toast-achievement-name");
-  if (!toast || !nameElement) return;
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "bottom-end",
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
-  nameElement.textContent = achievementName;
-  toast.classList.remove("hidden");
-  toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => toast.classList.add("hidden"), 500);
-  }, 4000);
+  Toast.fire({
+    icon: "success",
+    title: "Pencapaian Terbuka!",
+    html: achievementName,
+  });
 }
+
+window.resetAchievements = function () {
+  // Hapus data dari localStorage
+  localStorage.removeItem("portfolioAchievements");
+  localStorage.removeItem("appliedThemes");
+  localStorage.removeItem("paletteCount");
+
+  // Reset status di memori
+  if (typeof achievements !== "undefined") {
+    for (const id in achievements) {
+      if (Object.prototype.hasOwnProperty.call(achievements, id)) {
+        achievements[id].unlocked = false;
+      }
+    }
+  }
+
+  // Reset counter
+  paletteGenerationCount = 0;
+
+  // Beri notifikasi
+  const Toast = Swal.mixin({ toast: true, position: 'bottom-end', showConfirmButton: false, timer: 3000, timerProgressBar: true });
+  Toast.fire({
+    icon: 'info',
+    title: 'Pencapaian telah direset.'
+  });
+};
 
 window.unlockAchievement = function (id) {
   if (achievements[id] && !achievements[id].unlocked) {
@@ -730,6 +726,8 @@ function populateAchievements() {
   const achievementGrid = document.getElementById("achievement-grid");
   const progressBar = document.getElementById("achievement-progress-bar");
   const progressText = document.getElementById("achievement-progress-text");
+  const rewardSection = document.getElementById("achievement-reward-section");
+  const hintSection = document.getElementById("achievement-hint-section");
 
   if (!achievementGrid) return;
   achievementGrid.innerHTML = "";
@@ -739,6 +737,14 @@ function populateAchievements() {
   );
   const totalAchievements = Object.keys(achievements).length;
   const unlockedCount = unlockedIds.length;
+
+  // Kontrol visibilitas bagian hadiah dan petunjuk
+  if (rewardSection && hintSection) {
+    const allUnlocked = unlockedCount === totalAchievements;
+    hintSection.style.display = allUnlocked ? 'none' : 'block';
+    rewardSection.style.display = allUnlocked ? 'block' : 'none';
+    if (allUnlocked) rewardSection.classList.add('visible');
+  }
 
   if (progressBar && progressText) {
     const percentage =
@@ -910,10 +916,18 @@ function initializeContactForm() {
               "lastContactSubmission",
               Date.now().toString()
             );
-            form.innerHTML = `<div class="text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
-              <h4 class="text-xl font-bold text-accent">Terima Kasih!</h4>
-              <p style="color: var(--text-secondary);">Pesan Anda telah berhasil dikirim. Saya akan segera merespons.</p>
-            </div>`;
+            Swal.fire({
+              icon: "success",
+              title: "Pesan Terkirim!",
+              text: "Terima kasih telah menghubungi saya. Saya akan segera merespons.",
+            });
+            form.reset();
+            submitButton.disabled = true;
+            [nameInput, emailInput, messageInput].forEach((input) => {
+              input.classList.remove("valid");
+            });
+            submitText.classList.remove("hidden");
+            submitSpinner.classList.add("hidden");
           } else {
             throw new Error("Network response was not ok.");
           }
@@ -921,9 +935,11 @@ function initializeContactForm() {
         .catch((error) => {
           submitButton.textContent = "Kirim Pesan";
           submitButton.disabled = false;
-          alert(
-            "Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi."
-          );
+          Swal.fire({
+            icon: "error",
+            title: "Gagal Mengirim",
+            text: "Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.",
+          });
         });
     }
   });
