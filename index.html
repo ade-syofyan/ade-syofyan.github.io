@@ -67,8 +67,32 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="icon" href="./assets/img/favicon.png" type="image/png" />
-    
     <!-- Favicon sederhana -->
+
+    
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme') || 'system';
+          var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var resolved = (saved === 'dark') || (saved === 'system' && sysDark) ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', resolved);
+        } catch (e) {}
+      })();
+    </script>
+
+    <style>
+      /* Hindari flash putih sebelum CSS utama siap */
+      html { background:#1a202c; color-scheme: dark; }
+      html[data-theme="light"] { background:#f0f2f5; color-scheme: light; }
+      @media (prefers-color-scheme: light) {
+        html:not([data-theme]) { background:#f0f2f5; color-scheme: light; }
+      }
+
+      /* Matikan transition saat first paint, aktifkan nanti oleh JS */
+      body { transition: none !important; }
+      html.theme-ready body { transition: background-color .3s ease, color .3s ease; }
+    </style>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -89,23 +113,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
-
-
-    <script>
-      (function() {
-        try {
-          const theme = localStorage.getItem('theme') || 'system';
-          const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const isDark = theme === 'dark' || (theme === 'system' && isSystemDark);
-
-          if (isDark) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-          } else {
-            document.documentElement.setAttribute('data-theme', 'light');
-          }
-        } catch (e) {}
-      })();
-    </script>
   </head>
   <body class="leading-relaxed"> 
     <!-- Navbar -->

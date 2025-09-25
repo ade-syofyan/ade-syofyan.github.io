@@ -62,11 +62,11 @@ function initializeTheme() {
     if (!theme) return;
 
     if (theme === "system") {
-      document.documentElement.removeAttribute("data-theme");
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
         .matches
         ? "dark"
         : "light";
+      document.documentElement.setAttribute("data-theme", systemTheme);
       updateIcons(systemTheme, true);
     } else {
       document.documentElement.setAttribute("data-theme", theme);
@@ -181,6 +181,7 @@ function initializeTheme() {
 
   const savedTheme = localStorage.getItem("theme") || "system";
   applyTheme(savedTheme);
+  document.documentElement.classList.add("theme-ready");
 }
 
 // --- Mobile Menu ---
