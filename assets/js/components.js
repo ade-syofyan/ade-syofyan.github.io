@@ -386,14 +386,14 @@ function initializePaletteGenerator() {
           // Menggunakan Swal Toast untuk feedback
           const Toast = Swal.mixin({
             toast: true,
-            position: 'bottom-end',
+            position: "bottom-end",
             showConfirmButton: false,
             timer: 2000,
             timerProgressBar: true,
           });
           Toast.fire({
-            icon: 'success',
-            title: `Warna ${color.toUpperCase()} disalin!`
+            icon: "success",
+            title: `Warna ${color.toUpperCase()} disalin!`,
           });
         });
       });
@@ -428,9 +428,9 @@ function initializeCertificateGenerator() {
     const originalName = nameInput.value.trim();
     if (!originalName) {
       Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'Silakan masukkan nama Anda terlebih dahulu.',
+        icon: "warning",
+        title: "Oops...",
+        text: "Silakan masukkan nama Anda terlebih dahulu.",
       });
       nameInput.focus();
       return;
@@ -445,7 +445,7 @@ function initializeCertificateGenerator() {
 
     // Tampilkan dialog konfirmasi sebelum melanjutkan
     Swal.fire({
-      title: 'Konfirmasi Pembuatan Sertifikat',
+      title: "Konfirmasi Pembuatan Sertifikat",
       html: `
         <div class="text-left space-y-3 p-4" style="color: var(--text-secondary);">
           <p>Sertifikat ini hanya dapat dibuat <strong>satu kali</strong>.</p>
@@ -454,10 +454,10 @@ function initializeCertificateGenerator() {
           <p class="text-center text-xl font-bold text-accent">${formattedName}</p>
         </div>
       `,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Ya, Buat & Reset',
-      cancelButtonText: 'Batal',
+      confirmButtonText: "Ya, Buat & Reset",
+      cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
         // Lanjutkan proses jika dikonfirmasi
@@ -468,18 +468,28 @@ function initializeCertificateGenerator() {
         // Set name and date
         recipientNameEl.textContent = formattedName;
         if (dateEl) {
-          dateEl.textContent = new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+          dateEl.textContent = new Date().toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
         }
 
         // Generate and set Credential ID and Source
         if (credentialIdEl) {
-          const credentialId = `AS-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+          const credentialId = `AS-${Date.now()}-${Math.random()
+            .toString(36)
+            .substr(2, 9)
+            .toUpperCase()}`;
           credentialIdEl.textContent = credentialId;
         }
         if (sourceUrlEl) {
           const sourceUrl = window.location.origin + window.location.pathname;
           sourceUrlEl.href = sourceUrl;
-          sourceUrlEl.textContent = sourceUrl.replace(/^(https?:\/\/)?(www\.)?/, "");
+          sourceUrlEl.textContent = sourceUrl.replace(
+            /^(https?:\/\/)?(www\.)?/,
+            ""
+          );
         }
 
         // Tutup modal pencapaian terlebih dahulu
@@ -493,7 +503,12 @@ function initializeCertificateGenerator() {
           document.body.classList.add("modal-open");
           const certCanvas = modal.querySelector(".certificate-plexus-bg");
           if (certCanvas && typeof createPlexusInstance === "function") {
-            setTimeout(() => { createPlexusInstance(certCanvas, { particleCount: 40, maxDistance: 100 }); }, 100);
+            setTimeout(() => {
+              createPlexusInstance(certCanvas, {
+                particleCount: 40,
+                maxDistance: 100,
+              });
+            }, 100);
           }
         }, 300);
       }
@@ -530,10 +545,18 @@ function initializeCertificateGenerator() {
         loadingOverlay.classList.add("flex");
       }
 
-      // 2. Pindahkan elemen sertifikat ke body untuk rendering penuh
+      // Simpan gaya asli untuk dikembalikan nanti
+      const originalStyles = {
+        width: certWrapper.style.width,
+        height: certWrapper.style.height,
+        maxHeight: certWrapper.style.maxHeight,
+        overflow: certWrapper.style.overflow,
+      };
+
+      // 2. Pindahkan elemen ke body dan paksa layout lanskap untuk rendering
       document.body.appendChild(certWrapper);
-      certWrapper.style.maxHeight = "none";
-      certWrapper.style.height = `${certWrapper.scrollHeight}px`;
+      certWrapper.style.width = "1200px"; // Paksa lebar lanskap
+      certWrapper.style.height = "auto";
       certWrapper.style.overflow = "hidden"; // Paksa overflow agar border-radius dirender
 
       const computedBgColor = getComputedStyle(certWrapper).backgroundColor;
@@ -627,9 +650,9 @@ function initializeCertificateGenerator() {
       } catch (error) {
         console.error("Gagal membuat gambar sertifikat:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Gagal Mengunduh',
-          text: 'Maaf, terjadi kesalahan saat mencoba membuat gambar sertifikat. Silakan coba lagi.',
+          icon: "error",
+          title: "Gagal Mengunduh",
+          text: "Maaf, terjadi kesalahan saat mencoba membuat gambar sertifikat. Silakan coba lagi.",
         });
       } finally {
         // --- NEW: Restore the filter after download ---
@@ -637,9 +660,10 @@ function initializeCertificateGenerator() {
 
         // 4. Kembalikan elemen ke posisi semula, apapun yang terjadi
         originalParent.appendChild(certWrapper);
-        certWrapper.style.maxHeight = "";
-        certWrapper.style.height = "";
-        certWrapper.style.overflow = ""; // Kembalikan overflow ke default
+        certWrapper.style.width = originalStyles.width;
+        certWrapper.style.height = originalStyles.height;
+        certWrapper.style.maxHeight = originalStyles.maxHeight;
+        certWrapper.style.overflow = originalStyles.overflow;
 
         // Aktifkan kembali tombol dan kembalikan ikon semula
         downloadBtn.disabled = false;
