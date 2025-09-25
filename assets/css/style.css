@@ -2044,7 +2044,7 @@ html.ios-chrome body.has-fixed-nav {
 }
 
 .certificate-title {
-  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-size: clamp(1.2rem, 3.5vw, 2.2rem);
   font-weight: 700;
   color: #ffffff;
   letter-spacing: 2px;
@@ -2053,7 +2053,7 @@ html.ios-chrome body.has-fixed-nav {
 }
 
 .certificate-subtitle {
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-size: clamp(0.7rem, 2vw, 1.1rem);
   color: #a0aec0;
   font-weight: 300;
 }
@@ -2065,7 +2065,7 @@ html.ios-chrome body.has-fixed-nav {
 
 .certificate-name {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-size: clamp(1.5rem, 5vw, 3.5rem);
   font-weight: 800;
   color: var(--color-accent);
   margin-bottom: 1rem;
@@ -2079,7 +2079,7 @@ html.ios-chrome body.has-fixed-nav {
 }
 
 .certificate-description {
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: clamp(0.65rem, 1.8vw, 1rem);
   color: #a0aec0;
   max-width: 75%;
   margin: 0 auto;
