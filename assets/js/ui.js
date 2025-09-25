@@ -12,6 +12,7 @@ function initializeNavbarScrollEffect() {
   };
 
   window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
 }
 
 // --- Full Height Hero Section Adjustment ---
@@ -926,4 +927,32 @@ function initializeContactForm() {
         });
     }
   });
+}
+
+// --- Fix khusus Chrome iOS: pakai fixed + padding body ---
+function enableIOSChromeNavbarFix() {
+  const ua = navigator.userAgent || navigator.vendor || "";
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isChromeIOS = /CriOS/.test(ua);
+  if (!(isIOS && isChromeIOS)) return;
+
+  const nav = document.querySelector("nav");
+  if (!nav) return;
+
+  document.documentElement.classList.add("ios-chrome");
+
+  const applyHeight = () => {
+    const h = nav.offsetHeight || 64;
+    document.documentElement.style.setProperty("--nav-height", h + "px");
+    document.body.classList.add("has-fixed-nav");
+  };
+
+  applyHeight();
+  // Rehitung saat UI atas berubah tinggi
+  window.addEventListener("resize", applyHeight, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", applyHeight, {
+      passive: true,
+    });
+  }
 }

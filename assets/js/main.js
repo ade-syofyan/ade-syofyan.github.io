@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI elements
+  enableIOSChromeNavbarFix();
   initializeTheme();
   initializeMobileMenu();
   initializeNavbarScrollEffect();

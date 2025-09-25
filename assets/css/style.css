@@ -140,8 +140,15 @@ nav {
   box-shadow: none;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
-  transform: translateZ(0);
   will-change: background-color, backdrop-filter, box-shadow;
+  position: -webkit-sticky;
+}
+
+/* Awareness terhadap notch/safe area saat ditempel di atas */
+@supports (top: env(safe-area-inset-top)) {
+  nav {
+    top: env(safe-area-inset-top);
+  }
 }
 
 nav.nav-scrolled {
@@ -1936,4 +1943,21 @@ body.hackerman-mode #achievement-toast {
   100% {
     border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
   }
+}
+
+/* Layout var */
+:root {
+  --nav-height: 64px;
+}
+
+/* Saat nav dipaksa fixed di iOS Chrome */
+html.ios-chrome nav {
+  position: fixed;
+  top: env(safe-area-inset-top, 0);
+  left: 0;
+  right: 0;
+}
+
+html.ios-chrome body.has-fixed-nav {
+  padding-top: calc(var(--nav-height) + env(safe-area-inset-top, 0));
 }
