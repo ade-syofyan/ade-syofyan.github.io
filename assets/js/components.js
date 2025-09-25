@@ -170,8 +170,8 @@ function initializePathfindingVisualizer() {
       for (let col = 0; col < GRID_WIDTH; col++) {
         const node = nodes[row][col];
         node.element.classList.remove("node-visited", "node-path");
-        node.element.classList.remove("is-drawing"); 
-        node.costElement.textContent = ""; 
+        node.element.classList.remove("is-drawing");
+        node.costElement.textContent = "";
         if (fullReset) {
           node.element.classList.remove(
             "node-start",
@@ -269,7 +269,7 @@ function initializePathfindingVisualizer() {
 
         if (!current.isStart) {
           current.element.classList.add("node-visited");
-          current.costElement.textContent = distances.get(current); 
+          current.costElement.textContent = distances.get(current);
           await new Promise((r) => setTimeout(r, 20));
         }
 
@@ -285,7 +285,7 @@ function initializePathfindingVisualizer() {
             const neighbor = nodes[newRow][newCol];
             if (neighbor.isWall) continue;
 
-            const weight = neighbor.isWater ? 15 : 1; 
+            const weight = neighbor.isWater ? 15 : 1;
             const distanceToNeighbor = distances.get(current) + weight;
 
             if (distanceToNeighbor < distances.get(neighbor)) {
@@ -403,6 +403,251 @@ function initializePaletteGenerator() {
   generatePalette(); // Initial generation
 }
 
+// --- Live Demo: Certificate Generator ---
+function initializeCertificateGenerator() {
+  const modal = document.getElementById("certificateModal");
+  const generateBtn = document.getElementById("generate-certificate-btn");
+  const nameInput = document.getElementById("certificate-name-input");
+  const recipientNameEl = document.getElementById("cert-recipient-name");
+  const dateEl = document.getElementById("certificate-date");
+  const downloadBtn = document.getElementById("download-certificate-btn");
+  const credentialIdEl = document.getElementById("cert-credential-id");
+  const sourceUrlEl = document.getElementById("cert-source-url");
+
+  if (!modal || !generateBtn || !nameInput || !recipientNameEl) return;
+
+  const generate = () => {
+    const originalName = nameInput.value.trim();
+    if (!originalName) {
+      alert("Silakan masukkan nama Anda terlebih dahulu.");
+      nameInput.focus();
+      return;
+    }
+
+    // Mengubah nama menjadi format Title Case (setiap kata diawali huruf kapital)
+    const formattedName = originalName
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    // Set name and date
+    recipientNameEl.textContent = formattedName;
+    if (dateEl) {
+      dateEl.textContent = new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+
+    // Generate and set Credential ID and Source
+    if (credentialIdEl) {
+      const credentialId = `AS-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)
+        .toUpperCase()}`;
+      credentialIdEl.textContent = credentialId;
+    }
+    if (sourceUrlEl) {
+      const sourceUrl = window.location.origin + window.location.pathname;
+      sourceUrlEl.href = sourceUrl;
+      sourceUrlEl.textContent = sourceUrl.replace(
+        /^(https?:\/\/)?(www\.)?/,
+        ""
+      );
+    }
+
+    // Tutup modal pencapaian terlebih dahulu
+    if (window.closeAchievementModal) {
+      window.closeAchievementModal();
+    }
+
+    // Tampilkan modal sertifikat setelah jeda singkat untuk transisi yang mulus
+    setTimeout(() => {
+      modal.classList.add("open");
+      document.body.classList.add("modal-open");
+
+      // Inisialisasi plexus pada kanvas sertifikat
+      const certCanvas = modal.querySelector(".certificate-plexus-bg");
+      if (certCanvas && typeof createPlexusInstance === "function") {
+        // Gunakan timeout untuk memastikan kanvas terlihat dan memiliki dimensi
+        setTimeout(() => {
+          createPlexusInstance(certCanvas, {
+            particleCount: 40,
+            maxDistance: 100,
+          });
+        }, 100);
+      }
+    }, 300); // Jeda ini sesuai dengan durasi transisi modal
+  };
+
+  if (downloadBtn) {
+    downloadBtn.addEventListener("click", async () => {
+      const certWrapper = document.getElementById("certificate-wrapper");
+      const certificateModal = document.getElementById("certificateModal");
+      const loadingOverlay = document.getElementById(
+        "certificateLoadingOverlay"
+      );
+
+      // Menambahkan referensi ke ikon di dalam tombol unduh
+      const downloadIcon = downloadBtn.querySelector(
+        '[data-lucide="download"]'
+      );
+      const loadingIcon = downloadBtn.querySelector('[data-lucide="loader"]');
+
+      // Nonaktifkan tombol dan tampilkan spinner
+      downloadBtn.disabled = true;
+      if (downloadIcon && loadingIcon) {
+        downloadIcon.classList.add("hidden");
+        loadingIcon.classList.remove("hidden");
+      }
+
+      const originalParent = certWrapper.parentNode;
+
+      // 1. Sembunyikan modal sertifikat dan tampilkan overlay loading
+      if (certificateModal) certificateModal.style.display = "none";
+      if (loadingOverlay) {
+        loadingOverlay.classList.remove("hidden");
+        loadingOverlay.classList.add("flex");
+      }
+
+      // 2. Pindahkan elemen sertifikat ke body untuk rendering penuh
+      document.body.appendChild(certWrapper);
+      certWrapper.style.maxHeight = "none";
+      certWrapper.style.height = `${certWrapper.scrollHeight}px`;
+      certWrapper.style.overflow = "hidden"; // Paksa overflow agar border-radius dirender
+
+      const computedBgColor = getComputedStyle(certWrapper).backgroundColor;
+      const borderRadius = parseFloat(
+        getComputedStyle(certWrapper).borderRadius
+      );
+
+      // --- NEW: Wait for all images inside the certificate to load ---
+      const images = Array.from(certWrapper.querySelectorAll("img"));
+      const imageLoadPromises = images.map(
+        (img) =>
+          new Promise((resolve) => {
+            if (img.complete) resolve();
+            else img.onload = resolve;
+          })
+      );
+      await Promise.all(imageLoadPromises);
+
+      // --- NEW: Temporarily remove filter from signature for download ---
+      const signatureImg = certWrapper.querySelector(
+        ".certificate-signature-img"
+      );
+      if (signatureImg) signatureImg.style.filter = "none";
+
+      try {
+        const canvas = await html2canvas(certWrapper, {
+          backgroundColor: computedBgColor,
+          useCORS: true,
+          // Gunakan scrollHeight/Width untuk memastikan ukuran penuh
+          width: certWrapper.scrollWidth,
+          height: certWrapper.scrollHeight,
+          windowWidth: certWrapper.scrollWidth,
+          windowHeight: certWrapper.scrollHeight,
+        });
+
+        // --- NEW: Apply rounded corners manually ---
+        const roundedCanvas = document.createElement("canvas");
+        roundedCanvas.width = canvas.width;
+        roundedCanvas.height = canvas.height;
+        const context = roundedCanvas.getContext("2d");
+
+        // Create a rounded rectangle clipping path
+        context.beginPath();
+        context.moveTo(borderRadius, 0);
+        context.lineTo(roundedCanvas.width - borderRadius, 0);
+        context.arcTo(
+          roundedCanvas.width,
+          0,
+          roundedCanvas.width,
+          borderRadius,
+          borderRadius
+        );
+        context.lineTo(
+          roundedCanvas.width,
+          roundedCanvas.height - borderRadius
+        );
+        context.arcTo(
+          roundedCanvas.width,
+          roundedCanvas.height,
+          roundedCanvas.width - borderRadius,
+          roundedCanvas.height,
+          borderRadius
+        );
+        context.lineTo(borderRadius, roundedCanvas.height);
+        context.arcTo(
+          0,
+          roundedCanvas.height,
+          0,
+          roundedCanvas.height - borderRadius,
+          borderRadius
+        );
+        context.lineTo(0, borderRadius);
+        context.arcTo(0, 0, borderRadius, 0, borderRadius);
+        context.closePath();
+        context.clip();
+
+        // Draw the original canvas onto the new one with the clipping path
+        context.drawImage(canvas, 0, 0);
+
+        const timestamp = Date.now();
+        const safeName = nameInput.value
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "-");
+
+        const link = document.createElement("a");
+        // Menggunakan nama huruf kecil dan menambahkan timestamp pada nama file
+        link.download = `sertifikat-apresiasi-${safeName}-${timestamp}.png`;
+        link.href = roundedCanvas.toDataURL("image/png");
+        link.click();
+      } catch (error) {
+        console.error("Gagal membuat gambar sertifikat:", error);
+        alert("Maaf, terjadi kesalahan saat mencoba mengunduh sertifikat.");
+      } finally {
+        // --- NEW: Restore the filter after download ---
+        if (signatureImg) signatureImg.style.filter = "";
+
+        // 4. Kembalikan elemen ke posisi semula, apapun yang terjadi
+        originalParent.appendChild(certWrapper);
+        certWrapper.style.maxHeight = "";
+        certWrapper.style.height = "";
+        certWrapper.style.overflow = ""; // Kembalikan overflow ke default
+
+        // Aktifkan kembali tombol dan kembalikan ikon semula
+        downloadBtn.disabled = false;
+        if (downloadIcon && loadingIcon) {
+          downloadIcon.classList.remove("hidden");
+          loadingIcon.classList.add("hidden");
+        }
+
+        // 5. Sembunyikan overlay loading dan tampilkan kembali modal sertifikat
+        if (loadingOverlay) loadingOverlay.classList.add("hidden");
+        if (certificateModal) certificateModal.style.display = "flex";
+      }
+    });
+  }
+
+  generateBtn.addEventListener("click", generate);
+  nameInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") generate();
+  });
+
+  window.closeCertificateModal = function () {
+    modal.classList.remove("open");
+    document.body.classList.remove("modal-open");
+  };
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) window.closeCertificateModal();
+  });
+}
+
 // --- "Behind the Code" Logic ---
 function initializeCodeViewers() {
   const modal = document.getElementById("codeViewerModal");
@@ -512,7 +757,6 @@ function initializeCodeViewers() {
 
       // Tab switching logic
       tabButton.addEventListener("click", () => {
-
         if (tabButton.classList.contains("active")) return;
 
         tabContainer.querySelector(".active").classList.remove("active");

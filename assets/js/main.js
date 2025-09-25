@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeVisitorCounter();
   initializePathfindingVisualizer();
   initializePaletteGenerator();
+  initializeCertificateGenerator();
   initializeCodeViewers();
   initializeTimeTravelerAchievement();
   initializeCssHackerAchievement();

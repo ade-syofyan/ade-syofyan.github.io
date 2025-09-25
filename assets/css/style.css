@@ -321,16 +321,31 @@ nav.nav-scrolled {
   flex-shrink: 0;
 }
 
+/* --- Certificate Modal Button Overrides --- */
 .modal-close-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: color 0.3s ease;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  /* Warna putih tetap */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15), 0 4px 8px 0 var(--shadow-color);
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  /* Border putih tetap */
+  color: var(--text-white);
+  z-index: 25;
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.1);
 }
 
 .modal-close-btn:hover {
@@ -1960,4 +1975,239 @@ html.ios-chrome nav {
 
 html.ios-chrome body.has-fixed-nav {
   padding-top: calc(var(--nav-height) + env(safe-area-inset-top, 0));
+}
+
+/* --- Redesigned Certificate Styles --- */
+#certificate-wrapper {
+  background-color: #2d3748;
+  /* Warna gelap tetap */
+  color: #a0aec0;
+  /* Warna teks sekunder tetap */
+  font-family: 'Inter', sans-serif;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  /* Menambahkan sudut membulat */
+  flex-grow: 1;
+  /* Memastikan elemen ini mengisi ruang yang tersedia */
+  overflow-y: auto;
+  /* Menambahkan scroll jika konten lebih tinggi dari area */
+}
+
+.certificate-plexus-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.certificate-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  max-width: 300px;
+  opacity: 0.05;
+  /* Opasitas sangat rendah untuk efek watermark */
+  z-index: 1;
+  /* Di bawah lapisan konten, di atas plexus */
+  pointer-events: none;
+  /* Agar tidak bisa diklik */
+}
+
+.certificate-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.certificate-logo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--color-accent-rgb), 0.1);
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+.certificate-issuer {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  margin-top: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.certificate-title {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.certificate-subtitle {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: #a0aec0;
+  font-weight: 300;
+}
+
+.certificate-body {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.certificate-name {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.certificate-separator {
+  width: 80px;
+  height: 2px;
+  background-color: #4a5568;
+  margin: 0 auto 1.5rem auto;
+}
+
+.certificate-description {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #a0aec0;
+  max-width: 75%;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.certificate-footer {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  text-align: center;
+}
+
+.signature-block {
+  width: 40%;
+  position: relative;
+  /* Menjadi referensi posisi untuk elemen absolute di dalamnya */
+}
+
+.certificate-date {
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 1.1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #4a5568;
+}
+
+.certificate-signature-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0 auto 0.5rem auto;
+  border-bottom: 1px solid #4a5568;
+}
+
+.certificate-signature-img {
+  height: 140px;
+  /* Ukuran gambar tanda tangan */
+  position: absolute;
+  bottom: 0.5rem;
+  /* Posisi mengambang di atas garis */
+  left: 50%;
+  transform: translateX(-50%);
+  object-fit: contain;
+}
+
+.certificate-signature-name {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.certificate-signature-org {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  margin-top: 0.25rem;
+}
+
+.certificate-credentials {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #4a5568;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #a0aec0;
+}
+
+.credential-item {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.credential-label {
+  font-weight: 600;
+}
+
+.credential-value {
+  font-family: monospace;
+}
+
+.credential-value.link {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.credential-value.link:hover {
+  text-decoration: underline;
+}
+
+.certificate-signature-title {
+  font-size: 0.9rem;
+  color: #a0aec0;
+  margin-top: 0.5rem;
+}
+
+.certificate-actions {
+  display: none;
+  /* Footer tidak lagi digunakan */
+}
+
+/* Gaya baru untuk tombol aksi sertifikat yang mengambang */
+.certificate-action-btn {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Warna putih tetap dengan efek Liquid Glass */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15), 0 4px 12px 0 var(--shadow-color);
+  color: var(--text-white);
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+}
+
+.certificate-action-btn:hover {
+  transform: scale(1.1);
 }
