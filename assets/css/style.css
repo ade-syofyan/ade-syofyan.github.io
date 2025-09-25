@@ -419,6 +419,7 @@ nav.nav-scrolled {
   z-index: 0;
   opacity: 0.15;
   background-color: transparent;
+  pointer-events: none; /* Memungkinkan klik menembus canvas */
 }
 
 /* Gaya spesifik Chatbot */
