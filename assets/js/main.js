@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeMobileMenu();
   initializeNavbarScrollEffect();
   initializeFullHeightHero();
+  populateSchemaData();
   initializeBSOD();
   initializeModals();
   initializeScrollToTop();
@@ -37,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof projectsData !== "undefined") {
     renderProjects(projectsData);
     renderProjectFilters(projectsData);
+  }
+  if (typeof workHistoryData !== "undefined") {
+    renderWorkHistory(workHistoryData);
+  }
+  if (typeof certificatesData !== "undefined") {
+    renderCertificates(certificatesData);
   }
   if (typeof testimonialsData !== "undefined") {
     renderTestimonials(testimonialsData);

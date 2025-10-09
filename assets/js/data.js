@@ -387,6 +387,59 @@ const projectsData = [
   },
 ];
 
+// --- Work History Data ---
+const workHistoryData = [
+  {
+    company: "PT. Dofla Jaya Properti",
+    role: "Staff IT",
+    duration: "Nov 2023 - Saat ini",
+    description:
+      "Bertanggung jawab sebagai Web Developer serta mencakup IT Support dan Maintenance Server untuk mendukung operasional perusahaan.",
+    logo: "./assets/img/company/doflaland.png",
+  },
+  {
+    company: "PT. Sukumaya Teknologi",
+    role: "Senior Mobile Developer",
+    duration: "Agu 2016 - Jan 2023",
+    description:
+      "Mengembangkan berbagai aplikasi mobile (Android Native & Flutter) dan web untuk klien. Terlibat dalam seluruh siklus hidup proyek, dari perencanaan hingga deployment dan maintenance.",
+    logo: "./assets/img/company/sukumaya.png",
+  },
+  {
+    company: "CV. Minangsoft",
+    role: "Founder",
+    duration: "Mei 2014 - Des 2016",
+    description:
+      "Mendirikan dan memimpin software house yang fokus pada pembuatan website dan aplikasi kustom untuk klien lokal menggunakan CodeIgniter dan MySQL.",
+    logo: "./assets/img/company/minangsoft.png",
+  },
+];
+
+// --- Certificates Data ---
+const certificatesData = [
+  {
+    title: "Belajar Membuat Aplikasi Flutter untuk Pemula",
+    issuer: "Dicoding Indonesia",
+    date: "Juli 2023",
+    thumbnail: "./assets/img/certs/dicoding-flutter.png",
+    url: "https://www.dicoding.com/certificates/N9ZO41O0YPG5",
+  },
+  {
+    title: "Belajar Dasar Pemrograman Web",
+    issuer: "Dicoding Indonesia",
+    date: "Juni 2023",
+    thumbnail: "./assets/img/certs/dicoding-web.png",
+    url: "https://www.dicoding.com/certificates/07Z6G5JMQPQR",
+  },
+  {
+    title: "Cloud Practitioner Essentials (Digital)",
+    issuer: "Amazon Web Services (AWS)",
+    date: "Agustus 2023",
+    thumbnail: "./assets/img/certs/aws-cloud.png",
+    url: "https://www.credly.com/badges/0f6a6f1b-5e3a-4b9a-8b9e-5b1f2c2d3e4d/public_url",
+  },
+];
+
 // --- Testimonials Data ---
 const testimonialsData = [
   {

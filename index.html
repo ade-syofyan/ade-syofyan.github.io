@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ade Syofyan - Portofolio Developer Profesional</title>
+    <title>Ade Syofyan - Portofolio Mobile & Web Developer Senior</title>
     <!-- Meta SEO Tags -->
     <meta
       name="description"
@@ -66,8 +66,14 @@
     <meta name="rating" content="general" />
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="icon" href="./assets/img/favicon.png" type="image/png" />
-    <!-- Favicon sederhana -->
+    <!-- Favicons for various devices -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon-16x16.png">
+    <link rel="manifest" href="./assets/img/site.webmanifest">
+    <link rel="mask-icon" href="./assets/img/favicon.svg" color="#17a2b8">
+    <meta name="msapplication-TileColor" content="#1a202c">
+    <meta name="theme-color" content="#1a202c">
 
     
     <script>
@@ -121,81 +127,53 @@
   </head>
   <body class="leading-relaxed"> 
     <!-- Navbar -->
-    <nav class="py-4 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
+    <nav class="py-4 md:py-0 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
       <div
         class="container flex justify-between items-center"
         id="main-navbar"
       >
         <a href="#" id="nav-brand" class="text-2xl font-bold tracking-wide" style="color: var(--text-white);">Ade Syofyan</a>
         <!-- Redesigned Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-2 desktop-nav">
-          <a
-            href="#about"
-            class="nav-link-anchor"
-            ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
-              <span class="liquid-glass-text">Tentang Saya</span>
-            </div></a
-          >
-          <a
-            href="#skills"
-            class="nav-link-anchor"
-            ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
-              <span class="liquid-glass-text">Keahlian</span>
-            </div></a
-          >
-          <a
-            href="#services"
-            class="nav-link-anchor"
-            ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
+        <div class="hidden md:flex items-center space-x-2 desktop-nav" data-main-nav>
+          <!-- Dropdown "Tentang Saya" -->
+          <div class="relative nav-dropdown-group">
+            <a href="#about" class="nav-link-anchor" data-parent-link>
+              <div class="liquid-glass-wrapper">
+                <span class="liquid-glass-text">Tentang Saya</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 ml-1 opacity-70"></i>
+              </div>
+            </a>
+            <div class="nav-dropdown-menu">
+              <a href="#skills" class="nav-dropdown-item">Keahlian</a>
+              <a href="#workflow" class="nav-dropdown-item">Proses Kerja</a>
+              <a href="#work-history" class="nav-dropdown-item">Riwayat Kerja</a>
+              <a href="#certificates" class="nav-dropdown-item">Sertifikat</a>
+            </div>
+          </div>
+
+          <!-- Dropdown "Portofolio" -->
+          <div class="relative nav-dropdown-group">
+            <a href="#portfolio" class="nav-link-anchor" data-parent-link>
+              <div class="liquid-glass-wrapper">
+                <span class="liquid-glass-text">Portofolio</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 ml-1 opacity-70"></i>
+              </div>
+            </a>
+            <div class="nav-dropdown-menu">
+              <a href="#live-demos" class="nav-dropdown-item">Live Demos</a>
+            </div>
+          </div>
+
+          <!-- Menu Item Biasa -->
+          <a href="#services" class="nav-link-anchor" data-parent-link>
+            <div class="liquid-glass-wrapper">
               <span class="liquid-glass-text">Layanan</span>
-            </div></a
-          >
-          <a
-            href="#live-demos"
-            class="nav-link-anchor"
-            ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
-              <span class="liquid-glass-text">Live Demos</span>
-            </div></a
-          >
-          <a
-            href="#workflow"
-            class="nav-link-anchor"
-            ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
-              <span class="liquid-glass-text">Proses Kerja</span>
-            </div></a
-          >
-          <a
-            href="#portfolio"
-            class="nav-link-anchor"
-            ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
-              <span class="liquid-glass-text">Portofolio</span>
-            </div></a
-          >
+            </div>
+          </a>          
           <a
             href="#testimonials"
             class="nav-link-anchor"
             ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
               <span class="liquid-glass-text">Testimoni</span>
             </div></a
           >
@@ -203,9 +181,6 @@
             href="#contact"
             class="nav-link-anchor"
             ><div class="liquid-glass-wrapper">
-              <div class="liquid-glass-effect"></div>
-              <div class="liquid-glass-tint"></div>
-              <div class="liquid-glass-shine"></div>
               <span class="liquid-glass-text">Kontak</span>
             </div></a
           >
@@ -259,19 +234,49 @@
       >
         <i data-lucide="x" class="w-8 h-8"></i>
       </button>
-      <a href="#about" onclick="closeMobileMenu()"><i data-lucide="user" class="w-6 h-6 text-accent"></i><span>Tentang Saya</span></a>
-      <a href="#skills" onclick="closeMobileMenu()"><i data-lucide="star" class="w-6 h-6 text-accent"></i><span>Keahlian</span></a>
-      <a href="#services" onclick="closeMobileMenu()"><i data-lucide="briefcase" class="w-6 h-6 text-accent"></i><span>Layanan</span></a>
-      <a href="#live-demos" onclick="closeMobileMenu()"><i data-lucide="play-circle" class="w-6 h-6 text-accent"></i><span>Live Demos</span></a>
-      <a href="#workflow" onclick="closeMobileMenu()"><i data-lucide="workflow" class="w-6 h-6 text-accent"></i><span>Proses Kerja</span></a>
-      <a href="#portfolio" onclick="closeMobileMenu()"><i data-lucide="folder-kanban" class="w-6 h-6 text-accent"></i><span>Portofolio</span></a>
-      <a href="#testimonials" onclick="closeMobileMenu()"><i data-lucide="quote" class="w-6 h-6 text-accent"></i><span>Testimoni</span></a>
-      <a href="#contact" onclick="closeMobileMenu()"><i data-lucide="mail" class="w-6 h-6 text-accent"></i><span>Kontak</span></a>
-      <a href="#" class="mobile-menu-cta" onclick="openChatbotModal(); closeMobileMenu(); return false;">
-        <i data-lucide="message-circle" class="w-6 h-6"></i><span>Chat ke AI</span>
-      </a>
-      <div class="mt-8 text-center text-gray-400">
-        <p class="mb-2 text-black">Ganti Tema</p>
+      <div class="mobile-menu-content">
+        <!-- Grup Menu "Tentang Saya" -->
+        <div class="mobile-menu-group">
+          <button class="mobile-menu-item has-submenu">
+            <div class="flex items-center gap-4"><i data-lucide="user" class="w-6 h-6 text-accent"></i><span>Tentang Saya</span></div>
+            <i data-lucide="chevron-down" class="submenu-toggle-icon"></i>
+          </button>
+          <div class="mobile-submenu-wrapper">
+            <div class="mobile-submenu-container">
+              <a href="#about" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Profil</span></a>
+              <a href="#skills" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Keahlian</span></a>
+              <a href="#workflow" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Proses Kerja</span></a>
+              <a href="#work-history" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Riwayat Kerja</span></a>
+              <a href="#certificates" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Sertifikat</span></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grup Menu "Portofolio" -->
+        <div class="mobile-menu-group">
+          <button class="mobile-menu-item has-submenu">
+            <div class="flex items-center gap-4"><i data-lucide="folder-kanban" class="w-6 h-6 text-accent"></i><span>Portofolio</span></div>
+            <i data-lucide="chevron-down" class="submenu-toggle-icon"></i>
+          </button>
+          <div class="mobile-submenu-wrapper">
+            <div class="mobile-submenu-container">
+              <a href="#portfolio" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Proyek Pilihan</span></a>
+              <a href="#live-demos" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Live Demos</span></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item Menu Biasa -->
+        <a href="#services" class="mobile-menu-item" onclick="closeMobileMenu()"><i data-lucide="briefcase" class="w-6 h-6 text-accent"></i><span>Layanan</span></a>
+        <a href="#testimonials" class="mobile-menu-item" onclick="closeMobileMenu()"><i data-lucide="quote" class="w-6 h-6 text-accent"></i><span>Testimoni</span></a>
+        <a href="#contact" class="mobile-menu-item" onclick="closeMobileMenu()"><i data-lucide="mail" class="w-6 h-6 text-accent"></i><span>Kontak</span></a>
+
+        <a href="#" class="mobile-menu-cta" onclick="openChatbotModal(); closeMobileMenu(); return false;">
+          <i data-lucide="message-circle" class="w-6 h-6"></i><span>Chat ke AI</span>
+        </a>
+      </div>
+      <div class="mt-8 text-center">
+        <p class="mb-2" style="color: var(--text-secondary);">Ganti Tema</p>
         <div id="mobile-theme-switcher" class="flex justify-center gap-4"></div>
       </div>
     </div>
@@ -485,7 +490,323 @@
       </div>
     </section>
 
+    <section id="workflow" class="py-20 fade-in-on-scroll relative">
+      <canvas class="plexus-canvas"></canvas>
+      <div class="container text-center relative z-10">
+        <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
+          Bagaimana Saya Bekerja
+        </h2>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="workflowSteps"
+        >
+
+          <div class="flex flex-col items-center workflow-step">
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
+              1
+            </div>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
+              Konsultasi & Perencanaan
+            </h3>
+            <p class="text-sm" style="color: var(--text-secondary);">
+              Memahami kebutuhan Anda, menentukan lingkup proyek, dan menyusun
+              rencana kerja yang detail.
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center workflow-step">
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
+              2
+            </div>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
+              Desain & Prototyping
+            </h3>
+            <p class="text-sm" style="color: var(--text-secondary);">
+              Merancang antarmuka pengguna (UI/UX) yang intuitif dan membuat
+              prototipe untuk validasi awal.
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center workflow-step">
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
+              3
+            </div>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
+              Pengembangan & Pengujian
+            </h3>
+            <p class="text-sm" style="color: var(--text-secondary);">
+              Implementasi kode, integrasi fitur, dan pengujian menyeluruh
+              untuk memastikan kualitas dan fungsionalitas.
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center workflow-step">
+            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
+              style="background-color: var(--color-accent);">
+              4
+            </div>
+            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
+              Deployment & Dukungan
+            </h3>
+            <p class="text-sm" style="color: var(--text-secondary);">
+              Peluncuran aplikasi ke server atau app store, serta menyediakan
+              dukungan pasca-peluncuran.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+     <!-- Work History Section -->
+    <section id="work-history" class="py-20 fade-in-on-scroll">
+      <canvas class="plexus-canvas"></canvas>
+      <div class="container relative z-10">
+        <h2 class="text-4xl font-bold mb-16 text-center" style="color: var(--text-white);">Riwayat Kerja</h2>
+        <div id="timeline-container" class="relative max-w-3xl mx-auto">
+          <!-- Timeline items will be injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="py-20 fade-in-on-scroll">
+      <canvas class="plexus-canvas"></canvas>
+      <div class="container text-center relative z-10">
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Sertifikat & Lisensi</h2>
+        <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
+          Beberapa sertifikasi yang telah saya peroleh untuk memvalidasi keahlian saya.
+        </p>
+        <div id="certificates-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Certificate cards will be injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Section -->
     <section
+      id="portfolio"
+      class="py-20 shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
+    >
+      <canvas class="plexus-canvas"></canvas>
+      <div class="text-center relative z-10">
+        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
+
+        <div id="portfolio-filters" class="flex justify-center flex-wrap gap-2 mb-8"></div>
+
+        <!-- Search Input -->
+        <div class="relative max-w-lg mx-auto mb-10">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i data-lucide="search" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+          </div>
+          <input type="text" id="portfolio-search-input" class="w-full form-input !rounded-full !pl-12 !py-3" placeholder="Cari proyek berdasarkan nama, teknologi...">
+        </div>
+
+        <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <!-- Kontainer untuk tombol paginasi -->
+        <div id="portfolio-pagination" class="flex justify-center items-center gap-2 mt-12"></div>
+
+        <p class="text-xl mt-12" style="color: var(--text-secondary);">
+          <span class="text-accent font-semibold"
+            >Ingin melihat lebih banyak?</span
+          > Punya ide proyek yang menarik?
+          <br />Mari kita diskusikan bagaimana saya bisa membantu
+          mewujudkannya.
+        </p>
+      </div>
+    </section>
+
+    <section id="live-demos" class="py-20 fade-in-on-scroll">
+          <canvas class="plexus-canvas"></canvas>
+          <div class="container text-center">
+            <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
+            <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
+              Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+
+              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Simulasi Pengunjung</h3>
+                </div>
+                <p class="mb-6" style="color: var(--text-secondary);">
+                  Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
+                </p>
+                <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
+                  <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
+                  <p id="visitor-count" class="text-5xl font-bold text-accent transition-transform duration-300">
+                    ...
+                  </p>
+                </div>
+                <button class="btn-code-toggle" data-code-source="visitor-counter-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="visitor-counter-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>
+                    &lt;div class="p-4 rounded-lg"&gt;
+                      &lt;p class="text-sm mb-2"&gt;Pengunjung Online Saat Ini:&lt;/p&gt;
+                      &lt;p id="visitor-count" class="text-5xl font-bold text-accent"&gt;...&lt;/p&gt;
+                    &lt;/div&gt;
+                  </code></pre>
+                  <pre data-lang="css" class="language-css"><code>
+                    #visitor-count.pop-in {
+                      animation: popIn 0.3s ease-out;
+                    }
+                    @keyframes popIn {
+                      0% { transform: scale(0.8); opacity: 0.5; }
+                      50% { transform: scale(1.1); opacity: 1; }
+                      100% { transform: scale(1); }
+                    }
+                  </code></pre>
+                  <pre data-lang="js" class="language-javascript"><code>const countEl = document.getElementById('visitor-count');
+    let visitors = Math.floor(Math.random() * 151) + 150;
+    setInterval(() => {
+      const fluctuation = Math.floor(Math.random() * 5) - 2;
+      visitors = Math.max(100, visitors + fluctuation);
+      countEl.textContent = visitors;
+    }, Math.random() * 2000 + 2000);
+                  </code></pre>
+                </div>
+              </div>
+        
+      
+              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Color Palette Generator</h3>
+                </div>
+                <p class="mb-6" style="color: var(--text-secondary);">
+                  Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
+                </p>
+                <div id="palette-container" class="flex justify-center gap-2 mb-6">
+
+                </div>
+                <button id="generate-palette-btn" class="btn-secondary w-full">
+                  Buat Palet Baru
+                </button>
+                <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
+
+                <button class="btn-code-toggle" data-code-source="palette-generator-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="palette-generator-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>
+                    &lt;div id="palette-container" class="flex justify-center gap-2 mb-6"&gt;
+                      &lt;!-- Swatches generated here --&gt;
+                    &lt;/div&gt;
+                    &lt;button id="generate-palette-btn" class="btn-secondary w-full"&gt;
+                      Buat Palet Baru
+                    &lt;/button&gt;
+                  </code></pre>
+                  <pre data-lang="css" class="language-css"><code>
+                    .color-swatch {
+                      flex: 1 1 38px;
+                      aspect-ratio: 1 / 1;
+                      border-radius: 0.5rem;
+                      cursor: pointer;
+                      transition: transform 0.2s ease;
+                    }
+                    .color-swatch:hover {
+                      transform: translateY(-4px);
+                    }
+                  </code></pre>
+                  <pre data-lang="js" class="language-javascript"><code>function generatePalette() {
+      paletteContainer.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.backgroundColor = color;
+        swatch.addEventListener('click', () => copyColor(color));
+        paletteContainer.appendChild(swatch);
+      }
+    }</code></pre>
+                </div>
+              </div>
+
+
+              <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
+                </div>
+                <p class="mb-6 text-center" style="color: var(--text-secondary);">
+                  Visualisasi perbandingan algoritma pencarian jalan. Pilih mode, gambar rintangan, dan lihat cara kerjanya.
+                </p>
+
+                <div class="flex flex-col lg:flex-row gap-6 items-start">
+
+                  <div id="pathfinding-grid" class="pathfinding-grid w-full lg:flex-grow"></div>
+
+                  <div class="w-full lg:w-auto lg:min-w-[220px] flex flex-col gap-4">
+                    <div class="flex flex-col gap-2 text-sm">
+                      <label for="algorithm-select" class="text-secondary text-left font-semibold">Algoritma</label>
+                      <select id="algorithm-select" class="pathfinding-select">
+                        <option value="bfs">BFS (Tak Berbobot)</option>
+                        <option value="dijkstra">Dijkstra (Berbobot)</option>
+                        <option value="a-star">A* (Heuristik)</option>
+                      </select>
+                    </div>
+                    <div class="flex flex-col gap-2 text-sm">
+                      <span class="text-secondary text-left font-semibold">Mode Gambar</span>
+                      <div id="pathfinding-controls" class="grid grid-cols-2 gap-2">
+                        <button class="pathfinding-btn active" data-mode="start" title="Tempatkan titik awal"><i data-lucide="flag-triangle-right" class="w-4 h-4"></i><span>Mulai</span></button>
+                        <button class="pathfinding-btn" data-mode="end" title="Tempatkan titik akhir"><i data-lucide="flag-triangle-left" class="w-4 h-4"></i><span>Akhir</span></button>
+                        <button class="pathfinding-btn" data-mode="wall" title="Gambar tembok penghalang"><i data-lucide="brick-wall" class="w-4 h-4"></i><span>Tembok</span></button>
+                        <button class="pathfinding-btn" data-mode="water" title="Gambar area air (beban lebih berat)"><i data-lucide="waves" class="w-4 h-4"></i><span>Air</span></button>
+                      </div>
+                    </div>
+                    <div class="flex flex-col gap-2 mt-2">
+                      <button id="run-pathfinding-btn" class="btn-primary w-full flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i><span id="run-btn-text">Cari Jalan</span></button>
+                      <button id="reset-pathfinding-btn" class="btn-secondary w-full flex items-center justify-center gap-2"><i data-lucide="rotate-cw" class="w-4 h-4"></i><span>Reset</span></button>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn-code-toggle" data-code-source="pathfinding-visualizer-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="pathfinding-visualizer-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>
+                    &lt;div id="pathfinding-grid" class="pathfinding-grid"&gt;&lt;/div&gt;
+                    &lt;div id="pathfinding-controls"&gt;
+                      &lt;!-- Tombol-tombol kontrol --&gt;
+                    &lt;/div&gt;
+                    &lt;select id="algorithm-select"&gt;
+                      &lt;!-- Opsi algoritma --&gt;
+                    &lt;/select&gt;
+                  </code></pre>
+                  <pre data-lang="css" class="language-css"><code>
+                    .pathfinding-grid {
+                      display: grid;
+                      grid-template-columns: repeat(30, 1fr);
+                      grid-template-rows: repeat(15, 1fr);
+                    }
+                    .pathfinding-node.node-water {
+                      background-color: blue; /* Beban lebih berat */
+                    }
+                  </code></pre>
+                  <pre data-lang="js" data-algo="bfs" class="language-javascript"><code>
+                    // BFS: Unweighted search (finds shortest path in terms of steps)
+                    async function runBFS(startNode, endNode) { ... }
+                  </code></pre>
+                  <pre data-lang="js" data-algo="dijkstra" class="language-javascript"><code>
+                    // Dijkstra: Weighted search (finds cheapest path)
+                    async function runDijkstra(startNode, endNode) { ... }
+                  </code></pre>
+                  <pre data-lang="js" data-algo="a-star" class="language-javascript"><code>
+                    // A*: Weighted search with heuristic (more efficient)
+                    async function runAStar(startNode, endNode) { ... }
+                  </code></pre>
+                </div>
+              </div>
+
+            </div>
+          </div>
+    </section>
+
+     <section
       id="services"
       class="py-20 shadow-lg my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
     >
@@ -583,298 +904,7 @@
           <br />Hubungi saya untuk diskusi lebih lanjut tentang proyek Anda.
         </p>
       </div>
-    </section>
-
-    <section id="live-demos" class="py-20 fade-in-on-scroll">
-      <canvas class="plexus-canvas"></canvas>
-      <div class="container text-center">
-        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
-        <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
-          Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-
-          <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
-            <div class="flex items-center justify-center gap-4 mb-4">
-              <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Simulasi Pengunjung</h3>
-            </div>
-            <p class="mb-6" style="color: var(--text-secondary);">
-              Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
-            </p>
-            <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
-              <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
-              <p id="visitor-count" class="text-5xl font-bold text-accent transition-transform duration-300">
-                ...
-              </p>
-            </div>
-            <button class="btn-code-toggle" data-code-source="visitor-counter-code">
-              <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
-            </button>
-            <div id="visitor-counter-code" class="hidden" data-keep-source="true">
-              <pre data-lang="html" class="language-html"><code>
-                &lt;div class="p-4 rounded-lg"&gt;
-                  &lt;p class="text-sm mb-2"&gt;Pengunjung Online Saat Ini:&lt;/p&gt;
-                  &lt;p id="visitor-count" class="text-5xl font-bold text-accent"&gt;...&lt;/p&gt;
-                &lt;/div&gt;
-              </code></pre>
-              <pre data-lang="css" class="language-css"><code>
-                #visitor-count.pop-in {
-                  animation: popIn 0.3s ease-out;
-                }
-                @keyframes popIn {
-                  0% { transform: scale(0.8); opacity: 0.5; }
-                  50% { transform: scale(1.1); opacity: 1; }
-                  100% { transform: scale(1); }
-                }
-              </code></pre>
-              <pre data-lang="js" class="language-javascript"><code>const countEl = document.getElementById('visitor-count');
-let visitors = Math.floor(Math.random() * 151) + 150;
-setInterval(() => {
-  const fluctuation = Math.floor(Math.random() * 5) - 2;
-  visitors = Math.max(100, visitors + fluctuation);
-  countEl.textContent = visitors;
-}, Math.random() * 2000 + 2000);
-              </code></pre>
-            </div>
-          </div>
-    
-  
-          <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
-            <div class="flex items-center justify-center gap-4 mb-4">
-              <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Color Palette Generator</h3>
-            </div>
-            <p class="mb-6" style="color: var(--text-secondary);">
-              Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
-            </p>
-            <div id="palette-container" class="flex justify-center gap-2 mb-6">
-
-            </div>
-            <button id="generate-palette-btn" class="btn-secondary w-full">
-              Buat Palet Baru
-            </button>
-            <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
-
-            <button class="btn-code-toggle" data-code-source="palette-generator-code">
-              <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
-            </button>
-            <div id="palette-generator-code" class="hidden" data-keep-source="true">
-              <pre data-lang="html" class="language-html"><code>
-                &lt;div id="palette-container" class="flex justify-center gap-2 mb-6"&gt;
-                  &lt;!-- Swatches generated here --&gt;
-                &lt;/div&gt;
-                &lt;button id="generate-palette-btn" class="btn-secondary w-full"&gt;
-                  Buat Palet Baru
-                &lt;/button&gt;
-              </code></pre>
-              <pre data-lang="css" class="language-css"><code>
-                .color-swatch {
-                  flex: 1 1 38px;
-                  aspect-ratio: 1 / 1;
-                  border-radius: 0.5rem;
-                  cursor: pointer;
-                  transition: transform 0.2s ease;
-                }
-                .color-swatch:hover {
-                  transform: translateY(-4px);
-                }
-              </code></pre>
-              <pre data-lang="js" class="language-javascript"><code>function generatePalette() {
-  paletteContainer.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const color = '#' + Math.floor(Math.random()*16777215).toString(16);
-    const swatch = document.createElement('div');
-    swatch.className = 'color-swatch';
-    swatch.style.backgroundColor = color;
-    swatch.addEventListener('click', () => copyColor(color));
-    paletteContainer.appendChild(swatch);
-  }
-}</code></pre>
-            </div>
-          </div>
-
-
-          <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
-            <div class="flex items-center justify-center gap-4 mb-4">
-              <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
-              <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
-            </div>
-            <p class="mb-6 text-center" style="color: var(--text-secondary);">
-              Visualisasi perbandingan algoritma pencarian jalan. Pilih mode, gambar rintangan, dan lihat cara kerjanya.
-            </p>
-
-            <div class="flex flex-col lg:flex-row gap-6 items-start">
-
-              <div id="pathfinding-grid" class="pathfinding-grid w-full lg:flex-grow"></div>
-
-              <div class="w-full lg:w-auto lg:min-w-[220px] flex flex-col gap-4">
-                <div class="flex flex-col gap-2 text-sm">
-                  <label for="algorithm-select" class="text-secondary text-left font-semibold">Algoritma</label>
-                  <select id="algorithm-select" class="pathfinding-select">
-                    <option value="bfs">BFS (Tak Berbobot)</option>
-                    <option value="dijkstra">Dijkstra (Berbobot)</option>
-                    <option value="a-star">A* (Heuristik)</option>
-                  </select>
-                </div>
-                <div class="flex flex-col gap-2 text-sm">
-                  <span class="text-secondary text-left font-semibold">Mode Gambar</span>
-                  <div id="pathfinding-controls" class="grid grid-cols-2 gap-2">
-                    <button class="pathfinding-btn active" data-mode="start" title="Tempatkan titik awal"><i data-lucide="flag-triangle-right" class="w-4 h-4"></i><span>Mulai</span></button>
-                    <button class="pathfinding-btn" data-mode="end" title="Tempatkan titik akhir"><i data-lucide="flag-triangle-left" class="w-4 h-4"></i><span>Akhir</span></button>
-                    <button class="pathfinding-btn" data-mode="wall" title="Gambar tembok penghalang"><i data-lucide="brick-wall" class="w-4 h-4"></i><span>Tembok</span></button>
-                    <button class="pathfinding-btn" data-mode="water" title="Gambar area air (beban lebih berat)"><i data-lucide="waves" class="w-4 h-4"></i><span>Air</span></button>
-                  </div>
-                </div>
-                <div class="flex flex-col gap-2 mt-2">
-                  <button id="run-pathfinding-btn" class="btn-primary w-full flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i><span id="run-btn-text">Cari Jalan</span></button>
-                  <button id="reset-pathfinding-btn" class="btn-secondary w-full flex items-center justify-center gap-2"><i data-lucide="rotate-cw" class="w-4 h-4"></i><span>Reset</span></button>
-                </div>
-              </div>
-            </div>
-            <button class="btn-code-toggle" data-code-source="pathfinding-visualizer-code">
-              <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
-            </button>
-            <div id="pathfinding-visualizer-code" class="hidden" data-keep-source="true">
-              <pre data-lang="html" class="language-html"><code>
-                &lt;div id="pathfinding-grid" class="pathfinding-grid"&gt;&lt;/div&gt;
-                &lt;div id="pathfinding-controls"&gt;
-                  &lt;!-- Tombol-tombol kontrol --&gt;
-                &lt;/div&gt;
-                &lt;select id="algorithm-select"&gt;
-                  &lt;!-- Opsi algoritma --&gt;
-                &lt;/select&gt;
-              </code></pre>
-              <pre data-lang="css" class="language-css"><code>
-                .pathfinding-grid {
-                  display: grid;
-                  grid-template-columns: repeat(30, 1fr);
-                  grid-template-rows: repeat(15, 1fr);
-                }
-                .pathfinding-node.node-water {
-                  background-color: blue; /* Beban lebih berat */
-                }
-              </code></pre>
-              <pre data-lang="js" data-algo="bfs" class="language-javascript"><code>
-                // BFS: Unweighted search (finds shortest path in terms of steps)
-                async function runBFS(startNode, endNode) { ... }
-              </code></pre>
-              <pre data-lang="js" data-algo="dijkstra" class="language-javascript"><code>
-                // Dijkstra: Weighted search (finds cheapest path)
-                async function runDijkstra(startNode, endNode) { ... }
-              </code></pre>
-              <pre data-lang="js" data-algo="a-star" class="language-javascript"><code>
-                // A*: Weighted search with heuristic (more efficient)
-                async function runAStar(startNode, endNode) { ... }
-              </code></pre>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section id="workflow" class="py-20 fade-in-on-scroll relative">
-      <canvas class="plexus-canvas"></canvas>
-      <div class="container text-center relative z-10">
-        <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
-          Bagaimana Saya Bekerja
-        </h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="workflowSteps"
-        >
-
-          <div class="flex flex-col items-center workflow-step">
-            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-              style="background-color: var(--color-accent);">
-              1
-            </div>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Konsultasi & Perencanaan
-            </h3>
-            <p class="text-sm" style="color: var(--text-secondary);">
-              Memahami kebutuhan Anda, menentukan lingkup proyek, dan menyusun
-              rencana kerja yang detail.
-            </p>
-          </div>
-
-          <div class="flex flex-col items-center workflow-step">
-            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-              style="background-color: var(--color-accent);">
-              2
-            </div>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Desain & Prototyping
-            </h3>
-            <p class="text-sm" style="color: var(--text-secondary);">
-              Merancang antarmuka pengguna (UI/UX) yang intuitif dan membuat
-              prototipe untuk validasi awal.
-            </p>
-          </div>
-
-          <div class="flex flex-col items-center workflow-step">
-            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-              style="background-color: var(--color-accent);">
-              3
-            </div>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Pengembangan & Pengujian
-            </h3>
-            <p class="text-sm" style="color: var(--text-secondary);">
-              Implementasi kode, integrasi fitur, dan pengujian menyeluruh
-              untuk memastikan kualitas dan fungsionalitas.
-            </p>
-          </div>
-
-          <div class="flex flex-col items-center workflow-step">
-            <div class="text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-              style="background-color: var(--color-accent);">
-              4
-            </div>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Deployment & Dukungan
-            </h3>
-            <p class="text-sm" style="color: var(--text-secondary);">
-              Peluncuran aplikasi ke server atau app store, serta menyediakan
-              dukungan pasca-peluncuran.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section
-      id="portfolio"
-      class="py-20 shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
-    >
-      <canvas class="plexus-canvas"></canvas>
-      <div class="text-center relative z-10">
-        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
-
-        <div id="portfolio-filters" class="flex justify-center flex-wrap gap-2 mb-8"></div>
-
-        <!-- Search Input -->
-        <div class="relative max-w-lg mx-auto mb-10">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <i data-lucide="search" class="w-5 h-5" style="color: var(--text-secondary);"></i>
-          </div>
-          <input type="text" id="portfolio-search-input" class="w-full form-input !rounded-full !pl-12 !py-3" placeholder="Cari proyek berdasarkan nama, teknologi...">
-        </div>
-
-        <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-        <!-- Kontainer untuk tombol paginasi -->
-        <div id="portfolio-pagination" class="flex justify-center items-center gap-2 mt-12"></div>
-
-        <p class="text-xl mt-12" style="color: var(--text-secondary);">
-          <span class="text-accent font-semibold"
-            >Ingin melihat lebih banyak?</span
-          > Punya ide proyek yang menarik?
-          <br />Mari kita diskusikan bagaimana saya bisa membantu
-          mewujudkannya.
-        </p>
-      </div>
-    </section>
+    </section> 
 
     <!-- Testimonials Section (New) -->
     <section id="testimonials" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container liquid-glass-card">
@@ -1015,7 +1045,7 @@ setInterval(() => {
           <canvas class="plexus-canvas certificate-plexus-bg"></canvas>
           <div class="certificate-content-layer relative z-10">
             <div class="certificate-header">
-              <div class="certificate-logo">
+              <div class="certificate-logo" aria-hidden="true">
                 <img src="./assets/img/logo_transparant.png" alt="Logo Ade Syofyan" class="h-full w-full object-contain" crossorigin="anonymous">
               </div>
               <h2 class="certificate-title">Certificate of Appreciation</h2>
@@ -1063,9 +1093,10 @@ setInterval(() => {
     <!-- Dynamic Case Study Modal -->
     <div id="caseStudyModal" class="modal-overlay">
       <div class="modal-content max-w-3xl">
-        <!-- Modal Header -->
         <div class="modal-header">
-          <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">&times;</button>
+          <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
           <h3 id="caseStudyTitle" class="text-3xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
         </div>
         <!-- Modal Body (Scrollable) -->
@@ -1085,9 +1116,10 @@ setInterval(() => {
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
       <div class="modal-content">
-        <!-- Modal Header -->
         <div class="modal-header">
-          <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">&times;</button>
+          <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
           <h3 id="modalTitle" class="text-3xl font-bold" style="color: var(--text-white);"></h3>
           <p id="modalType" class="text-lg" style="color: var(--text-secondary);"></p>
           <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
@@ -1141,7 +1173,9 @@ setInterval(() => {
 
     <!-- Lightbox Modal untuk Gambar -->
     <div id="lightboxModal" class="lightbox-overlay">
-      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close Image Viewer">&times;</button>
+      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close Image Viewer">
+        <i data-lucide="x" class="w-8 h-8"></i>
+      </button>
       <img class="lightbox-content" id="lightboxImage" alt="Gambar yang diperbesar">
     </div>
 
@@ -1150,7 +1184,9 @@ setInterval(() => {
       <div class="chatbot-content">
         <!-- Chatbot Header -->
         <div class="modal-header">
-          <button class="modal-close-btn" onclick="closeChatbotModal()" aria-label="Close Chatbot Modal">&times;</button>
+          <button class="modal-close-btn" onclick="closeChatbotModal()" aria-label="Close Chatbot Modal">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
           <h3 class="text-2xl font-bold" style="color: var(--text-white);">Tanya Ade ✨</h3>
         </div>
         <!-- Chatbot Body (Scrollable) -->
@@ -1209,7 +1245,9 @@ setInterval(() => {
         <div class="modal-content">
             <!-- Achievement Header -->
             <div class="modal-header text-center">
-                <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">&times;</button>
+                <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">
+                  <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
                 <h3 class="text-3xl font-bold" style="color: var(--text-white);">Pencapaian</h3>
             </div>
             <!-- Progress Bar -->
@@ -1326,12 +1364,12 @@ setInterval(() => {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Ade Syofyan",
-        "url": "https://ade-syofyan.github.io/",
+        "url": "https://ade-syofyan.github.io",
         "image": "https://ade-syofyan.github.io/assets/img/foto_ade_new.jpeg",
         "sameAs": [
-          "https://www.linkedin.com/in/ade-syofyan/", <!-- Akan diisi oleh JS -->
-          "mailto:ade.syofyan@gmail.com", <!-- Akan diisi oleh JS -->
-          "https://wa.me/6282284955080"
+          "https://www.linkedin.com/in/ade-syofyan/",
+          "https://wa.me/6282284955080",
+          "mailto:ade.syofyan@gmail.com"
         ],
         "jobTitle": "Mobile & Web Developer Senior",
         "worksFor": {
@@ -1354,10 +1392,6 @@ setInterval(() => {
           "PHP",
           "JavaScript"
         ],
-        "alumniOf": {
-          "@type": "EducationalOrganization",
-          "name": "Nama Universitas/Institusi Anda" <!-- Ganti dengan nama universitas/institusi Anda -->
-        },
         "hasOccupation": {
           "@type": "Occupation",
           "name": "Software Developer",

@@ -190,10 +190,40 @@ function initializeMobileMenu() {
   const mobileMenu = document.getElementById("mobileMenu");
   const mobileMenuToggleBtn = document.getElementById("mobileMenuToggleBtn");
 
+  // --- Accordion Logic ---
+  const submenuToggles = mobileMenu.querySelectorAll(".has-submenu");
+  submenuToggles.forEach(clickedToggle => {
+    clickedToggle.addEventListener("click", () => {
+      const wasOpen = clickedToggle.classList.contains("open");
+
+      // Tutup semua akordeon terlebih dahulu
+      submenuToggles.forEach(toggle => {
+        toggle.classList.remove("open");
+        toggle.nextElementSibling.classList.remove("open");
+      });
+
+      // Jika item yang diklik sebelumnya tidak terbuka, buka sekarang.
+      // Ini akan membuat item yang sudah terbuka menjadi tertutup saat diklik lagi.
+      if (!wasOpen) {
+        clickedToggle.classList.add("open");
+        clickedToggle.nextElementSibling.classList.add("open");
+      }
+    });
+  });
+
+  // --- Link Click Logic ---
+  const menuLinks = mobileMenu.querySelectorAll('a.mobile-menu-item');
+  menuLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Allow default behavior (scrolling) but close the menu
+      closeMobileMenu();
+    });
+  });
+
   const setAnimationDelays = (isOpen) => {
-    const menuItems = mobileMenu.querySelectorAll("a, .mt-8");
+    const menuItems = mobileMenu.querySelectorAll(".mobile-menu-group, .mobile-menu-item, .mobile-menu-cta, .text-center");
     menuItems.forEach((item, index) => {
-      item.style.transitionDelay = isOpen ? `${100 + index * 40}ms` : "0ms";
+      item.style.transitionDelay = isOpen ? `${100 + index * 30}ms` : "0ms";
     });
   };
 
@@ -212,10 +242,7 @@ function initializeMobileMenu() {
       mobileMenuToggleBtn.setAttribute("aria-expanded", "false");
     }
     document.body.classList.remove("modal-open");
-    setAnimationDelays(false);
-    setTimeout(() => {
-      highlightNavLinkOnScroll();
-    }, 100);
+    setAnimationDelays(false); 
   };
 }
 
@@ -1195,6 +1222,90 @@ function initializeContactForm() {
         });
     }
   });
+}
+
+// --- Work History Rendering ---
+function renderWorkHistory(history) {
+  const timelineContainer = document.getElementById("timeline-container");
+  if (!timelineContainer) return;
+  timelineContainer.innerHTML = "";
+
+  history.forEach((item) => {
+    const timelineItem = document.createElement("div");
+    timelineItem.className = "timeline-item";
+    timelineItem.innerHTML = `
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo" onerror="this.style.display='none'">
+          <div class="flex-grow">
+            <h4 class="text-xl font-bold" style="color: var(--text-white);">${item.role}</h4>
+            <p class="text-md" style="color: var(--text-secondary);">${item.company}</p>
+            <p class="text-sm font-semibold mt-1" style="color: var(--color-accent);">${item.duration}</p>
+          </div>
+        </div>
+        <p class="text-sm" style="color: var(--text-secondary);">${item.description}</p>
+      </div>
+    `;
+    timelineContainer.appendChild(timelineItem);
+  });
+}
+
+// --- Certificates Rendering ---
+function renderCertificates(certificates) {
+  const certificatesGrid = document.getElementById("certificates-grid");
+  if (!certificatesGrid) return;
+  certificatesGrid.innerHTML = "";
+
+  certificates.forEach((cert) => {
+    const certCard = document.createElement("div");
+    certCard.className = "certificate-card";
+    certCard.innerHTML = `
+      <a href="${cert.url}" target="_blank" rel="noopener noreferrer">
+        <img src="${cert.thumbnail}" alt="Sertifikat ${cert.title}" class="certificate-thumbnail" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
+      </a>
+      <div class="certificate-info">
+        <h4 class="text-lg font-bold mb-1" style="color: var(--text-white);">${cert.title}</h4>
+        <p class="text-sm mb-3" style="color: var(--text-secondary);">${cert.issuer} - ${cert.date}</p>
+        <a href="${cert.url}" target="_blank" rel="noopener noreferrer" class="btn-secondary inline-flex items-center gap-2 text-xs !py-1.5 !px-3">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>Verifikasi</span>
+        </a>
+      </div>
+    `;
+    certificatesGrid.appendChild(certCard);
+  });
+
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons();
+  }
+}
+
+// --- Populate Schema.org JSON-LD ---
+function populateSchemaData() {
+  if (typeof siteConfig === "undefined") return;
+
+  const schemaScript = document.querySelector(
+    'script[type="application/ld+json"]'
+  );
+  if (!schemaScript) return;
+
+  try {
+    const schema = JSON.parse(schemaScript.textContent);
+
+    // Update data yang relevan
+    schema.url = window.location.origin + window.location.pathname;
+    schema.sameAs = [
+      siteConfig.social.linkedin,
+      siteConfig.social.whatsapp,
+      `mailto:${siteConfig.email}`,
+    ];
+    schema.contactPoint.telephone = siteConfig.phone;
+
+    schemaScript.textContent = JSON.stringify(schema, null, 2);
+  } catch (error) {
+    console.error("Gagal mem-parsing atau memperbarui skema JSON-LD:", error);
+  }
 }
 
 // --- Fix khusus Chrome iOS: pakai fixed + padding body ---

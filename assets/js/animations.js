@@ -397,9 +397,29 @@ function initializeNavHighlighting() {
     });
 
     navLinks.forEach((link) => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === `#${currentSectionId}`) {
+      const linkHref = link.getAttribute("href");
+      const isDirectMatch = linkHref === `#${currentSectionId}`;
+
+      // Cek apakah link ini adalah parent dari dropdown
+      const parentGroup = link.closest(".nav-dropdown-group");
+      let isSubmenuActive = false;
+      if (parentGroup) {
+        const dropdownItems =
+          parentGroup.querySelectorAll(".nav-dropdown-item");
+        dropdownItems.forEach((item) => {
+          if (item.getAttribute("href") === `#${currentSectionId}`) {
+            isSubmenuActive = true;
+            item.classList.add("active");
+          } else {
+            item.classList.remove("active");
+          }
+        });
+      }
+
+      if (isDirectMatch || isSubmenuActive) {
         link.classList.add("active");
+      } else {
+        link.classList.remove("active");
       }
     });
   };
