@@ -852,18 +852,26 @@ setInterval(() => {
       <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
 
-        <div id="portfolio-filters" class="flex justify-center flex-wrap gap-2 mb-8">
-  
+        <div id="portfolio-filters" class="flex justify-center flex-wrap gap-2 mb-8"></div>
+
+        <!-- Search Input -->
+        <div class="relative max-w-lg mx-auto mb-10">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i data-lucide="search" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+          </div>
+          <input type="text" id="portfolio-search-input" class="w-full form-input !rounded-full !pl-12 !py-3" placeholder="Cari proyek berdasarkan nama, teknologi...">
         </div>
 
         <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <!-- Kontainer untuk tombol paginasi -->
+        <div id="portfolio-pagination" class="flex justify-center items-center gap-2 mt-12"></div>
+
         <p class="text-xl mt-12" style="color: var(--text-secondary);">
           <span class="text-accent font-semibold"
             >Ingin melihat lebih banyak?</span
-          >
-          Saya punya lebih banyak proyek menakjubkan yang siap untuk dibagikan.
-          <br />Silakan lengkapi detail proyek lainnya agar saya bisa
-          menambahkannya di sini!
+          > Punya ide proyek yang menarik?
+          <br />Mari kita diskusikan bagaimana saya bisa membantu
+          mewujudkannya.
         </p>
       </div>
     </section>
@@ -1085,34 +1093,49 @@ setInterval(() => {
           <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
         </div>
 
-        <div class="modal-body">
-            <div id="modalImages" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-             
+        <div class="modal-body grid grid-cols-1 lg:grid-cols-3 lg:gap-8">
+          <!-- Kolom Konten Utama -->
+          <div class="lg:col-span-2">
+            <!-- Carousel Slider untuk Gambar Proyek -->
+            <div id="modalImageSlider" class="relative mb-8 overflow-hidden rounded-lg shadow-lg" style="background-color: var(--bg-primary);">
+              <div id="modalImageWrapper" class="flex transition-transform duration-500 ease-in-out">
+                <!-- Slides akan disuntikkan di sini -->
+              </div>
+              <button id="slider-prev-btn" class="absolute top-1/2 left-3 transform -translate-y-1/2 slider-nav-btn">
+                <i data-lucide="chevron-left"></i>
+              </button>
+              <button id="slider-next-btn" class="absolute top-1/2 right-3 transform -translate-y-1/2 slider-nav-btn">
+                <i data-lucide="chevron-right"></i>
+              </button>
+              <div id="slider-pagination" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2"></div>
             </div>
-            <p class="text-lg mb-4" style="color: var(--text-secondary);">
-                <span class="font-semibold text-accent">Tujuan Proyek:</span>
-                <span id="modalGoal"></span>
-            </p>
-            <p class="text-lg mb-4" style="color: var(--text-secondary);">
-                <span class="font-semibold text-accent">Proses Kerja:</span>
-                <span id="modalProcess"></span>
-            </p>
-            <p class="text-lg mb-4" style="color: var(--text-secondary);">
-                <span class="font-semibold text-accent">Hasil/Dampak:</span>
-                <span id="modalImpact"></span>
-            </p>
-            <!-- Container untuk Tech Stack -->
-            <div class="mb-4">
-                <p class="text-lg mb-2"><span class="font-semibold text-accent">Teknologi yang Digunakan:</span></p>
-                <div id="modalTechStack" class="flex flex-wrap gap-3">
-                    
-                </div>
+
+            <div class="project-detail-section">
+              <h4 class="project-detail-heading"><i data-lucide="target"></i>Tujuan Proyek</h4>
+              <p id="modalGoal" style="color: var(--text-secondary);"></p>
             </div>
+
+            <div class="project-detail-section">
+              <h4 class="project-detail-heading"><i data-lucide="workflow"></i>Proses Kerja</h4>
+              <p id="modalProcess" style="color: var(--text-secondary);"></p>
+            </div>
+
+            <div class="project-detail-section">
+              <h4 class="project-detail-heading"><i data-lucide="trending-up"></i>Hasil & Dampak</h4>
+              <p id="modalImpact" style="color: var(--text-secondary);"></p>
+            </div>
+          </div>
+
+          <!-- Kolom Sidebar -->
+          <div class="lg:col-span-1 mt-8 lg:mt-0">
+            <div class="project-sidebar-section">
+              <h4 class="project-detail-heading"><i data-lucide="cpu"></i>Teknologi</h4>
+              <div id="modalTechStack" class="flex flex-wrap gap-3"></div>
+            </div>
+            <div id="modalLinks" class="project-sidebar-section flex flex-col gap-3"></div>
+          </div>
         </div>
-        <!-- Modal Footer -->
-        <div class="modal-footer">
-            <div id="modalLinks" class="flex flex-wrap gap-4"></div>
-        </div>
+        <!-- Footer tidak lagi diperlukan karena link dipindah ke sidebar -->
       </div>
     </div>
 

@@ -17,6 +17,227 @@ const siteConfig = {
 
 const projectsData = [
   {
+    id: "sitampan-duo",
+    title: "Aplikasi Klinik Si Tampan Duo",
+    type: "Aplikasi Booking Pemeriksaan Kesehatan",
+    thumbnail: "./assets/img/project/sitampan/sitampan-1.png",
+    tag: "Mobile & Backend Development",
+    category: "mobile",
+    goal: "Memudahkan pasien untuk melakukan **booking pemeriksaan umum & gigi**, memantau antrean, dan mengakses resep/rujukan secara digital tanpa perlu antre panjang di klinik.",
+    role: "Lead Mobile & Backend Developer",
+    process:
+      "Saya merancang dan mengembangkan sistem ini secara end-to-end. **Aplikasi mobile** dibangun dengan **Flutter** untuk memberikan pengalaman pengguna yang mulus. **Backend** menggunakan **Laravel** untuk mengelola jadwal, antrean, dan data medis pasien. Fitur utama yang diimplementasikan meliputi: **sistem antrean digital** otomatis, **notifikasi real-time** untuk status booking dan hasil, serta **manajemen dokumen** untuk resep dan rujukan yang aman.",
+    impact:
+      "Aplikasi ini berhasil **mengubah pengalaman berobat menjadi lebih cepat, aman, dan transparan**. Pasien dapat meminimalkan waktu tunggu dan mengelola riwayat kesehatan mereka dengan mudah. Di sisi klinik, sistem ini **meningkatkan efisiensi operasional** melalui dashboard admin terintegrasi untuk mengelola check-in, panggilan antrean, dan upload hasil pemeriksaan.",
+    images: [
+      {
+        src: "./assets/img/project/sitampan/sitampan-1.png",
+        alt: "Screenshot Halaman Login Aplikasi Si Tampan Duo",
+      },
+      {
+        src: "./assets/img/project/sitampan/sitampan-2.png",
+        alt: "Screenshot Dashboard Aplikasi Si Tampan Duo",
+      },
+    ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=com.adein.sitampan",
+    },
+    techStack: [
+      {
+        name: "Flutter",
+        reason:
+          "Membangun aplikasi mobile cross-platform yang responsif dan modern untuk Android & iOS.",
+      },
+      {
+        name: "Laravel",
+        reason:
+          "Menyediakan API yang andal dan aman untuk mengelola data booking, antrean, dan rekam medis.",
+      },
+      {
+        name: "MySQL",
+        reason:
+          "Menyimpan data pasien, jadwal, dan riwayat pemeriksaan secara terstruktur dan efisien.",
+      },
+    ],
+  },
+  {
+    id: "vigoshop",
+    title: "Vigoshop - Aplikasi Pulsa & PPOB",
+    type: "Aplikasi Agen Pulsa & PPOB",
+    thumbnail: "./assets/img/project/vigoshop/vigoshop-1.png",
+    tag: "Mobile & Backend Development",
+    category: "mobile",
+    goal: "Membangun aplikasi PPOB (Payment Point Online Bank) yang **andal dan mudah digunakan** bagi para agen untuk menjual pulsa, paket data, token listrik, dan membayar berbagai tagihan secara efisien.",
+    role: "Lead Developer",
+    process:
+      "Saya mengembangkan aplikasi ini dari awal, menggunakan **Java** untuk membangun aplikasi **Android Native** yang performanya optimal dan **Laravel** untuk backend. Prosesnya meliputi perancangan **arsitektur sistem transaksi** yang cepat, integrasi dengan berbagai **API biller** nasional, dan memastikan keamanan data pengguna serta saldo agen.",
+    impact:
+      "Vigoshop berhasil menjadi platform yang stabil dan dipercaya oleh **ratusan agen pulsa**. Aplikasi ini memfasilitasi ribuan transaksi setiap harinya, membantu para agen meningkatkan pendapatan mereka dengan menyediakan layanan pembayaran digital yang lengkap dan harga yang kompetitif.",
+    images: [
+      {
+        src: "./assets/img/project/vigoshop/vigoshop-1.png",
+        alt: "Screenshot Halaman Utama Vigoshop",
+      },
+      {
+        src: "./assets/img/project/vigoshop/vigoshop-2.png",
+        alt: "Screenshot Fitur Transaksi Vigoshop",
+      },
+    ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=com.sukumaya.metashop",
+    },
+    techStack: [
+      {
+        name: "Java (Native Android)",
+        reason:
+          "Membangun aplikasi Android native yang cepat dan memiliki performa optimal untuk transaksi.",
+      },
+      {
+        name: "Laravel",
+        reason:
+          "Menyediakan backend yang kuat untuk mengelola ribuan transaksi harian dan integrasi API biller.",
+      },
+      {
+        name: "MySQL",
+        reason:
+          "Menyimpan data transaksi, produk, dan pengguna secara aman dan terstruktur.",
+      },
+    ],
+  },
+  {
+    id: "pasarpedia",
+    title: "Pasarpedia - Belanja Pasar Online",
+    type: "Aplikasi E-commerce & Logistik Lokal",
+    thumbnail: "./assets/img/project/pasarpedia/pasarpedia-1.png",
+    tag: "Mobile & Backend Development",
+    category: "mobile",
+    goal: "Memudahkan pengguna untuk berbelanja kebutuhan dari **pasar tradisional dan swalayan** secara online, dengan jaminan kualitas, pengantaran di hari yang sama, dan pembayaran di tempat (COD).",
+    role: "Lead Developer",
+    process:
+      "Saya mengembangkan aplikasi ini dari sisi **backend dan mobile menggunakan Flutter**. Prosesnya meliputi pembuatan sistem katalog produk dinamis, manajemen order, **pelacakan mitra pengantaran**, dan sistem nota belanja yang transparan. Fokus utama adalah menciptakan alur belanja yang sangat mudah digunakan oleh berbagai kalangan.",
+    impact:
+      "Pasarpedia berhasil **mendigitalisasi pengalaman belanja pasar lokal**, menghemat waktu dan biaya bagi pengguna. Sistem COD dan jaminan kualitas barang meningkatkan kepercayaan, sementara para mitra pengantaran mendapatkan peluang kerja baru.",
+    images: [
+      {
+        src: "./assets/img/project/pasarpedia/pasarpedia-1.png",
+        alt: "Screenshot Aplikasi Pasarpedia",
+      },
+      {
+        src: "./assets/img/project/pasarpedia/pasarpedia-2.png",
+        alt: "Screenshot Fitur Belanja Pasarpedia",
+      },
+    ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=id.kliker.pasarpedia",
+      liveSite: "http://www.pasarpedia.id",
+    },
+    techStack: [
+      {
+        name: "Flutter",
+        reason:
+          "Membangun aplikasi cross-platform yang user-friendly dan memiliki performa baik.",
+      },
+      {
+        name: "PHP (Backend)",
+        reason:
+          "Menyediakan API untuk manajemen produk, order, dan mitra pengantaran.",
+      },
+      {
+        name: "MySQL",
+        reason:
+          "Menyimpan data produk, pengguna, dan riwayat transaksi secara efisien.",
+      },
+    ],
+  },
+  {
+    id: "mbakrhoda",
+    title: "Mbakrhoda - Toko Teknik Online",
+    type: "Aplikasi E-commerce B2B & B2C",
+    thumbnail: "./assets/img/project/mbakrhoda/mbakrhoda-1.png",
+    tag: "Mobile & Backend Development",
+    category: "mobile",
+    goal: "Mendigitalisasi 'Mbakrhoda', sebuah toko teknik legendaris sejak 1987, untuk melayani pelanggan industri dan ritel secara online, serta mempermudah proses pemesanan dan manajemen produk.",
+    role: "Lead Developer",
+    process:
+      "Saya mengembangkan aplikasi ini dengan pendekatan **WebView**, di mana aplikasi mobile Android berfungsi sebagai *wrapper* untuk situs web e-commerce yang sudah ada. Saya juga mengimplementasikan jembatan (bridge) antara **JavaScript dan Java** untuk mengakses fitur native seperti pemindaian produk (barcode/QR scanner).",
+    impact:
+      "Aplikasi ini berhasil membawa bisnis yang telah berdiri puluhan tahun ke ranah digital, memperluas jangkauan pasar ke seluruh Indonesia. Fitur pemindaian produk mempercepat proses inventaris dan pemesanan bagi pelanggan B2B, meningkatkan efisiensi secara keseluruhan.",
+    images: [
+      {
+        src: "./assets/img/project/mbakrhoda/mbakrhoda-1.png",
+        alt: "Screenshot Aplikasi Mbakrhoda",
+      },
+      {
+        src: "./assets/img/project/mbakrhoda/mbakrhoda-2.png",
+        alt: "Screenshot Fitur Scan Produk Mbakrhoda",
+      },
+    ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=com.sukumaya.mbakrhoda",
+    },
+    techStack: [
+      {
+        name: "WebView (Android)",
+        reason:
+          "Membungkus situs web menjadi aplikasi Android yang dapat di-publish ke Play Store dengan cepat.",
+      },
+      {
+        name: "Java & JavaScript Bridge",
+        reason:
+          "Untuk memungkinkan komunikasi antara web dan aplikasi native, khususnya untuk mengakses fitur pemindaian produk.",
+      },
+      {
+        name: "PHP (Backend)",
+        reason:
+          "Menyediakan API untuk manajemen katalog produk yang luas dan sistem order.",
+      },
+    ],
+  },
+  {
+    id: "atip-maintenance",
+    title: "Maintenance & Repair ATIP",
+    type: "Aplikasi Pengaduan Online",
+    thumbnail: "./assets/img/project/atip/atip-1.png",
+    tag: "Mobile Development",
+    category: "mobile",
+    goal: "Mendigitalisasi proses pengaduan kerusakan dan permintaan perbaikan di lingkungan Politeknik ATI Padang melalui sebuah aplikasi online yang mudah diakses.",
+    role: "Lead Developer",
+    process:
+      "Mengembangkan aplikasi mobile menggunakan pendekatan **WebView** untuk membungkus sistem pengaduan berbasis web. Ini memungkinkan deployment cepat ke Play Store dan memastikan konsistensi antara platform web dan mobile.",
+    impact:
+      "Aplikasi ini berhasil menyederhanakan alur pelaporan, mempercepat respons tim perbaikan, dan menyediakan jejak digital untuk setiap pengaduan, meningkatkan transparansi dan efisiensi manajemen fasilitas di Politeknik ATI Padang.",
+    images: [
+      {
+        src: "./assets/img/project/atip/atip-1.png",
+        alt: "Screenshot Aplikasi Maintenance & Repair ATIP",
+      },
+      {
+        src: "./assets/img/project/atip/atip-2.png",
+        alt: "Screenshot Fitur Pengaduan ATIP",
+      },
+    ],
+    links: {
+      playStore:
+        "https://play.google.com/store/apps/details?id=com.sukumaya.pekersa",
+    },
+    techStack: [
+      {
+        name: "WebView (Android)",
+        reason:
+          "Membungkus situs web pengaduan menjadi aplikasi Android yang dapat di-publish ke Play Store.",
+      },
+      {
+        name: "PHP (Backend)",
+        reason:
+          "Menyediakan sistem untuk mengelola tiket pengaduan, status, dan notifikasi.",
+      },
+    ],
+  },
+  {
     id: "ppdb",
     title: "Studi Kasus: PPDB Online SMAKPA Padang",
     type: "Website Pendaftaran Peserta Didik Baru Online",
@@ -164,7 +385,6 @@ const projectsData = [
       },
     ],
   },
-  // Untuk menambahkan proyek baru, cukup salin objek di atas dan isi datanya.
 ];
 
 // --- Testimonials Data ---

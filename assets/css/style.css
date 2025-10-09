@@ -20,6 +20,8 @@
   --color-accent-hover: #4299e1;
   --border-color: #4a5568;
   --border-color-rgb: 74, 85, 104;
+  --highlight-bg: #fde047;
+  --highlight-text: var(--text-black);
   --shadow-color: rgba(0, 0, 0, 0.4);
   --prism-bg: #2d3748;
   --prism-color: #f8f8f2;
@@ -36,23 +38,25 @@
 
 html[data-theme='light'] {
   /* Light Theme */
-  --bg-primary: #f0f2f5;
-  --bg-card: #f8f9fa;
-  --bg-card-rgb: 248, 249, 250;
-  --bg-card-secondary: rgba(233, 236, 239, 0.6);
-  --bg-nav: #f8f9fa;
-  --bg-nav-rgb: 248, 249, 250;
-  --bg-modal: #f8f9fa;
+  --bg-primary: #fdfcf9; /* Off-white yang lebih hangat */
+  --bg-card: #ffffff; /* Putih bersih untuk kartu */
+  --bg-card-rgb: 255, 255, 255;
+  --bg-card-secondary: rgba(248, 249, 250, 0.7); /* Sedikit transparan */
+  --bg-nav: #ffffff;
+  --bg-nav-rgb: 255, 255, 255;
+  --bg-modal: #ffffff;
   --bg-nav-link-hover: var(--bg-card-secondary);
   --bg-overlay: rgba(247, 250, 252, 0.8);
-  --text-primary: #343a40;
-  --text-secondary: #6c757d;
+  --text-primary: #34495e; /* Abu-abu gelap yang lebih lembut */
+  --text-secondary: #7f8c8d; /* Abu-abu sekunder */
   --text-white: #212529;
-  --color-accent: #3182ce;
-  --color-accent-rgb: 49, 130, 206;
-  --color-accent-hover: #2b6cb0;
+  --color-accent: #17a2b8; /* Warna Teal/Cyan yang segar */
+  --color-accent-rgb: 23, 162, 184;
+  --color-accent-hover: #138496; /* Versi lebih gelap untuk hover */
   --border-color: #dee2e6;
   --border-color-rgb: 222, 226, 230;
+  --highlight-bg: #ffe680;
+  --highlight-text: var(--text-primary);
   --shadow-color: rgba(0, 0, 0, 0.1);
   --prism-bg: #f5f2f0;
   --prism-color: #393a34;
@@ -238,6 +242,45 @@ nav.nav-scrolled {
   border-color: var(--color-accent);
 }
 
+/* Gaya untuk menyorot hasil pencarian */
+.search-highlight {
+  background-color: var(--highlight-bg);
+  color: var(--highlight-text);
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+/* Gaya untuk tombol paginasi */
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  min-width: 40px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.pagination-btn:hover {
+  background-color: var(--color-accent-hover);
+  color: white;
+  border-color: var(--color-accent-hover);
+}
+
+.pagination-btn.active {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+  font-weight: 600;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px -2px rgba(var(--color-accent-rgb), 0.4);
+}
+
 /* Scrollbar kustom untuk browser webkit */
 ::-webkit-scrollbar {
   width: 8px;
@@ -263,7 +306,7 @@ nav.nav-scrolled {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--bg-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -302,10 +345,76 @@ nav.nav-scrolled {
   transform: translateY(0) scale(1);
 }
 
-/* Override khusus untuk modal sertifikat agar bisa lebih lebar */
-#certificateModal .modal-content {
-  width: 90%; /* Gunakan persentase agar responsif di layar kecil */
-  /* Lebar maksimum akan diatur oleh class Tailwind (max-w-6xl) */
+/* Override khusus untuk modal agar bisa lebih lebar */
+#certificateModal .modal-content,
+#projectModal .modal-content {
+  width: 90%;
+}
+
+/* Gaya baru untuk Carousel Slider di Modal Proyek */
+.slider-nav-btn {
+  background-color: rgba(var(--bg-card-rgb), 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: var(--text-white);
+  border: 1px solid rgba(var(--border-color-rgb), 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.slider-nav-btn:hover {
+  background-color: rgba(var(--color-accent-rgb), 0.7);
+  transform: scale(1.1);
+}
+
+.slider-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.slider-pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.slider-pagination-dot.active {
+  background-color: white;
+  transform: scale(1.25);
+}
+
+/* Gaya baru untuk detail proyek di dalam modal */
+.project-detail-section {
+  margin-bottom: 2rem;
+}
+
+.project-detail-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-white);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.project-sidebar-section {
+  background-color: var(--bg-card-secondary);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .modal-header {
@@ -319,12 +428,6 @@ nav.nav-scrolled {
   padding: 1.5rem 2rem;
   overflow-y: auto;
   flex-grow: 1;
-}
-
-.modal-footer {
-  padding: 1.5rem 2rem;
-  border-top: 1px solid var(--border-color);
-  flex-shrink: 0;
 }
 
 /* --- Certificate Modal Button Overrides --- */
@@ -365,7 +468,7 @@ nav.nav-scrolled {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(var(--bg-primary-rgb, 26, 32, 44), 0.9);
   display: none;
   justify-content: center;
   align-items: center;
@@ -390,7 +493,7 @@ nav.nav-scrolled {
   position: absolute;
   top: 20px;
   right: 35px;
-  color: #fff;
+  color: var(--text-white);
   font-size: 40px;
   font-weight: bold;
   cursor: pointer;
@@ -400,7 +503,7 @@ nav.nav-scrolled {
 }
 
 .lightbox-close-btn:hover {
-  color: #bbb;
+  color: var(--text-secondary);
 }
 
 /* Tambahkan kursor 'zoom-in' pada gambar di modal proyek */

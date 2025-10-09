@@ -294,23 +294,76 @@ function initializeModals() {
         }
       }
 
-      const modalImages = document.getElementById("modalImages");
-      modalImages.innerHTML = "";
+      // --- Logika Baru untuk Carousel Slider ---
+      const imageWrapper = document.getElementById("modalImageWrapper");
+      const paginationContainer = document.getElementById("slider-pagination");
+      const prevBtn = document.getElementById("slider-prev-btn");
+      const nextBtn = document.getElementById("slider-next-btn");
+
+      imageWrapper.innerHTML = "";
+      paginationContainer.innerHTML = "";
+      let currentSlide = 0;
+
       if (project.images && project.images.length > 0) {
+        document.getElementById("modalImageSlider").classList.remove("hidden");
+
         project.images.forEach((imgData) => {
-          const imgElement = document.createElement("img");
-          imgElement.src = imgData.src;
-          imgElement.alt = imgData.alt;
-          imgElement.className =
-            "rounded-lg w-full h-auto object-cover shadow-md transition-transform duration-200 hover:scale-105";
-          imgElement.onerror = function () {
-            this.onerror = null;
-            this.src =
-              "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+";
-          };
-          imgElement.addEventListener("click", () => openLightbox(imgData.src));
-          modalImages.appendChild(imgElement);
+          // Buat slide
+          const slide = document.createElement("div");
+          slide.className = "w-full flex-shrink-0";
+          slide.innerHTML = `
+            <img src="${imgData.src}" alt="${imgData.alt}" 
+                 class="w-full h-64 md:h-96 object-cover cursor-zoom-in" 
+                 onclick="openLightbox('${imgData.src}')"
+                 onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
+          `;
+          imageWrapper.appendChild(slide);
+
+          // Buat dot paginasi
+          const dot = document.createElement("div");
+          dot.className = "slider-pagination-dot"; // Index akan ditambahkan di dalam loop
+          dot.addEventListener("click", () => goToSlide(index));
+          paginationContainer.appendChild(dot);
         });
+
+        const totalSlides = project.images.length;
+
+        const updateSlider = () => {
+          imageWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+          // Update dots
+          const dots = paginationContainer.children;
+          for (let i = 0; i < dots.length; i++) {
+            dots[i].classList.toggle("active", i === currentSlide);
+          }
+
+          // Update buttons
+          prevBtn.disabled = currentSlide === 0;
+          nextBtn.disabled = currentSlide === totalSlides - 1;
+        };
+
+        const goToSlide = (slideIndex) => {
+          currentSlide = slideIndex;
+          updateSlider();
+        };
+
+        prevBtn.onclick = () => {
+          if (currentSlide > 0) {
+            currentSlide--;
+            updateSlider();
+          }
+        };
+
+        nextBtn.onclick = () => {
+          if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlider();
+          }
+        };
+
+        updateSlider(); // Inisialisasi slider
+      } else {
+        document.getElementById("modalImageSlider").classList.add("hidden");
       }
 
       const modalLinks = document.getElementById("modalLinks");
@@ -321,7 +374,8 @@ function initializeModals() {
           linkEl.href = project.links.playStore;
           linkEl.target = "_blank";
           linkEl.rel = "noopener noreferrer";
-          linkEl.className = "btn-secondary inline-flex items-center gap-2";
+          linkEl.className =
+            "btn-primary w-full inline-flex items-center justify-center gap-2";
           linkEl.innerHTML = `<i data-lucide="play-circle"></i>Lihat di Play Store`;
           modalLinks.appendChild(linkEl);
         }
@@ -330,15 +384,14 @@ function initializeModals() {
           linkEl.href = project.links.liveSite;
           linkEl.target = "_blank";
           linkEl.rel = "noopener noreferrer";
-          linkEl.className = "btn-secondary inline-flex items-center gap-2";
+          linkEl.className =
+            "btn-primary w-full inline-flex items-center justify-center gap-2";
           linkEl.innerHTML = `<i data-lucide="external-link"></i>Kunjungi Situs`;
           modalLinks.appendChild(linkEl);
         }
-
-        if (typeof lucide !== "undefined") {
-          lucide.createIcons();
-        }
       }
+
+      lucide.createIcons(); // Panggil di akhir setelah semua HTML disuntikkan
       projectModal.classList.add("open");
       document.body.classList.add("modal-open");
     }
@@ -502,20 +555,77 @@ function initializeBSOD() {
 }
 
 // --- Project Rendering ---
-function renderProjects(projects, filter = "all") {
+/**
+ * Menyorot teks dalam sebuah string berdasarkan query pencarian.
+ * @param {string} text - Teks asli.
+ * @param {string} query - Kata kunci pencarian.
+ * @returns {string} Teks dengan kata kunci yang disorot.
+ */
+function highlightText(text, query) {
+  if (!query || !text) {
+    return text;
+  }
+  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escapedQuery})`, "gi");
+  return text.replace(regex, `<mark class="search-highlight">$1</mark>`);
+}
+
+let currentProjectFilter = "all";
+let currentSearchQuery = "";
+let currentProjectPage = 1;
+const projectsPerPage = 6;
+
+function renderProjects(
+  projects,
+  filter = currentProjectFilter,
+  searchQuery = currentSearchQuery,
+  page = currentProjectPage
+) {
   const portfolioGrid = document.getElementById("portfolio-grid");
   if (!portfolioGrid) return;
+
+  currentProjectFilter = filter;
+  currentSearchQuery = searchQuery.toLowerCase();
+  currentProjectPage = page;
+
   portfolioGrid.innerHTML = "";
 
-  const filteredProjects =
+  let filteredProjects =
     filter === "all" ? projects : projects.filter((p) => p.category === filter);
+
+  // Logika Pencarian
+  if (currentSearchQuery) {
+    filteredProjects = filteredProjects.filter((p) => {
+      const searchableText = [
+        p.title,
+        p.type,
+        p.tag,
+        ...(p.techStack ? p.techStack.map((t) => t.name) : []),
+      ]
+        .join(" ")
+        .toLowerCase();
+      return searchableText.includes(currentSearchQuery);
+    });
+  }
+
+  // Logika Paginasi
+  const startIndex = (page - 1) * projectsPerPage;
+  const endIndex = startIndex + projectsPerPage;
+  const paginatedProjects = filteredProjects.slice(startIndex, endIndex);
 
   if (filteredProjects.length === 0) {
     portfolioGrid.innerHTML = `<p class="col-span-full text-center" style="color: var(--text-secondary);">Tidak ada proyek dalam kategori ini.</p>`;
+    renderPaginationControls(0, 0); // Kosongkan paginasi
     return;
   }
 
-  filteredProjects.forEach((project, index) => {
+  if (paginatedProjects.length === 0 && page > 1) {
+    // Jika halaman yang diminta kosong (misal: setelah filter), kembali ke halaman 1
+    renderProjects(projects, filter, searchQuery, 1);
+    return;
+  }
+
+  paginatedProjects.forEach((project, index) => {
     const projectCard = document.createElement("div");
     projectCard.className = `
       project-card p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer
@@ -525,13 +635,107 @@ function renderProjects(projects, filter = "all") {
     projectCard.style.backgroundColor = "var(--bg-card-secondary)";
     projectCard.setAttribute("onclick", `openModal('${project.id}')`);
 
+    // Sorot teks yang cocok dengan query pencarian
+    const highlightedTitle = highlightText(project.title, currentSearchQuery);
+    const highlightedType = highlightText(project.type, currentSearchQuery);
+    const highlightedTag = highlightText(project.tag, currentSearchQuery);
+
     projectCard.innerHTML = `
       <img src="${project.thumbnail}" alt="Thumbnail untuk ${project.title}" class="rounded-lg mb-4 w-full h-48 object-cover" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
-      <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">${project.title}</h3>
-      <p class="text-lg mb-4" style="color: var(--text-secondary);">${project.type}</p>
-      <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${project.tag}</span>
+      <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">${highlightedTitle}</h3>
+      <p class="text-lg mb-4" style="color: var(--text-secondary);">${highlightedType}</p>
+      <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${highlightedTag}</span>
     `;
     portfolioGrid.appendChild(projectCard);
+  });
+
+  renderPaginationControls(filteredProjects.length, page);
+}
+
+function renderPaginationControls(totalItems, currentPage) {
+  const paginationContainer = document.getElementById("portfolio-pagination");
+  if (!paginationContainer) return;
+  paginationContainer.innerHTML = "";
+
+  const totalPages = Math.ceil(totalItems / projectsPerPage);
+  if (totalPages <= 1) return;
+
+  const createButton = (text, page, isDisabled = false, isActive = false) => {
+    const button = document.createElement("button");
+    button.className = "pagination-btn";
+    button.innerHTML = text;
+    button.disabled = isDisabled;
+    if (isActive) button.classList.add("active");
+    if (!isDisabled) {
+      button.addEventListener("click", () => {
+        renderProjects(
+          projectsData,
+          currentProjectFilter,
+          currentSearchQuery,
+          page
+        );
+        document
+          .getElementById("portfolio")
+          .scrollIntoView({ behavior: "smooth" });
+      });
+    }
+    return button;
+  };
+
+  // Tombol "Sebelumnya"
+  paginationContainer.appendChild(
+    createButton("Sebelumnya", currentPage - 1, currentPage === 1)
+  );
+
+  // Tombol Halaman
+  for (let i = 1; i <= totalPages; i++) {
+    // Logika untuk menampilkan elipsis jika halaman terlalu banyak (opsional, untuk > 7 halaman)
+    if (
+      totalPages > 7 &&
+      Math.abs(currentPage - i) > 2 &&
+      i !== 1 &&
+      i !== totalPages
+    ) {
+      if (!paginationContainer.querySelector(".ellipsis")) {
+        const ellipsis = document.createElement("span");
+        ellipsis.className = "ellipsis px-2 text-secondary";
+        ellipsis.textContent = "...";
+        paginationContainer.appendChild(ellipsis);
+      }
+      continue;
+    }
+    paginationContainer.appendChild(
+      createButton(i.toString(), i, false, i === currentPage)
+    );
+  }
+
+  // Tombol "Berikutnya"
+  paginationContainer.appendChild(
+    createButton("Berikutnya", currentPage + 1, currentPage === totalPages)
+  );
+}
+
+// --- Debounce function for search input ---
+function debounce(func, delay) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), delay);
+  };
+}
+
+// --- Initialize Search Functionality ---
+function initializeProjectSearch(projects) {
+  const searchInput = document.getElementById("portfolio-search-input");
+  if (!searchInput) return;
+
+  const debouncedSearch = debounce((query) => {
+    renderProjects(projects, currentProjectFilter, query, 1); // Reset to page 1 on new search
+  }, 300);
+
+  searchInput.addEventListener("input", (e) => {
+    debouncedSearch(e.target.value);
   });
 }
 
@@ -584,7 +788,7 @@ function renderProjectFilters(projects) {
       const totalFadeOutTime =
         300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
       setTimeout(() => {
-        renderProjects(projects, categoryKey);
+        renderProjects(projects, categoryKey, currentSearchQuery, 1); // Selalu mulai dari halaman 1 saat filter
       }, totalFadeOutTime);
     });
 
@@ -594,6 +798,9 @@ function renderProjectFilters(projects) {
   if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
+
+  // Initialize search after filters are rendered
+  initializeProjectSearch(projects);
 }
 
 // --- Interactive Skill Filtering ---
