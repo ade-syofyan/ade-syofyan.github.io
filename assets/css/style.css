@@ -2,6 +2,7 @@
 :root {
   /* Dark Theme (Default) */
   --bg-primary: #1a202c;
+  --bg-primary-rgb: 26, 32, 44;
   --bg-card: #2d3748;
   --bg-card-rgb: 45, 55, 72;
   --bg-card-secondary: rgba(74, 85, 104, 0.6);
@@ -40,6 +41,7 @@
 html[data-theme='light'] {
   /* Light Theme */
   --bg-primary: #fdfcf9;
+  --bg-primary-rgb: 253, 252, 249;
   /* Off-white yang lebih hangat */
   --bg-card: #ffffff;
   /* Putih bersih untuk kartu */
@@ -685,9 +687,9 @@ html[data-theme='light'] .project-sidebar-section {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--bg-overlay);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+  background-color: rgba(var(--bg-primary-rgb), 0.2);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
