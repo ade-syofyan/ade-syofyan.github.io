@@ -422,7 +422,145 @@ function initializeCertificateGenerator() {
   const credentialIdEl = document.getElementById("cert-credential-id");
   const sourceUrlEl = document.getElementById("cert-source-url");
 
-  if (!modal || !generateBtn || !nameInput || !recipientNameEl) return;
+  // Hanya inisialisasi jika tombol generate ada.
+  // Ini penting karena elemennya sekarang dibuat dinamis.
+  if (!generateBtn) return;
+
+  // Hapus event listener lama untuk mencegah duplikasi jika fungsi ini dipanggil lagi
+  generateBtn.replaceWith(generateBtn.cloneNode(true));
+
+  /**
+   * Fungsi untuk mengisi data ke dalam elemen sertifikat.
+   * @param {string} name - Nama penerima sertifikat.
+   */
+  function populateCertificateData(name) {
+    recipientNameEl.textContent = name;
+    if (dateEl) {
+      dateEl.textContent = new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+    if (credentialIdEl) {
+      const credentialId = `AS-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)
+        .toUpperCase()}`;
+      credentialIdEl.textContent = credentialId;
+    }
+    if (sourceUrlEl) {
+      const sourceUrl = window.location.origin + window.location.pathname;
+      sourceUrlEl.href = sourceUrl;
+      sourceUrlEl.textContent = sourceUrl.replace(
+        /^(https?:\/\/)?(www\.)?/,
+        ""
+      );
+    }
+  }
+
+  /**
+   * Fungsi untuk mengambil elemen sertifikat, mengubahnya menjadi gambar, dan mengunduhnya.
+   * @param {string} name - Nama yang akan digunakan untuk nama file.
+   */
+  async function downloadCertificateImage(name) {
+    const certWrapper = document.getElementById("certificate-wrapper");
+    const loadingOverlay = document.getElementById(
+      "certificateLoadingOverlay"
+    );
+    const originalParent = certWrapper.parentNode;
+
+    // Tampilkan overlay loading
+    if (loadingOverlay) {
+      loadingOverlay.classList.remove("hidden");
+      loadingOverlay.classList.add("flex");
+    }
+
+    // Simpan gaya asli untuk dikembalikan nanti
+    const originalStyles = {
+      width: certWrapper.style.width,
+      height: certWrapper.style.height,
+      maxHeight: certWrapper.style.maxHeight,
+      overflow: certWrapper.style.overflow,
+    };
+
+    // Pindahkan elemen ke body dan paksa layout lanskap untuk rendering
+    document.body.appendChild(certWrapper);
+    certWrapper.style.width = "1200px";
+    certWrapper.style.height = "auto";
+    certWrapper.style.overflow = "hidden";
+
+    const computedBgColor = getComputedStyle(certWrapper).backgroundColor;
+    const borderRadius = parseFloat(getComputedStyle(certWrapper).borderRadius);
+
+    const images = Array.from(certWrapper.querySelectorAll("img"));
+    const imageLoadPromises = images.map(
+      (img) =>
+        new Promise((resolve) => {
+          if (img.complete) resolve();
+          else img.onload = resolve;
+        })
+    );
+    await Promise.all(imageLoadPromises);
+
+    const signatureImg = certWrapper.querySelector(
+      ".certificate-signature-img"
+    );
+    if (signatureImg) signatureImg.style.filter = "none";
+
+    try {
+      const canvas = await html2canvas(certWrapper, {
+        backgroundColor: computedBgColor,
+        useCORS: true,
+        width: certWrapper.scrollWidth,
+        height: certWrapper.scrollHeight,
+        windowWidth: certWrapper.scrollWidth,
+        windowHeight: certWrapper.scrollHeight,
+      });
+
+      const roundedCanvas = document.createElement("canvas");
+      roundedCanvas.width = canvas.width;
+      roundedCanvas.height = canvas.height;
+      const context = roundedCanvas.getContext("2d");
+
+      context.beginPath();
+      context.moveTo(borderRadius, 0);
+      context.lineTo(roundedCanvas.width - borderRadius, 0);
+      context.arcTo(roundedCanvas.width, 0, roundedCanvas.width, borderRadius, borderRadius);
+      context.lineTo(roundedCanvas.width, roundedCanvas.height - borderRadius);
+      context.arcTo(roundedCanvas.width, roundedCanvas.height, roundedCanvas.width - borderRadius, roundedCanvas.height, borderRadius);
+      context.lineTo(borderRadius, roundedCanvas.height);
+      context.arcTo(0, roundedCanvas.height, 0, roundedCanvas.height - borderRadius, borderRadius);
+      context.lineTo(0, borderRadius);
+      context.arcTo(0, 0, borderRadius, 0, borderRadius);
+      context.closePath();
+      context.clip();
+      context.drawImage(canvas, 0, 0);
+
+      const timestamp = Date.now();
+      const safeName = name.trim().toLowerCase().replace(/\s+/g, "-");
+
+      const link = document.createElement("a");
+      link.download = `sertifikat-apresiasi-${safeName}-${timestamp}.png`;
+      link.href = roundedCanvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("Gagal membuat gambar sertifikat:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal Mengunduh",
+        text: "Maaf, terjadi kesalahan saat mencoba membuat gambar sertifikat. Silakan coba lagi.",
+      });
+    } finally {
+      if (signatureImg) signatureImg.style.filter = "";
+      originalParent.appendChild(certWrapper);
+      Object.assign(certWrapper.style, originalStyles);
+      if (loadingOverlay) {
+        loadingOverlay.classList.add("hidden");
+        loadingOverlay.classList.remove("flex");
+      }
+    }
+  }
 
   const generate = () => {
     const originalName = nameInput.value.trim();
@@ -460,227 +598,81 @@ function initializeCertificateGenerator() {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Lanjutkan proses jika dikonfirmasi
         if (window.resetAchievements) {
           window.resetAchievements();
         }
 
-        // Set name and date
-        recipientNameEl.textContent = formattedName;
-        if (dateEl) {
-          dateEl.textContent = new Date().toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
-        }
-
-        // Generate and set Credential ID and Source
-        if (credentialIdEl) {
-          const credentialId = `AS-${Date.now()}-${Math.random()
-            .toString(36)
-            .substr(2, 9)
-            .toUpperCase()}`;
-          credentialIdEl.textContent = credentialId;
-        }
-        if (sourceUrlEl) {
-          const sourceUrl = window.location.origin + window.location.pathname;
-          sourceUrlEl.href = sourceUrl;
-          sourceUrlEl.textContent = sourceUrl.replace(
-            /^(https?:\/\/)?(www\.)?/,
-            ""
-          );
-        }
+        populateCertificateData(formattedName);
 
         // Tutup modal pencapaian terlebih dahulu
         if (window.closeAchievementModal) {
           window.closeAchievementModal();
         }
 
-        // Tampilkan modal sertifikat setelah jeda singkat untuk transisi yang mulus
-        setTimeout(() => {
-          modal.classList.add("open");
-          document.body.classList.add("modal-open");
-          const certCanvas = modal.querySelector(".certificate-plexus-bg");
-          if (certCanvas && typeof createPlexusInstance === "function") {
-            setTimeout(() => {
-              createPlexusInstance(certCanvas, {
-                particleCount: 40,
-                maxDistance: 100,
-              });
-            }, 100);
-          }
-        }, 300);
+        if (DEBUG_CERTIFICATE) {
+          // Alur DEBUG: Tampilkan modal dulu
+          setTimeout(() => {
+            modal.classList.add("open");
+            document.body.classList.add("modal-open");
+            const certCanvas = modal.querySelector(".certificate-plexus-bg");
+            if (certCanvas && typeof createPlexusInstance === "function") {
+              setTimeout(() => {
+                createPlexusInstance(certCanvas, { particleCount: 40, maxDistance: 100 });
+              }, 100);
+            }
+          }, 300);
+        } else {
+          // Alur PRODUKSI: Langsung download
+          setTimeout(() => {
+            downloadCertificateImage(formattedName);
+          }, 300);
+        }
       }
     });
   };
 
+  // Ambil referensi elemen baru setelah di-clone
+  const newGenerateBtn = document.getElementById("generate-certificate-btn");
+  const newNameInput = document.getElementById("certificate-name-input");
+
   if (downloadBtn) {
     downloadBtn.addEventListener("click", async () => {
-      const certWrapper = document.getElementById("certificate-wrapper");
-      const certificateModal = document.getElementById("certificateModal");
-      const loadingOverlay = document.getElementById(
-        "certificateLoadingOverlay"
-      );
-
-      // Menambahkan referensi ke ikon di dalam tombol unduh
       const downloadIcon = downloadBtn.querySelector(
         '[data-lucide="download"]'
       );
       const loadingIcon = downloadBtn.querySelector('[data-lucide="loader"]');
 
-      // Nonaktifkan tombol dan tampilkan spinner
       downloadBtn.disabled = true;
       if (downloadIcon && loadingIcon) {
         downloadIcon.classList.add("hidden");
         loadingIcon.classList.remove("hidden");
       }
 
-      const originalParent = certWrapper.parentNode;
-
-      // 1. Sembunyikan modal sertifikat dan tampilkan overlay loading
-      if (certificateModal) certificateModal.style.display = "none";
-      if (loadingOverlay) {
-        loadingOverlay.classList.remove("hidden");
-        loadingOverlay.classList.add("flex");
-      }
-
-      // Simpan gaya asli untuk dikembalikan nanti
-      const originalStyles = {
-        width: certWrapper.style.width,
-        height: certWrapper.style.height,
-        maxHeight: certWrapper.style.maxHeight,
-        overflow: certWrapper.style.overflow,
-      };
-
-      // 2. Pindahkan elemen ke body dan paksa layout lanskap untuk rendering
-      document.body.appendChild(certWrapper);
-      certWrapper.style.width = "1200px"; // Paksa lebar lanskap
-      certWrapper.style.height = "auto";
-      certWrapper.style.overflow = "hidden"; // Paksa overflow agar border-radius dirender
-
-      const computedBgColor = getComputedStyle(certWrapper).backgroundColor;
-      const borderRadius = parseFloat(
-        getComputedStyle(certWrapper).borderRadius
-      );
-
-      // --- NEW: Wait for all images inside the certificate to load ---
-      const images = Array.from(certWrapper.querySelectorAll("img"));
-      const imageLoadPromises = images.map(
-        (img) =>
-          new Promise((resolve) => {
-            if (img.complete) resolve();
-            else img.onload = resolve;
-          })
-      );
-      await Promise.all(imageLoadPromises);
-
-      // --- NEW: Temporarily remove filter from signature for download ---
-      const signatureImg = certWrapper.querySelector(
-        ".certificate-signature-img"
-      );
-      if (signatureImg) signatureImg.style.filter = "none";
+      // Sembunyikan modal saat proses download dimulai
+      if (modal) modal.style.display = "none";
 
       try {
-        const canvas = await html2canvas(certWrapper, {
-          backgroundColor: computedBgColor,
-          useCORS: true,
-          // Gunakan scrollHeight/Width untuk memastikan ukuran penuh
-          width: certWrapper.scrollWidth,
-          height: certWrapper.scrollHeight,
-          windowWidth: certWrapper.scrollWidth,
-          windowHeight: certWrapper.scrollHeight,
-        });
-
-        // --- NEW: Apply rounded corners manually ---
-        const roundedCanvas = document.createElement("canvas");
-        roundedCanvas.width = canvas.width;
-        roundedCanvas.height = canvas.height;
-        const context = roundedCanvas.getContext("2d");
-
-        // Create a rounded rectangle clipping path
-        context.beginPath();
-        context.moveTo(borderRadius, 0);
-        context.lineTo(roundedCanvas.width - borderRadius, 0);
-        context.arcTo(
-          roundedCanvas.width,
-          0,
-          roundedCanvas.width,
-          borderRadius,
-          borderRadius
-        );
-        context.lineTo(
-          roundedCanvas.width,
-          roundedCanvas.height - borderRadius
-        );
-        context.arcTo(
-          roundedCanvas.width,
-          roundedCanvas.height,
-          roundedCanvas.width - borderRadius,
-          roundedCanvas.height,
-          borderRadius
-        );
-        context.lineTo(borderRadius, roundedCanvas.height);
-        context.arcTo(
-          0,
-          roundedCanvas.height,
-          0,
-          roundedCanvas.height - borderRadius,
-          borderRadius
-        );
-        context.lineTo(0, borderRadius);
-        context.arcTo(0, 0, borderRadius, 0, borderRadius);
-        context.closePath();
-        context.clip();
-
-        // Draw the original canvas onto the new one with the clipping path
-        context.drawImage(canvas, 0, 0);
-
-        const timestamp = Date.now();
-        const safeName = nameInput.value
-          .trim()
-          .toLowerCase()
-          .replace(/\s+/g, "-");
-
-        const link = document.createElement("a");
-        // Menggunakan nama huruf kecil dan menambahkan timestamp pada nama file
-        link.download = `sertifikat-apresiasi-${safeName}-${timestamp}.png`;
-        link.href = roundedCanvas.toDataURL("image/png");
-        link.click();
-      } catch (error) {
-        console.error("Gagal membuat gambar sertifikat:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Gagal Mengunduh",
-          text: "Maaf, terjadi kesalahan saat mencoba membuat gambar sertifikat. Silakan coba lagi.",
-        });
+        // Karena tombol ini hanya ada di mode DEBUG, kita panggil fungsi download
+        // dengan nama yang sudah ada di input.
+        // Fungsi ini akan menangani overlay loading dan proses konversi gambar.
+        const currentName = newNameInput.value ||
+          document.getElementById("cert-recipient-name").textContent ||
+          "sertifikat";
+        await downloadCertificateImage(currentName);
       } finally {
-        // --- NEW: Restore the filter after download ---
-        if (signatureImg) signatureImg.style.filter = "";
-
-        // 4. Kembalikan elemen ke posisi semula, apapun yang terjadi
-        originalParent.appendChild(certWrapper);
-        certWrapper.style.width = originalStyles.width;
-        certWrapper.style.height = originalStyles.height;
-        certWrapper.style.maxHeight = originalStyles.maxHeight;
-        certWrapper.style.overflow = originalStyles.overflow;
-
-        // Aktifkan kembali tombol dan kembalikan ikon semula
         downloadBtn.disabled = false;
         if (downloadIcon && loadingIcon) {
           downloadIcon.classList.remove("hidden");
           loadingIcon.classList.add("hidden");
         }
-
-        // 5. Sembunyikan overlay loading dan tampilkan kembali modal sertifikat
-        if (loadingOverlay) loadingOverlay.classList.add("hidden");
-        if (certificateModal) certificateModal.style.display = "flex";
+        // Tampilkan kembali modal setelah selesai
+        if (modal) modal.style.display = "flex";
       }
     });
   }
 
-  generateBtn.addEventListener("click", generate);
-  nameInput.addEventListener("keypress", (e) => {
+  newGenerateBtn.addEventListener("click", generate);
+  newNameInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") generate();
   });
 

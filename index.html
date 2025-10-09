@@ -998,7 +998,7 @@ setInterval(() => {
 
     <!-- Certificate Modal -->
     <div id="certificateModal" class="modal-overlay">
-      <div class="modal-content max-w-4xl p-0">
+      <div class="modal-content max-w-6xl p-0">
         <button class="modal-close-btn" onclick="closeCertificateModal()" aria-label="Close Certificate Modal">
           <i data-lucide="x" class="w-6 h-6"></i>
         </button>
@@ -1202,26 +1202,6 @@ setInterval(() => {
             <!-- Achievement Body (Scrollable) -->
             <div id="achievement-grid" class="modal-body grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Achievement cards will be injected here -->
-            </div>
-            <!-- Hint for the final reward (visible by default) -->
-            <div id="achievement-hint-section" class="p-3 mt-4 border-t text-center" style="border-color: var(--border-color);">
-                <div class="flex items-center justify-center gap-3 opacity-60">
-                    <i data-lucide="lock" class="w-6 h-6 text-accent"></i>
-                    <p class="text-sm" style="color: var(--text-secondary);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
-                </div>
-            </div>
-            <!-- Certificate Generator Reward Section (hidden by default) -->
-            <div id="achievement-reward-section" class="p-3 mt-4 border-t" style="border-color: var(--border-color); background-color: rgba(var(--color-accent-rgb), 0.05); display: none;">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 text-left">
-                        <i data-lucide="gift" class="w-8 h-8 text-accent flex-shrink-0"></i>
-                        <div>
-                            <h4 class="font-bold text-base" style="color: var(--text-white);">Klaim Hadiah Spesial Anda</h4>
-                            <p class="text-xs" style="color: var(--text-secondary);">Selamat! Anda telah membuka semua pencapaian.</p>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 w-full md:w-auto"><div class="flex gap-2"><input type="text" id="certificate-name-input" class="form-input !py-2 !pl-3 text-sm flex-grow" placeholder="Nama Anda..."><button id="generate-certificate-btn" class="btn-primary !py-2 !px-4 text-sm whitespace-nowrap">Buat</button></div></div>
-                </div>
             </div>
         </div>
     </div>

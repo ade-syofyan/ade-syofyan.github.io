@@ -686,10 +686,16 @@ window.resetAchievements = function () {
   paletteGenerationCount = 0;
 
   // Beri notifikasi
-  const Toast = Swal.mixin({ toast: true, position: 'bottom-end', showConfirmButton: false, timer: 3000, timerProgressBar: true });
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "bottom-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
   Toast.fire({
-    icon: 'info',
-    title: 'Pencapaian telah direset.'
+    icon: "info",
+    title: "Pencapaian telah direset.",
   });
 };
 
@@ -726,8 +732,6 @@ function populateAchievements() {
   const achievementGrid = document.getElementById("achievement-grid");
   const progressBar = document.getElementById("achievement-progress-bar");
   const progressText = document.getElementById("achievement-progress-text");
-  const rewardSection = document.getElementById("achievement-reward-section");
-  const hintSection = document.getElementById("achievement-hint-section");
 
   if (!achievementGrid) return;
   achievementGrid.innerHTML = "";
@@ -738,12 +742,53 @@ function populateAchievements() {
   const totalAchievements = Object.keys(achievements).length;
   const unlockedCount = unlockedIds.length;
 
-  // Kontrol visibilitas bagian hadiah dan petunjuk
-  if (rewardSection && hintSection) {
-    const allUnlocked = unlockedCount === totalAchievements;
-    hintSection.style.display = allUnlocked ? 'none' : 'block';
-    rewardSection.style.display = allUnlocked ? 'block' : 'none';
-    if (allUnlocked) rewardSection.classList.add('visible');
+  // Hapus elemen hint/reward lama jika ada, untuk mencegah duplikasi
+  const oldHint = document.getElementById("achievement-hint-section");
+  if (oldHint) oldHint.remove();
+  const oldReward = document.getElementById("achievement-reward-section");
+  if (oldReward) oldReward.remove();
+
+  const showReward =
+    unlockedCount === totalAchievements ||
+    (typeof DEBUG_CERTIFICATE !== "undefined" && DEBUG_CERTIFICATE === true);
+
+  if (showReward) {
+    // Buat dan tambahkan reward section
+    const rewardSection = document.createElement("div");
+    rewardSection.id = "achievement-reward-section";
+    rewardSection.className = "p-3 mt-4 border-t";
+    rewardSection.style.borderColor = "var(--border-color)";
+    rewardSection.style.backgroundColor = "rgba(var(--color-accent-rgb), 0.05)";
+    rewardSection.innerHTML = `
+      <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3 text-left">
+          <i data-lucide="gift" class="w-8 h-8 text-accent flex-shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-base" style="color: var(--text-white);">Klaim Hadiah Spesial Anda</h4>
+            <p class="text-xs" style="color: var(--text-secondary);">Selamat! Anda telah membuka semua pencapaian.</p>
+          </div>
+        </div>
+        <div class="flex-shrink-0 w-full md:w-auto">
+          <div class="flex gap-2">
+            <input type="text" id="certificate-name-input" class="form-input !py-2 !pl-3 text-sm flex-grow" placeholder="Nama Anda...">
+            <button id="generate-certificate-btn" class="btn-primary !py-2 !px-4 text-sm whitespace-nowrap">Buat</button>
+          </div>
+        </div>
+      </div>`;
+    achievementGrid.parentElement.appendChild(rewardSection);
+    initializeCertificateGenerator(); // Inisialisasi ulang event listener untuk tombol yang baru dibuat
+  } else {
+    // Buat dan tambahkan hint section
+    const hintSection = document.createElement("div");
+    hintSection.id = "achievement-hint-section";
+    hintSection.className = "p-3 mt-4 border-t text-center";
+    hintSection.style.borderColor = "var(--border-color)";
+    hintSection.innerHTML = `
+      <div class="flex items-center justify-center gap-3 opacity-60">
+        <i data-lucide="lock" class="w-6 h-6 text-accent"></i>
+        <p class="text-sm" style="color: var(--text-secondary);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
+      </div>`;
+    achievementGrid.parentElement.appendChild(hintSection);
   }
 
   if (progressBar && progressText) {

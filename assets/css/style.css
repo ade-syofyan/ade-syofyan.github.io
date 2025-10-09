@@ -302,6 +302,12 @@ nav.nav-scrolled {
   transform: translateY(0) scale(1);
 }
 
+/* Override khusus untuk modal sertifikat agar bisa lebih lebar */
+#certificateModal .modal-content {
+  width: 90%; /* Gunakan persentase agar responsif di layar kecil */
+  /* Lebar maksimum akan diatur oleh class Tailwind (max-w-6xl) */
+}
+
 .modal-header {
   padding: 1.5rem 2rem;
   border-bottom: 1px solid var(--border-color);
