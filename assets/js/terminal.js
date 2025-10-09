@@ -433,15 +433,18 @@ function initializeTerminal() {
   const openTerminal = () => {
     terminal.classList.remove("hidden");
     terminalInput.focus();
+    lockBodyScroll();
   };
   const closeTerminal = () => {
     fullResetTerminal();
     terminal.classList.add("hidden");
     terminalWindow.classList.remove("maximized");
+    unlockBodyScroll();
   };
   const minimizeTerminal = () => {
     terminal.classList.add("hidden");
     terminalWindow.classList.remove("maximized");
+    unlockBodyScroll();
   };
 
   window.minimizeTerminal = minimizeTerminal;

@@ -9,7 +9,7 @@ function initializeChatbot() {
 
   window.openChatbotModal = function () {
     chatbotModal.classList.add("open");
-    document.body.classList.add("modal-open");
+    lockBodyScroll();
     chatInput.focus();
     loadChatHistory();
     if (chatDisplay.children.length <= 1) {
@@ -19,7 +19,7 @@ function initializeChatbot() {
 
   window.actuallyCloseChatbot = function () {
     chatbotModal.classList.remove("open");
-    document.body.classList.remove("modal-open");
+    unlockBodyScroll();
   };
 
   window.closeChatbotModal = function () {
@@ -275,9 +275,9 @@ async function sendChatMessage() {
     console.error("Error calling Gemini API:", error);
     if (chatDisplay.contains(loadingDiv)) chatDisplay.removeChild(loadingDiv);
     Swal.fire({
-      icon: 'error',
-      title: 'Gagal Menghubungi AI',
-      text: 'Terjadi masalah koneksi atau pada server. Silakan coba lagi beberapa saat.',
+      icon: "error",
+      title: "Gagal Menghubungi AI",
+      text: "Terjadi masalah koneksi atau pada server. Silakan coba lagi beberapa saat.",
     });
   } finally {
     chatDisplay.scrollTop = chatDisplay.scrollHeight;

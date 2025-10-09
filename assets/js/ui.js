@@ -232,7 +232,7 @@ function initializeMobileMenu() {
     if (mobileMenuToggleBtn) {
       mobileMenuToggleBtn.setAttribute("aria-expanded", isOpen.toString());
     }
-    document.body.classList.toggle("modal-open", isOpen);
+    isOpen ? lockBodyScroll() : unlockBodyScroll();
     setAnimationDelays(isOpen);
   };
 
@@ -241,9 +241,27 @@ function initializeMobileMenu() {
     if (mobileMenuToggleBtn) {
       mobileMenuToggleBtn.setAttribute("aria-expanded", "false");
     }
-    document.body.classList.remove("modal-open");
+    unlockBodyScroll();
     setAnimationDelays(false); 
   };
+}
+
+// --- Centralized Modal Scroll Lock Manager ---
+let openModalCount = 0;
+
+function lockBodyScroll() {
+  openModalCount++;
+  if (openModalCount === 1) {
+    document.body.classList.add("modal-open");
+  }
+}
+
+function unlockBodyScroll() {
+  openModalCount--;
+  if (openModalCount <= 0) {
+    openModalCount = 0; // Prevent negative numbers
+    document.body.classList.remove("modal-open");
+  }
 }
 
 // --- Helper Functions ---
@@ -420,13 +438,13 @@ function initializeModals() {
 
       lucide.createIcons(); // Panggil di akhir setelah semua HTML disuntikkan
       projectModal.classList.add("open");
-      document.body.classList.add("modal-open");
+      lockBodyScroll();
     }
   };
 
   window.closeModal = function () {
     if (projectModal) projectModal.classList.remove("open");
-    document.body.classList.remove("modal-open");
+    unlockBodyScroll();
   };
 
   if (projectModal) {
@@ -444,14 +462,14 @@ function initializeModals() {
     if (lightboxModal && lightboxImage) {
       lightboxImage.src = imageUrl;
       lightboxModal.classList.add("open");
-      document.body.classList.add("modal-open");
+      lockBodyScroll();
     }
   };
 
   window.closeLightbox = function () {
     if (lightboxModal) {
       lightboxModal.classList.remove("open");
-      document.body.classList.remove("modal-open");
+      unlockBodyScroll();
     }
   };
 
@@ -465,12 +483,12 @@ function initializeModals() {
   window.openAchievementModal = function () {
     populateAchievements();
     if (achievementModal) achievementModal.classList.add("open");
-    document.body.classList.add("modal-open");
+    lockBodyScroll();
   };
 
   window.closeAchievementModal = function () {
     if (achievementModal) achievementModal.classList.remove("open");
-    document.body.classList.remove("modal-open");
+    unlockBodyScroll();
   };
 
   const achievementToggleBtn = document.getElementById(

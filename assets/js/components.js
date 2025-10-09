@@ -465,9 +465,7 @@ function initializeCertificateGenerator() {
    */
   async function downloadCertificateImage(name) {
     const certWrapper = document.getElementById("certificate-wrapper");
-    const loadingOverlay = document.getElementById(
-      "certificateLoadingOverlay"
-    );
+    const loadingOverlay = document.getElementById("certificateLoadingOverlay");
     const originalParent = certWrapper.parentNode;
 
     // Tampilkan overlay loading
@@ -526,11 +524,29 @@ function initializeCertificateGenerator() {
       context.beginPath();
       context.moveTo(borderRadius, 0);
       context.lineTo(roundedCanvas.width - borderRadius, 0);
-      context.arcTo(roundedCanvas.width, 0, roundedCanvas.width, borderRadius, borderRadius);
+      context.arcTo(
+        roundedCanvas.width,
+        0,
+        roundedCanvas.width,
+        borderRadius,
+        borderRadius
+      );
       context.lineTo(roundedCanvas.width, roundedCanvas.height - borderRadius);
-      context.arcTo(roundedCanvas.width, roundedCanvas.height, roundedCanvas.width - borderRadius, roundedCanvas.height, borderRadius);
+      context.arcTo(
+        roundedCanvas.width,
+        roundedCanvas.height,
+        roundedCanvas.width - borderRadius,
+        roundedCanvas.height,
+        borderRadius
+      );
       context.lineTo(borderRadius, roundedCanvas.height);
-      context.arcTo(0, roundedCanvas.height, 0, roundedCanvas.height - borderRadius, borderRadius);
+      context.arcTo(
+        0,
+        roundedCanvas.height,
+        0,
+        roundedCanvas.height - borderRadius,
+        borderRadius
+      );
       context.lineTo(0, borderRadius);
       context.arcTo(0, 0, borderRadius, 0, borderRadius);
       context.closePath();
@@ -613,11 +629,14 @@ function initializeCertificateGenerator() {
           // Alur DEBUG: Tampilkan modal dulu
           setTimeout(() => {
             modal.classList.add("open");
-            document.body.classList.add("modal-open");
+            lockBodyScroll();
             const certCanvas = modal.querySelector(".certificate-plexus-bg");
             if (certCanvas && typeof createPlexusInstance === "function") {
               setTimeout(() => {
-                createPlexusInstance(certCanvas, { particleCount: 40, maxDistance: 100 });
+                createPlexusInstance(certCanvas, {
+                  particleCount: 40,
+                  maxDistance: 100,
+                });
               }, 100);
             }
           }, 300);
@@ -655,7 +674,8 @@ function initializeCertificateGenerator() {
         // Karena tombol ini hanya ada di mode DEBUG, kita panggil fungsi download
         // dengan nama yang sudah ada di input.
         // Fungsi ini akan menangani overlay loading dan proses konversi gambar.
-        const currentName = newNameInput.value ||
+        const currentName =
+          newNameInput.value ||
           document.getElementById("cert-recipient-name").textContent ||
           "sertifikat";
         await downloadCertificateImage(currentName);
@@ -678,7 +698,7 @@ function initializeCertificateGenerator() {
 
   window.closeCertificateModal = function () {
     modal.classList.remove("open");
-    document.body.classList.remove("modal-open");
+    unlockBodyScroll();
   };
 
   modal.addEventListener("click", (e) => {
@@ -698,7 +718,7 @@ function initializeCodeViewers() {
 
   const closeModal = () => {
     modal.classList.remove("open");
-    document.body.classList.remove("modal-open");
+    unlockBodyScroll();
     modalHeader.innerHTML = "";
     modalContent.innerHTML = "";
   };
@@ -838,7 +858,7 @@ function initializeCodeViewers() {
     Prism.highlightAllUnder(modalContent);
     lucide.createIcons();
     modal.classList.add("open");
-    unlockAchievement("code_inspector");
+    lockBodyScroll();
   };
 
   codeToggleButtons.forEach((button) => {
