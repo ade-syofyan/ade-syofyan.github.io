@@ -1337,69 +1337,74 @@ async function generatePdfThumbnail(pdfUrl, canvasId) {
   const ctx = canvas.getContext("2d");
 
   try {
-    // --- PERBAIKAN DEFINITIF ---
-    // Langkah 1: Dapatkan ukuran render canvas yang sebenarnya dari CSS, tunggu jika belum siap.
-    const rect = canvas.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      setTimeout(() => generatePdfThumbnail(pdfUrl, canvasId), 100);
-      return;
-    }
+    // --- PERBAIKAN DENGAN RESIZEOBSERVER ---
+    const renderPdf = async (rect) => {
+      // Langkah 2: Sesuaikan resolusi internal canvas agar tajam di layar HiDPI.
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
 
-    // Langkah 2: Sesuaikan resolusi internal canvas agar tajam di layar HiDPI.
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
+      // Langkah 3: Isi latar belakang canvas utama dengan warna tema.
+      const themeBgColor = getComputedStyle(document.documentElement)
+        .getPropertyValue("--bg-primary")
+        .trim();
+      ctx.fillStyle = themeBgColor;
+      ctx.fillRect(0, 0, rect.width, rect.height);
 
-    // Langkah 3: Isi latar belakang canvas utama dengan warna tema.
-    const themeBgColor = getComputedStyle(document.documentElement)
-      .getPropertyValue("--bg-primary")
-      .trim();
-    ctx.fillStyle = themeBgColor;
-    ctx.fillRect(0, 0, rect.width, rect.height);
+      // Ensure pdf.js worker is configured
+      if (
+        typeof pdfjsLib === "undefined" ||
+        !pdfjsLib.GlobalWorkerOptions.workerSrc
+      ) {
+        throw new Error("PDF.js library or worker not loaded.");
+      }
 
-    // Ensure pdf.js worker is configured
-    if (
-      typeof pdfjsLib === "undefined" ||
-      !pdfjsLib.GlobalWorkerOptions.workerSrc
-    ) {
-      throw new Error("PDF.js library or worker not loaded.");
-    }
+      // Langkah 4: Muat PDF dan render ke canvas sementara dengan latar belakang putih.
+      const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 2.0 }); // Skala tinggi untuk kualitas
 
-    // Langkah 4: Muat PDF dan render ke canvas sementara dengan latar belakang putih.
-    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
-    const page = await pdf.getPage(1);
-    const viewport = page.getViewport({ scale: 2.0 }); // Skala tinggi untuk kualitas
+      const tempCanvas = document.createElement("canvas");
+      const tempCtx = tempCanvas.getContext("2d");
+      tempCanvas.width = viewport.width;
+      tempCanvas.height = viewport.height;
 
-    const tempCanvas = document.createElement("canvas");
-    const tempCtx = tempCanvas.getContext("2d");
-    tempCanvas.width = viewport.width;
-    tempCanvas.height = viewport.height;
+      await page.render({
+        canvasContext: tempCtx,
+        viewport: viewport,
+        background: "rgba(255, 255, 255, 1)",
+      }).promise;
 
-    await page.render({
-      canvasContext: tempCtx,
-      viewport: viewport,
-      background: "rgba(255, 255, 255, 1)",
-    }).promise;
+      // Langkah 5: Gambar hasil dari canvas sementara ke canvas utama dengan logika 'contain'.
+      const hRatio = rect.width / tempCanvas.width;
+      const vRatio = rect.height / tempCanvas.height;
+      const ratio = Math.min(hRatio, vRatio);
+      const centerShift_x = (rect.width - tempCanvas.width * ratio) / 2;
+      const centerShift_y = (rect.height - tempCanvas.height * ratio) / 2;
 
-    // Langkah 5: Gambar hasil dari canvas sementara ke canvas utama dengan logika 'contain'.
-    const hRatio = rect.width / tempCanvas.width;
-    const vRatio = rect.height / tempCanvas.height;
-    const ratio = Math.min(hRatio, vRatio);
-    const centerShift_x = (rect.width - tempCanvas.width * ratio) / 2;
-    const centerShift_y = (rect.height - tempCanvas.height * ratio) / 2;
+      ctx.drawImage(
+        tempCanvas,
+        0,
+        0,
+        tempCanvas.width,
+        tempCanvas.height,
+        centerShift_x,
+        centerShift_y,
+        tempCanvas.width * ratio,
+        tempCanvas.height * ratio
+      );
+    };
 
-    ctx.drawImage(
-      tempCanvas,
-      0,
-      0,
-      tempCanvas.width,
-      tempCanvas.height,
-      centerShift_x,
-      centerShift_y,
-      tempCanvas.width * ratio,
-      tempCanvas.height * ratio
-    );
+    // Langkah 1: Gunakan ResizeObserver untuk menunggu canvas memiliki ukuran.
+    const observer = new ResizeObserver(entries => {
+      if (entries[0].contentRect.width > 0 && entries[0].contentRect.height > 0) {
+        renderPdf(entries[0].contentRect);
+        observer.unobserve(canvas); // Hentikan observasi setelah render pertama berhasil
+      }
+    });
+    observer.observe(canvas);
+
   } catch (error) {
     console.error("Error rendering PDF thumbnail:", error);
     // Draw a fallback error message on the canvas

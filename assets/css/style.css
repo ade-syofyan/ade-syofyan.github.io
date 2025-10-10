@@ -957,7 +957,7 @@ html[data-theme='light'] .project-sidebar-section {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  animation: pulse 2.5s infinite;
+  animation: pulse 2.5s infinite; /* Dihapus dari sini */
 }
 
 button#scrollToTopBtn,
@@ -976,6 +976,10 @@ button#achievement-toggle-btn {
   transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-white);
+}
+/* Animasi pulse hanya aktif saat tombol terlihat */
+button#scrollToTopBtn.visible {
+  animation: pulse 2.5s infinite;
 }
 
 button#scrollToTopBtn:hover,
