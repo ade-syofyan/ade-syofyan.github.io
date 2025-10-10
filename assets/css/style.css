@@ -332,13 +332,15 @@ nav.nav-scrolled {
 }
 
 .modal-content {
-  background: rgba(var(--bg-card-rgb), 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: transparent;
+  /* Dihapus agar liquid-glass-card mengambil alih */
+  /* Lebih transparan */
+  /* backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); */
   border-radius: 1.4rem 1.2rem 1.5rem 1.2rem;
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
-  max-width: 90%;
-  width: 900px;
+  max-width: 95%;
+  width: 1100px;
   max-height: 90%;
   position: relative;
   display: flex;
@@ -374,8 +376,22 @@ nav.nav-scrolled {
 /* Override khusus untuk modal agar bisa lebih lebar */
 #certificateModal .modal-content,
 #projectModal .modal-content {
-  width: 90%;
+  width: 95%;
 }
+
+/* Gaya baru untuk meta info di modal (Tipe & Peran) */
+.modal-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+}
+
 
 /* Gaya baru untuk Carousel Slider di Modal Proyek */
 .slider-nav-btn {
@@ -398,6 +414,7 @@ nav.nav-scrolled {
 .slider-nav-btn:hover {
   background-color: rgba(var(--color-accent-rgb), 0.7);
   transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.5);
 }
 
 .slider-nav-btn:disabled {
@@ -406,15 +423,17 @@ nav.nav-scrolled {
 }
 
 .slider-pagination-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
-.slider-pagination-dot.active {
+.slider-pagination-dot.active,
+.slider-pagination-dot:hover {
   background-color: white;
   transform: scale(1.25);
 }
@@ -437,9 +456,12 @@ nav.nav-scrolled {
 }
 
 .project-sidebar-section {
-  background-color: var(--bg-card-secondary);
+  background-color: rgba(var(--bg-card-rgb), 0.2);
+  /* Nested glass effect */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
   padding: 1.5rem;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   margin-bottom: 1.5rem;
 }
 
@@ -452,7 +474,8 @@ html[data-theme='light'] .project-sidebar-section {
 }
 
 .modal-header {
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
+  /* Padding lebih ramping */
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
   position: relative;
@@ -719,13 +742,13 @@ html[data-theme='light'] .project-sidebar-section {
   transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   overflow-y: auto;
 }
-
-/* Gaya baru untuk menu dropdown desktop */
-.nav-dropdown-group:hover .nav-dropdown-menu {
+.mobile-menu-overlay.open {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
+
+/* --- Gaya baru untuk menu dropdown desktop --- */
 
 .nav-dropdown-menu {
   position: absolute;
@@ -770,23 +793,17 @@ html[data-theme='light'] .project-sidebar-section {
 }
 
 .nav-dropdown-group:hover .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
   transform: translateX(-50%) translateY(0) scale(1);
-}
-
-.liquid-glass-wrapper {
-  display: flex;
-  align-items: center;
 }
 
 .mobile-menu-content {
   width: 90%;
   max-width: 400px;
-}
-
-.mobile-menu-overlay.open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Beri jarak antar item/grup */
 }
 
 .mobile-menu-group {
@@ -842,22 +859,47 @@ html[data-theme='light'] .project-sidebar-section {
 }
 
 .mobile-submenu-wrapper {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease-in-out;
+  /* Sembunyikan sepenuhnya saat tidak aktif */
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  will-change: opacity, transform; /* Optimasi performa animasi */
 }
 
 .mobile-submenu-wrapper.open {
-  grid-template-rows: 1fr;
+  /* Tampilkan kembali saat aktif */
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  /* Atur transisi untuk item di dalamnya agar muncul berurutan */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Animasi untuk setiap item di dalam submenu */
+.mobile-submenu-wrapper .mobile-submenu-item {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .mobile-submenu-container {
-  overflow: hidden;
   padding: 0.5rem 0;
 }
 
 .mobile-menu-item.mobile-submenu-item {
   font-size: 1.1rem;
+  /* Saat submenu terbuka, animasikan item-itemnya */
+.mobile-submenu-wrapper.open .mobile-submenu-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Menambahkan delay (stagger) untuk setiap item agar muncul berurutan */
+.mobile-submenu-wrapper.open .mobile-submenu-item:nth-child(2) { transition-delay: 0.05s; }
+.mobile-submenu-wrapper.open .mobile-submenu-item:nth-child(3) { transition-delay: 0.1s; }
+.mobile-submenu-wrapper.open .mobile-submenu-item:nth-child(4) { transition-delay: 0.15s; }
+.mobile-submenu-wrapper.open .mobile-submenu-item:nth-child(5) { transition-delay: 0.2s; }
   padding: 0.6rem 1.25rem 0.6rem 2.5rem;
   background-color: transparent;
   border: none;
@@ -888,12 +930,6 @@ html[data-theme='light'] .project-sidebar-section {
 .mobile-menu-overlay.open .mobile-menu-group {
   opacity: 1;
   transform: translateY(0);
-}
-
-.mobile-menu-overlay.open .mobile-menu-item:hover {
-  color: var(--color-accent);
-  background-color: rgba(var(--bg-card-rgb), 0.2);
-  transform: scale(1.03);
 }
 
 .mobile-menu-close-btn {
@@ -999,7 +1035,6 @@ button#achievement-toggle-btn:hover {
 
 /* Gaya untuk link navigasi aktif */
 .desktop-nav a.active {
-  background-color: var(--bg-nav-link-hover);
   color: var(--text-white);
 }
 
@@ -1425,26 +1460,50 @@ button#achievement-toggle-btn:hover {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  /* Jarak antara teks dan ikon */
-  padding: 0.5rem 0.75rem;
+  /* Jarak antara teks dan ikon */ /* Padding di dalam wrapper */
+  padding: 0.35rem 0.75rem;
   /* Padding di dalam wrapper */
   overflow: hidden;
   border-radius: 1rem 0.9rem 1rem 0.9rem;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  z-index: 1;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
 }
 
 .liquid-glass-wrapper::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: rgba(var(--border-color-rgb), 0.1);
+  inset: -5px;
+  /* Sedikit lebih besar untuk efek blur yang lebih baik di tepi */
+  background-color: rgba(var(--bg-card-rgb), 0.25);
+  /* Warna dasar yang lebih transparan */
+  opacity: 0;
+  /* Sembunyikan secara default */
   backdrop-filter: blur(4px);
+  /* Efek blur */
   -webkit-backdrop-filter: blur(4px);
-  transform: translateX(-101%);
-  transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.4s ease;
+  /* Transisi yang smooth */
   z-index: 2;
+  /* Posisi awal disembunyikan di kiri secara default */
+  transform: translateX(-101%);
+}
+
+/* Aturan untuk arah masuk mouse */
+.desktop-nav a.hover-from-left .liquid-glass-wrapper::before {
+  transform: translateX(-101%);
+}
+
+.desktop-nav a.hover-from-right .liquid-glass-wrapper::before {
+  transform: translateX(101%);
+}
+
+/* Saat hover atau aktif, selalu bawa ke tengah dan tampilkan */
+.desktop-nav a:hover .liquid-glass-wrapper::before,
+.desktop-nav a.active .liquid-glass-wrapper::before {
+  transform: translate(0, 0);
+  opacity: 1;
 }
 
 .desktop-nav a:hover .liquid-glass-wrapper {
@@ -1472,23 +1531,32 @@ button#achievement-toggle-btn:hover {
 
 /* Gaya BARU yang lebih jelas untuk link aktif */
 .desktop-nav a.active .liquid-glass-wrapper {
-  background-color: var(--color-accent);
   box-shadow: 0 4px 10px -2px rgba(var(--color-accent-rgb), 0.4);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .desktop-nav a.active .liquid-glass-text {
   color: var(--color-white);
 }
 
-/* Gaya untuk hover state */
-.desktop-nav a:hover .liquid-glass-wrapper::before {
-  transform: translateX(0);
+/* Perbaikan untuk tema terang: pastikan teks link aktif tetap terbaca */
+html[data-theme='light'] .desktop-nav a.active .liquid-glass-text {
+  color: var(--color-accent);
+  font-weight: 700;
+  /* Sedikit lebih tebal agar menonjol */
 }
 
-.desktop-nav a:hover .liquid-glass-text {
-  color: var(--color-black);
-  transition-delay: 0.1s;
+html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
+  color: var(--color-accent);
+  font-weight: 700;
+  /* Sedikit lebih tebal agar menonjol */
+}
+
+/* Gaya untuk hover state pada teks */
+.desktop-nav a:hover .liquid-glass-text,
+.desktop-nav a.active:hover .liquid-glass-text {
+  color: var(--text-white);
+  /* Ubah menjadi putih agar kontras */
+  transition-delay: 0s;
 }
 
 /* Gaya untuk menyorot fitur secara dinamis */
@@ -1524,11 +1592,40 @@ button#achievement-toggle-btn:hover {
   /* Memastikan <pre> mengisi wrapper */
 }
 
+#codeViewerContent pre.line-numbers>.line-numbers-rows>span.filler::before {
+  content: "";
+}
+
+#codeViewerModal .modal-content {
+  display: flex;
+}
+
+#codeViewerContent {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#codeViewerContent .code-block-wrapper:not(.hidden) {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+#codeViewerContent pre[class*="language-"] {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  overflow: auto;
+}
+
 .code-viewer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem 0.5rem 1.5rem;
+  /* Dibuat lebih transparan */
   background-color: var(--bg-card-secondary);
   border-bottom: 1px solid var(--border-color);
   gap: 1rem;
@@ -1542,16 +1639,6 @@ button#achievement-toggle-btn:hover {
   right: 1rem;
   /* Sesuaikan dengan padding kanan header */
   transform: translateY(-50%);
-}
-
-.code-block-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  position: relative;
-  /* Diperlukan agar line-numbers bisa diatur relatif terhadap wrapper ini */
-  overflow: hidden;
-  /* Mencegah pre meluap dari wrapper */
 }
 
 .code-viewer-tabs {
@@ -1598,9 +1685,9 @@ button#achievement-toggle-btn:hover {
   backdrop-filter: blur(4px);
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.6rem;
   cursor: pointer;
-  padding: 0.5rem 0.75rem;
+  padding: 0.3rem 0.3rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
@@ -1634,25 +1721,11 @@ button#achievement-toggle-btn:hover {
 }
 
 pre[class*="language-"] {
-  background: var(--prism-bg) !important;
+  background: transparent !important;
   padding: 1em !important;
   margin: 0 !important;
   border: none !important;
   overflow: auto;
-}
-
-/* Override untuk memastikan line-numbers mengisi tinggi */
-.line-numbers .line-numbers-rows {
-  height: 100%;
-  /* Paksa tinggi 100% */
-  border-right: 1px solid var(--border-color);
-  /* Jaga konsistensi border */
-  background-color: rgba(var(--bg-primary-rgb), 0.3);
-  /* Tambahkan sedikit latar belakang berbeda */
-  top: 0;
-  /* Pastikan posisi dari atas */
-  padding-top: 1em;
-  /* Sesuaikan dengan padding <pre> */
 }
 
 .token.comment,
@@ -1723,6 +1796,7 @@ pre[class*="language-"] {
 .tech-tag:hover {
   background-color: var(--color-accent);
   color: white;
+  transform: translateY(-2px);
   border-color: var(--color-accent-hover);
 }
 

@@ -1127,19 +1127,20 @@
 
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
-      <div class="modal-content w-[90vw] max-w-4xl">
+      <div class="modal-content">
         <div class="modal-header flex justify-between items-start">
           <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">
             <i data-lucide="x" class="w-6 h-6"></i>
           </button>
-          <h3 id="modalTitle" class="text-xl md:text-3xl font-bold" style="color: var(--text-white);"></h3>
-          <p id="modalType" class="text-lg" style="color: var(--text-secondary);"></p>
-          <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
+          <h3 id="modalTitle" class="text-xl md:text-3xl font-bold text-center flex-grow" style="color: var(--text-white);"></h3>
         </div>
 
-        <div class="modal-body grid grid-cols-1 lg:grid-cols-3 lg:gap-8">
+        <div class="modal-body grid grid-cols-1 md:grid-cols-3 md:gap-8">
           <!-- Kolom Konten Utama -->
-          <div class="lg:col-span-2">
+          <div class="md:col-span-2">
+            <div id="modalMetaInfo" class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 text-sm">
+              <!-- Info Tipe dan Peran akan disuntikkan di sini -->
+            </div>
             <!-- Carousel Slider untuk Gambar Proyek -->
             <div id="modalImageSlider" class="relative mb-8 overflow-hidden rounded-lg shadow-lg" style="background-color: var(--bg-primary);">
               <div id="modalImageWrapper" class="flex transition-transform duration-500 ease-in-out">
@@ -1171,7 +1172,7 @@
           </div>
 
           <!-- Kolom Sidebar -->
-          <div class="lg:col-span-1 mt-8 lg:mt-0">
+          <div class="md:col-span-1 mt-8 md:mt-0">
             <div class="project-sidebar-section">
               <h4 class="project-detail-heading"><i data-lucide="cpu"></i>Teknologi</h4>
               <div id="modalTechStack" class="flex flex-wrap gap-3"></div>
@@ -1281,7 +1282,7 @@
 
     <!-- Code Viewer Modal -->
     <div id="codeViewerModal" class="modal-overlay">
-      <div class="modal-content w-[90vw] max-w-5xl h-[85vh] flex flex-col p-0">
+      <div class="modal-content liquid-glass-card w-[90vw] max-w-5xl h-[85vh] flex flex-col p-0">
         <!-- Header dan Konten akan disuntikkan oleh JavaScript -->
         <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0 flex justify-between items-center"></div>
         <div id="codeViewerContent" class="flex-grow">

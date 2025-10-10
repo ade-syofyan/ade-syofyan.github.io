@@ -294,12 +294,20 @@ function initializeModals() {
     if (project && projectModal) {
       document.getElementById("modalTitle").textContent =
         project.title || "Detail Proyek";
-      document.getElementById("modalType").textContent = `Jenis: ${
-        project.type || ""
-      }`;
-      document.getElementById("modalRole").textContent = `Peran: ${
-        project.role || ""
-      }`;
+
+      // Suntikkan Tipe dan Peran ke kontainer baru
+      const metaInfoContainer = document.getElementById("modalMetaInfo");
+      metaInfoContainer.innerHTML = `
+        <span class="modal-meta-item">
+          <i data-lucide="package" class="w-4 h-4"></i>
+          <span>${project.type || "Proyek"}</span>
+        </span>
+        <span class="modal-meta-item">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+          <span>${project.role || "Developer"}</span>
+        </span>
+      `;
+
       document.getElementById("modalGoal").innerHTML = parseMarkdownBold(
         project.goal || ""
       );
@@ -317,8 +325,8 @@ function initializeModals() {
         if (project.techStack && project.techStack.length > 0) {
           project.techStack.forEach((tech) => {
             const tagEl = document.createElement("div");
-            tagEl.className = "tech-tag";
-            tagEl.textContent = tech.name;
+            tagEl.className = "tech-tag inline-flex items-center gap-2";
+            tagEl.innerHTML = `<i data-lucide="cpu" class="w-3.5 h-3.5 opacity-70"></i><span>${tech.name}</span>`;
 
             // --- New Tooltip Logic ---
             const tooltip = document.getElementById("global-tooltip");
@@ -1609,4 +1617,32 @@ function enableIOSChromeNavbarFix() {
       passive: true,
     });
   }
+}
+
+// --- Directional Hover for Desktop Nav ---
+function initializeDirectionalNavHover() {
+  const navLinks = document.querySelectorAll('.desktop-nav .nav-link-anchor');
+  if (!navLinks.length) return;
+
+  const getDirection = (element, event) => {
+    const rect = element.getBoundingClientRect();
+    const x = event.clientX - rect.left; // Posisi X mouse relatif terhadap elemen
+    const w = rect.width;
+    
+    // Jika mouse masuk dari separuh kiri, arahnya 'left', selain itu 'right'
+    return x < w / 2 ? 'left' : 'right';
+  };
+
+  navLinks.forEach(link => {
+    const wrapper = link.querySelector('.liquid-glass-wrapper');
+    if (!wrapper) return;
+
+    link.addEventListener('mouseenter', e => {
+      const direction = getDirection(link, e);
+      // Hapus semua kelas arah sebelumnya untuk memastikan reset
+      link.classList.remove('hover-from-top', 'hover-from-bottom', 'hover-from-left', 'hover-from-right');
+      // Tambahkan kelas arah masuk yang baru
+      link.classList.add(`hover-from-${direction}`);
+    });
+  });
 }

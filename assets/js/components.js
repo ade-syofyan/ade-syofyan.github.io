@@ -712,11 +712,20 @@ function initializeCodeViewers() {
   const modalHeader = document.getElementById("codeViewerHeader");
   const modalContent = document.getElementById("codeViewerContent");
   const codeToggleButtons = document.querySelectorAll(".btn-code-toggle");
-
   if (!modal || !modalHeader || !modalContent || codeToggleButtons.length === 0)
     return;
 
+  let relayout = null;
+
   const closeModal = () => {
+    if (relayout) {
+      window.removeEventListener("resize", relayout);
+      relayout = null;
+    }
+    if (modal._ro) {
+      modal._ro.disconnect();
+      modal._ro = null;
+    }
     modal.classList.remove("open");
     unlockBodyScroll();
     modalHeader.innerHTML = "";
@@ -729,71 +738,55 @@ function initializeCodeViewers() {
       sourceContainer.querySelectorAll("pre[data-lang]");
     if (sourcePreElements.length === 0) return;
 
-    // --- Get selected algorithm if it's the pathfinder demo ---
+    // (optional) filter untuk pathfinder
     let selectedAlgorithm = null;
     if (sourceId === "pathfinding-visualizer-code") {
       const algorithmSelect = document.getElementById("algorithm-select");
-      if (algorithmSelect) {
-        selectedAlgorithm = algorithmSelect.value;
-      }
+      if (algorithmSelect) selectedAlgorithm = algorithmSelect.value;
     }
 
-    // --- Clear previous content ---
+    // reset isi modal
     modalHeader.innerHTML = "";
     modalContent.innerHTML = "";
 
-    // --- Buat Header ---
+    // header tabs + tombol close
     const tabContainer = document.createElement("div");
     tabContainer.className = "code-viewer-tabs";
-
-    // Buat tombol tutup yang benar
     const closeButton = document.createElement("button");
     closeButton.className = "modal-close-btn";
     closeButton.setAttribute("aria-label", "Close Code Viewer");
     closeButton.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
     closeButton.onclick = closeModal;
-
     modalHeader.append(tabContainer, closeButton);
 
-    // --- Proses dan tambahkan blok kode ---
-    sourcePreElements.forEach((preEl, index) => {
+    // buat pane kode
+    sourcePreElements.forEach((preEl) => {
       const lang = preEl.dataset.lang;
-      const codeEl = preEl.querySelector("code");
       const algo = preEl.dataset.algo;
-
-      // --- Dynamic filtering for JS blocks in pathfinder ---
+      const codeEl = preEl.querySelector("code");
+      if (!codeEl) return;
       if (
         lang === "js" &&
         selectedAlgorithm &&
         algo &&
         algo !== selectedAlgorithm
-      ) {
-        // Skip this JS block if it doesn't match the selected algorithm
+      )
         return;
-      }
 
-      if (!codeEl) return;
-
-      // Dedent logic
       const lines = codeEl.textContent.split("\n");
       const minIndent = Math.min(
-        ...lines
-          .filter((line) => line.trim())
-          .map((line) => line.match(/^\s*/)[0].length)
+        ...lines.filter((l) => l.trim()).map((l) => l.match(/^\s*/)[0].length)
       );
       const dedentedCode = lines
-        .map((line) => line.substring(minIndent))
+        .map((l) => l.substring(minIndent))
         .join("\n")
         .trim();
 
-      // Create tab button
       const tabButton = document.createElement("button");
       tabButton.className = "code-viewer-tab";
       tabButton.textContent = lang.toUpperCase();
-      tabButton.dataset.target = `code-block-${lang}`;
       tabContainer.appendChild(tabButton);
 
-      // Create code block content
       const codeBlockWrapper = document.createElement("div");
       codeBlockWrapper.id = `code-block-${lang}`;
       codeBlockWrapper.className = "code-block-wrapper hidden";
@@ -803,36 +796,31 @@ function initializeCodeViewers() {
       newCode.textContent = dedentedCode;
       newPre.appendChild(newCode);
       codeBlockWrapper.appendChild(newPre);
+      modalContent.appendChild(codeBlockWrapper);
 
-      // Tab switching logic
       tabButton.addEventListener("click", () => {
         if (tabButton.classList.contains("active")) return;
-
-        tabContainer.querySelector(".active").classList.remove("active");
+        tabContainer.querySelector(".active")?.classList.remove("active");
         tabButton.classList.add("active");
         modalContent
           .querySelector(".code-block-wrapper:not(.hidden)")
-          .classList.add("hidden");
+          ?.classList.add("hidden");
         codeBlockWrapper.classList.remove("hidden");
+        padLineNumbersIn(codeBlockWrapper);
       });
 
-      if (!modalContent.querySelector(`#code-block-${lang}`)) {
-        modalContent.appendChild(codeBlockWrapper);
-      }
-
-      if (modalContent.children.length === 1) {
+      // buka tab pertama
+      if (!tabContainer.querySelector(".active")) {
         tabButton.classList.add("active");
         codeBlockWrapper.classList.remove("hidden");
       }
     });
 
-    // --- Buat & Tambahkan Tombol Salin ke Area Konten ---
+    // tombol salin
     const copyButton = document.createElement("button");
     copyButton.className = "btn-copy-code";
-    modalContent.appendChild(copyButton); // Tambahkan tombol salin ke konten
-
     copyButton.innerHTML =
-      '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+      '<i data-lucide="copy" class="w-3 h-3 mr-2"></i>Salin';
     copyButton.onclick = () => {
       const activeCodeBlock = modalContent.querySelector(
         ".code-block-wrapper:not(.hidden) code"
@@ -841,23 +829,110 @@ function initializeCodeViewers() {
         navigator.clipboard.writeText(activeCodeBlock.textContent).then(() => {
           copyButton.innerHTML =
             '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
-          lucide.createIcons(); // Perbarui ikon menjadi centang
+          lucide.createIcons();
           setTimeout(() => {
             copyButton.innerHTML =
               '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
-            lucide.createIcons(); // Perbarui ikon kembali menjadi copy
+            lucide.createIcons();
           }, 2000);
         });
       }
     };
+    modalContent.appendChild(copyButton);
 
-    // --- Finalize and show modal ---
+    // tampilkan modal + highlight
     Prism.highlightAllUnder(modalContent);
     lucide.createIcons();
     modal.classList.add("open");
     lockBodyScroll();
+
+    Prism.hooks.add("complete", () => {
+      if (modal.classList.contains("open")) {
+        padLineNumbersIn(modalContent);
+      }
+    });
+
+    // --- relayout yang kuat ---
+    relayout = () => padLineNumbersIn(modalContent);
+    window.addEventListener("resize", relayout);
+
+    // observe perubahan ukuran konten
+    const ro = new ResizeObserver(() => relayout && relayout());
+    ro.observe(modalContent);
+    modal._ro = ro;
+
+    // setelah layout settle + font siap
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => relayout && relayout())
+    );
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => relayout && relayout());
+    }
   };
 
+  // === Pad gutter line-numbers sampai DASAR body modal + hilangkan gap awal
+  function padLineNumbersIn(root) {
+    const blocks = root.querySelectorAll("pre.line-numbers");
+    const body = document.getElementById("codeViewerContent");
+    if (!body) return;
+
+    const bodyRect = body.getBoundingClientRect();
+
+    blocks.forEach((pre) => {
+      const rows = pre.querySelector(".line-numbers-rows");
+      if (!rows) return;
+
+      const preRect = pre.getBoundingClientRect();
+      const preStyle = getComputedStyle(pre);
+      const padTop = parseFloat(preStyle.paddingTop) || 0;
+
+      // target: dari top <pre> (setelah padding-top) hingga bottom body modal
+      const targetHeight = Math.max(
+        0,
+        Math.floor(bodyRect.bottom - preRect.top - padTop)
+      );
+
+      // line-height akurat (fallback jika 'normal')
+      const code = pre.querySelector("code") || pre;
+      let lh = parseFloat(getComputedStyle(code).lineHeight);
+      if (!lh || Number.isNaN(lh)) {
+        const probe = document.createElement("span");
+        probe.textContent = "M";
+        probe.style.visibility = "hidden";
+        code.appendChild(probe);
+        lh = probe.getBoundingClientRect().height || 16;
+        probe.remove();
+      }
+
+      const realCount = rows.querySelectorAll(
+        ":scope > span:not(.filler)"
+      ).length;
+      const shouldHaveTotal = Math.max(realCount, Math.ceil(targetHeight / lh));
+      const currentTotal = rows.childElementCount;
+
+      if (currentTotal < shouldHaveTotal) {
+        const frag = document.createDocumentFragment();
+        for (let i = currentTotal; i < shouldHaveTotal - 1; i++) {
+          const s = document.createElement("span");
+          if (i >= realCount) s.className = "filler"; // baris tambahan
+          frag.appendChild(s);
+        }
+        rows.appendChild(frag);
+      } else if (currentTotal > shouldHaveTotal) {
+        // hapus hanya baris filler dari belakang
+        let toRemove = currentTotal - shouldHaveTotal + 1;
+        for (let i = rows.children.length - 1; i >= 0 && toRemove > 0; i--) {
+          const el = rows.children[i];
+          if (el.classList.contains("filler")) {
+            rows.removeChild(el);
+            toRemove--;
+          } else break;
+        }
+      }
+    });
+  }
+
+  // bind tombol pembuka
   codeToggleButtons.forEach((button) => {
     button.addEventListener("click", () =>
       openModal(button.dataset.codeSource)

@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeHeroCanvas();
   initializeScrollAnimations();
   initializeParallax();
-  initializeTypingEffect(); // Pastikan ini dipanggil
+  initializeDirectionalNavHover();
+  initializeTypingEffect(); 
   initializeSmoothScroll();
 
   // Initialize Interactive Components
