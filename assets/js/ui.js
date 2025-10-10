@@ -250,19 +250,28 @@ function initializeMobileMenu() {
 
 // --- Centralized Modal Scroll Lock Manager ---
 let openModalCount = 0;
+let scrollPosition = 0;
 
 function lockBodyScroll() {
   openModalCount++;
   if (openModalCount === 1) {
+    scrollPosition = window.pageYOffset;
     document.body.classList.add("modal-open");
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = '100%';
   }
 }
 
 function unlockBodyScroll() {
   openModalCount--;
   if (openModalCount <= 0) {
-    openModalCount = 0; // Prevent negative numbers
+    openModalCount = 0; // Mencegah angka negatif
     document.body.classList.remove("modal-open");
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPosition);
   }
 }
 
