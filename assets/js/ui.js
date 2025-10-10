@@ -1090,12 +1090,11 @@ function populateAchievements() {
     // Buat dan tambahkan hint section
     const hintSection = document.createElement("div");
     hintSection.id = "achievement-hint-section";
-    hintSection.className = "p-3 mt-4 border-t text-center";
-    hintSection.style.borderColor = "var(--border-color)";
+    hintSection.className = "p-4 mt-4 text-center rounded-lg achievement-hint-pulse";
     hintSection.innerHTML = `
-      <div class="flex items-center justify-center gap-3 opacity-60">
-        <i data-lucide="lock" class="w-6 h-6 text-accent"></i>
-        <p class="text-sm" style="color: var(--text-secondary);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
+      <div class="flex items-center justify-center gap-3 relative z-10">
+        <i data-lucide="gift" class="w-6 h-6 text-accent"></i>
+        <p class="text-sm font-semibold" style="color: var(--text-accent);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
       </div>`;
     achievementGrid.parentElement.appendChild(hintSection);
   }

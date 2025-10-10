@@ -988,6 +988,35 @@ button#achievement-toggle-btn:hover {
     0 6px 15px 0 var(--shadow-color);
 }
 
+/* Animasi untuk menonjolkan hint hadiah pencapaian */
+.achievement-hint-pulse {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(var(--color-accent-rgb), 0.3);
+  background-color: rgba(var(--color-accent-rgb), 0.05);
+}
+
+.achievement-hint-pulse::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.2) 50%, transparent 80%);
+  animation: achievement-hint-pulse 3.5s ease-in-out infinite;
+}
+
+@keyframes achievement-hint-pulse {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
 .blink {
   animation: blinker 1.5s linear infinite;
 }
