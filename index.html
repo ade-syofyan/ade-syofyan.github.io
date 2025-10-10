@@ -1105,11 +1105,11 @@
     <!-- Dynamic Case Study Modal -->
     <div id="caseStudyModal" class="modal-overlay">
       <div class="modal-content max-w-3xl">
-        <div class="modal-header">
+        <div class="modal-header flex justify-between items-center">
           <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
             <i data-lucide="x" class="w-6 h-6"></i>
           </button>
-          <h3 id="caseStudyTitle" class="text-3xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
+          <h3 id="caseStudyTitle" class="text-xl md:text-3xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
         </div>
         <!-- Modal Body (Scrollable) -->
         <div id="caseStudyBody" class="modal-body">
@@ -1128,11 +1128,11 @@
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
       <div class="modal-content w-[90vw] max-w-4xl">
-        <div class="modal-header">
+        <div class="modal-header flex justify-between items-start">
           <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">
             <i data-lucide="x" class="w-6 h-6"></i>
           </button>
-          <h3 id="modalTitle" class="text-3xl font-bold" style="color: var(--text-white);"></h3>
+          <h3 id="modalTitle" class="text-xl md:text-3xl font-bold" style="color: var(--text-white);"></h3>
           <p id="modalType" class="text-lg" style="color: var(--text-secondary);"></p>
           <p id="modalRole" class="text-lg" style="color: var(--text-secondary);"></p>
         </div>
@@ -1195,11 +1195,11 @@
     <div id="chatbotModal" class="modal-overlay">
       <div class="chatbot-content">
         <!-- Chatbot Header -->
-        <div class="modal-header">
+        <div class="modal-header flex justify-between items-center">
           <button class="modal-close-btn" onclick="closeChatbotModal()" aria-label="Close Chatbot Modal">
             <i data-lucide="x" class="w-6 h-6"></i>
           </button>
-          <h3 class="text-2xl font-bold" style="color: var(--text-white);">Tanya Ade ✨</h3>
+          <h3 class="text-xl md:text-2xl font-bold" style="color: var(--text-white);">Tanya Ade ✨</h3>
         </div>
         <!-- Chatbot Body (Scrollable) -->
         <div id="chatDisplay" class="chat-display">
@@ -1256,11 +1256,11 @@
     <div id="achievementModal" class="modal-overlay">
         <div class="modal-content">
             <!-- Achievement Header -->
-            <div class="modal-header text-center">
+            <div class="modal-header flex justify-between items-center">
                 <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close Achievements Modal">
                   <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
-                <h3 class="text-3xl font-bold" style="color: var(--text-white);">Pencapaian</h3>
+                <h3 class="text-xl md:text-3xl font-bold" style="color: var(--text-white);">Pencapaian</h3>
             </div>
             <!-- Progress Bar -->
             <div class="p-4 border-b" style="border-color: var(--border-color);">
@@ -1281,9 +1281,9 @@
 
     <!-- Code Viewer Modal -->
     <div id="codeViewerModal" class="modal-overlay">
-      <div class="modal-content max-w-4xl h-[85vh] flex flex-col p-0">
+      <div class="modal-content w-[90vw] max-w-5xl h-[85vh] flex flex-col p-0">
         <!-- Header dan Konten akan disuntikkan oleh JavaScript -->
-        <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0"></div>
+        <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0 flex justify-between items-center"></div>
         <div id="codeViewerContent" class="flex-grow">
           <!-- <pre><code>...</code></pre> akan disuntikkan di sini -->
         </div>
@@ -1373,12 +1373,12 @@
 
     <!-- PDF Viewer Modal -->
     <div id="pdfViewerModal" class="modal-overlay">
-      <div class="liquid-glass-card pdf-viewer-container w-[90vw] max-w-6xl aspect-[1.4/1] p-0">
-        <div class="modal-header flex-shrink-0">
+      <div class="liquid-glass-card pdf-viewer-container w-[90vw] max-w-6xl h-[85vh] md:h-auto md:aspect-[1.4/1] p-0">
+        <div class="modal-header flex-shrink-0 flex justify-between items-center">
           <button class="modal-close-btn" onclick="closePdfViewerModal()" aria-label="Close PDF Viewer">
             <i data-lucide="x" class="w-6 h-6"></i>
           </button>
-          <h3 id="pdfViewerTitle" class="text-2xl font-bold" style="color: var(--text-white);">Pratinjau Sertifikat</h3>
+          <h3 id="pdfViewerTitle" class="text-xl md:text-3xl font-bold" style="color: var(--text-white);">Pratinjau Sertifikat</h3>
         </div>
         <div id="pdfViewerContent" class="flex-grow">
           <!-- Embed tag will be injected here -->

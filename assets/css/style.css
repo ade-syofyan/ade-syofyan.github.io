@@ -1510,6 +1510,7 @@ button#achievement-toggle-btn:hover {
 }
 
 #codeViewerContent {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -1519,6 +1520,8 @@ button#achievement-toggle-btn:hover {
   margin: 0 !important;
   padding-left: 3.8em !important;
   flex-grow: 1;
+  height: 100%;
+  /* Memastikan <pre> mengisi wrapper */
 }
 
 .code-viewer-header {
@@ -1529,6 +1532,26 @@ button#achievement-toggle-btn:hover {
   background-color: var(--bg-card-secondary);
   border-bottom: 1px solid var(--border-color);
   gap: 1rem;
+  position: relative;
+  /* Tambahkan ini agar tombol tutup diposisikan dengan benar */
+}
+
+/* Override posisi tombol tutup khusus untuk code viewer */
+.code-viewer-header .modal-close-btn {
+  top: 50%;
+  right: 1rem;
+  /* Sesuaikan dengan padding kanan header */
+  transform: translateY(-50%);
+}
+
+.code-block-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  /* Diperlukan agar line-numbers bisa diatur relatif terhadap wrapper ini */
+  overflow: hidden;
+  /* Mencegah pre meluap dari wrapper */
 }
 
 .code-viewer-tabs {
@@ -1565,21 +1588,27 @@ button#achievement-toggle-btn:hover {
 }
 
 .btn-copy-code {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
-  background: none;
-  border: none;
+  background: rgba(var(--bg-card-rgb), 0.2);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-secondary);
   font-size: 0.875rem;
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 .btn-copy-code:hover {
   color: var(--text-primary);
   background-color: var(--bg-card);
+  transform: scale(1.05);
 }
 
 .btn-code-toggle {
@@ -1610,6 +1639,20 @@ pre[class*="language-"] {
   margin: 0 !important;
   border: none !important;
   overflow: auto;
+}
+
+/* Override untuk memastikan line-numbers mengisi tinggi */
+.line-numbers .line-numbers-rows {
+  height: 100%;
+  /* Paksa tinggi 100% */
+  border-right: 1px solid var(--border-color);
+  /* Jaga konsistensi border */
+  background-color: rgba(var(--bg-primary-rgb), 0.3);
+  /* Tambahkan sedikit latar belakang berbeda */
+  top: 0;
+  /* Pastikan posisi dari atas */
+  padding-top: 1em;
+  /* Sesuaikan dengan padding <pre> */
 }
 
 .token.comment,
@@ -1750,6 +1793,7 @@ pre[class*="language-"] {
     opacity: 0;
     transform: translateY(15px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1761,6 +1805,7 @@ pre[class*="language-"] {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+
   to {
     opacity: 0;
     transform: translateY(-15px) scale(0.98);
@@ -2620,8 +2665,10 @@ html[data-theme='light'] .timeline-logo {
 .certificate-thumbnail-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10; /* Rasio aspek yang lebih seimbang */
-  background-color: var(--bg-primary); /* Latar belakang jika gambar gagal dimuat */
+  aspect-ratio: 16 / 10;
+  /* Rasio aspek yang lebih seimbang */
+  background-color: var(--bg-primary);
+  /* Latar belakang jika gambar gagal dimuat */
   overflow: hidden;
   border-bottom: 1px solid var(--border-color);
 }
@@ -2629,13 +2676,16 @@ html[data-theme='light'] .timeline-logo {
 .certificate-thumbnail {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Mengisi area, mungkin memotong sedikit */
+  object-fit: cover;
+  /* Mengisi area, mungkin memotong sedikit */
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .certificate-card:hover .certificate-thumbnail {
-  object-fit: contain; /* Saat hover, tampilkan gambar penuh */
-  transform: scale(1.1); /* Sedikit zoom untuk fokus */
+  object-fit: contain;
+  /* Saat hover, tampilkan gambar penuh */
+  transform: scale(1.1);
+  /* Sedikit zoom untuk fokus */
 }
 
 .thumbnail-overlay {
@@ -2647,7 +2697,8 @@ html[data-theme='light'] .timeline-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none; /* Agar tidak menghalangi klik */
+  pointer-events: none;
+  /* Agar tidak menghalangi klik */
 }
 
 .certificate-card:hover .thumbnail-overlay {
@@ -2672,5 +2723,6 @@ html[data-theme='light'] .timeline-logo {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  justify-content: space-between; /* Mendorong tombol ke bawah */
+  justify-content: space-between;
+  /* Mendorong tombol ke bawah */
 }

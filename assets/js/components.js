@@ -742,29 +742,20 @@ function initializeCodeViewers() {
     modalHeader.innerHTML = "";
     modalContent.innerHTML = "";
 
-    // --- Create Header Elements ---
+    // --- Buat Header ---
     const tabContainer = document.createElement("div");
     tabContainer.className = "code-viewer-tabs";
 
-    const controlsContainer = document.createElement("div");
-    controlsContainer.className = "code-viewer-controls";
-
-    // --- Create Copy Button ---
-    const copyButton = document.createElement("button");
-    copyButton.className = "btn-copy-code";
-    copyButton.innerHTML =
-      '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
-
-    // --- Create Close Button ---
+    // Buat tombol tutup yang benar
     const closeButton = document.createElement("button");
-    closeButton.className = "modal-close-btn static text-2xl ml-4 p-0";
-    closeButton.innerHTML = "&times;";
+    closeButton.className = "modal-close-btn";
+    closeButton.setAttribute("aria-label", "Close Code Viewer");
+    closeButton.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
     closeButton.onclick = closeModal;
 
-    controlsContainer.append(copyButton, closeButton);
-    modalHeader.append(tabContainer, controlsContainer);
+    modalHeader.append(tabContainer, closeButton);
 
-    // --- Process and append code blocks ---
+    // --- Proses dan tambahkan blok kode ---
     sourcePreElements.forEach((preEl, index) => {
       const lang = preEl.dataset.lang;
       const codeEl = preEl.querySelector("code");
@@ -835,7 +826,13 @@ function initializeCodeViewers() {
       }
     });
 
-    // Update copy button logic
+    // --- Buat & Tambahkan Tombol Salin ke Area Konten ---
+    const copyButton = document.createElement("button");
+    copyButton.className = "btn-copy-code";
+    modalContent.appendChild(copyButton); // Tambahkan tombol salin ke konten
+
+    copyButton.innerHTML =
+      '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
     copyButton.onclick = () => {
       const activeCodeBlock = modalContent.querySelector(
         ".code-block-wrapper:not(.hidden) code"
@@ -844,11 +841,11 @@ function initializeCodeViewers() {
         navigator.clipboard.writeText(activeCodeBlock.textContent).then(() => {
           copyButton.innerHTML =
             '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
-          lucide.createIcons();
+          lucide.createIcons(); // Perbarui ikon menjadi centang
           setTimeout(() => {
             copyButton.innerHTML =
               '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
-            lucide.createIcons();
+            lucide.createIcons(); // Perbarui ikon kembali menjadi copy
           }, 2000);
         });
       }
