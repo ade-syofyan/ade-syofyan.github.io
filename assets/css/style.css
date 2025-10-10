@@ -42,27 +42,20 @@ html[data-theme='light'] {
   /* Light Theme */
   --bg-primary: #fdfcf9;
   --bg-primary-rgb: 253, 252, 249;
-  /* Off-white yang lebih hangat */
   --bg-card: #ffffff;
-  /* Putih bersih untuk kartu */
   --bg-card-rgb: 255, 255, 255;
   --bg-card-secondary: rgba(248, 249, 250, 0.7);
-  /* Sedikit transparan */
   --bg-nav: #ffffff;
   --bg-nav-rgb: 255, 255, 255;
   --bg-modal: #ffffff;
   --bg-nav-link-hover: var(--bg-card-secondary);
   --bg-overlay: rgba(247, 250, 252, 0.8);
   --text-primary: #34495e;
-  /* Abu-abu gelap yang lebih lembut */
   --text-secondary: #7f8c8d;
-  /* Abu-abu sekunder */
   --text-white: #212529;
   --color-accent: #17a2b8;
-  /* Warna Teal/Cyan yang segar */
   --color-accent-rgb: 23, 162, 184;
   --color-accent-hover: #138496;
-  /* Versi lebih gelap untuk hover */
   --border-color: #dee2e6;
   --border-color-rgb: 222, 226, 230;
   --highlight-bg: #ffe680;
@@ -90,7 +83,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Mencegah body scroll saat modal terbuka */
 body.modal-open {
   overflow: hidden;
 }
@@ -467,14 +459,11 @@ nav.nav-scrolled {
 /* Perbaikan UI/UX untuk sidebar modal proyek di tema terang */
 html[data-theme='light'] .project-sidebar-section {
   background-color: rgba(var(--color-accent-rgb), 0.05);
-  /* Latar belakang dengan sedikit warna aksen */
   border: 1px solid rgba(var(--color-accent-rgb), 0.1);
-  /* Garis tepi yang halus */
 }
 
 .modal-header {
   padding: 1rem 2rem;
-  /* Padding lebih ramping */
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
   position: relative;
@@ -496,14 +485,12 @@ html[data-theme='light'] .project-sidebar-section {
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.1);
-  /* Warna putih tetap */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 50%;
   box-shadow: inset 1px 1px 0px 0 rgba(255, 255, 255, 0.15), 0 4px 8px 0 var(--shadow-color);
   transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  /* Border putih tetap */
   color: var(--text-white);
   z-index: 25;
 }
@@ -755,7 +742,6 @@ html[data-theme='light'] .project-sidebar-section {
   left: 50%;
   transform: translateX(-50%) translateY(10px) scale(0.95);
   margin-top: 0.25rem;
-  /* Mengurangi margin atas agar lebih dekat */
   padding: 0.5rem;
   min-width: 200px;
   background-color: rgba(var(--bg-card-rgb), 0.3);
@@ -768,7 +754,6 @@ html[data-theme='light'] .project-sidebar-section {
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
   z-index: 50;
-  /* Menaikkan z-index agar di atas elemen lain */
 }
 
 .nav-dropdown-item {
@@ -803,7 +788,6 @@ html[data-theme='light'] .project-sidebar-section {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  /* Beri jarak antar item/grup */
 }
 
 .mobile-menu-group {
@@ -821,14 +805,12 @@ html[data-theme='light'] .project-sidebar-section {
   border: none;
   margin-bottom: 0;
   padding: 0.7rem 1.25rem;
-  /* Mengurangi padding vertikal */
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: var(--text-white);
   font-size: 1.1rem;
-  /* Mengurangi ukuran font */
   font-weight: 500;
   transition: all 0.3s ease;
   text-align: left;
@@ -841,7 +823,6 @@ html[data-theme='light'] .project-sidebar-section {
 .submenu-toggle-button {
   padding: 0.5rem;
   margin: -0.5rem;
-  /* Offset padding agar area klik lebih besar */
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -859,21 +840,17 @@ html[data-theme='light'] .project-sidebar-section {
 }
 
 .mobile-submenu-wrapper {
-  /* Sembunyikan sepenuhnya saat tidak aktif */
   display: none;
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   will-change: opacity, transform;
-  /* Optimasi performa animasi */
 }
 
 .mobile-submenu-wrapper.open {
-  /* Tampilkan kembali saat aktif */
   display: block;
   opacity: 1;
   transform: translateY(0);
-  /* Atur transisi untuk item di dalamnya agar muncul berurutan */
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -921,13 +898,11 @@ html[data-theme='light'] .project-sidebar-section {
   margin: 0;
   border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
   justify-content: flex-start;
-  /* Ratakan konten ke kiri */
   gap: 1rem;
 }
 
 .mobile-submenu-container .mobile-menu-item:first-child {
   border-top: none;
-  /* Hapus garis pemisah pada item pertama */
 }
 
 .mobile-menu-overlay .mobile-menu-item,
@@ -1139,12 +1114,10 @@ button#achievement-toggle-btn:hover {
 
 .fade-in-on-scroll#services {
   transition-delay: 0.2s;
-  /* Tambahkan delay untuk section Layanan */
 }
 
 .fade-in-on-scroll#live-demos {
   transition-delay: 0.3s;
-  /* Tambahkan delay untuk section Live Demos */
 }
 
 /* Typing Effect Cursor */
@@ -1152,7 +1125,6 @@ button#achievement-toggle-btn:hover {
   display: inline-block;
   width: 2px;
   height: 1.5rem;
-  /* Sesuaikan dengan ukuran font */
   background-color: var(--color-accent);
   animation: blink-caret 0.85s step-end infinite;
 }
@@ -1474,10 +1446,7 @@ button#achievement-toggle-btn:hover {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  /* Jarak antara teks dan ikon */
-  /* Padding di dalam wrapper */
   padding: 0.35rem 0.75rem;
-  /* Padding di dalam wrapper */
   overflow: hidden;
   border-radius: 1rem 0.9rem 1rem 0.9rem;
   cursor: pointer;
@@ -1490,18 +1459,12 @@ button#achievement-toggle-btn:hover {
   content: '';
   position: absolute;
   inset: -5px;
-  /* Sedikit lebih besar untuk efek blur yang lebih baik di tepi */
   background-color: rgba(var(--bg-card-rgb), 0.25);
-  /* Warna dasar yang lebih transparan */
   opacity: 0;
-  /* Sembunyikan secara default */
   backdrop-filter: blur(4px);
-  /* Efek blur */
   -webkit-backdrop-filter: blur(4px);
   transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.4s ease;
-  /* Transisi yang smooth */
   z-index: 2;
-  /* Posisi awal disembunyikan di kiri secara default */
   transform: translateX(-101%);
 }
 
@@ -1557,20 +1520,17 @@ button#achievement-toggle-btn:hover {
 html[data-theme='light'] .desktop-nav a.active .liquid-glass-text {
   color: var(--color-accent);
   font-weight: 700;
-  /* Sedikit lebih tebal agar menonjol */
 }
 
 html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   color: var(--color-accent);
   font-weight: 700;
-  /* Sedikit lebih tebal agar menonjol */
 }
 
 /* Gaya untuk hover state pada teks */
 .desktop-nav a:hover .liquid-glass-text,
 .desktop-nav a.active:hover .liquid-glass-text {
   color: var(--text-white);
-  /* Ubah menjadi putih agar kontras */
   transition-delay: 0s;
 }
 
@@ -1604,7 +1564,6 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   padding-left: 3.8em !important;
   flex-grow: 1;
   height: 100%;
-  /* Memastikan <pre> mengisi wrapper */
 }
 
 #codeViewerContent pre.line-numbers>.line-numbers-rows>span.filler::before {
@@ -1640,19 +1599,16 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem 0.5rem 1.5rem;
-  /* Dibuat lebih transparan */
   background-color: var(--bg-card-secondary);
   border-bottom: 1px solid var(--border-color);
   gap: 1rem;
   position: relative;
-  /* Tambahkan ini agar tombol tutup diposisikan dengan benar */
 }
 
 /* Override posisi tombol tutup khusus untuk code viewer */
 .code-viewer-header .modal-close-btn {
   top: 50%;
   right: 1rem;
-  /* Sesuaikan dengan padding kanan header */
   transform: translateY(-50%);
 }
 
@@ -2428,17 +2384,12 @@ html.ios-chrome body.has-fixed-nav {
 /* --- Redesigned Certificate Styles --- */
 #certificate-wrapper {
   background-color: #2d3748;
-  /* Warna gelap tetap */
   color: #a0aec0;
-  /* Warna teks sekunder tetap */
   font-family: 'Inter', sans-serif;
   border: 1px solid var(--border-color);
   border-radius: 0.75rem;
-  /* Menambahkan sudut membulat */
   flex-grow: 1;
-  /* Memastikan elemen ini mengisi ruang yang tersedia */
   overflow-y: auto;
-  /* Menambahkan scroll jika konten lebih tinggi dari area */
 }
 
 .certificate-plexus-bg {
@@ -2459,11 +2410,8 @@ html.ios-chrome body.has-fixed-nav {
   width: 50%;
   max-width: 300px;
   opacity: 0.05;
-  /* Opasitas sangat rendah untuk efek watermark */
   z-index: 1;
-  /* Di bawah lapisan konten, di atas plexus */
   pointer-events: none;
-  /* Agar tidak bisa diklik */
 }
 
 .certificate-header {
@@ -2545,7 +2493,6 @@ html.ios-chrome body.has-fixed-nav {
 .signature-block {
   width: 40%;
   position: relative;
-  /* Menjadi referensi posisi untuk elemen absolute di dalamnya */
 }
 
 .certificate-date {
@@ -2567,10 +2514,8 @@ html.ios-chrome body.has-fixed-nav {
 
 .certificate-signature-img {
   height: 140px;
-  /* Ukuran gambar tanda tangan */
   position: absolute;
   bottom: 0.5rem;
-  /* Posisi mengambang di atas garis */
   left: 50%;
   transform: translateX(-50%);
   object-fit: contain;
@@ -2630,7 +2575,6 @@ html.ios-chrome body.has-fixed-nav {
 
 .certificate-actions {
   display: none;
-  /* Footer tidak lagi digunakan */
 }
 
 /* Gaya baru untuk tombol aksi sertifikat yang mengambang */
@@ -2646,7 +2590,6 @@ html.ios-chrome body.has-fixed-nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Warna putih tetap dengan efek Liquid Glass */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -2666,7 +2609,6 @@ html.ios-chrome body.has-fixed-nav {
   position: absolute;
   top: 0;
   left: 1.5rem;
-  /* 24px */
   transform: translateX(-50%);
   width: 4px;
   height: 100%;
@@ -2677,9 +2619,7 @@ html.ios-chrome body.has-fixed-nav {
 .timeline-item {
   position: relative;
   padding-left: 4rem;
-  /* 64px */
   padding-bottom: 3rem;
-  /* 48px */
 }
 
 .timeline-item:last-child {
@@ -2689,7 +2629,6 @@ html.ios-chrome body.has-fixed-nav {
 .timeline-dot {
   position: absolute;
   left: 1.5rem;
-  /* 24px */
   top: 0;
   transform: translateX(-50%);
   width: 24px;
@@ -2706,15 +2645,12 @@ html.ios-chrome body.has-fixed-nav {
   object-fit: contain;
   border-radius: 0.5rem;
   background-color: white;
-  /* Latar belakang putih untuk logo yang transparan */
   padding: 2px;
   border: 1px solid var(--border-color);
-  /* Menghilangkan latar belakang putih pada logo untuk estetika yang lebih baik */
   mix-blend-mode: multiply;
 }
 
 html[data-theme='light'] .timeline-logo {
-  /* Di tema terang, blend mode 'multiply' tidak bekerja baik, jadi kita gunakan normal */
   mix-blend-mode: normal;
   background-color: #ffffff;
 }
@@ -2755,9 +2691,7 @@ html[data-theme='light'] .timeline-logo {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
-  /* Rasio aspek yang lebih seimbang */
   background-color: var(--bg-primary);
-  /* Latar belakang jika gambar gagal dimuat */
   overflow: hidden;
   border-bottom: 1px solid var(--border-color);
 }
@@ -2766,15 +2700,12 @@ html[data-theme='light'] .timeline-logo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Mengisi area, mungkin memotong sedikit */
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .certificate-card:hover .certificate-thumbnail {
   object-fit: contain;
-  /* Saat hover, tampilkan gambar penuh */
   transform: scale(1.1);
-  /* Sedikit zoom untuk fokus */
 }
 
 .thumbnail-overlay {
@@ -2787,7 +2718,6 @@ html[data-theme='light'] .timeline-logo {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  /* Agar tidak menghalangi klik */
 }
 
 .certificate-card:hover .thumbnail-overlay {
@@ -2813,5 +2743,4 @@ html[data-theme='light'] .timeline-logo {
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
-  /* Mendorong tombol ke bawah */
 }
