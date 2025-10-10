@@ -1127,7 +1127,7 @@
 
     <!-- Modal Detail Proyek -->
     <div id="projectModal" class="modal-overlay">
-      <div class="modal-content">
+      <div class="modal-content w-[90vw] max-w-4xl">
         <div class="modal-header">
           <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Project Modal">
             <i data-lucide="x" class="w-6 h-6"></i>
@@ -1373,14 +1373,14 @@
 
     <!-- PDF Viewer Modal -->
     <div id="pdfViewerModal" class="modal-overlay">
-      <div class="liquid-glass-card pdf-viewer-container w-[90vw] max-w-4xl h-[90vh] p-0">
+      <div class="liquid-glass-card pdf-viewer-container w-[90vw] max-w-6xl aspect-[1.4/1] p-0">
         <div class="modal-header flex-shrink-0">
           <button class="modal-close-btn" onclick="closePdfViewerModal()" aria-label="Close PDF Viewer">
             <i data-lucide="x" class="w-6 h-6"></i>
           </button>
           <h3 id="pdfViewerTitle" class="text-2xl font-bold" style="color: var(--text-white);">Pratinjau Sertifikat</h3>
         </div>
-        <div id="pdfViewerContent" class="flex-grow bg-gray-800">
+        <div id="pdfViewerContent" class="flex-grow">
           <!-- Embed tag will be injected here -->
         </div>
         <div class="modal-footer p-4 flex justify-end">

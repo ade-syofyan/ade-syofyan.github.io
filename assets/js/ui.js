@@ -496,7 +496,7 @@ function initializeModals() {
     ) {
       pdfViewerTitle.textContent = title;
       pdfDownloadLink.href = pdfUrl;
-      pdfViewerContent.innerHTML = `<embed src="${pdfUrl}" type="application/pdf" width="100%" height="100%">`;
+      pdfViewerContent.innerHTML = `<embed src="${pdfUrl}#view=FitH" type="application/pdf" width="100%" height="100%">`;
       pdfViewerModal.classList.add("open");
       lockBodyScroll();
     }
