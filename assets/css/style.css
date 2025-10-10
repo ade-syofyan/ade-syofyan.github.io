@@ -355,6 +355,22 @@ nav.nav-scrolled {
   transform: translateY(0) scale(1);
 }
 
+/* Container khusus untuk PDF Viewer agar bisa menggunakan liquid-glass-card */
+.pdf-viewer-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+}
+
+.modal-overlay.open .pdf-viewer-container {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
 /* Override khusus untuk modal agar bisa lebih lebar */
 #certificateModal .modal-content,
 #projectModal .modal-content {
@@ -787,13 +803,15 @@ html[data-theme='light'] .project-sidebar-section {
   background-color: transparent;
   border: none;
   margin-bottom: 0;
-  padding: 0.7rem 1.25rem; /* Mengurangi padding vertikal */
+  padding: 0.7rem 1.25rem;
+  /* Mengurangi padding vertikal */
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: var(--text-white);
-  font-size: 1.1rem; /* Mengurangi ukuran font */
+  font-size: 1.1rem;
+  /* Mengurangi ukuran font */
   font-weight: 500;
   transition: all 0.3s ease;
   text-align: left;
@@ -1726,6 +1744,37 @@ pre[class*="language-"] {
   animation: fadeOutPortfolio 0.3s ease-in forwards;
 }
 
+/* Animasi untuk Kartu Sertifikat yang Mulus */
+@keyframes fadeInCertificate {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeOutCertificate {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+}
+
+.certificate-card.fading-in {
+  animation: fadeInCertificate 0.4s ease-out forwards;
+}
+
+.certificate-card.fading-out {
+  animation: fadeOutCertificate 0.3s ease-in forwards;
+}
+
 /* Neofetch Command Styles */
 .neofetch-container {
   display: flex;
@@ -2552,6 +2601,8 @@ html[data-theme='light'] .timeline-logo {
 
 /* --- Certificate Card Styles --- */
 .certificate-card {
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-card-secondary);
   border-radius: 0.75rem;
   border: 1px solid var(--border-color);
@@ -2561,17 +2612,65 @@ html[data-theme='light'] .timeline-logo {
 }
 
 .certificate-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02);
   box-shadow: 0 8px 25px -5px var(--shadow-color);
+}
+
+/* --- DESAIN ULANG KARTU SERTIFIKAT --- */
+.certificate-thumbnail-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10; /* Rasio aspek yang lebih seimbang */
+  background-color: var(--bg-primary); /* Latar belakang jika gambar gagal dimuat */
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .certificate-thumbnail {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-bottom: 1px solid var(--border-color);
+  height: 100%;
+  object-fit: cover; /* Mengisi area, mungkin memotong sedikit */
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.certificate-card:hover .certificate-thumbnail {
+  object-fit: contain; /* Saat hover, tampilkan gambar penuh */
+  transform: scale(1.1); /* Sedikit zoom untuk fokus */
+}
+
+.thumbnail-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(var(--bg-primary-rgb), 0.7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Agar tidak menghalangi klik */
+}
+
+.certificate-card:hover .thumbnail-overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  color: var(--text-white);
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.certificate-card:hover .overlay-content {
+  transform: scale(1);
+  opacity: 1;
 }
 
 .certificate-info {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between; /* Mendorong tombol ke bawah */
 }

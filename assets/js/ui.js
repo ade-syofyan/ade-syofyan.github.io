@@ -192,12 +192,12 @@ function initializeMobileMenu() {
 
   // --- Accordion Logic ---
   const submenuToggles = mobileMenu.querySelectorAll(".has-submenu");
-  submenuToggles.forEach(clickedToggle => {
+  submenuToggles.forEach((clickedToggle) => {
     clickedToggle.addEventListener("click", () => {
       const wasOpen = clickedToggle.classList.contains("open");
 
       // Tutup semua akordeon terlebih dahulu
-      submenuToggles.forEach(toggle => {
+      submenuToggles.forEach((toggle) => {
         toggle.classList.remove("open");
         toggle.nextElementSibling.classList.remove("open");
       });
@@ -212,16 +212,18 @@ function initializeMobileMenu() {
   });
 
   // --- Link Click Logic ---
-  const menuLinks = mobileMenu.querySelectorAll('a.mobile-menu-item');
-  menuLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+  const menuLinks = mobileMenu.querySelectorAll("a.mobile-menu-item");
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
       // Allow default behavior (scrolling) but close the menu
       closeMobileMenu();
     });
   });
 
   const setAnimationDelays = (isOpen) => {
-    const menuItems = mobileMenu.querySelectorAll(".mobile-menu-group, .mobile-menu-item, .mobile-menu-cta, .text-center");
+    const menuItems = mobileMenu.querySelectorAll(
+      ".mobile-menu-group, .mobile-menu-item, .mobile-menu-cta, .text-center"
+    );
     menuItems.forEach((item, index) => {
       item.style.transitionDelay = isOpen ? `${100 + index * 30}ms` : "0ms";
     });
@@ -242,7 +244,7 @@ function initializeMobileMenu() {
       mobileMenuToggleBtn.setAttribute("aria-expanded", "false");
     }
     unlockBodyScroll();
-    setAnimationDelays(false); 
+    setAnimationDelays(false);
   };
 }
 
@@ -455,6 +457,7 @@ function initializeModals() {
 
   const achievementModal = document.getElementById("achievementModal");
   const lightboxModal = document.getElementById("lightboxModal");
+  const pdfViewerModal = document.getElementById("pdfViewerModal");
 
   // Lightbox Modal
   window.openLightbox = function (imageUrl) {
@@ -476,6 +479,37 @@ function initializeModals() {
   if (lightboxModal) {
     lightboxModal.addEventListener("click", (e) => {
       if (e.target.id === "lightboxModal") closeLightbox();
+    });
+  }
+
+  // PDF Viewer Modal
+  window.openPdfViewerModal = function (pdfUrl, title) {
+    const pdfViewerContent = document.getElementById("pdfViewerContent");
+    const pdfViewerTitle = document.getElementById("pdfViewerTitle");
+    const pdfDownloadLink = document.getElementById("pdfDownloadLink");
+
+    if (
+      pdfViewerModal &&
+      pdfViewerContent &&
+      pdfViewerTitle &&
+      pdfDownloadLink
+    ) {
+      pdfViewerTitle.textContent = title;
+      pdfDownloadLink.href = pdfUrl;
+      pdfViewerContent.innerHTML = `<embed src="${pdfUrl}" type="application/pdf" width="100%" height="100%">`;
+      pdfViewerModal.classList.add("open");
+      lockBodyScroll();
+    }
+  };
+
+  window.closePdfViewerModal = function () {
+    if (pdfViewerModal) pdfViewerModal.classList.remove("open");
+    unlockBodyScroll();
+  };
+
+  if (pdfViewerModal) {
+    pdfViewerModal.addEventListener("click", (e) => {
+      if (e.target === pdfViewerModal) closePdfViewerModal();
     });
   }
 
@@ -702,6 +736,8 @@ function renderPaginationControls(totalItems, currentPage) {
   if (!paginationContainer) return;
   paginationContainer.innerHTML = "";
 
+  const portfolioGrid = document.getElementById("portfolio-grid");
+
   const totalPages = Math.ceil(totalItems / projectsPerPage);
   if (totalPages <= 1) return;
 
@@ -713,12 +749,18 @@ function renderPaginationControls(totalItems, currentPage) {
     if (isActive) button.classList.add("active");
     if (!isDisabled) {
       button.addEventListener("click", () => {
-        renderProjects(
-          projectsData,
-          currentProjectFilter,
-          currentSearchQuery,
-          page
-        );
+        // --- Animasi Fade Out ---
+        const existingCards = portfolioGrid.querySelectorAll(".project-card");
+        existingCards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 50}ms`;
+          card.classList.add("fading-out");
+        });
+        const totalFadeOutTime = 300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
+        setTimeout(() => {
+          renderProjects(projectsData, currentProjectFilter, currentSearchQuery, page);
+        }, totalFadeOutTime);
+        // --- End Animasi ---
+
         document
           .getElementById("portfolio")
           .scrollIntoView({ behavior: "smooth" });
@@ -874,24 +916,22 @@ function renderTestimonials(testimonials) {
   const testimonialsGrid = document.getElementById("testimonials-grid");
   if (!testimonialsGrid) return;
   testimonialsGrid.innerHTML = "";
-
-  testimonials.forEach((testimonial) => {
-    const testimonialCard = document.createElement("div");
-    testimonialCard.className =
-      "testimonial-card p-6 text-left liquid-glass-card shadow-lg";
-    testimonialCard.innerHTML = `
+  
+  testimonialsGrid.innerHTML = testimonials
+    .map(
+      (testimonial) => `
+    <div class="testimonial-card p-6 text-left liquid-glass-card shadow-lg">
       <p class="italic mb-4" style="color: var(--text-secondary);">
         "${parseMarkdownBold(testimonial.quote)}"
       </p>
       <p class="font-semibold" style="color: var(--text-white);">
         - ${testimonial.name}
       </p>
-      <p class="text-sm" style="color: var(--text-secondary);">${
-        testimonial.title
-      }</p>
-    `;
-    testimonialsGrid.appendChild(testimonialCard);
-  });
+      <p class="text-sm" style="color: var(--text-secondary);">${testimonial.title}</p>
+    </div>
+  `
+    )
+    .join("");
 }
 
 // --- Achievement System UI ---
@@ -1247,56 +1287,264 @@ function renderWorkHistory(history) {
   const timelineContainer = document.getElementById("timeline-container");
   if (!timelineContainer) return;
   timelineContainer.innerHTML = "";
-
-  history.forEach((item) => {
-    const timelineItem = document.createElement("div");
-    timelineItem.className = "timeline-item";
-    timelineItem.innerHTML = `
-      <div class="timeline-dot"></div>
-      <div class="timeline-content">
-        <div class="timeline-header">
-          <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo" onerror="this.style.display='none'">
-          <div class="flex-grow">
-            <h4 class="text-xl font-bold" style="color: var(--text-white);">${item.role}</h4>
-            <p class="text-md" style="color: var(--text-secondary);">${item.company}</p>
-            <p class="text-sm font-semibold mt-1" style="color: var(--color-accent);">${item.duration}</p>
+  
+  timelineContainer.innerHTML = history
+    .map(
+      (item) => `
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo" onerror="this.style.display='none'">
+            <div class="flex-grow">
+              <h4 class="text-xl font-bold" style="color: var(--text-white);">${item.role}</h4>
+              <p class="text-md" style="color: var(--text-secondary);">${item.company}</p>
+              <p class="text-sm font-semibold mt-1" style="color: var(--color-accent);">${item.duration}</p>
+            </div>
           </div>
+          <p class="text-sm" style="color: var(--text-secondary);">${item.description}</p>
         </div>
-        <p class="text-sm" style="color: var(--text-secondary);">${item.description}</p>
       </div>
-    `;
-    timelineContainer.appendChild(timelineItem);
-  });
+    `
+    )
+    .join("");
+}
+
+/**
+ * Generates a thumbnail from the first page of a PDF and renders it onto a canvas.
+ * @param {string} pdfUrl - The URL of the PDF file.
+ * @param {string} canvasId - The ID of the canvas element to render to.
+ */
+async function generatePdfThumbnail(pdfUrl, canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  try {
+    // --- PERBAIKAN DEFINITIF ---
+    // Langkah 1: Dapatkan ukuran render canvas yang sebenarnya dari CSS, tunggu jika belum siap.
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      setTimeout(() => generatePdfThumbnail(pdfUrl, canvasId), 100);
+      return;
+    }
+
+    // Langkah 2: Sesuaikan resolusi internal canvas agar tajam di layar HiDPI.
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Langkah 3: Isi latar belakang canvas utama dengan warna tema.
+    const themeBgColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--bg-primary")
+      .trim();
+    ctx.fillStyle = themeBgColor;
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    // Ensure pdf.js worker is configured
+    if (
+      typeof pdfjsLib === "undefined" ||
+      !pdfjsLib.GlobalWorkerOptions.workerSrc
+    ) {
+      throw new Error("PDF.js library or worker not loaded.");
+    }
+
+    // Langkah 4: Muat PDF dan render ke canvas sementara dengan latar belakang putih.
+    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 2.0 }); // Skala tinggi untuk kualitas
+
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d");
+    tempCanvas.width = viewport.width;
+    tempCanvas.height = viewport.height;
+
+    await page.render({
+      canvasContext: tempCtx,
+      viewport: viewport,
+      background: "rgba(255, 255, 255, 1)",
+    }).promise;
+
+    // Langkah 5: Gambar hasil dari canvas sementara ke canvas utama dengan logika 'contain'.
+    const hRatio = rect.width / tempCanvas.width;
+    const vRatio = rect.height / tempCanvas.height;
+    const ratio = Math.min(hRatio, vRatio);
+    const centerShift_x = (rect.width - tempCanvas.width * ratio) / 2;
+    const centerShift_y = (rect.height - tempCanvas.height * ratio) / 2;
+
+    ctx.drawImage(
+      tempCanvas,
+      0,
+      0,
+      tempCanvas.width,
+      tempCanvas.height,
+      centerShift_x,
+      centerShift_y,
+      tempCanvas.width * ratio,
+      tempCanvas.height * ratio
+    );
+  } catch (error) {
+    console.error("Error rendering PDF thumbnail:", error);
+    // Draw a fallback error message on the canvas
+    ctx.fillStyle = "#4A5568"; // bg-card-secondary
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#e2e8f0"; // text-white
+    ctx.font = "16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Gagal memuat", canvas.width / 2, canvas.height / 2 - 10);
+    ctx.fillText("pratinjau PDF", canvas.width / 2, canvas.height / 2 + 10);
+  }
+}
+
+// --- State untuk Paginasi Sertifikat ---
+let currentCertificatePage = 1;
+const certsPerPage = 6;
+
+// --- Kontrol Paginasi untuk Sertifikat ---
+function renderCertificatePaginationControls(totalItems, currentPage) {
+  const paginationContainer = document.getElementById("certificate-controls");
+  const certificatesGrid = document.getElementById("certificates-grid");
+  if (!paginationContainer) return;
+  paginationContainer.innerHTML = "";
+
+  const totalPages = Math.ceil(totalItems / certsPerPage);
+  if (totalPages <= 1) return;
+
+  const createButton = (text, page, isDisabled = false, isActive = false) => {
+    const button = document.createElement("button");
+    button.className = "pagination-btn";
+    button.innerHTML = text;
+    button.disabled = isDisabled;
+    if (isActive) button.classList.add("active");
+    if (!isDisabled) {
+      button.addEventListener("click", () => {
+        // --- Animasi Fade Out ---
+        const existingCards = certificatesGrid.querySelectorAll(".certificate-card");
+        existingCards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 50}ms`;
+          card.classList.add("fading-out");
+        });
+        const totalFadeOutTime = 300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
+        setTimeout(() => {
+          renderCertificates(certificatesData, page);
+        }, totalFadeOutTime);
+        document
+          .getElementById("certificates")
+          .scrollIntoView({ behavior: "smooth" });
+      });
+    }
+    return button;
+  };
+
+  // Tombol "Sebelumnya"
+  paginationContainer.appendChild(
+    createButton("Sebelumnya", currentPage - 1, currentPage === 1)
+  );
+
+  // Tombol Halaman
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      totalPages > 7 &&
+      Math.abs(currentPage - i) > 2 &&
+      i !== 1 &&
+      i !== totalPages
+    ) {
+      if (!paginationContainer.querySelector(".ellipsis")) {
+        const ellipsis = document.createElement("span");
+        ellipsis.className = "ellipsis px-2 text-secondary";
+        ellipsis.textContent = "...";
+        paginationContainer.appendChild(ellipsis);
+      }
+      continue;
+    }
+    paginationContainer.appendChild(
+      createButton(i.toString(), i, false, i === currentPage)
+    );
+  }
+
+  // Tombol "Berikutnya"
+  paginationContainer.appendChild(
+    createButton("Berikutnya", currentPage + 1, currentPage === totalPages)
+  );
 }
 
 // --- Certificates Rendering ---
-function renderCertificates(certificates) {
+function renderCertificates(certificates, page = currentCertificatePage) {
   const certificatesGrid = document.getElementById("certificates-grid");
-  if (!certificatesGrid) return;
+  const controlsContainer = document.getElementById("certificate-controls");
+
+  if (!certificatesGrid || !controlsContainer) return;
+
+  currentCertificatePage = page;
   certificatesGrid.innerHTML = "";
 
-  certificates.forEach((cert) => {
+  const startIndex = (page - 1) * certsPerPage;
+  const endIndex = startIndex + certsPerPage;
+  const paginatedCertificates = certificates.slice(startIndex, endIndex);
+
+  paginatedCertificates.forEach((cert, index) => {
     const certCard = document.createElement("div");
-    certCard.className = "certificate-card";
-    certCard.innerHTML = `
-      <a href="${cert.url}" target="_blank" rel="noopener noreferrer">
-        <img src="${cert.thumbnail}" alt="Sertifikat ${cert.title}" class="certificate-thumbnail" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
-      </a>
+    certCard.className = "certificate-card fading-in";
+    certCard.style.animationDelay = `${index * 75}ms`;
+
+    const isPdf = cert.url.endsWith(".pdf");
+    const actionHtml = isPdf
+      ? `onclick="openPdfViewerModal('${cert.url}', '${cert.title}')"`
+      : `href="${cert.url}" target="_blank" rel="noopener noreferrer"`;
+
+    const isThumbnailPdf = cert.thumbnail.endsWith(".pdf");
+    const canvasId = `cert-canvas-${index}`;
+    const thumbnailHtml = isThumbnailPdf
+      ? `<canvas id="${canvasId}" class="certificate-thumbnail" width="400" height="200"></canvas>` // width/height ini menentukan resolusi, bukan ukuran display
+      : `<img src="${cert.thumbnail}" alt="Sertifikat ${cert.title}" class="certificate-thumbnail" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">`;
+
+    const cardContent = `
+      <div class="certificate-thumbnail-wrapper">
+        ${thumbnailHtml}
+        <div class="thumbnail-overlay">
+          <div class="overlay-content">
+            <i data-lucide="eye" class="w-8 h-8"></i>
+          </div>
+        </div>
+      </div>
       <div class="certificate-info">
-        <h4 class="text-lg font-bold mb-1" style="color: var(--text-white);">${cert.title}</h4>
-        <p class="text-sm mb-3" style="color: var(--text-secondary);">${cert.issuer} - ${cert.date}</p>
-        <a href="${cert.url}" target="_blank" rel="noopener noreferrer" class="btn-secondary inline-flex items-center gap-2 text-xs !py-1.5 !px-3">
-          <i data-lucide="check-circle" class="w-4 h-4"></i>
-          <span>Verifikasi</span>
-        </a>
+        <h4 class="text-lg font-bold mb-1" style="color: var(--text-white);">${
+          cert.title
+        }</h4>
+        <p class="text-sm mb-3" style="color: var(--text-secondary);">${
+          cert.issuer
+        } - ${cert.date}</p>
+        <div class="mt-auto"> <!-- Wrapper untuk mendorong tombol ke bawah -->
+          <span class="btn-secondary inline-flex items-center gap-2 text-xs !py-1.5 !px-3">
+            <i data-lucide="${
+              isPdf ? "eye" : "check-circle"
+            }" class="w-4 h-4"></i>
+            <span>${isPdf ? "Lihat PDF" : "Verifikasi"}</span>
+          </span>
+        </div>
       </div>
     `;
+
+    // Jika bukan PDF, bungkus dengan <a>. Jika PDF, gunakan div dengan onclick.
+    certCard.innerHTML = `
+      <${isPdf ? "div" : "a"} ${actionHtml} class="block cursor-pointer">
+        ${cardContent}
+      </${isPdf ? "div" : "a"}>
+    `;
     certificatesGrid.appendChild(certCard);
+
+    // If the thumbnail was a PDF, call the function to render it on the canvas
+    if (isThumbnailPdf) {
+      generatePdfThumbnail(cert.thumbnail, canvasId);
+    }
   });
 
   if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
+
+  renderCertificatePaginationControls(certificates.length, page);
 }
 
 // --- Populate Schema.org JSON-LD ---

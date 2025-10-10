@@ -418,25 +418,56 @@ const workHistoryData = [
 // --- Certificates Data ---
 const certificatesData = [
   {
-    title: "Belajar Membuat Aplikasi Flutter untuk Pemula",
-    issuer: "Dicoding Indonesia",
-    date: "Juli 2023",
-    thumbnail: "./assets/img/certs/dicoding-flutter.png",
-    url: "https://www.dicoding.com/certificates/N9ZO41O0YPG5",
+    title: "Google Play Academy - Store Listing Certificate",
+    issuer: "Google Play Academy",
+    date: "September 2025",
+    thumbnail:
+      "./assets/certs/pdf/google_play_academy_store_listing_certificate.pdf",
+    url: "./assets/certs/pdf/google_play_academy_store_listing_certificate.pdf",
   },
   {
-    title: "Belajar Dasar Pemrograman Web",
-    issuer: "Dicoding Indonesia",
-    date: "Juni 2023",
-    thumbnail: "./assets/img/certs/dicoding-web.png",
-    url: "https://www.dicoding.com/certificates/07Z6G5JMQPQR",
+    title:
+      "Webinar #22 – Etika Ngoding di Era AI yang Harus Dikuasai Programmer Pemula",
+    issuer: "Sinau Koding Academy",
+    date: "September 2025",
+    thumbnail:
+      "./assets/certs/pdf/webinar_22_etika_ngoding_di_era_ai_yang_harus_dikuasai_programmer_pemula.pdf",
+    url: "./assets/certs/pdf/webinar_22_etika_ngoding_di_era_ai_yang_harus_dikuasai_programmer_pemula.pdf",
   },
   {
-    title: "Cloud Practitioner Essentials (Digital)",
-    issuer: "Amazon Web Services (AWS)",
-    date: "Agustus 2023",
-    thumbnail: "./assets/img/certs/aws-cloud.png",
-    url: "https://www.credly.com/badges/0f6a6f1b-5e3a-4b9a-8b9e-5b1f2c2d3e4d/public_url",
+    title: "Maju Bareng AI by Hacktiv8",
+    issuer: "Hacktiv8 Indonesia",
+    date: "Juli 2025",
+    thumbnail: "./assets/certs/pdf/sertifikat_ai_for_it_developer_wave_1.pdf",
+    url: "./assets/certs/pdf/sertifikat_ai_for_it_developer_wave_1.pdf",
+  },
+  {
+    title: "AI For Business Blueprint",
+    issuer: "Asian Tiger School",
+    date: "April 2025",
+    thumbnail: "./assets/certs/pdf/ai_for_business_blueprint.pdf",
+    url: "./assets/certs/pdf/ai_for_business_blueprint.pdf",
+  },
+  {
+    title: "Sololearn PHP",
+    issuer: "Sololearn",
+    date: "Agustus 2017",
+    thumbnail: "./assets/certs/pdf/sololearn_php.pdf",
+    url: "./assets/certs/pdf/sololearn_php.pdf",
+  },
+  {
+    title: "Sololearn SQL",
+    issuer: "Sololearn",
+    date: "Agustus 2017",
+    thumbnail: "./assets/certs/pdf/sololearn_sql.pdf",
+    url: "./assets/certs/pdf/sololearn_sql.pdf",
+  },
+  {
+    title: "Workshop “Informatics Day”",
+    issuer: "STMIK Indonesia Padang (Bekerjasama dengan Intel & Baidu)",
+    date: "September 2014",
+    thumbnail: "./assets/certs/pdf/sertifikat_intel_dan_baidu.pdf",
+    url: "./assets/certs/pdf/sertifikat_intel_dan_baidu.pdf",
   },
 ];
 

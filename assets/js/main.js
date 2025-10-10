@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeMobileMenu();
   initializeNavbarScrollEffect();
   initializeFullHeightHero();
-  populateSchemaData();
+  populateStaticData();
   initializeBSOD();
   initializeModals();
   initializeScrollToTop();
@@ -43,11 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
     renderWorkHistory(workHistoryData);
   }
   if (typeof certificatesData !== "undefined") {
-    renderCertificates(certificatesData);
+    renderCertificates(certificatesData, 1); // Render halaman pertama
   }
   if (typeof testimonialsData !== "undefined") {
     renderTestimonials(testimonialsData);
-    // populateStaticData(); // Dinonaktifkan untuk mencegah penimpaan hero-subtitle
+    populateSchemaData();
   }
   if (typeof achievements !== "undefined") {
     loadAchievements();
@@ -66,11 +66,4 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     { passive: true, once: true }
   );
-});
-
-// Panggil populateStaticData setelah DOMContentLoaded, tapi pastikan tidak menimpa hero-subtitle
-document.addEventListener("DOMContentLoaded", () => {
-  if (typeof populateStaticData === "function") {
-    populateStaticData();
-  }
 });
