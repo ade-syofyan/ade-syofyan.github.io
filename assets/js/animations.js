@@ -58,6 +58,7 @@ function createPlexusInstance(canvas, options = {}) {
   let themeTextColor = { r: 226, g: 232, b: 240 };
   let interactionTriggered = false;
   let baseHue = 0.58; // Default hue untuk biru
+  let animationFrameId = null; // Untuk kontrol loop animasi
 
   const mouse = {
     x: null,
@@ -200,7 +201,7 @@ function createPlexusInstance(canvas, options = {}) {
   }
 
   function animate() {
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p) => {
       p.update();
@@ -209,10 +210,18 @@ function createPlexusInstance(canvas, options = {}) {
     connect();
   }
 
+  function stopAnimation() {
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
   // Inisialisasi instance
   resizeCanvas();
   init();
-  animate();
+  // Jangan langsung mulai, biarkan IntersectionObserver yang mengontrol
+  // animate(); 
 
   // Pindahkan event listener ke elemen parent (section) agar tidak terhalang konten
   window.addEventListener("mousemove", (event) => {
@@ -240,6 +249,8 @@ function createPlexusInstance(canvas, options = {}) {
       resizeCanvas();
       init();
     },
+    start: animate,
+    stop: stopAnimation,
   };
 }
 
@@ -250,15 +261,39 @@ function initializeHeroCanvas() {
 
   const plexusInstances = [];
 
+  // --- OPTIMASI: Kurangi partikel jika pengguna meminta pengurangan gerakan ---
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   const isMobile = window.innerWidth < 768;
   const options = {
-    particleCount: isMobile ? 100 : 250, // Jumlah partikel untuk seluruh layar
-    maxDistance: isMobile ? 100 : 120,
+    // Kurangi partikel secara signifikan jika ada preferensi atau di mobile
+    particleCount: prefersReducedMotion ? 50 : isMobile ? 80 : 150,
+    maxDistance: isMobile ? 90 : 120,
   };
 
   const instance = createPlexusInstance(canvas, options);
   if (instance) {
     plexusInstances.push(instance);
+  }
+
+  // --- OPTIMASI: Gunakan IntersectionObserver untuk menjeda animasi saat tidak terlihat ---
+  const heroSection = document.querySelector(".hero-full-height");
+  if (heroSection && instance) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            instance.start(); // Mulai animasi saat terlihat
+          } else {
+            instance.stop(); // Hentikan animasi saat tidak terlihat
+          }
+        });
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(heroSection);
   }
 
   // Handler global untuk resize dan perubahan tema
