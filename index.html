@@ -313,9 +313,9 @@
         </div>
         <!-- Animated Scroll Down Arrow -->
         <a href="#about" class="scroll-down-container" aria-label="Scroll down">
-          <i data-lucide="chevron-down" class="scroll-down-arrow"></i>
-          <i data-lucide="chevron-down" class="scroll-down-arrow"></i>
-          <i data-lucide="chevron-down" class="scroll-down-arrow"></i>
+          <div class="mouse-icon">
+            <div class="mouse-wheel"></div>
+          </div>
         </a>
       </div>
     </header>
@@ -327,51 +327,53 @@
     <!-- About Me Section -->
     <section
       id="about"
-      class="py-20 shadow-lg my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
+      class="py-20 my-8 md:mx-auto container fade-in-on-scroll"
     >
-      <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
-        <div class="md:w-1/3 flex justify-center">
+      <!-- Menggunakan flexbox untuk mobile dan grid untuk desktop -->
+      <div class="flex flex-col items-center lg:grid lg:grid-cols-3 lg:gap-8">
+        <!-- Kolom Gambar -->
+        <div class="lg:col-span-1 flex justify-center items-start">
           <img
             id="profile-img"
             src="./assets/img/foto_ade_new.jpeg"
             alt="Foto Profil Ade Syofyan"
-            class="rounded-full w-64 h-64 object-cover object-top shadow-lg border-4 border-accent" style="background-color: #4a5568;"
+            class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover object-top shadow-2xl border-4 border-accent mb-8 lg:mb-0"
             onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjQwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5BUzwvdGV4dD48L3N2Zz4=';"
           />
         </div>
-        <div class="md:w-2/3 text-center md:text-left">
-          <h2 class="text-4xl font-bold mb-6" style="color: var(--text-white);">Tentang Saya</h2>
-          <p class="text-lg mb-4" style="color: var(--text-secondary);">
-            Saya seorang
-            <span class="font-semibold text-accent">Programmer Senior</span>
-            dengan pengalaman lebih dari
-            <span class="font-semibold text-accent">7 tahun</span> dalam
-            pengembangan aplikasi web, mobile, dan ERP. Saya bersemangat dalam
-            membangun solusi digital inovatif yang efisien dan berdampak
-            positif.
-          </p>
-          <p class="text-lg mb-4" style="color: var(--text-secondary);">
-            Keahlian saya mencakup pengembangan di berbagai sektor seperti
-            properti, otomotif, dan layanan publik. Saya juga memiliki
-            spesialisasi dalam
-            <span class="font-semibold text-accent">integrasi AI</span> untuk
-            efisiensi bisnis, seperti pengembangan AI akuntan untuk input jurnal
-            otomatis dan chatbot WhatsApp AI untuk mendukung tim sales dan
-            customer service.
-          </p>
-          <p class="text-lg mb-6" style="color: var(--text-secondary);">
-            Saya mahir dalam *tech stack* seperti
-            <span class="font-semibold text-accent"
-              >Laravel, Flutter, Firebase</span
-            >, dan integrasi sistem real-time. Saya selalu berupaya memberikan
-            solusi terbaik dengan pendekatan *problem-solving* yang kuat.
-          </p>
-          <a
-            id="cv-link-about" href="#"
-            target="_blank"
-            class="btn-secondary inline-block"
-            >Lihat CV Saya</a
-          >
+
+        <!-- Kolom Konten -->
+        <div class="lg:col-span-2 w-full">
+          <!-- Kartu konten dengan posisi relatif untuk efek tumpang tindih di desktop -->
+          <div class="relative lg:-ml-24 liquid-glass-card p-8 md:p-12 text-center lg:text-left">
+            <h2 class="text-4xl font-bold mb-6" style="color: var(--text-white);">Tentang Saya</h2>
+            <p class="text-lg mb-6" style="color: var(--text-secondary);">
+              Saya seorang <span class="font-semibold text-accent">Programmer Senior</span> dengan pengalaman lebih dari <span class="font-semibold text-accent">7 tahun</span> dalam pengembangan aplikasi web, mobile, dan ERP. Saya bersemangat dalam membangun solusi digital inovatif yang efisien dan berdampak positif, dengan spesialisasi dalam <span class="font-semibold text-accent">integrasi AI</span> untuk efisiensi bisnis.
+            </p>
+
+            <!-- Kartu Statistik -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+              <div class="stat-card">
+                <p class="stat-value">7+</p>
+                <p class="stat-label">Tahun Pengalaman</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-value">15+</p>
+                <p class="stat-label">Proyek Sukses</p>
+              </div>
+              <div class="stat-card col-span-2 md:col-span-1">
+                <p class="stat-value">AI</p>
+                <p class="stat-label">Integrasi & Otomatisasi</p>
+              </div>
+            </div>
+
+            <a
+              id="cv-link-about" href="#"
+              target="_blank"
+              class="btn-secondary inline-block"
+              >Lihat CV Saya</a
+            >
+          </div>
         </div>
       </div>
     </section>

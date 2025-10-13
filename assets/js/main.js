@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTypingEffect(); 
   initializeShatterEffect();
   initializeSmoothScroll();
+  initializeScrollDownArrowBehavior();
 
   // Initialize Interactive Components
   initializeVisitorCounter();

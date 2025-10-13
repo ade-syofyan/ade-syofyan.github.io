@@ -351,18 +351,25 @@ function initializeParallax() {
 
       // Profile Image Parallax
       if (profileImg && aboutSection) {
-        const sectionTop = aboutSection.offsetTop;
-        const sectionHeight = aboutSection.offsetHeight;
-        const scrollRelativeToSection = scrollY - sectionTop;
-        const parallaxSpeedImg = 0.2; // Meningkatkan kecepatan paralaks agar lebih terlihat
+        const isDesktop = window.innerWidth >= 1024; // Aktifkan hanya di layar besar (lg)
 
-        if (
-          scrollY + window.innerHeight > sectionTop &&
-          scrollY < sectionTop + sectionHeight
-        ) {
-          const translateY = scrollRelativeToSection * parallaxSpeedImg;
-          profileImg.style.transform = `translateY(${translateY}px)`;
+        if (isDesktop) {
+          const sectionTop = aboutSection.offsetTop;
+          const sectionHeight = aboutSection.offsetHeight;
+          const scrollRelativeToSection = scrollY - sectionTop;
+          const parallaxSpeedImg = 0.2;
+
+          if (
+            scrollY + window.innerHeight > sectionTop &&
+            scrollY < sectionTop + sectionHeight
+          ) {
+            const translateY = scrollRelativeToSection * -parallaxSpeedImg; // Dibalik arahnya
+            profileImg.style.transform = `translateY(${translateY}px)`;
+          } else {
+            profileImg.style.transform = "translateY(0px)";
+          }
         } else {
+          // Di mobile & tablet, pastikan gambar tidak bergerak
           profileImg.style.transform = "translateY(0px)";
         }
       }
@@ -468,9 +475,9 @@ function initializeShatterEffect() {
   const shatterTexts = document.querySelectorAll(".shatter-text");
   if (!shatterTexts.length) return;
 
-  shatterTexts.forEach(textElement => {
+  shatterTexts.forEach((textElement) => {
     const text = textElement.textContent;
-    const hasGradient = textElement.classList.contains('text-gradient-shiny');
+    const hasGradient = textElement.classList.contains("text-gradient-shiny");
     textElement.innerHTML = ""; // Kosongkan elemen
 
     for (let i = 0; i < text.length; i++) {
@@ -479,7 +486,7 @@ function initializeShatterEffect() {
       span.className = "shatter-char";
       // Jika elemen induk memiliki gradien, terapkan juga ke setiap huruf
       if (hasGradient) {
-        span.classList.add('text-gradient-shiny');
+        span.classList.add("text-gradient-shiny");
       }
       // Jika karakter adalah spasi, gunakan &nbsp; agar tetap terlihat
       span.innerHTML = char === " " ? "&nbsp;" : char;
@@ -491,14 +498,36 @@ function initializeShatterEffect() {
         const rot = (Math.random() - 0.5) * 30;
 
         span.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
-        span.style.opacity = '0';
+        span.style.opacity = "0";
 
         // Kembali ke posisi semula setelah jeda
         setTimeout(() => {
           span.style.transform = "translate(0, 0) rotate(0deg)";
-          span.style.opacity = '1';
+          span.style.opacity = "1";
         }, 500);
       });
     }
   });
+}
+
+// --- Scroll Down Arrow Fade Out ---
+function initializeScrollDownArrowBehavior() {
+  const scrollDownArrow = document.querySelector(".scroll-down-container");
+  if (!scrollDownArrow) return;
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (window.scrollY > 50) {
+        scrollDownArrow.style.opacity = "0";
+        scrollDownArrow.style.transform = "translateX(-50%) translateY(20px)";
+        scrollDownArrow.style.pointerEvents = "none";
+      } else {
+        scrollDownArrow.style.opacity = "1";
+        scrollDownArrow.style.transform = "translateX(-50%) translateY(0)";
+        scrollDownArrow.style.pointerEvents = "auto";
+      }
+    },
+    { passive: true }
+  );
 }
