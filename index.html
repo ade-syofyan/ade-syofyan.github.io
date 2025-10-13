@@ -805,6 +805,74 @@
                 </div>
               </div>
 
+              <!-- Live Demo: AI Text Analyzer -->
+              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="scan-text"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">AI Text Analyzer</h3>
+                </div>
+                <p class="mb-6" style="color: var(--text-secondary);">
+                  Masukkan teks di bawah ini dan biarkan AI menganalisis sentimen, kata kunci, dan memberikan ringkasan singkat.
+                </p>
+                
+                <!-- Container untuk view yang bisa berganti -->
+                <div id="analyzer-view-container" class="relative min-h-[260px] transition-all duration-500">
+                  
+                  <!-- 1. Input View -->
+                  <div id="analyzer-input-view" class="analyzer-view">
+                    <div class="flex flex-col gap-4">
+                      <textarea id="text-analyzer-input" class="form-input !rounded-lg" rows="4" placeholder="Ketik atau tempel teks di sini..."></textarea>
+                      <button id="analyze-text-btn" class="btn-primary w-full flex items-center justify-center gap-2">
+                        <i data-lucide="play-circle" class="w-4 h-4"></i>
+                        <span>Analisis Teks</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- 2. Loading View -->
+                  <div id="analyzer-loader-view" class="analyzer-view absolute inset-0 hidden">
+                    <div class="flex flex-col justify-center items-center h-full gap-4 text-secondary">
+                      <i data-lucide="loader" class="w-10 h-10 animate-spin text-accent"></i>
+                      <span class="text-lg">Menganalisis Teks...</span>
+                    </div>
+                  </div>
+
+                  <!-- 3. Results View -->
+                  <div id="analyzer-results-view" class="analyzer-view absolute inset-0 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+                      <!-- Sentiment -->
+                      <div class="md:col-span-1 flex flex-col items-center justify-center text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
+                        <div id="sentiment-visual" class="sentiment-visual mb-3">
+                          <span id="sentiment-emoji" class="sentiment-emoji"></span>
+                        </div>
+                        <p id="sentiment-label" class="sentiment-label"></p>
+                        <p id="sentiment-score" class="sentiment-score"></p>
+                      </div>
+                      <!-- Summary & Keywords -->
+                      <div class="md:col-span-2 flex flex-col gap-4">
+                        <div>
+                          <h4 class="analyzer-heading"><i data-lucide="file-text"></i>Ringkasan</h4>
+                          <blockquote id="summary-result" class="analyzer-summary"></blockquote>
+                        </div>
+                        <div>
+                          <h4 class="analyzer-heading"><i data-lucide="tags"></i>Kata Kunci</h4>
+                          <div id="keywords-result" class="flex flex-wrap gap-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <button id="analyzer-reset-btn" class="btn-secondary w-full mt-6 flex items-center justify-center gap-2">
+                      <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                      <span>Analisis Teks Lain</span>
+                    </button>
+                  </div>
+                </div> 
+
+                <button class="btn-code-toggle" data-code-source="text-analyzer-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="text-analyzer-code" class="hidden" data-keep-source="true"></div>
+              </div>
+
             </div>
           </div>
     </section>

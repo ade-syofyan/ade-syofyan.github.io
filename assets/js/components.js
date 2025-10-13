@@ -442,6 +442,160 @@ function initializePathfindingVisualizer() {
   // 5. INITIALIZATION
   createGrid();
   initializeCustomSelect();
+  initializeAiTextAnalyzer();
+}
+
+// --- Live Demo: AI Text Analyzer ---
+function initializeAiTextAnalyzer() {
+  const analyzeBtn = document.getElementById("analyze-text-btn");
+  const resetBtn = document.getElementById("analyzer-reset-btn");
+  const inputEl = document.getElementById("text-analyzer-input");
+
+  const inputView = document.getElementById("analyzer-input-view");
+  const loaderView = document.getElementById("analyzer-loader-view");
+  const resultsView = document.getElementById("analyzer-results-view");
+
+  const codeSourceEl = document.getElementById("text-analyzer-code");
+
+  if (!analyzeBtn || !inputEl || !inputView || !loaderView || !resultsView)
+    return;
+
+  // Populate the code block for the "View Code" button
+  if (codeSourceEl) {
+    codeSourceEl.innerHTML = `
+      <pre data-lang="html" class="language-html"><code>&lt;textarea id="text-analyzer-input"&gt;&lt;/textarea&gt;
+&lt;button id="analyze-text-btn"&gt;Analisis Teks&lt;/button&gt;
+&lt;div id="text-analyzer-results"&gt;&lt;/div&gt;</code></pre>
+      <pre data-lang="js" class="language-javascript"><code>async function analyzeText(text) {
+  const prompt = \`
+    Analyze the following text and provide the result in a JSON object.
+    The JSON object must have these exact keys: "sentiment", "score", "keywords", "summary".
+    - "sentiment": must be one of "Positive", "Neutral", or "Negative".
+    - "score": a number between 0 and 1.
+    - "keywords": an array of 3-5 most relevant keywords.
+    - "summary": a one-sentence summary in Indonesian.
+    Text: "\${text}"
+  \`;
+  // ... (API call to Gemini)
+  const result = await callGeminiAPI(prompt);
+  return JSON.parse(result);
+}</code></pre>
+    `;
+  }
+
+  const switchView = (viewToShow) => {
+    [inputView, loaderView, resultsView].forEach((view) => {
+      if (view === viewToShow) {
+        view.classList.remove("hidden");
+      } else {
+        view.classList.add("hidden");
+      }
+    });
+  };
+
+  resetBtn.addEventListener("click", () => switchView(inputView));
+
+  analyzeBtn.addEventListener("click", async () => {
+    const text = inputEl.value.trim();
+    if (!text) {
+      Swal.fire({
+        icon: "warning",
+        title: "Teks Kosong",
+        text: "Silakan masukkan teks untuk dianalisis.",
+      });
+      return;
+    }
+
+    // Switch to loader view
+    switchView(loaderView);
+    analyzeBtn.disabled = true;
+
+    try {
+      const prompt = `
+        Analyze the following text and provide the result in a strict JSON object format.
+        The JSON object must have these exact keys: "sentiment", "score", "keywords", "summary".
+        - "sentiment": A string, must be one of "Positive", "Neutral", or "Negative".
+        - "score": A number between 0 and 1 representing the confidence score.
+        - "keywords": An array of 3 to 5 most relevant string keywords from the text.
+        - "summary": A concise one-sentence summary of the text in Indonesian.
+
+        Here is the text to analyze:
+        "${text}"
+      `;
+
+      const apiKey = typeof API_KEY !== "undefined" ? API_KEY : "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+      });
+
+      const result = await response.json();
+      const content = result.candidates[0].content.parts[0].text;
+
+      // Clean and parse the JSON response
+      const jsonString = content.replace(/```json|```/g, "").trim();
+      const analysis = JSON.parse(jsonString);
+
+      displayResults(analysis);
+    } catch (error) {
+      console.error("Error analyzing text:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Analisis Gagal",
+        text: "Terjadi kesalahan saat menghubungi AI. Pastikan format respons dari AI adalah JSON yang valid.",
+      });
+      switchView(inputView); // Kembali ke tampilan input jika terjadi error
+    } finally {
+      // Enable button for next use
+      analyzeBtn.disabled = false;
+    }
+  });
+
+  function displayResults(analysis) {
+    const sentimentMap = { Positive: "😊", Neutral: "😐", Negative: "😠" };
+    const sentimentColorMap = {
+      Positive: "positive",
+      Neutral: "neutral",
+      Negative: "negative",
+    };
+    const sentimentColorHex = {
+      Positive: "#22c55e",
+      Neutral: "#a0aec0",
+      Negative: "#ef4444",
+    };
+
+    const sentimentVisual = document.getElementById("sentiment-visual");
+    sentimentVisual.style.color =
+      sentimentColorHex[analysis.sentiment] || "#a0aec0";
+
+    document.getElementById("sentiment-emoji").textContent =
+      sentimentMap[analysis.sentiment] || "🤔";
+    document.getElementById("sentiment-label").textContent = analysis.sentiment;
+    document.getElementById(
+      "sentiment-label"
+    ).className = `sentiment-label sentiment-${
+      sentimentColorMap[analysis.sentiment]
+    }`;
+    document.getElementById(
+      "sentiment-score"
+    ).textContent = `Tingkat kepercayaan: ${(analysis.score * 100).toFixed(
+      0
+    )}%`;
+
+    const keywordsContainer = document.getElementById("keywords-result");
+    keywordsContainer.innerHTML = analysis.keywords
+      .map((kw) => `<span class="keyword-tag">${kw}</span>`)
+      .join("");
+
+    document.getElementById("summary-result").textContent = analysis.summary;
+
+    // Switch to results view
+    switchView(resultsView);
+    lucide.createIcons();
+  }
 }
 
 // --- Live Demo: Color Palette Generator ---

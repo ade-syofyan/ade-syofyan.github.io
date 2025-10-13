@@ -2613,6 +2613,122 @@ body.hackerman-mode #achievement-toast {
   }
 }
 
+/* --- Redesigned AI Text Analyzer Demo --- */
+.analyzer-view {
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+.analyzer-view.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.sentiment-visual {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: transparent; /* Dihapus agar bisa di-override */
+}
+
+.sentiment-visual::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.2;
+  animation: pulse-sentiment 2s infinite;
+}
+
+@keyframes pulse-sentiment {
+  0% { transform: scale(0.9); opacity: 0.2; }
+  70% { transform: scale(1.1); opacity: 0.1; }
+  100% { transform: scale(0.9); opacity: 0.2; }
+}
+
+.sentiment-emoji {
+  font-size: 2.5rem;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.sentiment-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.analyzer-summary {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+  font-style: italic;
+}
+
+/* --- Styles for AI Text Analyzer Demo --- */
+.analyzer-section {
+  margin-bottom: 1.5rem;
+}
+
+.analyzer-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sentiment-score {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.keyword-tag {
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: scale(0.9);
+  animation: popInTag 0.3s ease-out forwards;
+}
+
+@keyframes popInTag {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Staggered animation for tags */
+.keyword-tag:nth-child(2) { animation-delay: 0.05s; }
+.keyword-tag:nth-child(3) { animation-delay: 0.1s; }
+.keyword-tag:nth-child(4) { animation-delay: 0.15s; }
+.keyword-tag:nth-child(5) { animation-delay: 0.2s; }
+
+/* Sentiment-specific colors */
+.sentiment-positive { color: #22c55e; } /* green-500 */
+.sentiment-neutral { color: #a0aec0; } /* gray-500 */
+.sentiment-negative { color: #ef4444; } /* red-500 */
+
+/* Override textarea style for this demo */
+#text-analyzer-input {
+  padding: 0.75rem 1rem;
+  resize: vertical;
+}
+
 /* Gaya baru untuk modal pencapaian */
 .achievement-item {
   display: flex;
