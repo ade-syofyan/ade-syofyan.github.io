@@ -1218,16 +1218,24 @@ button#achievement-toggle-btn:hover {
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 4s linear infinite;
+  /* Menggunakan text-fill-color hanya jika didukung, dengan fallback color */
   color: var(--color-accent);
-  padding-bottom: 15px;
+  -webkit-text-fill-color: transparent; 
+  animation: shine 4s linear infinite;
 }
 
 @keyframes shine {
   to {
     background-position: -200% center;
   }
+}
+
+/* Gaya untuk efek shatter pada judul */
+.shatter-char {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
+  cursor: default;
 }
 
 /* Hero Full Height */

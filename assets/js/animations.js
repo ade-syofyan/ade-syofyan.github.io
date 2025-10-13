@@ -462,3 +462,43 @@ function initializeSmoothScroll() {
     });
   });
 }
+
+// --- Hero Title Shatter Effect ---
+function initializeShatterEffect() {
+  const shatterTexts = document.querySelectorAll(".shatter-text");
+  if (!shatterTexts.length) return;
+
+  shatterTexts.forEach(textElement => {
+    const text = textElement.textContent;
+    const hasGradient = textElement.classList.contains('text-gradient-shiny');
+    textElement.innerHTML = ""; // Kosongkan elemen
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const span = document.createElement("span");
+      span.className = "shatter-char";
+      // Jika elemen induk memiliki gradien, terapkan juga ke setiap huruf
+      if (hasGradient) {
+        span.classList.add('text-gradient-shiny');
+      }
+      // Jika karakter adalah spasi, gunakan &nbsp; agar tetap terlihat
+      span.innerHTML = char === " " ? "&nbsp;" : char;
+      textElement.appendChild(span);
+
+      span.addEventListener("mouseover", () => {
+        const dx = (Math.random() - 0.5) * 50;
+        const dy = (Math.random() - 0.5) * 50;
+        const rot = (Math.random() - 0.5) * 30;
+
+        span.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+        span.style.opacity = '0';
+
+        // Kembali ke posisi semula setelah jeda
+        setTimeout(() => {
+          span.style.transform = "translate(0, 0) rotate(0deg)";
+          span.style.opacity = '1';
+        }, 500);
+      });
+    }
+  });
+}

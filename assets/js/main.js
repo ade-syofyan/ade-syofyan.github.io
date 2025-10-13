@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeParallax();
   initializeDirectionalNavHover();
   initializeTypingEffect(); 
+  initializeShatterEffect();
   initializeSmoothScroll();
 
   // Initialize Interactive Components
