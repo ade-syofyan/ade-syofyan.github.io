@@ -524,6 +524,11 @@ function initializeModals() {
     }
   };
 
+  window.closePdfViewerModal = function () {
+    if (pdfViewerModal) pdfViewerModal.classList.remove("open");
+    unlockBodyScroll();
+  };
+
   if (pdfViewerModal) {
     pdfViewerModal.addEventListener("click", (e) => {
       if (e.target === pdfViewerModal) closePdfViewerModal();

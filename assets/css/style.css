@@ -999,18 +999,23 @@ html[data-theme='light'] .project-sidebar-section {
 
 /* Scroll to Top Button */
 #scrollToTopBtn {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px);
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 100;
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
   outline: none;
-  color: var(--text-white);
   cursor: pointer;
-  transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s, box-shadow 0.3s;
+}
+
+/* Sembunyikan tombol-tombol floating secara default */
+#scrollToTopBtn,
+#terminal-toggle-btn,
+#achievement-toggle-btn {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s, box-shadow 0.3s;
 }
 
 #scrollToTopBtn.visible {
@@ -1018,7 +1023,26 @@ html[data-theme='light'] .project-sidebar-section {
   visibility: visible;
   transform: translateY(0);
   animation: pulse 2.5s infinite;
-  /* Dihapus dari sini */
+}
+
+/* Tampilkan tombol-tombol floating saat diminta */
+#terminal-toggle-btn.visible,
+#achievement-toggle-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Sembunyikan tombol di hero section secara default */
+#hero-buttons {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s; /* Tambah delay */
+}
+
+#hero-buttons.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 button#scrollToTopBtn,
@@ -1280,8 +1304,14 @@ button#achievement-toggle-btn:hover {
   left: 50%;
   transform: translateX(-50%) translateY(0);
   cursor: pointer;
-  opacity: 1;
+  opacity: 0;
+  visibility: hidden;
   transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.scroll-down-container.visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 .mouse-icon {

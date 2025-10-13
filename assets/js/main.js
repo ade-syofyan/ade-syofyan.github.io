@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeScrollAnimations();
   initializeParallax();
   initializeDirectionalNavHover();
-  initializeTypingEffect(); 
+  initializeTypingEffect();
   initializeShatterEffect();
   initializeSmoothScroll();
   initializeScrollDownArrowBehavior();
@@ -58,6 +58,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Final UI setup
   lucide.createIcons();
+
+  // Show floating/initial buttons after a short delay to ensure everything is rendered
+  setTimeout(() => {
+    const scrollDownArrow = document.querySelector(".scroll-down-container");
+    const terminalBtn = document.getElementById("terminal-toggle-btn");
+    const achievementBtn = document.getElementById("achievement-toggle-btn");
+    const heroBtns = document.getElementById("hero-buttons");
+    if (scrollDownArrow) scrollDownArrow.classList.add("visible");
+    if (terminalBtn) terminalBtn.classList.add("visible");
+    if (achievementBtn) achievementBtn.classList.add("visible");
+    if (heroBtns) heroBtns.classList.add("visible");
+  }, 500);
 
   // Explorer achievement
   const footer = document.querySelector("footer");

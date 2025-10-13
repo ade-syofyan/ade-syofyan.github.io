@@ -560,11 +560,11 @@ function initializeScrollDownArrowBehavior() {
     "scroll",
     () => {
       if (window.scrollY > 50) {
-        scrollDownArrow.style.opacity = "0";
+        scrollDownArrow.classList.remove("visible");
         scrollDownArrow.style.transform = "translateX(-50%) translateY(20px)";
         scrollDownArrow.style.pointerEvents = "none";
       } else {
-        scrollDownArrow.style.opacity = "1";
+        scrollDownArrow.classList.add("visible");
         scrollDownArrow.style.transform = "translateX(-50%) translateY(0)";
         scrollDownArrow.style.pointerEvents = "auto";
       }
