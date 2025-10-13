@@ -3172,12 +3172,12 @@ html[data-theme='light'] .achievement-progress-text {
   }
 
   .timeline-item-v2:nth-child(even)::after {
-    left: 12px;
+    left: 0px;
   }
 
   .timeline-item-v2:nth-child(odd)::after {
     left: auto;
-    right: -12px;
+    right: -25px;
   }
 }
 
