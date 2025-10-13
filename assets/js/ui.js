@@ -1452,11 +1452,11 @@ function renderWorkHistory(history) {
 
   timelineContainer.innerHTML = history
     .map(
-      (item) => `
+      (item, index) => `
       <div class="timeline-item-v2">
-        <div class="timeline-content-v2 liquid-glass-card">
+        <div class="timeline-content-v2">
           <div class="flex items-start gap-4">
-            <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo-v2" onerror="this.style.display='none'">
+            <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo-v2" loading="lazy" onerror="this.style.display='none'">
             <div class="flex-grow text-left">
               <p class="timeline-duration-v2">${item.duration}</p>
               <h4 class="timeline-role-v2">${item.role}</h4>
@@ -1469,6 +1469,21 @@ function renderWorkHistory(history) {
     `
     )
     .join("");
+
+  // Initialize Intersection Observer for animations
+  const timelineItems = timelineContainer.querySelectorAll(".timeline-item-v2");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+  timelineItems.forEach((item) => observer.observe(item));
 }
 
 /**

@@ -1964,8 +1964,10 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
 }
 
 #codeViewerContent pre[class*="language-"] {
-  margin: 0 !important; /* Override Prism default margin */
-  padding-left: 3.8em !important; /* Space for line numbers */
+  margin: 0 !important;
+  /* Override Prism default margin */
+  padding-left: 3.8em !important;
+  /* Space for line numbers */
   flex-grow: 1;
   height: 100%;
 }
@@ -1976,7 +1978,8 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
 }
 
 #codeViewerModal .modal-content {
-  display: flex; /* Memastikan modal-content bisa menjadi flex container */
+  display: flex;
+  /* Memastikan modal-content bisa menjadi flex container */
 }
 
 /* Wrapper untuk konten kode agar bisa di-layout dengan flex */
@@ -1987,10 +1990,14 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
 }
 
 #codeViewerContent .code-block-wrapper:not(.hidden) {
-  display: flex; /* Membuat wrapper ini menjadi flex container */
-  flex: 1 1 auto; /* Mengisi sisa ruang */
-  min-height: 0; /* Mencegah overflow pada flex item */
-  height: 100%; /* Memastikan wrapper mengisi tinggi parent */
+  display: flex;
+  /* Membuat wrapper ini menjadi flex container */
+  flex: 1 1 auto;
+  /* Mengisi sisa ruang */
+  min-height: 0;
+  /* Mencegah overflow pada flex item */
+  height: 100%;
+  /* Memastikan wrapper mengisi tinggi parent */
 }
 
 #codeViewerContent pre[class*="language-"] {
@@ -2061,7 +2068,8 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-secondary);
   font-size: 0.6rem;
-  cursor: pointer; /* Ukuran font lebih kecil agar tidak dominan */
+  cursor: pointer;
+  /* Ukuran font lebih kecil agar tidak dominan */
   padding: 0.3rem 0.3rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
@@ -2559,12 +2567,16 @@ body.hackerman-mode #achievement-toast {
 .custom-select-option {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* 12px */
-  padding: 0.75rem 1rem; /* 12px 16px */
+  gap: 0.75rem;
+  /* 12px */
+  padding: 0.75rem 1rem;
+  /* 12px 16px */
   cursor: pointer;
   transition: background-color 0.2s ease;
-  border-radius: 0.5rem; /* 8px */
-  margin: 0.25rem; /* 4px */
+  border-radius: 0.5rem;
+  /* 8px */
+  margin: 0.25rem;
+  /* 4px */
 }
 
 .custom-select-option:hover {
@@ -2617,6 +2629,7 @@ body.hackerman-mode #achievement-toast {
 .analyzer-view {
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
+
 .analyzer-view.hidden {
   opacity: 0;
   transform: scale(0.95);
@@ -2631,7 +2644,8 @@ body.hackerman-mode #achievement-toast {
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: transparent; /* Dihapus agar bisa di-override */
+  background-color: transparent;
+  /* Dihapus agar bisa di-override */
 }
 
 .sentiment-visual::before {
@@ -2645,9 +2659,20 @@ body.hackerman-mode #achievement-toast {
 }
 
 @keyframes pulse-sentiment {
-  0% { transform: scale(0.9); opacity: 0.2; }
-  70% { transform: scale(1.1); opacity: 0.1; }
-  100% { transform: scale(0.9); opacity: 0.2; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
+
+  70% {
+    transform: scale(1.1);
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
 }
 
 .sentiment-emoji {
@@ -2713,15 +2738,38 @@ body.hackerman-mode #achievement-toast {
 }
 
 /* Staggered animation for tags */
-.keyword-tag:nth-child(2) { animation-delay: 0.05s; }
-.keyword-tag:nth-child(3) { animation-delay: 0.1s; }
-.keyword-tag:nth-child(4) { animation-delay: 0.15s; }
-.keyword-tag:nth-child(5) { animation-delay: 0.2s; }
+.keyword-tag:nth-child(2) {
+  animation-delay: 0.05s;
+}
+
+.keyword-tag:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+.keyword-tag:nth-child(4) {
+  animation-delay: 0.15s;
+}
+
+.keyword-tag:nth-child(5) {
+  animation-delay: 0.2s;
+}
 
 /* Sentiment-specific colors */
-.sentiment-positive { color: #22c55e; } /* green-500 */
-.sentiment-neutral { color: #a0aec0; } /* gray-500 */
-.sentiment-negative { color: #ef4444; } /* red-500 */
+.sentiment-positive {
+  color: #22c55e;
+}
+
+/* green-500 */
+.sentiment-neutral {
+  color: #a0aec0;
+}
+
+/* gray-500 */
+.sentiment-negative {
+  color: #ef4444;
+}
+
+/* red-500 */
 
 /* Override textarea style for this demo */
 #text-analyzer-input {
@@ -3369,8 +3417,8 @@ html[data-theme='light'] .achievement-progress-text {
   }
 
   .timeline-item-v2:nth-child(odd)::after {
-    left: auto;
-    right: -25px;
+    left: 100%;
+    right: auto;
   }
 }
 
@@ -3385,12 +3433,29 @@ html[data-theme='light'] .achievement-progress-text {
   mix-blend-mode: multiply;
 }
 
+.timeline-item-v2 {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.timeline-item-v2.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 html[data-theme='light'] .timeline-logo-v2 {
   mix-blend-mode: normal;
 }
 
 .timeline-content-v2 {
   padding: 1.5rem;
+  /* Remove liquid-glass-card from JS and apply it here for consistency */
+  background-color: rgba(var(--bg-card-rgb), 0.2);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.2);
+  border-radius: 1.5rem;
   transition: all 0.3s ease;
 }
 
