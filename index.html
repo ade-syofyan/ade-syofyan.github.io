@@ -741,13 +741,19 @@
                   <div id="pathfinding-grid" class="pathfinding-grid w-full lg:flex-grow"></div>
 
                   <div class="w-full lg:w-auto lg:min-w-[220px] flex flex-col gap-4">
+                    <!-- Redesigned Algorithm Select Dropdown -->
                     <div class="flex flex-col gap-2 text-sm">
-                      <label for="algorithm-select" class="text-secondary text-left font-semibold">Algoritma</label>
-                      <select id="algorithm-select" class="pathfinding-select">
-                        <option value="bfs">BFS (Tak Berbobot)</option>
-                        <option value="dijkstra">Dijkstra (Berbobot)</option>
-                        <option value="a-star">A* (Heuristik)</option>
-                      </select>
+                      <label class="text-secondary text-left font-semibold">Algoritma</label>
+                      <div id="algorithm-select-custom" class="custom-select-container">
+                        <button id="algorithm-select-toggle" class="custom-select-toggle">
+                          <!-- Konten akan diisi oleh JS -->
+                        </button>
+                        <div id="algorithm-select-options" class="custom-select-options">
+                          <!-- Opsi akan diisi oleh JS -->
+                        </div>
+                      </div>
+                      <!-- Select asli disembunyikan, digunakan untuk fallback/state -->
+                      <select id="algorithm-select" class="hidden"><option value="bfs"></option><option value="dijkstra"></option><option value="a-star"></option></select>
                     </div>
                     <div class="flex flex-col gap-2 text-sm">
                       <span class="text-secondary text-left font-semibold">Mode Gambar</span>
@@ -772,9 +778,6 @@
                     &lt;div id="pathfinding-grid" class="pathfinding-grid"&gt;&lt;/div&gt;
                     &lt;div id="pathfinding-controls"&gt;
                       &lt;!-- Tombol-tombol kontrol --&gt;
-                    &lt;/div&gt;
-                    &lt;select id="algorithm-select"&gt;
-                      &lt;!-- Opsi algoritma --&gt;
                     &lt;/select&gt;
                   </code></pre>
                   <pre data-lang="css" class="language-css"><code>

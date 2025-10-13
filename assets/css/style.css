@@ -2496,6 +2496,82 @@ body.hackerman-mode #achievement-toast {
   border-color: var(--border-color) !important;
 }
 
+/* --- Redesigned Custom Select (Pathfinding) --- */
+.custom-select-container {
+  position: relative;
+}
+
+.custom-select-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.custom-select-toggle:focus,
+.custom-select-container.open .custom-select-toggle {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.3);
+}
+
+.custom-select-toggle .lucide-chevron-down {
+  transition: transform 0.3s ease;
+}
+
+.custom-select-container.open .custom-select-toggle .lucide-chevron-down {
+  transform: rotate(180deg);
+}
+
+.custom-select-options {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: rgba(var(--bg-card-rgb), 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.15);
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.custom-select-container.open .custom-select-options {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.custom-select-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* 12px */
+  padding: 0.75rem 1rem; /* 12px 16px */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 0.5rem; /* 8px */
+  margin: 0.25rem; /* 4px */
+}
+
+.custom-select-option:hover {
+  background-color: rgba(var(--color-accent-rgb), 0.2);
+}
+
+
 /* Animasi "gagal" untuk pathfinding */
 .shake-animation {
   animation: shake 0.5s ease-in-out;

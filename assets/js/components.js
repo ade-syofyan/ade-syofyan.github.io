@@ -50,10 +50,26 @@ function initializePathfindingVisualizer() {
   const controlsContainer = document.getElementById("pathfinding-controls");
   const runBtn = document.getElementById("run-pathfinding-btn");
   const resetBtn = document.getElementById("reset-pathfinding-btn");
+  // Elemen select asli (sekarang disembunyikan)
   const algorithmSelect = document.getElementById("algorithm-select");
+  // Elemen dropdown kustom
+  const customSelectContainer = document.getElementById(
+    "algorithm-select-custom"
+  );
+  const customSelectToggle = document.getElementById("algorithm-select-toggle");
+  const customSelectOptions = document.getElementById(
+    "algorithm-select-options"
+  );
 
   // Exit if any element is missing to prevent errors
-  if (!gridContainer || !controlsContainer || !runBtn || !resetBtn) {
+  if (
+    !gridContainer ||
+    !controlsContainer ||
+    !runBtn ||
+    !resetBtn ||
+    !algorithmSelect ||
+    !customSelectContainer
+  ) {
     return;
   }
 
@@ -66,6 +82,12 @@ function initializePathfindingVisualizer() {
   let currentMode = "start"; // Modes: 'start', 'end', 'wall'
   let isRunning = false;
   let isMouseDown = false;
+
+  const algorithms = {
+    bfs: { name: "BFS", desc: "Tak Berbobot", icon: "waypoints" },
+    dijkstra: { name: "Dijkstra", desc: "Berbobot", icon: "weight" },
+    "a-star": { name: "A*", desc: "Heuristik", icon: "star" },
+  };
 
   // 3. CORE LOGIC
 
@@ -164,6 +186,7 @@ function initializePathfindingVisualizer() {
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = false));
     algorithmSelect.disabled = false;
+    if (customSelectToggle) customSelectToggle.disabled = false;
 
     gridContainer.classList.remove("shake-animation");
     for (let row = 0; row < GRID_HEIGHT; row++) {
@@ -204,6 +227,7 @@ function initializePathfindingVisualizer() {
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = true));
     algorithmSelect.disabled = true;
+    if (customSelectToggle) customSelectToggle.disabled = true;
 
     resetGrid(false);
     unlockAchievement("navigator");
@@ -325,9 +349,72 @@ function initializePathfindingVisualizer() {
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = false));
     algorithmSelect.disabled = false;
+    if (customSelectToggle) customSelectToggle.disabled = false;
   }
 
   // 4. EVENT LISTENERS
+
+  /**
+   * Initializes the custom algorithm selector dropdown.
+   */
+  function initializeCustomSelect() {
+    if (!customSelectOptions || !customSelectToggle) return;
+
+    // Populate options
+    customSelectOptions.innerHTML = "";
+    Object.keys(algorithms).forEach((key) => {
+      const algo = algorithms[key];
+      const optionEl = document.createElement("div");
+      optionEl.className = "custom-select-option";
+      optionEl.dataset.value = key;
+      optionEl.innerHTML = `
+        <i data-lucide="${algo.icon}" class="w-4 h-4 text-accent"></i>
+        <div>
+          <p class="font-semibold" style="color: var(--text-white);">${algo.name}</p>
+          <p class="text-xs" style="color: var(--text-secondary);">${algo.desc}</p>
+        </div>
+      `;
+      optionEl.addEventListener("click", () => {
+        updateSelectedAlgorithm(key);
+        customSelectContainer.classList.remove("open");
+      });
+      customSelectOptions.appendChild(optionEl);
+    });
+
+    // Set initial value
+    updateSelectedAlgorithm(algorithmSelect.value || "bfs");
+
+    // Toggle dropdown
+    customSelectToggle.addEventListener("click", () => {
+      customSelectContainer.classList.toggle("open");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!customSelectContainer.contains(e.target)) {
+        customSelectContainer.classList.remove("open");
+      }
+    });
+
+    lucide.createIcons();
+  }
+
+  /**
+   * Updates the selected algorithm in both the hidden select and the custom UI.
+   * @param {string} value - The algorithm value (e.g., 'bfs', 'dijkstra').
+   */
+  function updateSelectedAlgorithm(value) {
+    algorithmSelect.value = value;
+    const algo = algorithms[value];
+    customSelectToggle.innerHTML = `
+      <div class="flex items-center gap-3">
+        <i data-lucide="${algo.icon}" class="w-4 h-4 text-accent"></i>
+        <span class="font-semibold">${algo.name} <span class="font-normal opacity-70">(${algo.desc})</span></span>
+      </div>
+      <i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-secondary"></i>
+    `;
+    lucide.createIcons();
+  }
   gridContainer.addEventListener("mousedown", (e) => {
     isMouseDown = true;
     handleInteraction(e.target);
@@ -354,6 +441,7 @@ function initializePathfindingVisualizer() {
 
   // 5. INITIALIZATION
   createGrid();
+  initializeCustomSelect();
 }
 
 // --- Live Demo: Color Palette Generator ---
