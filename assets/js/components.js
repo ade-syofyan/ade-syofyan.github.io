@@ -755,7 +755,7 @@ function initializeCodeViewers() {
     const closeButton = document.createElement("button");
     closeButton.className = "modal-close-btn";
     closeButton.setAttribute("aria-label", "Close Code Viewer");
-    closeButton.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+    closeButton.innerHTML = '<i data-lucide="x" class="w-5 h-5"></i>';
     closeButton.onclick = closeModal;
     modalHeader.append(tabContainer, closeButton);
 
