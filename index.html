@@ -1123,25 +1123,31 @@
         </button>
       </div>
     </div>
-    <!-- Dynamic Case Study Modal -->
+    <!-- Redesigned Dynamic Case Study Modal -->
     <div id="caseStudyModal" class="modal-overlay">
-      <div class="modal-content max-w-3xl">
-        <div class="modal-header flex justify-between items-center">
-          <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-          <h3 id="caseStudyTitle" class="text-xl md:text-3xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
-        </div>
-        <!-- Modal Body (Scrollable) -->
-        <div id="caseStudyBody" class="modal-body">
-
-          <p style="color: var(--text-secondary);">Menganalisis permintaan Anda dan menghasilkan studi kasus yang relevan...</p>
-        </div>
-        <!-- Modal Footer -->
-        <div class="modal-footer">
-          <button id="downloadCaseStudyPdfBtn" class="btn-primary inline-flex items-center gap-2">
-            <i data-lucide="download"></i>Unduh sebagai PDF
-          </button>
+      <div class="modal-content !max-w-6xl !p-0">
+        <button class="modal-close-btn !top-4 !right-4" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="grid grid-cols-1 lg:grid-cols-5 h-full">
+          <!-- Kolom Kiri: Konten Studi Kasus -->
+          <div class="lg:col-span-3 flex flex-col h-full">
+            <div class="modal-header">
+              <h3 id="caseStudyTitle" class="text-xl md:text-2xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
+            </div>
+            <div id="caseStudyBody" class="modal-body">
+              <!-- Konten studi kasus akan disuntikkan di sini -->
+            </div>
+            <div class="modal-footer justify-start">
+              <button id="downloadCaseStudyPdfBtn" class="btn-secondary inline-flex items-center gap-2 !py-2 !px-4">
+                <i data-lucide="download" class="w-4 h-4"></i>Unduh Studi Kasus
+              </button>
+            </div>
+          </div>
+          <!-- Kolom Kanan: Area Interaksi Deep Dive -->
+          <div id="case-study-interaction-pane" class="lg:col-span-2 flex flex-col h-full border-l border-white/10" style="background-color: rgba(var(--bg-card-rgb), 0.1);">
+            <!-- Konten chat akan disuntikkan di sini oleh JS -->
+          </div>
         </div>
       </div>
     </div>

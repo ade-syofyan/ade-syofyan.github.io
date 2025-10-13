@@ -121,29 +121,30 @@ function analyzeAndHighlight(text, source = "chatbot") {
     }
   }
 
-  // Peta untuk Dynamic Case Study Generator (fitur baru)
-  const caseStudyKeywordMap = {
-    logistik: "logistik",
-    otomotif: "otomotif",
-    dealer: "otomotif",
-    pendidikan: "pendidikan",
-    sekolah: "pendidikan",
-    properti: "properti",
-  };
+  // --- Logika Pemicu Studi Kasus Dinamis ---
+  const caseStudyTriggers = [
+    { topic: "logistik", keywords: ["logistik", "pengiriman"] },
+    { topic: "otomotif", keywords: ["otomotif", "dealer", "mobil", "toyota"] },
+    { topic: "pendidikan", keywords: ["pendidikan", "sekolah", "ppdb"] },
+    { topic: "properti", keywords: ["properti", "jual beli rumah"] },
+  ];
 
-  for (const keyword in caseStudyKeywordMap) {
-    if (lowerText.includes(keyword)) {
-      const topic = caseStudyKeywordMap[keyword];
-      if (window.generateCaseStudy) {
-        unlockAchievement("case_study_analyst");
-        window.generateCaseStudy(topic);
-        if (source === "chatbot" && window.actuallyCloseChatbot) {
-          setTimeout(window.actuallyCloseChatbot, 300);
-        } else if (source === "terminal" && window.minimizeTerminal) {
-          setTimeout(window.minimizeTerminal, 300);
+  // Cek apakah permintaan mengandung "studi kasus" atau "case study"
+  if (lowerText.includes("studi kasus") || lowerText.includes("case study")) {
+    for (const trigger of caseStudyTriggers) {
+      if (trigger.keywords.some((keyword) => lowerText.includes(keyword))) {
+        if (window.generateCaseStudy) {
+          unlockAchievement("case_study_analyst");
+          window.generateCaseStudy(trigger.topic);
+          // Tutup modal chat/terminal setelah memicu studi kasus
+          if (source === "chatbot" && window.actuallyCloseChatbot) {
+            setTimeout(window.actuallyCloseChatbot, 300);
+          } else if (source === "terminal" && window.minimizeTerminal) {
+            setTimeout(window.minimizeTerminal, 300);
+          }
         }
+        return; // Hentikan proses setelah menemukan topik yang cocok
       }
-      break;
     }
   }
 }
