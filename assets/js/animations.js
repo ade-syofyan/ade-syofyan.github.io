@@ -11,6 +11,35 @@ function hexToRgb(hex) {
     : null;
 }
 
+// Helper untuk mengubah RGB ke HSL
+function rgbToHsl(r, g, b) {
+  (r /= 255), (g /= 255), (b /= 255);
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h,
+    s,
+    l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+  return [h, s, l];
+}
 /**
  * Membuat instance animasi plexus pada elemen canvas yang diberikan.
  * @param {HTMLCanvasElement} canvas - Elemen canvas untuk digambar.
@@ -28,21 +57,13 @@ function createPlexusInstance(canvas, options = {}) {
   let themeColors = { r: 99, g: 179, b: 237 };
   let themeTextColor = { r: 226, g: 232, b: 240 };
   let interactionTriggered = false;
+  let baseHue = 0.58; // Default hue untuk biru
 
   const mouse = {
     x: null,
     y: null,
     radius: 100,
   };
-
-  // Palet warna yang harmonis untuk partikel
-  const PLEXUS_PALETTE = [
-    "#ffbe0b",
-    "#fb5607",
-    "#ff006e",
-    "#8338ec",
-    "#3a86ff",
-  ];
 
   function updateThemeColors() {
     const accentColor = getComputedStyle(document.documentElement)
@@ -53,7 +74,10 @@ function createPlexusInstance(canvas, options = {}) {
       .trim();
 
     const accentRgb = hexToRgb(accentColor);
-    if (accentRgb) themeColors = accentRgb;
+    if (accentRgb) {
+      themeColors = accentRgb;
+      baseHue = rgbToHsl(accentRgb.r, accentRgb.g, accentRgb.b)[0];
+    }
 
     const textRgb = hexToRgb(textColor);
     if (textRgb) themeTextColor = textRgb;
@@ -66,24 +90,39 @@ function createPlexusInstance(canvas, options = {}) {
 
   class Particle {
     constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 3 + 1;
-      this.speedX = Math.random() * 0.2 - 0.1;
-      this.speedY = Math.random() * 0.2 - 0.1;
+      this.originX = Math.random() * canvas.width;
+      this.originY = Math.random() * canvas.height;
+      this.x = this.originX;
+      this.y = this.originY;
+      this.baseSize = Math.random() * 2.5 + 1;
+      this.size = this.baseSize;
+      this.speedX = Math.random() * 0.4 - 0.2;
+      this.speedY = Math.random() * 0.4 - 0.2;
+      this.density = Math.random() * 30 + 1;
+      this.angle = Math.random() * 360;
 
-      const baseColor =
-        PLEXUS_PALETTE[Math.floor(Math.random() * PLEXUS_PALETTE.length)];
-      const rgbColor = hexToRgb(baseColor);
-      this.color = `rgba(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, ${
-        Math.random() * 0.5 + 0.5
-      })`;
+      // Warna dinamis berdasarkan tema
+      const hue = baseHue + (Math.random() - 0.5) * 0.1; // Variasi hue
+      const saturation = 0.7 + Math.random() * 0.3; // Saturasi tinggi
+      const lightness = 0.5 + Math.random() * 0.2; // Terang
+      this.color = `hsla(${hue * 360}, ${saturation * 100}%, ${
+        lightness * 100
+      }%, ${Math.random() * 0.5 + 0.3})`;
     }
     update() {
+      // Efek "pernapasan" pada ukuran partikel
+      this.angle += 0.02;
+      this.size = this.baseSize + Math.sin(this.angle) * 0.5;
+
+      // Gerakan acak
       this.x += this.speedX;
       this.y += this.speedY;
       if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
       if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+
+      // Efek gravitasi kembali ke titik asal
+      this.x += (this.originX - this.x) * 0.005;
+      this.y += (this.originY - this.y) * 0.005;
 
       // Efek menjauh dari mouse (repulsion)
       if (mouse.x !== null) {
@@ -91,12 +130,11 @@ function createPlexusInstance(canvas, options = {}) {
         const dy = this.y - mouse.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         if (distance < mouse.radius) {
-          const forceDirectionX = dx / distance;
-          const forceDirectionY = dy / distance;
-          // Kekuatan dorongan berbanding terbalik dengan jarak
-          const force = (mouse.radius - distance) / mouse.radius;
-          const moveX = forceDirectionX * force * 1.5;
-          const moveY = forceDirectionY * force * 1.5;
+          const forceDirectionX = dx / distance || 0;
+          const forceDirectionY = dy / distance || 0;
+          const force = (mouse.radius - distance) / mouse.radius; // Kekuatan dorongan berbanding terbalik dengan jarak
+          const moveX = forceDirectionX * force * this.density * 0.1;
+          const moveY = forceDirectionY * force * this.density * 0.1;
           this.x += moveX;
           this.y += moveY;
         }
@@ -128,8 +166,8 @@ function createPlexusInstance(canvas, options = {}) {
         if (distance < config.maxDistance) {
           const opacityValue = 1 - distance / config.maxDistance;
           ctx.strokeStyle = `rgba(${themeTextColor.r}, ${themeTextColor.g}, ${
-            themeTextColor.b
-          }, ${opacityValue * 0.5})`;
+            themeTextColor.b // Garis antar partikel lebih halus
+          }, ${opacityValue * 0.3})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
@@ -146,8 +184,11 @@ function createPlexusInstance(canvas, options = {}) {
           (particles[i].x - mouse.x) ** 2 + (particles[i].y - mouse.y) ** 2
         );
         if (distance < config.maxDistance) {
-          const opacityValue = 1 - distance / config.maxDistance;
-          ctx.strokeStyle = `rgba(${themeColors.r}, ${themeColors.g}, ${themeColors.b}, ${opacityValue})`;
+          const opacityValue = 1 - distance / config.maxDistance; // Garis ke mouse lebih tebal dan cerah
+          ctx.strokeStyle = `rgba(${themeColors.r}, ${themeColors.g}, ${
+            themeColors.b
+          }, ${opacityValue * 0.8})`;
+          ctx.lineWidth = 1.5;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
