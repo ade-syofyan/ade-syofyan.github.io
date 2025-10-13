@@ -1090,13 +1090,20 @@ function populateAchievements() {
     // Buat dan tambahkan hint section
     const hintSection = document.createElement("div");
     hintSection.id = "achievement-hint-section";
-    hintSection.className = "p-4 mt-4 text-center rounded-lg achievement-hint-pulse";
+    hintSection.className = "achievement-hint-banner achievement-hint-pulse";
     hintSection.innerHTML = `
+      <div class="aurora">
+        <div class="aurora__item"></div>
+        <div class="aurora__item"></div>
+        <div class="aurora__item"></div>
+        <div class="aurora__item"></div>
+      </div>
       <div class="flex items-center justify-center gap-3 relative z-10">
         <i data-lucide="gift" class="w-6 h-6 text-accent"></i>
-        <p class="text-sm font-semibold" style="color: var(--text-accent);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
+        <p class="text-sm font-semibold text-center" style="color: var(--text-accent);">Selesaikan semua pencapaian untuk membuka hadiah spesial!</p>
       </div>`;
     achievementGrid.parentElement.appendChild(hintSection);
+    achievementGrid.classList.add("has-hint");
   }
 
   if (progressBar && progressText) {

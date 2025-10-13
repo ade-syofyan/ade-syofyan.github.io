@@ -957,7 +957,8 @@ html[data-theme='light'] .project-sidebar-section {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  animation: pulse 2.5s infinite; /* Dihapus dari sini */
+  animation: pulse 2.5s infinite;
+  /* Dihapus dari sini */
 }
 
 button#scrollToTopBtn,
@@ -977,6 +978,7 @@ button#achievement-toggle-btn {
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-white);
 }
+
 /* Animasi pulse hanya aktif saat tombol terlihat */
 button#scrollToTopBtn.visible {
   animation: pulse 2.5s infinite;
@@ -2337,8 +2339,12 @@ body.hackerman-mode #achievement-toast {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
-  mix-blend-mode: darken;
+  z-index: 0;
+  /* Pindahkan ke belakang konten */
+  mix-blend-mode: soft-light;
+  /* Mode blend yang lebih halus */
+  opacity: 0.6;
+  /* Kurangi intensitas keseluruhan */
   pointer-events: none;
 }
 
@@ -2349,7 +2355,8 @@ body.hackerman-mode #achievement-toast {
   height: 60vw;
   background-color: var(--clr-1);
   border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
-  filter: blur(var(--blur));
+  filter: blur(var(--blur)) saturate(1.2);
+  /* Sedikit menaikkan saturasi */
   mix-blend-mode: overlay;
 }
 
@@ -2776,4 +2783,47 @@ html[data-theme='light'] .timeline-logo {
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
+}
+
+#achievementModal .modal-content {
+  position: relative;
+}
+
+/* anchor */
+#achievement-hint-section.achievement-hint-banner {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 30;
+  width: calc(100% - 2rem);
+  padding: .875rem 1rem;
+  border-radius: 1rem;
+  background: rgba(var(--bg-card-rgb), 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(var(--border-color-rgb), .2);
+  box-shadow: 0 10px 25px -10px var(--shadow-color);
+}
+
+/* beri ruang ekstra di bawah daftar agar tidak tertutup banner */
+#achievement-grid.has-hint {
+  padding-bottom: 5rem;
+}
+
+/* sejajarkan ikon lucide di semua item + banner */
+#achievement-modal i[data-lucide],
+#achievement-modal .lucide,
+#achievement-hint-section i[data-lucide],
+#achievement-hint-section .lucide {
+  display: block;
+  line-height: 1;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* efek kilau hint yang tidak mengganggu tap */
+.achievement-hint-pulse::before {
+  pointer-events: none;
+  border-radius: inherit;
 }
