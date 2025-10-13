@@ -134,9 +134,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
   </head>
   <body class="leading-relaxed"> 
-    <!-- Kanvas Plexus Global untuk Latar Belakang -->
-    <canvas class="plexus-canvas"></canvas>
-
     <!-- Navbar -->
     <nav class="py-4 md:py-0 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
       <div
@@ -294,6 +291,8 @@
 
     <!-- Hero Section -->
     <header class="hero-full-height text-center relative overflow-hidden">
+      <!-- Kanvas untuk efek latar belakang "plexus" -->
+      
       <div
         class="container relative z-10 flex flex-col justify-center items-center h-full"
       >
@@ -321,12 +320,15 @@
       </div>
     </header>
 
+    <!-- Kontainer Baru untuk Latar Belakang Plexus yang Menyatu -->
+    <div id="plexus-background-container" class="relative">
+      <canvas class="plexus-canvas"></canvas>
+
     <!-- About Me Section -->
     <section
       id="about"
       class="py-20 shadow-lg my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
     >
-    <canvas class="plexus-canvas"></canvas>
       <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
         <div class="md:w-1/3 flex justify-center">
           <img
@@ -375,11 +377,8 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20 fade-in-on-scroll relative">
-      <!-- Canvas untuk efek plexus di background -->
-      <canvas class="plexus-canvas"></canvas>
-      <!-- Konten harus memiliki z-index agar di atas canvas -->
-      <div class="container text-center relative z-10">
+    <section id="skills" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container">
+      <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Keahlian Saya</h2>
         <!-- Updated grid classes for better responsiveness on small screens -->
         <div
@@ -488,8 +487,8 @@
       </div>
     </section>
 
-    <section id="workflow" class="py-20 fade-in-on-scroll relative">
-      <div class="container text-center relative z-10">
+    <section id="workflow" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container">
+      <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
           Bagaimana Saya Bekerja
         </h2>
@@ -557,8 +556,8 @@
     </section>
 
      <!-- Work History Section -->
-    <section id="work-history" class="py-20 fade-in-on-scroll">
-      <div class="container relative z-10">
+    <section id="work-history" class="py-20 fade-in-on-scroll my-8 md:mx-auto container">
+      <div class="relative z-10">
         <h2 class="text-4xl font-bold mb-16 text-center" style="color: var(--text-white);">Riwayat Kerja</h2>
         <div id="timeline-container" class="relative max-w-3xl mx-auto">
           <!-- Timeline items will be injected here -->
@@ -567,8 +566,8 @@
     </section>
 
     <!-- Certificates Section -->
-    <section id="certificates" class="py-20 fade-in-on-scroll">
-      <div class="container text-center relative z-10">
+    <section id="certificates" class="py-20 fade-in-on-scroll my-8 md:mx-auto container">
+      <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Sertifikat & Lisensi</h2>
         <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Beberapa sertifikasi yang telah saya peroleh untuk memvalidasi keahlian saya.
@@ -586,7 +585,7 @@
     <!-- Portfolio Section -->
     <section
       id="portfolio"
-      class="py-20 shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
+      class="py-20 rounded-xl my-8 md:mx-auto container fade-in-on-scroll"
     >
       <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
@@ -615,8 +614,8 @@
       </div>
     </section>
 
-    <section id="live-demos" class="py-20 fade-in-on-scroll">
-          <div class="container text-center">
+    <section id="live-demos" class="py-20 fade-in-on-scroll my-8 md:mx-auto container">
+          <div class="text-center">
             <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
             <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
               Berikut adalah beberapa demo interaktif kecil yang menunjukkan keahlian teknis saya secara langsung.
@@ -805,10 +804,8 @@
 
      <section
       id="services"
-      class="py-20 shadow-lg my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
+      class="py-20 my-8 md:mx-auto container fade-in-on-scroll"
     >
-
-    <canvas class="plexus-canvas"></canvas>
     
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Layanan Saya</h2>
@@ -888,7 +885,7 @@
     </section> 
 
     <!-- Testimonials Section (New) -->
-    <section id="testimonials" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container liquid-glass-card">
+    <section id="testimonials" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container ">
       <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Apa Kata Klien Saya</h2>
         <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -898,8 +895,8 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 fade-in-on-scroll relative">
-      <div class="container text-center relative z-10">
+    <section id="contact" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container">
+      <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
           Tertarik untuk berkolaborasi atau memiliki pertanyaan? Jangan ragu
@@ -986,6 +983,7 @@
         </div>
       </div>
     </section>
+    </div> <!-- Penutup untuk #plexus-background-container -->
 
     <!-- Footer -->
     <footer class="py-8 mt-12 text-center" style="background-color: var(--bg-nav); color: var(--text-secondary); transition: background-color 0.3s ease;">
