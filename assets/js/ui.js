@@ -1111,6 +1111,13 @@ function populateAchievements() {
       totalAchievements > 0 ? (unlockedCount / totalAchievements) * 100 : 0;
     const container = progressBar.parentElement;
 
+    // --- LOGIKA ANIMASI BARU ---
+    // Hapus kelas animasi agar bisa dipicu lagi
+    progressBar.classList.remove("is-animating");
+    // Tambahkan kembali kelas setelah jeda singkat untuk me-restart animasi
+    // `requestAnimationFrame` memastikan browser siap untuk perubahan DOM
+    requestAnimationFrame(() => progressBar.classList.add("is-animating"));
+
     progressBar.style.width = `${percentage}%`;
     progressText.textContent = `${unlockedCount}/${totalAchievements}`;
 
