@@ -3171,15 +3171,13 @@ html[data-theme='light'] .achievement-progress-text {
     align-self: flex-end;
   }
 
-  .timeline-item-v2::after {
-    left: 50%;
-    /* Center dot on the main timeline */
+  .timeline-item-v2:nth-child(even)::after {
+    left: 12px;
   }
 
   .timeline-item-v2:nth-child(odd)::after {
     left: auto;
     right: -12px;
-    /* Position dot on the right side of the item */
   }
 }
 
