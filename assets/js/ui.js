@@ -1025,20 +1025,35 @@ function renderProjectFilters(projects) {
 
 // --- Interactive Skill Filtering ---
 function initializeSkillFiltering() {
-  const skillCards = document.querySelectorAll(".skill-card[data-skill]");
+  // Menggunakan selector baru untuk kartu keahlian yang telah didesain ulang
+  const skillCards = document.querySelectorAll(".skill-card-v2[data-skill]");
   const portfolioSection = document.getElementById("portfolio");
+  const searchInput = document.getElementById("portfolio-search-input");
 
   skillCards.forEach((card) => {
     card.addEventListener("click", () => {
       const skill = card.dataset.skill;
+      if (!skill) return;
 
+      // Cek apakah ada tombol filter yang cocok dengan keahlian (misal: 'web', 'mobile')
       const filterButton = document.querySelector(
         `#portfolio-filters .filter-btn[data-filter="${skill}"]`
       );
 
       if (filterButton) {
+        // Jika ada filter, gulir ke portofolio dan klik tombol filter tersebut
         portfolioSection.scrollIntoView({ behavior: "smooth" });
-        setTimeout(() => filterButton.click(), 500);
+        // Tambahkan sedikit jeda agar scroll selesai sebelum filter diaktifkan
+        setTimeout(() => {
+          searchInput.value = ""; // Kosongkan pencarian jika menggunakan filter
+          filterButton.click();
+        }, 400);
+      } else {
+        // Jika tidak ada filter (misal: 'ai', 'erp'), gunakan fungsi pencarian
+        portfolioSection.scrollIntoView({ behavior: "smooth" });
+        searchInput.value = skill;
+        // Picu event 'input' agar fungsi pencarian (dengan debounce) berjalan
+        searchInput.dispatchEvent(new Event("input", { bubbles: true }));
       }
     });
   });

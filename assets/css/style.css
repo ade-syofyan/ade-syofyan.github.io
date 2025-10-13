@@ -1522,6 +1522,11 @@ button#achievement-toggle-btn:hover {
   opacity: 1;
 }
 
+.service-card-v2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px -4px var(--shadow-color);
+}
+
 .service-card-v2-content {
   position: relative;
   z-index: 2;
@@ -1611,6 +1616,11 @@ html[data-theme='light'] .skill-card-v2-content {
 
 .skill-card-v2:hover::before {
   opacity: 1;
+}
+
+.skill-card-v2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px -4px var(--shadow-color);
 }
 
 .skill-card-v2-content {
@@ -1970,7 +1980,7 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
 }
 
 /* Tambahkan isyarat interaktif untuk kartu keahlian yang dapat difilter */
-.skill-card[data-skill] {
+.skill-card-v2[data-skill] {
   cursor: pointer;
   border: 1px solid transparent;
 }
