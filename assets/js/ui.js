@@ -363,6 +363,7 @@ function initializeModals() {
       }
 
       // --- Logika Baru untuk Carousel Slider ---
+      const imageSlider = document.getElementById("modalImageSlider");
       const imageWrapper = document.getElementById("modalImageWrapper");
       const paginationContainer = document.getElementById("slider-pagination");
       const prevBtn = document.getElementById("slider-prev-btn");
@@ -373,7 +374,7 @@ function initializeModals() {
       let currentSlide = 0;
 
       if (project.images && project.images.length > 0) {
-        document.getElementById("modalImageSlider").classList.remove("hidden");
+        imageSlider.classList.remove("hidden"); // Pastikan slider terlihat
 
         project.images.forEach((imgData) => {
           // Buat slide
@@ -381,8 +382,8 @@ function initializeModals() {
           slide.className = "w-full flex-shrink-0";
           slide.innerHTML = `
             <img src="${imgData.src}" alt="${imgData.alt}" 
-                 class="w-full h-64 md:h-96 object-cover cursor-zoom-in" 
-                 onclick="openLightbox('${imgData.src}')"
+                 class="w-full h-64 md:h-96 object-cover cursor-zoom-in project-modal-image" 
+                 data-lightbox-src="${imgData.src}"
                  onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
           `;
           imageWrapper.appendChild(slide);
@@ -429,9 +430,90 @@ function initializeModals() {
           }
         };
 
+        // --- NEW: Swipe & Drag Gesture Logic ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let isDragging = false;
+        let hasDraggedSufficiently = false; // Variabel baru untuk melacak drag yang signifikan
+        let hasDragged = false; // Variabel baru untuk melacak apakah drag terjadi
+        const swipeThreshold = 50; // Jarak minimum untuk dianggap swipe
+
+        // Touch events for mobile
+        imageSlider.addEventListener(
+          "touchstart",
+          (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+          },
+          { passive: true }
+        );
+        imageSlider.addEventListener(
+          "touchend",
+          (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeDistance = touchEndX - touchStartX;
+            if (swipeDistance < -swipeThreshold) {
+              nextBtn.click();
+            } else if (swipeDistance > swipeThreshold) {
+              prevBtn.click();
+            }
+          },
+          { passive: true }
+        );
+
+        // Mouse events for desktop
+        imageSlider.addEventListener("mousedown", (e) => {
+          e.preventDefault(); // Mencegah perilaku drag gambar default browser
+          isDragging = true;
+          hasDraggedSufficiently = false; // Reset status drag signifikan
+          hasDragged = false; // Reset status drag setiap kali mouse ditekan
+          touchStartX = e.screenX;
+          imageSlider.style.cursor = "grabbing";
+        });
+
+        const handleMouseUpOrLeave = (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+          touchEndX = e.screenX;
+          imageSlider.style.cursor = "grab"; // Kembalikan kursor
+
+          // Hanya pindah slide jika mouse telah digeser secara signifikan
+          if (hasDraggedSufficiently) {
+            const swipeDistance = touchEndX - touchStartX;
+            if (swipeDistance < -swipeThreshold) {
+              nextBtn.click(); // Geser ke kiri -> gambar berikutnya
+            } else if (swipeDistance > swipeThreshold) {
+              prevBtn.click(); // Geser ke kanan -> gambar sebelumnya
+            }
+          }
+        };
+
+        imageSlider.addEventListener("mouseup", handleMouseUpOrLeave);
+        imageSlider.addEventListener("mouseleave", handleMouseUpOrLeave);
+        imageSlider.addEventListener("mousemove", (e) => {
+          if (isDragging) { // Hanya jika mouse sedang ditekan
+            e.preventDefault();
+            hasDragged = true; // Tandai bahwa mouse telah digeser sedikit
+
+            // Periksa apakah pergeseran sudah cukup signifikan untuk memicu slide
+            if (Math.abs(e.screenX - touchStartX) > swipeThreshold) {
+              hasDraggedSufficiently = true;
+            }
+          }
+        });
+
+        // Event listener baru untuk klik, yang memeriksa status 'hasDragged'
+        imageSlider.addEventListener('click', (e) => {
+          // Jika mouse telah digeser (walaupun sedikit), jangan buka lightbox
+          if (hasDragged) {
+            return; // Hentikan fungsi ini jika ada aksi drag, sehingga lightbox tidak terbuka.
+          } else if (e.target.classList.contains('project-modal-image')) {
+            openLightbox(e.target.dataset.lightboxSrc);
+          }
+        }, true); // Gunakan 'capture phase' untuk menangkap event lebih awal
+
         updateSlider(); // Inisialisasi slider
       } else {
-        document.getElementById("modalImageSlider").classList.add("hidden");
+        imageSlider.classList.add("hidden");
       }
 
       const modalLinks = document.getElementById("modalLinks");
