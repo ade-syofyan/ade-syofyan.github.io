@@ -626,107 +626,7 @@
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
-              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
-                <div class="flex items-center justify-center gap-4 mb-4">
-                  <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
-                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Simulasi Pengunjung</h3>
-                </div>
-                <p class="mb-6" style="color: var(--text-secondary);">
-                  Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
-                </p>
-                <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
-                  <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
-                  <p id="visitor-count" class="text-5xl font-bold text-accent transition-transform duration-300">
-                    ...
-                  </p>
-                </div>
-                <button class="btn-code-toggle" data-code-source="visitor-counter-code">
-                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
-                </button>
-                <div id="visitor-counter-code" class="hidden" data-keep-source="true">
-                  <pre data-lang="html" class="language-html"><code>
-                    &lt;div class="p-4 rounded-lg"&gt;
-                      &lt;p class="text-sm mb-2"&gt;Pengunjung Online Saat Ini:&lt;/p&gt;
-                      &lt;p id="visitor-count" class="text-5xl font-bold text-accent"&gt;...&lt;/p&gt;
-                    &lt;/div&gt;
-                  </code></pre>
-                  <pre data-lang="css" class="language-css"><code>
-                    #visitor-count.pop-in {
-                      animation: popIn 0.3s ease-out;
-                    }
-                    @keyframes popIn {
-                      0% { transform: scale(0.8); opacity: 0.5; }
-                      50% { transform: scale(1.1); opacity: 1; }
-                      100% { transform: scale(1); }
-                    }
-                  </code></pre>
-                  <pre data-lang="js" class="language-javascript"><code>const countEl = document.getElementById('visitor-count');
-    let visitors = Math.floor(Math.random() * 151) + 150;
-    setInterval(() => {
-      const fluctuation = Math.floor(Math.random() * 5) - 2;
-      visitors = Math.max(100, visitors + fluctuation);
-      countEl.textContent = visitors;
-    }, Math.random() * 2000 + 2000);
-                  </code></pre>
-                </div>
-              </div>
-        
-      
-              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
-                <div class="flex items-center justify-center gap-4 mb-4">
-                  <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
-                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Color Palette Generator</h3>
-                </div>
-                <p class="mb-6" style="color: var(--text-secondary);">
-                  Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
-                </p>
-                <div id="palette-container" class="flex justify-center gap-2 mb-6">
-
-                </div>
-                <button id="generate-palette-btn" class="btn-secondary w-full">
-                  Buat Palet Baru
-                </button>
-                <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
-
-                <button class="btn-code-toggle" data-code-source="palette-generator-code">
-                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
-                </button>
-                <div id="palette-generator-code" class="hidden" data-keep-source="true">
-                  <pre data-lang="html" class="language-html"><code>
-                    &lt;div id="palette-container" class="flex justify-center gap-2 mb-6"&gt;
-                      &lt;!-- Swatches generated here --&gt;
-                    &lt;/div&gt;
-                    &lt;button id="generate-palette-btn" class="btn-secondary w-full"&gt;
-                      Buat Palet Baru
-                    &lt;/button&gt;
-                  </code></pre>
-                  <pre data-lang="css" class="language-css"><code>
-                    .color-swatch {
-                      flex: 1 1 38px;
-                      aspect-ratio: 1 / 1;
-                      border-radius: 0.5rem;
-                      cursor: pointer;
-                      transition: transform 0.2s ease;
-                    }
-                    .color-swatch:hover {
-                      transform: translateY(-4px);
-                    }
-                  </code></pre>
-                  <pre data-lang="js" class="language-javascript"><code>function generatePalette() {
-      paletteContainer.innerHTML = '';
-      for (let i = 0; i < 5; i++) {
-        const color = '#' + Math.floor(Math.random()*16777215).toString(16);
-        const swatch = document.createElement('div');
-        swatch.className = 'color-swatch';
-        swatch.style.backgroundColor = color;
-        swatch.addEventListener('click', () => copyColor(color));
-        paletteContainer.appendChild(swatch);
-      }
-    }</code></pre>
-                </div>
-              </div>
-
-
+              <!-- Demo 1: Pathfinding Visualizer (Full Width) -->
               <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
                   <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
@@ -805,8 +705,8 @@
                 </div>
               </div>
 
-              <!-- Live Demo: AI Text Analyzer -->
-              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
+              <!-- Demo 2: AI Text Analyzer (Full Width) -->
+              <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
                   <p class="text-accent text-4xl"><i data-lucide="scan-text"></i></p>
                   <h3 class="text-2xl font-bold" style="color: var(--text-white);">AI Text Analyzer</h3>
@@ -871,6 +771,82 @@
                   <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
                 </button>
                 <div id="text-analyzer-code" class="hidden" data-keep-source="true"></div>
+              </div>
+
+              <!-- Demo 3: Simulasi Pengunjung (Half Width) -->
+              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="users"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Simulasi Pengunjung</h3>
+                </div>
+                <p class="mb-6" style="color: var(--text-secondary);">
+                  Demo ini menyimulasikan pembaruan data real-time, seperti pada dashboard analitik. Angka di bawah ini diperbarui secara acak.
+                </p>
+                <div class="p-4 rounded-lg" style="background-color: var(--bg-primary);">
+                  <p class="text-sm mb-2" style="color: var(--text-secondary);">Pengunjung Online Saat Ini:</p>
+                  <p id="visitor-count" class="text-5xl font-bold text-accent transition-transform duration-300">
+                    ...
+                  </p>
+                </div>
+                <button class="btn-code-toggle" data-code-source="visitor-counter-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="visitor-counter-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>
+                    &lt;div class="p-4 rounded-lg"&gt;
+                      &lt;p class="text-sm mb-2"&gt;Pengunjung Online Saat Ini:&lt;/p&gt;
+                      &lt;p id="visitor-count" class="text-5xl font-bold text-accent"&gt;...&lt;/p&gt;
+                    &lt;/div&gt;
+                  </code></pre>
+                  <pre data-lang="css" class="language-css"><code>
+                    #visitor-count.pop-in {
+                      animation: popIn 0.3s ease-out;
+                    }
+                    @keyframes popIn {
+                      0% { transform: scale(0.8); opacity: 0.5; }
+                      50% { transform: scale(1.1); opacity: 1; }
+                      100% { transform: scale(1); }
+                    }
+                  </code></pre>
+                  <pre data-lang="js" class="language-javascript"><code>const countEl = document.getElementById('visitor-count');
+    let visitors = Math.floor(Math.random() * 151) + 150;
+    setInterval(() => {
+      const fluctuation = Math.floor(Math.random() * 5) - 2;
+      visitors = Math.max(100, visitors + fluctuation);
+      countEl.textContent = visitors;
+    }, Math.random() * 2000 + 2000);
+                  </code></pre>
+                </div>
+              </div>
+        
+              <!-- Demo 4: Color Palette Generator (Half Width) -->
+              <div class="p-6 rounded-xl shadow-lg live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="palette"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Color Palette Generator</h3>
+                </div>
+                <p class="mb-6" style="color: var(--text-secondary);">
+                  Klik tombol di bawah untuk menghasilkan palet warna acak. Klik pada salah satu warna untuk menyalin kode hex-nya.
+                </p>
+                <div id="palette-container" class="flex justify-center gap-2 mb-6"></div>
+                <button id="generate-palette-btn" class="btn-secondary w-full">
+                  Buat Palet Baru
+                </button>
+                <p id="copy-feedback" class="text-green-400 text-sm mt-3 h-4 text-center transition-opacity duration-300"></p>
+                <button class="btn-code-toggle" data-code-source="palette-generator-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="palette-generator-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>&lt;div id="palette-container"&gt;&lt;/div&gt;
+&lt;button id="generate-palette-btn"&gt;Buat Palet Baru&lt;/button&gt;</code></pre>
+                  <pre data-lang="css" class="language-css"><code>.color-swatch { aspect-ratio: 1 / 1; cursor: pointer; }</code></pre>
+                  <pre data-lang="js" class="language-javascript"><code>function generatePalette() {
+  for (let i = 0; i < 5; i++) {
+    const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+    // ... create and append swatch element
+  }
+}</code></pre>
+                </div>
               </div>
 
             </div>
