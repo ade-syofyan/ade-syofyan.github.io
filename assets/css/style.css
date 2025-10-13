@@ -1955,6 +1955,7 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   border: 1px solid transparent;
 }
 
+/* --- Redesain Code Viewer Modal --- */
 #codeViewerContent {
   position: relative;
   display: flex;
@@ -1963,20 +1964,22 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
 }
 
 #codeViewerContent pre[class*="language-"] {
-  margin: 0 !important;
-  padding-left: 3.8em !important;
+  margin: 0 !important; /* Override Prism default margin */
+  padding-left: 3.8em !important; /* Space for line numbers */
   flex-grow: 1;
   height: 100%;
 }
 
+/* Fix untuk PrismJS line-numbers plugin */
 #codeViewerContent pre.line-numbers>.line-numbers-rows>span.filler::before {
   content: "";
 }
 
 #codeViewerModal .modal-content {
-  display: flex;
+  display: flex; /* Memastikan modal-content bisa menjadi flex container */
 }
 
+/* Wrapper untuk konten kode agar bisa di-layout dengan flex */
 #codeViewerContent {
   display: flex;
   flex-direction: column;
@@ -1984,10 +1987,10 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
 }
 
 #codeViewerContent .code-block-wrapper:not(.hidden) {
-  display: flex;
-  flex: 1 1 auto;
-  min-height: 0;
-  height: 100%;
+  display: flex; /* Membuat wrapper ini menjadi flex container */
+  flex: 1 1 auto; /* Mengisi sisa ruang */
+  min-height: 0; /* Mencegah overflow pada flex item */
+  height: 100%; /* Memastikan wrapper mengisi tinggi parent */
 }
 
 #codeViewerContent pre[class*="language-"] {
@@ -1997,6 +2000,7 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   overflow: auto;
 }
 
+/* Header baru untuk code viewer */
 .code-viewer-header {
   display: flex;
   justify-content: space-between;
@@ -2008,13 +2012,14 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   position: relative;
 }
 
-/* Override posisi tombol tutup khusus untuk code viewer */
+/* Override posisi tombol tutup agar berada di dalam header */
 .code-viewer-header .modal-close-btn {
   top: 50%;
   right: 1rem;
   transform: translateY(-50%);
 }
 
+/* Kontainer untuk tab bahasa */
 .code-viewer-tabs {
   display: flex;
   gap: 0.5rem;
@@ -2043,11 +2048,7 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   border-color: var(--border-color);
 }
 
-.code-viewer-controls {
-  display: flex;
-  align-items: center;
-}
-
+/* Tombol salin kode yang lebih modern */
 .btn-copy-code {
   position: absolute;
   top: 1rem;
@@ -2060,7 +2061,7 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-secondary);
   font-size: 0.6rem;
-  cursor: pointer;
+  cursor: pointer; /* Ukuran font lebih kecil agar tidak dominan */
   padding: 0.3rem 0.3rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
@@ -2072,6 +2073,7 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   transform: scale(1.05);
 }
 
+/* Tombol untuk membuka code viewer */
 .btn-code-toggle {
   display: inline-flex;
   align-items: center;

@@ -1231,11 +1231,11 @@
 
     <!-- Code Viewer Modal -->
     <div id="codeViewerModal" class="modal-overlay">
-      <div class="modal-content liquid-glass-card w-[90vw] max-w-5xl h-[85vh] flex flex-col p-0">
+      <div class="modal-content liquid-glass-card w-full md:w-[90vw] max-w-5xl h-full md:h-[85vh] flex flex-col p-0 rounded-none md:rounded-2xl">
         <!-- Header dan Konten akan disuntikkan oleh JavaScript -->
-        <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0 flex justify-between items-center"></div>
-        <div id="codeViewerContent" class="flex-grow">
-          <!-- <pre><code>...</code></pre> akan disuntikkan di sini -->
+        <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0"></div>
+        <div id="codeViewerContent" class="flex-grow min-h-0">
+          <!-- Konten kode akan disuntikkan di sini -->
         </div>
       </div>
     </div>

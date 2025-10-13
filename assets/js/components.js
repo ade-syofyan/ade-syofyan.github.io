@@ -750,14 +750,20 @@ function initializeCodeViewers() {
     modalContent.innerHTML = "";
 
     // header tabs + tombol close
+    const headerContentWrapper = document.createElement("div");
+    headerContentWrapper.className = "flex justify-between items-center w-full";
+
     const tabContainer = document.createElement("div");
     tabContainer.className = "code-viewer-tabs";
+
     const closeButton = document.createElement("button");
     closeButton.className = "modal-close-btn";
     closeButton.setAttribute("aria-label", "Close Code Viewer");
     closeButton.innerHTML = '<i data-lucide="x" class="w-5 h-5"></i>';
     closeButton.onclick = closeModal;
-    modalHeader.append(tabContainer, closeButton);
+
+    headerContentWrapper.append(tabContainer, closeButton);
+    modalHeader.appendChild(headerContentWrapper);
 
     // buat pane kode
     sourcePreElements.forEach((preEl) => {
@@ -819,23 +825,25 @@ function initializeCodeViewers() {
     // tombol salin
     const copyButton = document.createElement("button");
     copyButton.className = "btn-copy-code";
-    copyButton.innerHTML =
-      '<i data-lucide="copy" class="w-3 h-3 mr-2"></i>Salin';
+    copyButton.title = "Salin kode";
+    copyButton.innerHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
     copyButton.onclick = () => {
       const activeCodeBlock = modalContent.querySelector(
         ".code-block-wrapper:not(.hidden) code"
       );
       if (activeCodeBlock) {
-        navigator.clipboard.writeText(activeCodeBlock.textContent).then(() => {
-          copyButton.innerHTML =
-            '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
-          lucide.createIcons();
-          setTimeout(() => {
+        navigator.clipboard
+          .writeText(activeCodeBlock.textContent.trim())
+          .then(() => {
             copyButton.innerHTML =
-              '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+              '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Disalin!';
             lucide.createIcons();
-          }, 2000);
-        });
+            setTimeout(() => {
+              copyButton.innerHTML =
+                '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+              lucide.createIcons();
+            }, 2000);
+          });
       }
     };
     modalContent.appendChild(copyButton);
