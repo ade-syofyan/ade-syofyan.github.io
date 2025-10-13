@@ -1263,14 +1263,13 @@
                 </button>
                 <h3 class="text-xl md:text-3xl font-bold" style="color: var(--text-white);">Pencapaian</h3>
             </div>
-            <!-- Progress Bar -->
+            <!-- Redesigned Progress Bar -->
             <div class="p-4 border-b" style="border-color: var(--border-color);">
-                <div class="flex justify-between items-center mb-1 text-sm">
-                    <span style="color: var(--text-white);">Progress</span>
-                    <span id="achievement-progress-text" style="color: var(--text-secondary);">0/16</span>
-                </div>
-                <div class="w-full rounded-full h-2.5" style="background-color: var(--bg-primary);">
-                    <div id="achievement-progress-bar" class="bg-accent h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                <div class="achievement-progress-container">
+                    <div id="achievement-progress-bar" class="achievement-progress-bar">
+                        <div class="achievement-progress-glow"></div>
+                    </div>
+                    <span id="achievement-progress-text" class="achievement-progress-text">0/16</span>
                 </div>
             </div>
             <!-- Achievement Body (Scrollable) -->

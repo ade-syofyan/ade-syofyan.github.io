@@ -1109,8 +1109,12 @@ function populateAchievements() {
   if (progressBar && progressText) {
     const percentage =
       totalAchievements > 0 ? (unlockedCount / totalAchievements) * 100 : 0;
+    const container = progressBar.parentElement;
+
     progressBar.style.width = `${percentage}%`;
     progressText.textContent = `${unlockedCount}/${totalAchievements}`;
+
+    container.classList.toggle("completed", percentage >= 100);
   }
 
   for (const id in achievements) {
