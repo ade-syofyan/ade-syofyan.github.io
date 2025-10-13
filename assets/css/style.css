@@ -76,11 +76,16 @@ html[data-theme='light'] {
 
 body {
   font-family: "Inter", sans-serif;
-  background-color: var(--bg-primary);
   color: var(--text-primary);
   scroll-behavior: smooth;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#page-content {
+  position: relative;
+  z-index: 1;
+  background-color: var(--bg-primary);
 }
 
 body.modal-open {
@@ -138,6 +143,48 @@ body.modal-open {
   background-blend-mode: overlay;
   box-shadow: 0 8px 20px -8px var(--shadow-color);
 }
+
+/* --- Redesain Kartu Testimoni --- */
+.testimonial-card-v2 {
+  position: relative;
+  padding: 2.5rem 2rem 2rem;
+  text-align: left;
+  background-color: rgba(var(--bg-card-rgb), 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.15);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 20px -8px var(--shadow-color);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInPortfolio 0.5s ease-out forwards;
+}
+
+.testimonial-card-v2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px -4px var(--shadow-color);
+}
+
+.testimonial-quote-icon {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  color: var(--color-accent);
+  opacity: 0.3;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.testimonial-author { display: flex; align-items: center; gap: 1rem; margin-top: auto; }
+.testimonial-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+.testimonial-name { font-weight: 600; color: var(--text-white); }
+.testimonial-title { font-size: 0.875rem; color: var(--text-secondary); }
 
 /* Glassmorphism for Navbar */
 nav {
@@ -551,27 +598,15 @@ html[data-theme='light'] .project-sidebar-section {
   cursor: zoom-in;
 }
 
-/* Gaya kanvas untuk efek latar belakang hero */
-#heroCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  background-color: transparent;
-  opacity: 0.3;
-}
-
 /* Gaya untuk canvas plexus di setiap section */
 .plexus-canvas {
-  position: absolute;
+  position: fixed; /* Mengambang di latar belakang */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  opacity: 0.15;
+  z-index: 0; /* Posisikan di belakang konten, tapi di atas background body */
+  opacity: 0.2; /* Sedikit lebih terang agar terlihat */
   background-color: transparent;
   pointer-events: none;
   /* Memungkinkan klik menembus canvas */
@@ -1339,6 +1374,165 @@ button#achievement-toggle-btn:hover {
   transform: translateY(-5px) scale(1.03);
   box-shadow: 0 12px 24px -4px var(--shadow-color), 0 5px 8px -2px rgba(var(--color-accent-rgb), 0.2);
 }
+
+/* --- Redesain Kartu Layanan (Aurora Card) --- */
+.service-card-v2 {
+  position: relative;
+  padding: 1px; /* Trik untuk border gradien */
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(var(--border-color-rgb), 0.2), rgba(var(--border-color-rgb), 0.05));
+  transition: all 0.4s ease;
+}
+
+.service-card-v2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(var(--color-accent-rgb), 0.15), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 1;
+}
+
+.service-card-v2:hover::before {
+  opacity: 1;
+}
+
+.service-card-v2-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  border-radius: inherit;
+  background-color: rgba(var(--bg-card-rgb), 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-align: left;
+}
+
+.service-card-v2-icon {
+  position: absolute;
+  top: -1.25rem;
+  right: 1rem;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, var(--color-accent), var(--color-accent-hover));
+  color: var(--color-white);
+  box-shadow: 0 8px 20px -5px rgba(var(--color-accent-rgb), 0.5);
+  transform: rotate(15deg);
+}
+
+.service-card-v2-icon .lucide { width: 32px; height: 32px; }
+.service-card-v2-title { font-size: 1.5rem; font-weight: 700; color: var(--text-white); margin-bottom: 0.75rem; margin-top: 1rem; }
+.service-card-v2-desc { color: var(--text-secondary); margin-bottom: 1rem; }
+.service-card-v2-features { font-size: 0.875rem; color: var(--text-secondary); list-style-position: inside; }
+.service-card-v2-features li { margin-bottom: 0.25rem; }
+/* --- End Redesain Kartu Layanan --- */
+
+/* --- Perbaikan Kartu untuk Tema Terang --- */
+html[data-theme='light'] .service-card-v2-content,
+html[data-theme='light'] .skill-card-v2-content {
+  background-color: rgba(var(--color-accent-rgb), 0.05); /* Latar belakang dengan sedikit warna aksen */
+  border: 1px solid rgba(var(--color-accent-rgb), 0.1);
+}
+
+/* --- Redesain Kartu Keahlian (Aurora Card) --- */
+.skill-card-v2 {
+  position: relative;
+  padding: 1px;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(var(--border-color-rgb), 0.2), rgba(var(--border-color-rgb), 0.05));
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.skill-card-v2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(var(--color-accent-rgb), 0.1), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 1;
+}
+
+.skill-card-v2:hover::before {
+  opacity: 1;
+}
+
+.skill-card-v2-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  border-radius: inherit;
+  background-color: rgba(var(--bg-card-rgb), 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-card-v2-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, rgba(var(--color-accent-rgb), 0.2), rgba(var(--color-accent-rgb), 0.1));
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+.skill-card-v2-title { font-size: 1.125rem; font-weight: 600; color: var(--text-white); margin-bottom: 0.25rem; }
+.skill-card-v2-tech { font-size: 0.875rem; color: var(--text-secondary); }
+
+/* --- Redesain Kartu Kontak --- */
+.contact-card-v2 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--bg-card-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.contact-card-v2:hover {
+  transform: translateY(-5px);
+  background-color: var(--bg-card);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 20px -5px var(--shadow-color);
+}
+
+.contact-card-v2-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background-color: rgba(var(--color-accent-rgb), 0.15);
+  color: var(--color-accent);
+}
+
+.contact-card-v2-title { font-weight: 600; color: var(--text-white); }
+.contact-card-v2-link { font-size: 0.875rem; color: var(--text-secondary); word-break: break-all; transition: color 0.2s ease; }
+.contact-card-v2:hover .contact-card-v2-link:not(.is-static) { color: var(--color-accent); }
+
 
 /* Animasi untuk Kartu Layanan (Staggered) */
 .service-card {
@@ -2292,12 +2486,13 @@ body.hackerman-mode #achievement-toast {
   color: var(--text-primary);
   padding: 1rem 1rem 1rem 3.5rem;
   border-radius: 0.5rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 /* Hapus warna placeholder default */
 .form-input::placeholder {
   color: var(--text-secondary);
+  opacity: 1;
 }
 
 .form-input:focus {

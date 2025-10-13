@@ -954,19 +954,27 @@ function renderTestimonials(testimonials) {
   
   testimonialsGrid.innerHTML = testimonials
     .map(
-      (testimonial) => `
-    <div class="testimonial-card p-6 text-left liquid-glass-card shadow-lg">
-      <p class="italic mb-4" style="color: var(--text-secondary);">
-        "${parseMarkdownBold(testimonial.quote)}"
-      </p>
-      <p class="font-semibold" style="color: var(--text-white);">
-        - ${testimonial.name}
-      </p>
-      <p class="text-sm" style="color: var(--text-secondary);">${testimonial.title}</p>
-    </div>
-  `
+      (testimonial, index) => `
+      <div class="testimonial-card-v2" style="animation-delay: ${index * 100}ms;">
+        <div class="testimonial-quote-icon">
+          <i data-lucide="quote"></i>
+        </div>
+        <p class="testimonial-quote">${parseMarkdownBold(testimonial.quote)}</p>
+        <div class="testimonial-author">
+          <img src="${testimonial.avatar}" alt="Avatar ${testimonial.name}" class="testimonial-avatar">
+          <div>
+            <p class="testimonial-name">${testimonial.name}</p>
+            <p class="testimonial-title">${testimonial.title}</p>
+          </div>
+        </div>
+      </div>
+    `
     )
     .join("");
+
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 }
 
 // --- Achievement System UI ---
@@ -1657,6 +1665,22 @@ function enableIOSChromeNavbarFix() {
       passive: true,
     });
   }
+}
+
+function initializeServiceCardHover() {
+  // Gabungkan selector untuk kedua jenis kartu
+  const cards = document.querySelectorAll('.service-card-v2, .skill-card-v2');
+  if (!cards.length) return;
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
 }
 
 // --- Directional Hover for Desktop Nav ---

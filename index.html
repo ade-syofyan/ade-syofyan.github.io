@@ -134,6 +134,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
   </head>
   <body class="leading-relaxed"> 
+    <!-- Kanvas Plexus Global untuk Latar Belakang -->
+    <canvas class="plexus-canvas"></canvas>
+
     <!-- Navbar -->
     <nav class="py-4 md:py-0 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
       <div
@@ -291,8 +294,6 @@
 
     <!-- Hero Section -->
     <header class="hero-full-height text-center relative overflow-hidden">
-      <!-- Kanvas untuk efek latar belakang "plexus" -->
-      <canvas id="heroCanvas"></canvas>
       <div
         class="container relative z-10 flex flex-col justify-center items-center h-full"
       >
@@ -385,121 +386,109 @@
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
           id="skills-grid"
         >
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-            data-skill="mobile"
-          >
-            <!-- Ikon Pengembangan Mobile -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="smartphone"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Mobile Development
-            </h3>
-            <p style="color: var(--text-secondary);">Flutter, Kotlin</p>
+          <!-- Kartu Keahlian 1: Mobile -->
+          <div class="skill-card-v2" data-skill="mobile">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="smartphone"></i>
+              </div>
+              <h3 class="skill-card-v2-title">Mobile Development</h3>
+              <p class="skill-card-v2-tech">Flutter, Kotlin</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-            data-skill="web"
-          >
-            <!-- Ikon Pengembangan Web -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="globe"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Web Development
-            </h3>
-            <p style="color: var(--text-secondary);">Laravel, PHP, JavaScript</p>
+
+          <!-- Kartu Keahlian 2: Web -->
+          <div class="skill-card-v2" data-skill="web">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="globe"></i>
+              </div>
+              <h3 class="skill-card-v2-title">Web Development</h3>
+              <p class="skill-card-v2-tech">Laravel, PHP, JavaScript</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-            data-skill="ai"
-          >
-            <!-- Ikon Integrasi AI -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="brain"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              AI Integration
-            </h3>
-            <p style="color: var(--text-secondary);">Chatbot AI, Akuntan AI</p>
+
+          <!-- Kartu Keahlian 3: AI -->
+          <div class="skill-card-v2" data-skill="ai">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="brain"></i>
+              </div>
+              <h3 class="skill-card-v2-title">AI Integration</h3>
+              <p class="skill-card-v2-tech">Chatbot AI, Akuntan AI</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-            data-skill="erp"
-          >
-            <!-- Ikon Sistem ERP -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="columns-3"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">ERP Systems</h3>
-            <p style="color: var(--text-secondary);">Pengembangan & Integrasi</p>
+
+          <!-- Kartu Keahlian 4: ERP -->
+          <div class="skill-card-v2" data-skill="erp">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="columns-3"></i>
+              </div>
+              <h3 class="skill-card-v2-title">ERP Systems</h3>
+              <p class="skill-card-v2-tech">Pengembangan & Integrasi</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-            data-skill="firebase"
-          >
-            <!-- Ikon Firebase -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="flame"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Firebase</h3>
-            <p style="color: var(--text-secondary);">Backend as a Service</p>
+
+          <!-- Kartu Keahlian 5: Firebase -->
+          <div class="skill-card-v2" data-skill="firebase">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="flame"></i>
+              </div>
+              <h3 class="skill-card-v2-title">Firebase</h3>
+              <p class="skill-card-v2-tech">Backend as a Service</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-          >
-            <!-- Ikon Sistem Real-time -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="zap"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Sistem Real-time
-            </h3>
-            <p style="color: var(--text-secondary);">Integrasi & Implementasi</p>
+
+          <!-- Kartu Keahlian 6: Real-time -->
+          <div class="skill-card-v2">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="zap"></i>
+              </div>
+              <h3 class="skill-card-v2-title">Sistem Real-time</h3>
+              <p class="skill-card-v2-tech">Integrasi & Implementasi</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-          >
-            <!-- Ikon Pemecahan Masalah -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="puzzle"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Problem Solving
-            </h3>
-            <p style="color: var(--text-secondary);">Analisis & Solusi Efektif</p>
+
+          <!-- Kartu Keahlian 7: Problem Solving -->
+          <div class="skill-card-v2">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="puzzle"></i>
+              </div>
+              <h3 class="skill-card-v2-title">Problem Solving</h3>
+              <p class="skill-card-v2-tech">Analisis & Solusi Efektif</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-          >
-            <!-- Ikon Layanan Cloud -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="cloud"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              Cloud Services
-            </h3>
-            <p style="color: var(--text-secondary);">Deployment & Management</p>
+
+          <!-- Kartu Keahlian 8: Cloud -->
+          <div class="skill-card-v2">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="cloud"></i>
+              </div>
+              <h3 class="skill-card-v2-title">Cloud Services</h3>
+              <p class="skill-card-v2-tech">Deployment & Management</p>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 skill-card liquid-glass-card"
-          >
-            <!-- Ikon DevOps -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="server-cog"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">
-              DevOps
-            </h3>
-            <p style="color: var(--text-secondary);">Ubuntu, Nginx, Git</p>
+
+          <!-- Kartu Keahlian 9: DevOps -->
+          <div class="skill-card-v2">
+            <div class="skill-card-v2-content">
+              <div class="skill-card-v2-icon-wrapper">
+                <i data-lucide="server-cog"></i>
+              </div>
+              <h3 class="skill-card-v2-title">DevOps</h3>
+              <p class="skill-card-v2-tech">Ubuntu, Nginx, Git</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <section id="workflow" class="py-20 fade-in-on-scroll relative">
-      <canvas class="plexus-canvas"></canvas>
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-16" style="color: var(--text-white);">
           Bagaimana Saya Bekerja
@@ -569,7 +558,6 @@
 
      <!-- Work History Section -->
     <section id="work-history" class="py-20 fade-in-on-scroll">
-      <canvas class="plexus-canvas"></canvas>
       <div class="container relative z-10">
         <h2 class="text-4xl font-bold mb-16 text-center" style="color: var(--text-white);">Riwayat Kerja</h2>
         <div id="timeline-container" class="relative max-w-3xl mx-auto">
@@ -580,7 +568,6 @@
 
     <!-- Certificates Section -->
     <section id="certificates" class="py-20 fade-in-on-scroll">
-      <canvas class="plexus-canvas"></canvas>
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Sertifikat & Lisensi</h2>
         <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
@@ -601,7 +588,6 @@
       id="portfolio"
       class="py-20 shadow-lg rounded-xl my-8 md:mx-auto container fade-in-on-scroll liquid-glass-card"
     >
-      <canvas class="plexus-canvas"></canvas>
       <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Portofolio Pilihan</h2>
 
@@ -630,7 +616,6 @@
     </section>
 
     <section id="live-demos" class="py-20 fade-in-on-scroll">
-          <canvas class="plexus-canvas"></canvas>
           <div class="container text-center">
             <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Live Demos</h2>
             <p class="text-lg mb-12 max-w-2xl mx-auto" style="color: var(--text-secondary);">
@@ -828,84 +813,68 @@
       <div class="text-center">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Layanan Saya</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
-          >
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="smartphone-charging"></i>
-            </p>
-            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
-              Pengembangan Aplikasi Mobile Kustom
-            </h3>
-            <p class="mb-4" style="color: var(--text-secondary);">
-              Membangun aplikasi Android & iOS yang performa tinggi dan intuitif
-              menggunakan Flutter & Kotlin.
-            </p>
-            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
-              <li>UI/UX Responsif</li>
-              <li>Integrasi API</li>
-              <li>Offline Capabilities</li>
-            </ul>
+          <!-- Kartu Layanan 1: Mobile Dev -->
+          <div class="service-card-v2">
+            <div class="service-card-v2-content">
+              <div class="service-card-v2-icon">
+                <i data-lucide="smartphone-charging"></i>
+              </div>
+              <h3 class="service-card-v2-title">Aplikasi Mobile Kustom</h3>
+              <p class="service-card-v2-desc">Membangun aplikasi Android & iOS yang performa tinggi dan intuitif menggunakan Flutter & Kotlin.</p>
+              <ul class="service-card-v2-features">
+                <li>UI/UX Responsif</li>
+                <li>Integrasi API</li>
+                <li>Offline Capabilities</li>
+              </ul>
+            </div>
           </div>
 
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
-          >
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="layout-dashboard"></i>
-            </p>
-            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
-              Pengembangan Web & Sistem ERP
-            </h3>
-            <p class="mb-4" style="color: var(--text-secondary);">
-              Menciptakan aplikasi web yang skalabel dan sistem ERP khusus untuk
-              efisiensi bisnis Anda.
-            </p>
-            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
-              <li>Laravel Backend</li>
-              <li>Panel Admin Kustom</li>
-              <li>Manajemen Database</li>
-            </ul>
+          <!-- Kartu Layanan 2: Web & ERP -->
+          <div class="service-card-v2">
+            <div class="service-card-v2-content">
+              <div class="service-card-v2-icon">
+                <i data-lucide="layout-dashboard"></i>
+              </div>
+              <h3 class="service-card-v2-title">Web & Sistem ERP</h3>
+              <p class="service-card-v2-desc">Menciptakan aplikasi web yang skalabel dan sistem ERP khusus untuk efisiensi bisnis Anda.</p>
+              <ul class="service-card-v2-features">
+                <li>Laravel Backend</li>
+                <li>Panel Admin Kustom</li>
+                <li>Manajemen Database</li>
+              </ul>
+            </div>
           </div>
 
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
-          >
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="bot"></i>
-            </p>
-            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
-              Integrasi AI & Solusi Chatbot
-            </h3>
-            <p class="mb-4" style="color: var(--text-secondary);">
-              Mengotomatisasi proses bisnis dengan integrasi AI dan chatbot
-              interaktif (mis. WhatsApp AI).
-            </p>
-            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
-              <li>AI Data Processing</li>
-              <li>Chatbot Otomatisasi</li>
-              <li>Integrasi API AI</li>
-            </ul>
+          <!-- Kartu Layanan 3: AI & Chatbot -->
+          <div class="service-card-v2">
+            <div class="service-card-v2-content">
+              <div class="service-card-v2-icon">
+                <i data-lucide="bot"></i>
+              </div>
+              <h3 class="service-card-v2-title">Integrasi AI & Chatbot</h3>
+              <p class="service-card-v2-desc">Mengotomatisasi proses bisnis dengan integrasi AI dan chatbot interaktif (mis. WhatsApp AI).</p>
+              <ul class="service-card-v2-features">
+                <li>AI Data Processing</li>
+                <li>Chatbot Otomatisasi</li>
+                <li>Integrasi API AI</li>
+              </ul>
+            </div>
           </div>
 
-          <div
-            class="p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 service-card liquid-glass-card"
-          >
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="server"></i>
-            </p>
-            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">
-              Pengembangan Sistem Real-time
-            </h3>
-            <p class="mb-4" style="color: var(--text-secondary);">
-              Membangun aplikasi dengan kemampuan pemrosesan data dan interaksi
-              secara real-time.
-            </p>
-            <ul class="text-sm text-left list-disc list-inside" style="color: var(--text-secondary);">
-              <li>WebSockets</li>
-              <li>Streaming Data</li>
-              <li>Push Notifications</li>
-            </ul>
+          <!-- Kartu Layanan 4: Real-time Systems -->
+          <div class="service-card-v2">
+            <div class="service-card-v2-content">
+              <div class="service-card-v2-icon">
+                <i data-lucide="server"></i>
+              </div>
+              <h3 class="service-card-v2-title">Sistem Real-time</h3>
+              <p class="service-card-v2-desc">Membangun aplikasi dengan kemampuan pemrosesan data dan interaksi secara real-time.</p>
+              <ul class="service-card-v2-features">
+                <li>WebSockets</li>
+                <li>Streaming Data</li>
+                <li>Push Notifications</li>
+              </ul>
+            </div>
           </div>
         </div>
         <p class="text-xl mt-12" style="color: var(--text-secondary);">
@@ -920,7 +889,6 @@
 
     <!-- Testimonials Section (New) -->
     <section id="testimonials" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container liquid-glass-card">
-      <canvas class="plexus-canvas"></canvas>
       <div class="text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Apa Kata Klien Saya</h2>
         <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -931,7 +899,6 @@
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 fade-in-on-scroll relative">
-      <canvas class="plexus-canvas"></canvas>
       <div class="container text-center relative z-10">
         <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
@@ -941,59 +908,40 @@
         <div
           class="flex flex-col md:flex-row justify-center items-center gap-8" id="contact-cards"
         >
-          <div
-            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 liquid-glass-card"
-          >
-            <!-- Ikon Email -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="mail"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Email</h3>
-            <a
-              id="contact-email" href="#"
-              class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
-              >ade.syofyan@gmail.com</a
-            >
+          <!-- Kartu Kontak: Email -->
+          <div class="contact-card-v2">
+            <div class="contact-card-v2-icon"><i data-lucide="mail"></i></div>
+            <div class="contact-card-v2-content">
+              <h3 class="contact-card-v2-title">Email</h3>
+              <a id="contact-email" href="#" class="contact-card-v2-link">ade.syofyan@gmail.com</a>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 liquid-glass-card"
-          >
-            <!-- Ikon Telepon -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="phone"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Telepon</h3>
-            <a
-              id="contact-phone" href="#"
-              class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
-              >0822-8495-5080</a
-            >
+
+          <!-- Kartu Kontak: Telepon -->
+          <div class="contact-card-v2">
+            <div class="contact-card-v2-icon"><i data-lucide="phone"></i></div>
+            <div class="contact-card-v2-content">
+              <h3 class="contact-card-v2-title">Telepon</h3>
+              <a id="contact-phone" href="#" class="contact-card-v2-link">0822-8495-5080</a>
+            </div>
           </div>
-          <div
-            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 liquid-glass-card"
-          >
-            <!-- Ikon LinkedIn -->
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="linkedin"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">LinkedIn</h3>
-            <a
-              id="contact-linkedin" href="#"
-              target="_blank"
-              class="hover:text-white transition duration-300" style="color: var(--text-secondary);"
-              >Profil LinkedIn</a
-            >
+
+          <!-- Kartu Kontak: LinkedIn -->
+          <div class="contact-card-v2">
+            <div class="contact-card-v2-icon"><i data-lucide="linkedin"></i></div>
+            <div class="contact-card-v2-content">
+              <h3 class="contact-card-v2-title">LinkedIn</h3>
+              <a id="contact-linkedin" href="#" target="_blank" class="contact-card-v2-link">Profil LinkedIn</a>
+            </div>
           </div>
+
           <!-- Kartu Chatbot -->
-          <div
-            class="p-6 rounded-xl shadow-lg text-center w-full md:w-1/4 cursor-pointer transform hover:scale-105 transition duration-300 liquid-glass-card"
-            onclick="openChatbotModal()"
-          >
-            <p class="text-accent text-5xl mb-4 flex justify-center">
-              <i data-lucide="message-square"></i>
-            </p>
-            <h3 class="text-xl font-semibold mb-2" style="color: var(--text-white);">Tanya Ade ✨</h3>
-            <p style="color: var(--text-secondary);">Ajukan pertanyaan ke AI!</p>
+          <div class="contact-card-v2" onclick="openChatbotModal()">
+            <div class="contact-card-v2-icon"><i data-lucide="bot"></i></div>
+            <div class="contact-card-v2-content">
+              <h3 class="contact-card-v2-title">Tanya Ade ✨</h3>
+              <p class="contact-card-v2-link is-static">Ajukan pertanyaan ke AI!</p>
+            </div>
           </div>
         </div>
         <!-- Contact Form -->

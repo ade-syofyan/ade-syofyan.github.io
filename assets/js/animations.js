@@ -60,8 +60,8 @@ function createPlexusInstance(canvas, options = {}) {
   }
 
   function resizeCanvas() {
-    canvas.width = canvas.parentElement.offsetWidth;
-    canvas.height = canvas.parentElement.offsetHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
 
   class Particle {
@@ -174,11 +174,10 @@ function createPlexusInstance(canvas, options = {}) {
   animate();
 
   // Pindahkan event listener ke elemen parent (section) agar tidak terhalang konten
-  const parentElement = canvas.parentElement;
-  parentElement.addEventListener("mousemove", (event) => {
+  window.addEventListener("mousemove", (event) => {
     const rect = canvas.getBoundingClientRect();
-    mouse.x = event.clientX - rect.left;
-    mouse.y = event.clientY - rect.top;
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
 
     // Trigger achievement on first interaction with hero canvas
     if (canvas.id === "heroCanvas" && !interactionTriggered) {
@@ -189,7 +188,7 @@ function createPlexusInstance(canvas, options = {}) {
     }
   });
 
-  parentElement.addEventListener("mouseout", () => {
+  window.addEventListener("mouseout", () => {
     mouse.x = null;
     mouse.y = null;
   });
@@ -205,25 +204,21 @@ function createPlexusInstance(canvas, options = {}) {
 
 // --- Inisialisasi Semua Animasi Plexus ---
 function initializeHeroCanvas() {
-  const allCanvases = document.querySelectorAll("#heroCanvas, .plexus-canvas");
-  if (allCanvases.length === 0) return;
+  const canvas = document.querySelector(".plexus-canvas");
+  if (!canvas) return;
 
   const plexusInstances = [];
 
-  allCanvases.forEach((canvas) => {
-    let options;
-    if (canvas.id === "heroCanvas") {
-      const isMobile = window.innerWidth < 768;
-      options = {
-        particleCount: isMobile ? 60 : 150, // Kurangi partikel di mobile
-        maxDistance: isMobile ? 120 : 160,
-      };
-    } else {
-      options = { particleCount: 75, maxDistance: 110 };
-    }
-    const instance = createPlexusInstance(canvas, options);
-    if (instance) plexusInstances.push(instance);
-  });
+  const isMobile = window.innerWidth < 768;
+  const options = {
+    particleCount: isMobile ? 100 : 250, // Jumlah partikel untuk seluruh layar
+    maxDistance: isMobile ? 100 : 120,
+  };
+
+  const instance = createPlexusInstance(canvas, options);
+  if (instance) {
+    plexusInstances.push(instance);
+  }
 
   // Handler global untuk resize dan perubahan tema
   const reinitAll = () => plexusInstances.forEach((inst) => inst.reinit());
