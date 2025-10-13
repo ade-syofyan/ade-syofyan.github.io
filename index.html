@@ -199,11 +199,13 @@
             >Chat ke AI</a
           >
           <!-- Theme Switcher -->
-          <div class="theme-switcher">
+          <div class="theme-switcher" title="Ganti Tema">
             <button id="theme-toggle-btn" class="nav-link p-2 rounded-md transition-colors" aria-label="Toggle theme">
-              <i data-lucide="sun" class="w-5 h-5 hidden" id="theme-icon-light"></i>
-              <i data-lucide="moon" class="w-5 h-5 hidden" id="theme-icon-dark"></i>
-              <i data-lucide="laptop" class="w-5 h-5 hidden" id="theme-icon-system"></i>
+              <div class="theme-icon-container">
+                <div class="theme-icon-wrapper">
+                  <i data-lucide="sun" id="theme-icon-light"></i><i data-lucide="moon" id="theme-icon-dark"></i><i data-lucide="laptop" id="theme-icon-system"></i>
+                </div>
+              </div>
             </button>
             <div id="theme-dropdown" class="theme-dropdown">
               <div class="theme-option" data-theme-value="light">

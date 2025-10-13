@@ -174,10 +174,30 @@ body.modal-open {
   position: relative;
 }
 
-.testimonial-author { display: flex; align-items: center; gap: 1rem; margin-top: auto; }
-.testimonial-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
-.testimonial-name { font-weight: 600; color: var(--text-white); }
-.testimonial-title { font-size: 0.875rem; color: var(--text-secondary); }
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+.testimonial-name {
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.testimonial-title {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
 
 /* Glassmorphism for Navbar */
 nav {
@@ -593,13 +613,16 @@ html[data-theme='light'] .project-sidebar-section {
 
 /* Gaya untuk canvas plexus di setiap section */
 .plexus-canvas {
-  position: fixed; /* Mengambang di latar belakang */
+  position: fixed;
+  /* Mengambang di latar belakang */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0; /* Posisikan di belakang konten, tapi di atas background body */
-  opacity: 0.2; /* Sedikit lebih terang agar terlihat */
+  z-index: 0;
+  /* Posisikan di belakang konten, tapi di atas background body */
+  opacity: 0.2;
+  /* Sedikit lebih terang agar terlihat */
   background-color: transparent;
   pointer-events: none;
   /* Memungkinkan klik menembus canvas */
@@ -1213,7 +1236,7 @@ button#achievement-toggle-btn:hover {
   background-clip: text;
   /* Menggunakan text-fill-color hanya jika didukung, dengan fallback color */
   color: var(--color-accent);
-  -webkit-text-fill-color: transparent; 
+  -webkit-text-fill-color: transparent;
   animation: shine 4s linear infinite;
 }
 
@@ -1283,9 +1306,11 @@ button#achievement-toggle-btn:hover {
     opacity: 0;
     top: 8px;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     top: 24px;
@@ -1318,7 +1343,12 @@ button#achievement-toggle-btn:hover {
   font-weight: 800;
   color: var(--color-accent);
 }
-.stat-label { font-size: 0.75rem; color: var(--text-secondary); }
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
 /* Animation for visitor count update */
 #visitor-count.pop-in {
   animation: popIn 0.3s ease-out;
@@ -1409,7 +1439,8 @@ button#achievement-toggle-btn:hover {
 /* --- Redesain Kartu Layanan (Aurora Card) --- */
 .service-card-v2 {
   position: relative;
-  padding: 1px; /* Trik untuk border gradien */
+  padding: 1px;
+  /* Trik untuk border gradien */
   border-radius: 1.5rem;
   background: linear-gradient(135deg, rgba(var(--border-color-rgb), 0.2), rgba(var(--border-color-rgb), 0.05));
   transition: all 0.4s ease;
@@ -1458,17 +1489,41 @@ button#achievement-toggle-btn:hover {
   transform: rotate(15deg);
 }
 
-.service-card-v2-icon .lucide { width: 32px; height: 32px; }
-.service-card-v2-title { font-size: 1.5rem; font-weight: 700; color: var(--text-white); margin-bottom: 0.75rem; margin-top: 1rem; }
-.service-card-v2-desc { color: var(--text-secondary); margin-bottom: 1rem; }
-.service-card-v2-features { font-size: 0.875rem; color: var(--text-secondary); list-style-position: inside; }
-.service-card-v2-features li { margin-bottom: 0.25rem; }
+.service-card-v2-icon .lucide {
+  width: 32px;
+  height: 32px;
+}
+
+.service-card-v2-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+}
+
+.service-card-v2-desc {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.service-card-v2-features {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  list-style-position: inside;
+}
+
+.service-card-v2-features li {
+  margin-bottom: 0.25rem;
+}
+
 /* --- End Redesain Kartu Layanan --- */
 
 /* --- Perbaikan Kartu untuk Tema Terang --- */
 html[data-theme='light'] .service-card-v2-content,
 html[data-theme='light'] .skill-card-v2-content {
-  background-color: rgba(var(--color-accent-rgb), 0.05); /* Latar belakang dengan sedikit warna aksen */
+  background-color: rgba(var(--color-accent-rgb), 0.05);
+  /* Latar belakang dengan sedikit warna aksen */
   border: 1px solid rgba(var(--color-accent-rgb), 0.1);
 }
 
@@ -1524,8 +1579,18 @@ html[data-theme='light'] .skill-card-v2-content {
   color: var(--color-accent);
   margin-bottom: 1rem;
 }
-.skill-card-v2-title { font-size: 1.125rem; font-weight: 600; color: var(--text-white); margin-bottom: 0.25rem; }
-.skill-card-v2-tech { font-size: 0.875rem; color: var(--text-secondary); }
+
+.skill-card-v2-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-white);
+  margin-bottom: 0.25rem;
+}
+
+.skill-card-v2-tech {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
 
 /* --- Redesain Kartu Kontak --- */
 .contact-card-v2 {
@@ -1560,9 +1625,21 @@ html[data-theme='light'] .skill-card-v2-content {
   color: var(--color-accent);
 }
 
-.contact-card-v2-title { font-weight: 600; color: var(--text-white); }
-.contact-card-v2-link { font-size: 0.875rem; color: var(--text-secondary); word-break: break-all; transition: color 0.2s ease; }
-.contact-card-v2:hover .contact-card-v2-link:not(.is-static) { color: var(--color-accent); }
+.contact-card-v2-title {
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.contact-card-v2-link {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+  transition: color 0.2s ease;
+}
+
+.contact-card-v2:hover .contact-card-v2-link:not(.is-static) {
+  color: var(--color-accent);
+}
 
 
 /* Animasi untuk Kartu Layanan (Staggered) */
@@ -1663,6 +1740,31 @@ html[data-theme='light'] .skill-card-v2-content {
   opacity: 1;
   visibility: visible;
   transform: scale(1) translateY(0);
+}
+
+.theme-icon-container {
+  width: 20px;
+  height: 20px;
+  bottom: 10px;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Jarak antar ikon yang lebih modern dan akurat */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-icon-wrapper>.lucide {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .theme-option {
@@ -2869,7 +2971,8 @@ html.ios-chrome body.has-fixed-nav {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
-  animation: none; /* Hapus animasi default */
+  animation: none;
+  /* Hapus animasi default */
 }
 
 /* Terapkan animasi hanya saat class .is-animating ada */

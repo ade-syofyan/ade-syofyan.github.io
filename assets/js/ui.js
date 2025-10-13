@@ -100,15 +100,19 @@ function initializeTheme() {
   };
 
   const updateIcons = (theme, isSystem) => {
-    document
-      .getElementById("theme-icon-light")
-      .classList.toggle("hidden", theme !== "light" || isSystem);
-    document
-      .getElementById("theme-icon-dark")
-      .classList.toggle("hidden", theme !== "dark" || isSystem);
-    document
-      .getElementById("theme-icon-system")
-      .classList.toggle("hidden", !isSystem);
+    const wrapper = document.querySelector(".theme-icon-wrapper");
+    if (!wrapper) return;
+
+    if (isSystem) {
+      // Geser ke ikon 'system' (indeks 2)
+      wrapper.style.transform = `translateY(-28px)`;
+    } else if (theme === "dark") {
+      // Geser ke ikon 'moon' (indeks 1)
+      wrapper.style.transform = `translateY(0px)`;
+    } else {
+      // Geser ke ikon 'sun' (indeks 0)
+      wrapper.style.transform = "translateY(28px)";
+    }
   };
 
   const updateActiveState = (theme) => {
@@ -257,9 +261,9 @@ function lockBodyScroll() {
   if (openModalCount === 1) {
     scrollPosition = window.pageYOffset;
     document.body.classList.add("modal-open");
-    document.body.style.position = 'fixed';
+    document.body.style.position = "fixed";
     document.body.style.top = `-${scrollPosition}px`;
-    document.body.style.width = '100%';
+    document.body.style.width = "100%";
   }
 }
 
@@ -268,9 +272,9 @@ function unlockBodyScroll() {
   if (openModalCount <= 0) {
     openModalCount = 0; // Mencegah angka negatif
     document.body.classList.remove("modal-open");
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
     window.scrollTo(0, scrollPosition);
   }
 }
@@ -562,9 +566,13 @@ function initializeModals() {
         closeModal();
       } else if (pdfViewerModal && pdfViewerModal.classList.contains("open")) {
         closePdfViewerModal();
-      } else if (achievementModal && achievementModal.classList.contains("open")) {
+      } else if (
+        achievementModal &&
+        achievementModal.classList.contains("open")
+      ) {
         closeAchievementModal();
-      } else if (window.closeChatbotModal) { // Cek jika fungsi ada
+      } else if (window.closeChatbotModal) {
+        // Cek jika fungsi ada
         window.closeChatbotModal();
       }
     }
@@ -790,9 +798,16 @@ function renderPaginationControls(totalItems, currentPage) {
           card.style.animationDelay = `${index * 50}ms`;
           card.classList.add("fading-out");
         });
-        const totalFadeOutTime = 300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
+        const totalFadeOutTime =
+          300 +
+          (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
         setTimeout(() => {
-          renderProjects(projectsData, currentProjectFilter, currentSearchQuery, page);
+          renderProjects(
+            projectsData,
+            currentProjectFilter,
+            currentSearchQuery,
+            page
+          );
         }, totalFadeOutTime);
         // --- End Animasi ---
 
@@ -951,17 +966,21 @@ function renderTestimonials(testimonials) {
   const testimonialsGrid = document.getElementById("testimonials-grid");
   if (!testimonialsGrid) return;
   testimonialsGrid.innerHTML = "";
-  
+
   testimonialsGrid.innerHTML = testimonials
     .map(
       (testimonial, index) => `
-      <div class="testimonial-card-v2" style="animation-delay: ${index * 100}ms;">
+      <div class="testimonial-card-v2" style="animation-delay: ${
+        index * 100
+      }ms;">
         <div class="testimonial-quote-icon">
           <i data-lucide="quote"></i>
         </div>
         <p class="testimonial-quote">${parseMarkdownBold(testimonial.quote)}</p>
         <div class="testimonial-author">
-          <img src="${testimonial.avatar}" alt="Avatar ${testimonial.name}" class="testimonial-avatar">
+          <img src="${testimonial.avatar}" alt="Avatar ${
+        testimonial.name
+      }" class="testimonial-avatar">
           <div>
             <p class="testimonial-name">${testimonial.name}</p>
             <p class="testimonial-title">${testimonial.title}</p>
@@ -972,7 +991,7 @@ function renderTestimonials(testimonials) {
     )
     .join("");
 
-  if (typeof lucide !== 'undefined') {
+  if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
 }
@@ -1347,7 +1366,7 @@ function renderWorkHistory(history) {
   const timelineContainer = document.getElementById("timeline-container");
   if (!timelineContainer) return;
   timelineContainer.innerHTML = "";
-  
+
   timelineContainer.innerHTML = history
     .map(
       (item) => `
@@ -1441,14 +1460,16 @@ async function generatePdfThumbnail(pdfUrl, canvasId) {
     };
 
     // Langkah 1: Gunakan ResizeObserver untuk menunggu canvas memiliki ukuran.
-    const observer = new ResizeObserver(entries => {
-      if (entries[0].contentRect.width > 0 && entries[0].contentRect.height > 0) {
+    const observer = new ResizeObserver((entries) => {
+      if (
+        entries[0].contentRect.width > 0 &&
+        entries[0].contentRect.height > 0
+      ) {
         renderPdf(entries[0].contentRect);
         observer.unobserve(canvas); // Hentikan observasi setelah render pertama berhasil
       }
     });
     observer.observe(canvas);
-
   } catch (error) {
     console.error("Error rendering PDF thumbnail:", error);
     // Draw a fallback error message on the canvas
@@ -1485,12 +1506,15 @@ function renderCertificatePaginationControls(totalItems, currentPage) {
     if (!isDisabled) {
       button.addEventListener("click", () => {
         // --- Animasi Fade Out ---
-        const existingCards = certificatesGrid.querySelectorAll(".certificate-card");
+        const existingCards =
+          certificatesGrid.querySelectorAll(".certificate-card");
         existingCards.forEach((card, index) => {
           card.style.animationDelay = `${index * 50}ms`;
           card.classList.add("fading-out");
         });
-        const totalFadeOutTime = 300 + (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
+        const totalFadeOutTime =
+          300 +
+          (existingCards.length > 0 ? (existingCards.length - 1) * 50 : 0);
         setTimeout(() => {
           renderCertificates(certificatesData, page);
         }, totalFadeOutTime);
@@ -1669,42 +1693,47 @@ function enableIOSChromeNavbarFix() {
 
 function initializeServiceCardHover() {
   // Gabungkan selector untuk kedua jenis kartu
-  const cards = document.querySelectorAll('.service-card-v2, .skill-card-v2');
+  const cards = document.querySelectorAll(".service-card-v2, .skill-card-v2");
   if (!cards.length) return;
 
-  cards.forEach(card => {
-    card.addEventListener('mousemove', e => {
+  cards.forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+      card.style.setProperty("--mouse-x", `${x}px`);
+      card.style.setProperty("--mouse-y", `${y}px`);
     });
   });
 }
 
 // --- Directional Hover for Desktop Nav ---
 function initializeDirectionalNavHover() {
-  const navLinks = document.querySelectorAll('.desktop-nav .nav-link-anchor');
+  const navLinks = document.querySelectorAll(".desktop-nav .nav-link-anchor");
   if (!navLinks.length) return;
 
   const getDirection = (element, event) => {
     const rect = element.getBoundingClientRect();
     const x = event.clientX - rect.left; // Posisi X mouse relatif terhadap elemen
     const w = rect.width;
-    
+
     // Jika mouse masuk dari separuh kiri, arahnya 'left', selain itu 'right'
-    return x < w / 2 ? 'left' : 'right';
+    return x < w / 2 ? "left" : "right";
   };
 
-  navLinks.forEach(link => {
-    const wrapper = link.querySelector('.liquid-glass-wrapper');
+  navLinks.forEach((link) => {
+    const wrapper = link.querySelector(".liquid-glass-wrapper");
     if (!wrapper) return;
 
-    link.addEventListener('mouseenter', e => {
+    link.addEventListener("mouseenter", (e) => {
       const direction = getDirection(link, e);
       // Hapus semua kelas arah sebelumnya untuk memastikan reset
-      link.classList.remove('hover-from-top', 'hover-from-bottom', 'hover-from-left', 'hover-from-right');
+      link.classList.remove(
+        "hover-from-top",
+        "hover-from-bottom",
+        "hover-from-left",
+        "hover-from-right"
+      );
       // Tambahkan kelas arah masuk yang baru
       link.classList.add(`hover-from-${direction}`);
     });
