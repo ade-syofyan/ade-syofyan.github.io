@@ -424,6 +424,15 @@ nav.nav-scrolled {
   transform: translateY(0) scale(1);
 }
 
+/* Override posisi tombol tutup khusus untuk PDF viewer */
+#pdfViewerModal .modal-close-btn {
+  position: static; /* Kembalikan ke alur normal */
+  transform: none;
+  width: auto;
+  height: auto;
+  padding: 0.375rem; /* 6px */
+}
+
 /* Override khusus untuk modal agar bisa lebih lebar */
 #certificateModal .modal-content,
 #projectModal .modal-content {

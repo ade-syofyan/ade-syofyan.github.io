@@ -518,14 +518,10 @@ function initializeModals() {
       pdfViewerTitle.textContent = title;
       pdfDownloadLink.href = pdfUrl;
       pdfViewerContent.innerHTML = `<embed src="${pdfUrl}#view=FitH" type="application/pdf" width="100%" height="100%">`;
+      lucide.createIcons(); // Panggil untuk membuat ikon download
       pdfViewerModal.classList.add("open");
       lockBodyScroll();
     }
-  };
-
-  window.closePdfViewerModal = function () {
-    if (pdfViewerModal) pdfViewerModal.classList.remove("open");
-    unlockBodyScroll();
   };
 
   if (pdfViewerModal) {
