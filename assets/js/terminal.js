@@ -295,7 +295,10 @@ function initializeTerminal() {
     reboot: function () {
       return this._requestTerminalConfirmation(
         "Sistem ini akan di-reboot. Apakah Anda yakin?",
-        () => window.triggerBSOD && window.triggerBSOD()
+        () => {
+          unlockAchievement("system_crasher");
+          if (window.triggerBSOD) window.triggerBSOD();
+        }
       );
     },
 
@@ -303,7 +306,10 @@ function initializeTerminal() {
       if (drive && drive.toLowerCase() === "c:") {
         return this._requestTerminalConfirmation(
           "PERINGATAN: Semua data di 'drive C:' akan hilang. Lanjutkan?",
-          () => window.triggerBSOD && window.triggerBSOD()
+          () => {
+            unlockAchievement("system_crasher");
+            if (window.triggerBSOD) window.triggerBSOD();
+          }
         );
       }
       return "Gunakan: `format c:`";

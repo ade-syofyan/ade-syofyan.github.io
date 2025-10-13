@@ -551,6 +551,24 @@ function initializeModals() {
     achievementModal.addEventListener("click", (e) => {
       if (e.target === achievementModal) closeAchievementModal();
     });
+
+  // --- Global Escape Key Handler ---
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      // Urutkan dari modal yang paling mungkin di atas
+      if (lightboxModal && lightboxModal.classList.contains("open")) {
+        closeLightbox();
+      } else if (projectModal && projectModal.classList.contains("open")) {
+        closeModal();
+      } else if (pdfViewerModal && pdfViewerModal.classList.contains("open")) {
+        closePdfViewerModal();
+      } else if (achievementModal && achievementModal.classList.contains("open")) {
+        closeAchievementModal();
+      } else if (window.closeChatbotModal) { // Cek jika fungsi ada
+        window.closeChatbotModal();
+      }
+    }
+  });
 }
 
 // --- BSOD Easter Egg ---

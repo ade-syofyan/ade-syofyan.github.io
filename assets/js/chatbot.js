@@ -23,6 +23,9 @@ function initializeChatbot() {
   };
 
   window.closeChatbotModal = function () {
+    // Jika modal tidak terbuka, jangan lakukan apa-apa
+    if (!chatbotModal.classList.contains("open")) return;
+
     const hasUserInteracted = chatDisplay.querySelector(".flex.justify-end");
     if (!hasUserInteracted) {
       window.actuallyCloseChatbot();
@@ -48,7 +51,10 @@ function initializeChatbot() {
   };
 
   chatbotModal.addEventListener("click", (e) => {
-    if (e.target === chatbotModal) closeChatbotModal();
+    // Cek jika yang diklik adalah overlay, bukan konten di dalamnya
+    if (e.target === chatbotModal) {
+      closeChatbotModal();
+    }
   });
 
   chatInput.addEventListener("keypress", function (event) {
