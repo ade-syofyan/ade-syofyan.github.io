@@ -426,11 +426,13 @@ nav.nav-scrolled {
 
 /* Override posisi tombol tutup khusus untuk PDF viewer */
 #pdfViewerModal .modal-close-btn {
-  position: static; /* Kembalikan ke alur normal */
+  position: static;
+  /* Kembalikan ke alur normal */
   transform: none;
   width: auto;
   height: auto;
-  padding: 0.375rem; /* 6px */
+  padding: 0.375rem;
+  /* 6px */
 }
 
 /* Override khusus untuk modal agar bisa lebih lebar */
@@ -1037,7 +1039,8 @@ html[data-theme='light'] .project-sidebar-section {
 #hero-buttons {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s; /* Tambah delay */
+  transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
+  /* Tambah delay */
 }
 
 #hero-buttons.visible {
@@ -3098,49 +3101,91 @@ html[data-theme='light'] .achievement-progress-text {
   transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
 }
 
-.certificate-action-btn:hover {
-  transform: scale(1.1);
+/* --- Redesigned Work History Timeline Styles --- */
+#work-history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
-/* --- Work History Timeline Styles --- */
-#timeline-container::before {
+#work-history-timeline::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 1.5rem;
+  left: 50%;
   transform: translateX(-50%);
+  /* Center the line */
   width: 4px;
   height: 100%;
   background-color: var(--border-color);
   border-radius: 2px;
 }
 
-.timeline-item {
+/* Hide the line on mobile */
+@media (max-width: 767px) {
+  #work-history-timeline::before {
+    left: 1.5rem;
+    /* Move line to the left on mobile */
+  }
+}
+
+.timeline-item-v2 {
   position: relative;
+  width: 100%;
   padding-left: 4rem;
-  padding-bottom: 3rem;
+  /* Default padding for mobile */
 }
 
-.timeline-item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline-dot {
+.timeline-item-v2::after {
+  content: '';
   position: absolute;
+  top: 0.5rem;
   left: 1.5rem;
-  top: 0;
+  /* Align with the mobile timeline */
   transform: translateX(-50%);
+  /* Center the dot on the line */
   width: 24px;
   height: 24px;
   background-color: var(--bg-primary);
   border: 4px solid var(--color-accent);
-  box-shadow: 0 0 0 4px var(--bg-primary);
+  box-shadow: 0 0 0 4px var(--bg-primary), 0 0 10px rgba(var(--color-accent-rgb), 0.5);
   border-radius: 50%;
+  z-index: 1;
 }
 
-.timeline-logo {
-  width: 80px;
-  height: 80px;
+/* Desktop layout adjustments */
+@media (min-width: 768px) {
+  .timeline-item-v2 {
+    width: 50%;
+    padding-left: 2rem;
+    /* Space between line and card */
+  }
+
+  .timeline-item-v2:nth-child(odd) {
+    align-self: flex-start;
+    padding-right: 2rem;
+    padding-left: 0;
+  }
+
+  .timeline-item-v2:nth-child(even) {
+    align-self: flex-end;
+  }
+
+  .timeline-item-v2::after {
+    left: 50%;
+    /* Center dot on the main timeline */
+  }
+
+  .timeline-item-v2:nth-child(odd)::after {
+    left: auto;
+    right: -12px;
+    /* Position dot on the right side of the item */
+  }
+}
+
+.timeline-logo-v2 {
+  width: 64px;
+  height: 64px;
   object-fit: contain;
   border-radius: 0.5rem;
   background-color: white;
@@ -3149,23 +3194,43 @@ html[data-theme='light'] .achievement-progress-text {
   mix-blend-mode: multiply;
 }
 
-html[data-theme='light'] .timeline-logo {
+html[data-theme='light'] .timeline-logo-v2 {
   mix-blend-mode: normal;
-  background-color: #ffffff;
 }
 
-.timeline-content {
-  background-color: var(--bg-card-secondary);
+.timeline-content-v2 {
   padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
-.timeline-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+.timeline-content-v2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px -4px var(--shadow-color);
+}
+
+.timeline-duration-v2 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-role-v2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.timeline-company-v2 {
+  font-size: 1rem;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
+}
+
+.timeline-description-v2 {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 /* --- Certificate Card Styles --- */

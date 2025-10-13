@@ -1364,25 +1364,24 @@ function initializeContactForm() {
 
 // --- Work History Rendering ---
 function renderWorkHistory(history) {
-  const timelineContainer = document.getElementById("timeline-container");
+  const timelineContainer = document.getElementById("work-history-timeline");
   if (!timelineContainer) return;
   timelineContainer.innerHTML = "";
 
   timelineContainer.innerHTML = history
     .map(
       (item) => `
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <div class="timeline-header">
-            <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo" onerror="this.style.display='none'">
-            <div class="flex-grow">
-              <h4 class="text-xl font-bold" style="color: var(--text-white);">${item.role}</h4>
-              <p class="text-md" style="color: var(--text-secondary);">${item.company}</p>
-              <p class="text-sm font-semibold mt-1" style="color: var(--color-accent);">${item.duration}</p>
+      <div class="timeline-item-v2">
+        <div class="timeline-content-v2 liquid-glass-card">
+          <div class="flex items-start gap-4">
+            <img src="${item.logo}" alt="Logo ${item.company}" class="timeline-logo-v2" onerror="this.style.display='none'">
+            <div class="flex-grow text-left">
+              <p class="timeline-duration-v2">${item.duration}</p>
+              <h4 class="timeline-role-v2">${item.role}</h4>
+              <p class="timeline-company-v2">${item.company}</p>
             </div>
           </div>
-          <p class="text-sm" style="color: var(--text-secondary);">${item.description}</p>
+          <p class="timeline-description-v2">${item.description}</p>
         </div>
       </div>
     `
