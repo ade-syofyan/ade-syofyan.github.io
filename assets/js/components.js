@@ -445,6 +445,94 @@ function initializePathfindingVisualizer() {
   initializeAiTextAnalyzer();
 }
 
+// --- Live Demo: Text Case Converter ---
+function initializeTextConverter() {
+  const inputEl = document.getElementById("text-converter-input");
+  const outputEl = document.getElementById("text-converter-output");
+  const controlsContainer = document.getElementById("text-converter-controls");
+  const copyBtn = document.getElementById("copy-output-btn");
+
+  const charCountEl = document.getElementById("char-count");
+  const wordCountEl = document.getElementById("word-count");
+  const lineCountEl = document.getElementById("line-count");
+
+  if (!inputEl || !controlsContainer) return;
+
+  const converters = {
+    upper: (str) => str.toUpperCase(),
+    lower: (str) => str.toLowerCase(),
+    title: (str) =>
+      str.toLowerCase().replace(/(^|\s|-)\S/g, (L) => L.toUpperCase()),
+    sentence: (str) =>
+      str
+        .toLowerCase()
+        .replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase()),
+    camel: (str) =>
+      str
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9]+(.)?/g, (match, chr) =>
+          chr ? chr.toUpperCase() : ""
+        ),
+    pascal: (str) =>
+      str
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9]+(.)?/g, (match, chr) =>
+          chr ? chr.toUpperCase() : ""
+        )
+        .replace(/^./, (c) => c.toUpperCase()),
+    kebab: (str) =>
+      str
+        .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
+        .replace(/[\s_]+/g, "-")
+        .toLowerCase(),
+    snake: (str) =>
+      str
+        .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1_$2")
+        .replace(/[\s-]+/g, "_")
+        .toLowerCase(),
+  };
+
+  function updateStats() {
+    const text = inputEl.value;
+    charCountEl.textContent = text.length;
+    wordCountEl.textContent = text.trim().split(/\s+/).filter(Boolean).length;
+    lineCountEl.textContent = text.split("\n").length;
+  }
+
+  inputEl.addEventListener("input", updateStats);
+
+  controlsContainer.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const caseType = button.dataset.case;
+      if (converters[caseType]) {
+        const convertedText = converters[caseType](inputEl.value);
+        outputEl.value = convertedText;
+        // Animate button
+        controlsContainer
+          .querySelectorAll(".active")
+          .forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+      }
+    });
+  });
+
+  copyBtn.addEventListener("click", () => {
+    if (!outputEl.value) return;
+    navigator.clipboard.writeText(outputEl.value).then(() => {
+      const originalIcon = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i>';
+      lucide.createIcons();
+      setTimeout(() => {
+        copyBtn.innerHTML = originalIcon;
+        lucide.createIcons();
+      }, 2000);
+    });
+  });
+
+  // Initial stats update
+  updateStats();
+}
+
 // --- Live Demo: AI Text Analyzer ---
 function initializeAiTextAnalyzer() {
   const analyzeBtn = document.getElementById("analyze-text-btn");

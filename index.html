@@ -849,6 +849,64 @@
                 </div>
               </div>
 
+              <!-- Demo 5: Text Case Converter (Full Width) -->
+              <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="case-sensitive"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Text Case Converter</h3>
+                </div>
+                <p class="mb-6 text-center" style="color: var(--text-secondary);">
+                  Alat sederhana untuk mengubah format teks Anda secara instan. Masukkan teks dan pilih konversi yang diinginkan.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                  <textarea id="text-converter-input" class="form-input !rounded-lg h-40" placeholder="Masukkan teks di sini..."></textarea>
+                  <div class="relative">
+                    <textarea id="text-converter-output" class="form-input !rounded-lg h-40" placeholder="Hasil akan muncul di sini..." readonly></textarea>
+                    <button id="copy-output-btn" class="absolute top-2 right-2 btn-copy-code" title="Salin Hasil">
+                      <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="text-converter-controls" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+                  <button class="pathfinding-btn" data-case="upper">UPPERCASE</button>
+                  <button class="pathfinding-btn" data-case="lower">lowercase</button>
+                  <button class="pathfinding-btn" data-case="title">Title Case</button>
+                  <button class="pathfinding-btn" data-case="sentence">Sentence case</button>
+                  <button class="pathfinding-btn" data-case="camel">camelCase</button>
+                  <button class="pathfinding-btn" data-case="pascal">PascalCase</button>
+                  <button class="pathfinding-btn" data-case="kebab">kebab-case</button>
+                  <button class="pathfinding-btn" data-case="snake">snake_case</button>
+                </div>
+
+                <div id="text-converter-stats" class="flex justify-center gap-4 text-center text-sm" style="color: var(--text-secondary);">
+                  <div><span id="char-count" class="font-bold text-accent">0</span> Karakter</div>
+                  <div><span id="word-count" class="font-bold text-accent">0</span> Kata</div>
+                  <div><span id="line-count" class="font-bold text-accent">0</span> Baris</div>
+                </div>
+
+                <button class="btn-code-toggle" data-code-source="text-converter-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="text-converter-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>&lt;textarea id="text-converter-input"&gt;&lt;/textarea&gt;
+&lt;div id="text-converter-controls"&gt;
+  &lt;button data-case="upper"&gt;UPPERCASE&lt;/button&gt;
+  &lt;!-- ... more buttons ... --&gt;
+&lt;/div&gt;
+&lt;textarea id="text-converter-output" readonly&gt;&lt;/textarea&gt;</code></pre>
+                  <pre data-lang="js" class="language-javascript"><code>function toTitleCase(str) {
+  return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+}
+
+document.querySelector('[data-case="title"]').addEventListener('click', () => {
+  const input = document.getElementById('text-converter-input').value;
+  document.getElementById('text-converter-output').value = toTitleCase(input);
+});</code></pre>
+                </div>
+              </div>
+
             </div>
           </div>
     </section>
