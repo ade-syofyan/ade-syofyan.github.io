@@ -827,7 +827,7 @@ function initializeCodeViewers() {
     copyButton.className = "btn-copy-code";
     copyButton.title = "Salin kode";
     copyButton.innerHTML = '<i data-lucide="copy" class="w-4 h-4"></i>';
-    copyButton.onclick = () => {
+    copyButton.addEventListener("click", () => {
       const activeCodeBlock = modalContent.querySelector(
         ".code-block-wrapper:not(.hidden) code"
       );
@@ -840,12 +840,12 @@ function initializeCodeViewers() {
             lucide.createIcons();
             setTimeout(() => {
               copyButton.innerHTML =
-                '<i data-lucide="copy" class="w-4 h-4 mr-2"></i>Salin';
+                '<i data-lucide="copy" class="w-4 h-4"></i>';
               lucide.createIcons();
             }, 2000);
           });
       }
-    };
+    });
     modalContent.appendChild(copyButton);
 
     // tampilkan modal + highlight
@@ -855,7 +855,7 @@ function initializeCodeViewers() {
     lockBodyScroll();
 
     Prism.hooks.add("complete", () => {
-      if (modal.classList.contains("open")) {
+      if (modal.classList.contains("open") && relayout) {
         padLineNumbersIn(modalContent);
       }
     });
