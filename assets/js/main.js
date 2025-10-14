@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeCssHackerAchievement();
   initializeCaseStudyGenerator();
   initializeContactForm();
+  initializeGenerativeArt();
 
   // Initialize Complex Modules
   initializeTerminal();
