@@ -1,3 +1,274 @@
+// --- Live Demo: CSV to Chart Generator ---
+function initializeCsvToChartGenerator() {
+  const csvInput = document.getElementById("csv-input");
+  const fileInput = document.getElementById("csv-file-input");
+  const exampleBtn = document.getElementById("csv-example-btn");
+  const clearBtn = document.getElementById("csv-clear-btn");
+  const downloadBtn = document.getElementById("csv-download-btn");
+  const chartContainer = document.getElementById("chart-output-container");
+  const canvas = document.getElementById("csv-chart-canvas");
+  const placeholder = document.getElementById("chart-placeholder");
+  const controls = document.getElementById("chart-controls");
+  const chartTypeSelect = document.getElementById("chart-type-select");
+  const colorSchemeSelect = document.getElementById("chart-color-select");
+  const codeSourceEl = document.getElementById("csv-chart-code");
+
+  if (!csvInput || !canvas) return;
+
+  let chartInstance = null;
+  let parsedData = null;
+
+  const exampleCSV = `Bulan,Penjualan,Pengeluaran
+Januari,150,80
+Februari,200,120
+Maret,180,100
+April,270,150
+Mei,210,130
+Juni,300,170`;
+
+  // Palet warna yang menarik
+  const colorSchemes = {
+    default: [
+      "rgba(99, 179, 237, 0.7)", "rgba(99, 179, 237, 0.5)", "rgba(99, 179, 237, 0.3)"
+    ],
+    viridis: ['#440154', '#414487', '#2A788E', '#22A884', '#7AD151', '#FDE725'],
+    spectral: ['#9e0142', '#d53e4f', '#f46d43', '#fdae61', '#fee08b', '#e6f598', '#abdda4', '#66c2a5', '#3288bd', '#5e4fa2'],
+    pastel: ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a']
+  };
+
+  // Populate the code block for the "View Code" button
+  if (codeSourceEl) {
+    codeSourceEl.innerHTML = `
+      <pre data-lang="html" class="language-html"><code>&lt;textarea id="csv-input"&gt;&lt;/textarea&gt;
+&lt;input type="file" id="csv-file-input"&gt;
+&lt;canvas id="csv-chart-canvas"&gt;&lt;/canvas&gt;</code></pre>
+      <pre data-lang="js" class="language-javascript"><code>// Menggunakan Chart.js (https://www.chartjs.org/)
+function parseCSV(csvText) {
+  const lines = csvText.trim().split('\\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+  const data = lines.slice(1).map(line => {
+    const values = line.split(',');
+    let entry = {};
+    headers.forEach((header, i) => {
+      entry[header] = isNaN(values[i]) ? values[i].trim() : Number(values[i]);
+    });
+    return entry;
+  });
+  return { headers, data };
+}
+
+function createChart(data) {
+  const ctx = document.getElementById('csv-chart-canvas').getContext('2d');
+  const labels = data.data.map(row => row[data.headers[0]]);
+  const values = data.data.map(row => row[data.headers[1]]);
+
+  new Chart(ctx, {
+    type: 'bar', // 'line', 'pie', etc.
+    data: {
+      labels: labels,
+      datasets: [{
+        label: data.headers[1],
+        data: values,
+        backgroundColor: 'rgba(99, 179, 237, 0.7)',
+        borderColor: 'rgba(99, 179, 237, 1)',
+        borderWidth: 1
+      }]
+    }
+  });
+}</code></pre>
+    `;
+  }
+
+  function parseCSV(csvText) {
+    try {
+      const lines = csvText.trim().split('\n');
+      if (lines.length < 2) return null;
+
+      const headers = lines[0].split(',').map(h => h.trim()).filter(Boolean);
+      if (headers.length < 2) return null;
+
+      const data = lines
+        .slice(1)
+        .filter(line => line.trim() !== '') // Abaikan baris kosong
+        .map(line => {
+          const values = line.split(',');
+          let entry = {};
+          headers.forEach((header, i) => {
+            const value = values[i] ? values[i].trim() : '';
+            entry[header] = !isNaN(parseFloat(value)) && isFinite(value) ? Number(value) : value;
+          });
+          return entry;
+        });
+
+      // Validasi: kolom kedua harus numerik
+      if (data.some(row => typeof row[headers[1]] !== 'number')) {
+        return null;
+      }
+
+      return { headers, data };
+    } catch (e) {
+      console.error("CSV Parsing error:", e);
+      return null;
+    }
+  }
+
+  function renderChart() {
+    if (!parsedData) return;
+
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+
+    canvas.style.opacity = 0;
+    placeholder.classList.add("hidden");
+    controls.style.opacity = 1;
+    controls.style.pointerEvents = 'auto';
+
+    // Ambil label dari kolom pertama
+    const labels = parsedData.data.map(row => row[parsedData.headers[0]]);
+    const chartType = chartTypeSelect.value;
+    const selectedScheme = colorSchemeSelect.value;
+    const schemeColors = colorSchemes[selectedScheme] || colorSchemes.default;
+
+    // Buat dataset untuk setiap kolom numerik (selain kolom pertama)
+    const datasets = parsedData.headers.slice(1).map((header, index) => {
+      // Pastikan kolom ini berisi angka
+      if (typeof parsedData.data[0][header] !== 'number') return null;
+
+      const data = parsedData.data.map(row => row[header]);
+      const colorIndex = index % schemeColors.length;
+      const mainColor = schemeColors[colorIndex];
+      const borderColor = mainColor.replace('0.7', '1'); // Buat warna border lebih solid
+
+      return {
+        label: header,
+        data: data,
+        backgroundColor: mainColor,
+        borderColor: borderColor,
+        borderWidth: 1.5,
+      };
+    }).filter(Boolean); // Hapus dataset yang null (jika ada kolom non-numerik)
+
+    chartInstance = new Chart(canvas, {
+      type: chartType,
+      data: {
+        labels: labels,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            // Tampilkan legenda jika ada lebih dari satu dataset, atau jika tipenya pie/doughnut
+            display: datasets.length > 1 || ['pie', 'doughnut', 'polarArea'].includes(chartType),
+            position: 'top',
+            labels: {
+              color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary')
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(128, 128, 128, 0.2)' },
+            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary') }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary') }
+          }
+        }
+      }
+    });
+    
+    // Animate chart appearance
+    setTimeout(() => {
+      canvas.style.transition = 'opacity 0.5s ease-in-out';
+      canvas.style.opacity = 1;
+    }, 100);
+  }
+
+  function processInput(csvText) {
+    if (csvText.trim()) {
+      clearBtn.classList.remove("hidden");
+    } else {
+      clearBtn.classList.add("hidden");
+    }
+
+    parsedData = parseCSV(csvText);
+    if (parsedData) {
+      renderChart();
+    } else {
+      if (chartInstance) chartInstance.destroy();
+      canvas.style.opacity = 0;
+      placeholder.classList.remove("hidden");
+      controls.style.opacity = 0;
+      controls.style.pointerEvents = 'none';
+      if (csvText.trim()) {
+        placeholder.textContent = "Format CSV tidak valid. Pastikan ada header dan setidaknya satu baris data, dengan kolom kedua berisi angka.";
+      } else {
+        placeholder.textContent = "Grafik akan muncul di sini";
+      }
+    }
+  }
+
+  csvInput.addEventListener("input", (e) => processInput(e.target.value));
+
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        csvInput.value = event.target.result;
+        processInput(event.target.result);
+      };
+      reader.readAsText(file);
+    }
+  });
+
+  chartTypeSelect.addEventListener("change", renderChart);
+  colorSchemeSelect.addEventListener("change", renderChart);
+
+  exampleBtn.addEventListener("click", () => {
+    csvInput.value = exampleCSV;
+    processInput(exampleCSV);
+  });
+
+  // Inisialisasi dropdown kustom untuk demo ini
+  createCustomSelect(
+    document.getElementById("chart-type-select-wrapper"),
+    (value) => renderChart()
+  );
+  createCustomSelect(document.getElementById("chart-color-select-wrapper"), (value) => renderChart());
+
+  clearBtn.addEventListener("click", () => {
+    csvInput.value = "";
+    processInput("");
+    fileInput.value = ""; // Reset file input as well
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    if (!chartInstance) return;
+
+    // Dapatkan nama tipe grafik yang dipilih
+    const chartTypeText = chartTypeSelect.options[chartTypeSelect.selectedIndex].text.replace(/ /g, '_');
+
+    // Buat stempel waktu YYYYMMDD_HHMMSS
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+
+    // Gabungkan menjadi nama file yang deskriptif
+    const filename = `${chartTypeText}_${timestamp}.png`;
+
+    const link = document.createElement('a');
+    link.href = chartInstance.toBase64Image();
+    link.download = filename;
+    link.click();
+    unlockAchievement('data_viz_master');
+  });
+}
+
 // --- Live Demo: Real-time Visitor Counter ---
 function initializeVisitorCounter() {
   const visitorCountElement = document.getElementById("visitor-count");
@@ -21,6 +292,103 @@ function initializeVisitorCounter() {
     setTimeout(updateVisitorCount, nextUpdateDelay);
   }
   setTimeout(updateVisitorCount, 2500);
+}
+
+/**
+ * Creates a custom, accessible dropdown from a standard <select> element.
+ * @param {HTMLElement} wrapper - The container element with the class 'custom-select-container'.
+ * @param {Function} [onChangeCallback] - An optional callback function to run when the value changes.
+ */
+function createCustomSelect(wrapper, onChangeCallback) {
+  if (!wrapper) return;
+
+  const selectEl = wrapper.querySelector("select");
+  if (!selectEl) return;
+
+  // Create custom elements
+  const toggleBtn = document.createElement("button");
+  toggleBtn.className = "custom-select-toggle";
+  toggleBtn.setAttribute("aria-haspopup", "listbox");
+  toggleBtn.setAttribute("aria-expanded", "false");
+
+  const optionsContainer = document.createElement("div");
+  optionsContainer.className = "custom-select-options";
+  optionsContainer.setAttribute("role", "listbox");
+
+  wrapper.appendChild(toggleBtn);
+  wrapper.appendChild(optionsContainer);
+
+  // Populate options
+  Array.from(selectEl.options).forEach((option) => {
+    const optionEl = document.createElement("div");
+    optionEl.className = "custom-select-option";
+    optionEl.dataset.value = option.value;
+    optionEl.setAttribute("role", "option");
+
+    const icon = option.dataset.icon;
+    const desc = option.dataset.desc;
+
+    let innerHTML = "";
+    if (icon) {
+      innerHTML += `<i data-lucide="${icon}" class="w-4 h-4 text-accent"></i>`;
+    }
+    innerHTML += `<div>
+      <p class="font-semibold" style="color: var(--text-white);">${option.textContent}</p>
+      ${desc ? `<p class="text-xs" style="color: var(--text-secondary);">${desc}</p>` : ""}
+    </div>`;
+    optionEl.innerHTML = innerHTML;
+
+    optionEl.addEventListener("click", () => {
+      updateSelected(option.value);
+      wrapper.classList.remove("open");
+      if (onChangeCallback) {
+        onChangeCallback(option.value);
+      }
+    });
+    optionsContainer.appendChild(optionEl);
+  });
+
+  function updateSelected(value) {
+    const selectedOption = selectEl.querySelector(`option[value="${value}"]`);
+    if (!selectedOption) return;
+
+    selectEl.value = value;
+
+    const icon = selectedOption.dataset.icon;
+    const desc = selectedOption.dataset.desc;
+
+    let toggleHTML = `<div class="flex items-center gap-3">`;
+    if (icon) {
+      toggleHTML += `<i data-lucide="${icon}" class="w-4 h-4 text-accent"></i>`;
+    }
+    toggleHTML += `<span class="font-semibold">${selectedOption.textContent}`;
+    if (desc) {
+      toggleHTML += ` <span class="font-normal opacity-70">(${desc})</span>`;
+    }
+    toggleHTML += `</span></div>`;
+    toggleHTML += `<i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-secondary"></i>`;
+
+    toggleBtn.innerHTML = toggleHTML;
+    lucide.createIcons();
+  }
+
+  // Set initial value
+  updateSelected(selectEl.value);
+
+  // Event listeners
+  toggleBtn.addEventListener("click", () => {
+    const isOpen = wrapper.classList.toggle("open");
+    toggleBtn.setAttribute("aria-expanded", isOpen);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target)) {
+      wrapper.classList.remove("open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  lucide.createIcons();
 }
 
 class PriorityQueue {
@@ -50,16 +418,7 @@ function initializePathfindingVisualizer() {
   const controlsContainer = document.getElementById("pathfinding-controls");
   const runBtn = document.getElementById("run-pathfinding-btn");
   const resetBtn = document.getElementById("reset-pathfinding-btn");
-  // Elemen select asli (sekarang disembunyikan)
-  const algorithmSelect = document.getElementById("algorithm-select");
-  // Elemen dropdown kustom
-  const customSelectContainer = document.getElementById(
-    "algorithm-select-custom"
-  );
-  const customSelectToggle = document.getElementById("algorithm-select-toggle");
-  const customSelectOptions = document.getElementById(
-    "algorithm-select-options"
-  );
+  const algorithmSelectWrapper = document.getElementById("algorithm-select-wrapper");
 
   // Exit if any element is missing to prevent errors
   if (
@@ -67,8 +426,7 @@ function initializePathfindingVisualizer() {
     !controlsContainer ||
     !runBtn ||
     !resetBtn ||
-    !algorithmSelect ||
-    !customSelectContainer
+    !algorithmSelectWrapper
   ) {
     return;
   }
@@ -82,12 +440,6 @@ function initializePathfindingVisualizer() {
   let currentMode = "start"; // Modes: 'start', 'end', 'wall'
   let isRunning = false;
   let isMouseDown = false;
-
-  const algorithms = {
-    bfs: { name: "BFS", desc: "Tak Berbobot", icon: "waypoints" },
-    dijkstra: { name: "Dijkstra", desc: "Berbobot", icon: "weight" },
-    "a-star": { name: "A*", desc: "Heuristik", icon: "star" },
-  };
 
   // 3. CORE LOGIC
 
@@ -185,8 +537,9 @@ function initializePathfindingVisualizer() {
     controlsContainer
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = false));
-    algorithmSelect.disabled = false;
-    if (customSelectToggle) customSelectToggle.disabled = false;
+    
+    const toggle = algorithmSelectWrapper.querySelector('.custom-select-toggle');
+    if (toggle) toggle.disabled = false;
 
     gridContainer.classList.remove("shake-animation");
     for (let row = 0; row < GRID_HEIGHT; row++) {
@@ -226,15 +579,16 @@ function initializePathfindingVisualizer() {
     controlsContainer
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = true));
-    algorithmSelect.disabled = true;
-    if (customSelectToggle) customSelectToggle.disabled = true;
+    
+    const toggle = algorithmSelectWrapper.querySelector('.custom-select-toggle');
+    if (toggle) toggle.disabled = true;
 
     resetGrid(false);
     unlockAchievement("navigator");
 
     const predecessors = new Map();
     let pathFound = false;
-    const algorithm = algorithmSelect.value;
+    const algorithm = algorithmSelectWrapper.querySelector('select').value;
     const directions = [
       [0, 1],
       [0, -1],
@@ -348,73 +702,14 @@ function initializePathfindingVisualizer() {
     controlsContainer
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = false));
-    algorithmSelect.disabled = false;
-    if (customSelectToggle) customSelectToggle.disabled = false;
+    
+    if (toggle) toggle.disabled = false;
   }
 
   // 4. EVENT LISTENERS
-
   /**
    * Initializes the custom algorithm selector dropdown.
    */
-  function initializeCustomSelect() {
-    if (!customSelectOptions || !customSelectToggle) return;
-
-    // Populate options
-    customSelectOptions.innerHTML = "";
-    Object.keys(algorithms).forEach((key) => {
-      const algo = algorithms[key];
-      const optionEl = document.createElement("div");
-      optionEl.className = "custom-select-option";
-      optionEl.dataset.value = key;
-      optionEl.innerHTML = `
-        <i data-lucide="${algo.icon}" class="w-4 h-4 text-accent"></i>
-        <div>
-          <p class="font-semibold" style="color: var(--text-white);">${algo.name}</p>
-          <p class="text-xs" style="color: var(--text-secondary);">${algo.desc}</p>
-        </div>
-      `;
-      optionEl.addEventListener("click", () => {
-        updateSelectedAlgorithm(key);
-        customSelectContainer.classList.remove("open");
-      });
-      customSelectOptions.appendChild(optionEl);
-    });
-
-    // Set initial value
-    updateSelectedAlgorithm(algorithmSelect.value || "bfs");
-
-    // Toggle dropdown
-    customSelectToggle.addEventListener("click", () => {
-      customSelectContainer.classList.toggle("open");
-    });
-
-    // Close when clicking outside
-    document.addEventListener("click", (e) => {
-      if (!customSelectContainer.contains(e.target)) {
-        customSelectContainer.classList.remove("open");
-      }
-    });
-
-    lucide.createIcons();
-  }
-
-  /**
-   * Updates the selected algorithm in both the hidden select and the custom UI.
-   * @param {string} value - The algorithm value (e.g., 'bfs', 'dijkstra').
-   */
-  function updateSelectedAlgorithm(value) {
-    algorithmSelect.value = value;
-    const algo = algorithms[value];
-    customSelectToggle.innerHTML = `
-      <div class="flex items-center gap-3">
-        <i data-lucide="${algo.icon}" class="w-4 h-4 text-accent"></i>
-        <span class="font-semibold">${algo.name} <span class="font-normal opacity-70">(${algo.desc})</span></span>
-      </div>
-      <i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-secondary"></i>
-    `;
-    lucide.createIcons();
-  }
   gridContainer.addEventListener("mousedown", (e) => {
     isMouseDown = true;
     handleInteraction(e.target);
@@ -441,8 +736,7 @@ function initializePathfindingVisualizer() {
 
   // 5. INITIALIZATION
   createGrid();
-  initializeCustomSelect();
-  initializeAiTextAnalyzer();
+  createCustomSelect(algorithmSelectWrapper);
 }
 
 // --- Live Demo: Text Case Converter ---

@@ -626,6 +626,73 @@
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
+              <!-- Demo Baru: CSV to Chart Generator -->
+              <div class="relative z-20 p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="bar-chart-3"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">CSV to Chart Generator</h3>
+                </div>
+                <p class="mb-6 text-center" style="color: var(--text-secondary);">
+                  Tempel data CSV Anda atau unggah file untuk membuat visualisasi grafik secara instan.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                  <!-- Kolom Input & Kontrol -->
+                  <div class="flex flex-col gap-4">
+                    <div class="relative">
+                      <textarea id="csv-input" class="form-input !rounded-lg h-48" placeholder="Contoh:&#10;Bulan,Penjualan&#10;Januari,150&#10;Februari,200&#10;Maret,180"></textarea>
+                      <button id="csv-clear-btn" class="absolute top-2 right-4 btn-copy-code hidden" title="Hapus Teks">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+                      <button id="csv-example-btn" class="pathfinding-btn !justify-start sm:!justify-center"><i data-lucide="file-text" class="w-4 h-4"></i><span>Gunakan Contoh</span></button>
+                      <label for="csv-file-input" class="pathfinding-btn !justify-start sm:!justify-center cursor-pointer">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        <span>Unggah CSV</span>
+                      </label>
+                      <input type="file" id="csv-file-input" class="hidden" accept=".csv">
+                    </div>
+                  </div>
+                  <!-- Kolom Output Grafik -->
+                  <div class="flex flex-col gap-4">
+                    <div id="chart-output-container" class="relative min-h-[244px] p-4 rounded-lg flex items-center justify-center" style="background-color: var(--bg-primary);">
+                      <canvas id="csv-chart-canvas"></canvas>
+                      <p id="chart-placeholder" class="text-center" style="color: var(--text-secondary);">Grafik akan muncul di sini</p>
+                    </div>
+                    <!-- Kontrol Grafik -->
+                    <div id="chart-controls" class="relative z-10 grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm opacity-0 transition-opacity duration-500" style="pointer-events: none;">
+                      <div id="chart-type-select-wrapper" class="custom-select-container">
+                        <select id="chart-type-select" class="hidden">
+                          <option value="bar" data-icon="bar-chart-3">Grafik Batang</option>
+                          <option value="line" data-icon="line-chart">Grafik Garis</option>
+                          <option value="pie" data-icon="pie-chart">Grafik Pai</option>
+                          <option value="doughnut" data-icon="circle">Grafik Donat</option>
+                          <option value="polarArea" data-icon="app-window">Polar Area</option>
+                        </select>
+                      </div>
+                      <div id="chart-color-select-wrapper" class="custom-select-container">
+                        <select id="chart-color-select" class="hidden">
+                          <option value="default" data-icon="palette">Biru Modern</option>
+                          <option value="viridis" data-icon="palette">Viridis</option>
+                          <option value="spectral" data-icon="palette">Spektral</option>
+                          <option value="pastel" data-icon="palette">Pastel</option>
+                        </select>
+                      </div>
+                      <button id="csv-download-btn" class="pathfinding-btn !justify-start sm:!justify-center">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Unduh Grafik</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn-code-toggle" data-code-source="csv-chart-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Lihat Kode</span>
+                </button>
+                <div id="csv-chart-code" class="hidden" data-keep-source="true"></div>
+              </div>
+
               <!-- Demo 1: Pathfinding Visualizer (Full Width) -->
               <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
@@ -1510,6 +1577,8 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
     </script>
 
     <!-- Scripts -->
+    <!-- Chart.js for Data Visualization Demo (loaded before custom scripts) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="./assets/js/config.js" defer></script>
     <script src="./assets/js/data.js" defer></script>
     <script src="./assets/js/caseStudyGenerator.js" defer></script>

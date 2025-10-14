@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize Interactive Components
   initializeVisitorCounter();
   initializePathfindingVisualizer();
+  initializeCsvToChartGenerator();
+  initializeAiTextAnalyzer();
   initializeTextConverter();
   initializePaletteGenerator();
   initializeCertificateGenerator();

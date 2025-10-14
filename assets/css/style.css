@@ -2545,6 +2545,15 @@ body.hackerman-mode #achievement-toast {
   border-color: var(--border-color) !important;
 }
 
+/* --- CSV to Chart Generator Demo --- */
+#chart-output-container {
+  transition: background-color 0.3s ease;
+}
+
+#chart-controls {
+  transition: all 0.3s ease;
+}
+
 /* --- Redesigned Text Case Converter Styles --- */
 .case-converter-btn {
   display: inline-flex;
@@ -2841,7 +2850,8 @@ body.hackerman-mode #achievement-toast {
 /* Override textarea style for this demo */
 #text-analyzer-input,
 #text-converter-input,
-#text-converter-output {
+#text-converter-output,
+#csv-input {
   padding: 0.75rem 1rem;
   resize: vertical;
 }

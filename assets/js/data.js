@@ -605,6 +605,12 @@ const achievements = {
     description: "Berinteraksi dengan animasi partikel di header.",
     icon: "mouse-pointer-click",
   },
+  data_viz_master: {
+    name: "Master Visualisasi Data",
+    unlocked: false,
+    description: "Mengunduh grafik yang dihasilkan dari demo CSV to Chart.",
+    icon: "bar-chart-3",
+  },
 };
 
 // --- Virtual File System Data ---
