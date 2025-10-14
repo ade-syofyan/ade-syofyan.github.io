@@ -156,19 +156,23 @@
               <a href="#workflow" class="nav-dropdown-item">Proses Kerja</a>
               <a href="#work-history" class="nav-dropdown-item">Riwayat Kerja</a>
               <a href="#certificates" class="nav-dropdown-item">Sertifikat</a>
+              <a href="#portfolio" class="nav-dropdown-item">Portofolio</a>
             </div>
           </div>
 
-          <!-- Dropdown "Portofolio" -->
+          <!-- Dropdown "Live Demos" -->
           <div class="relative nav-dropdown-group">
-            <a href="#portfolio" class="nav-link-anchor" data-parent-link>
+            <a href="#live-demos" class="nav-link-anchor" data-parent-link>
               <div class="liquid-glass-wrapper">
-                <span class="liquid-glass-text">Portofolio</span>
+                <span class="liquid-glass-text">Live Demos</span>
                 <i data-lucide="chevron-down" class="w-4 h-4 ml-1 opacity-70"></i>
               </div>
             </a>
             <div class="nav-dropdown-menu">
-              <a href="#live-demos" class="nav-dropdown-item">Live Demos</a>
+              <a href="#csv-chart-generator" class="nav-dropdown-item">CSV to Chart</a>
+              <a href="#pathfinding-visualizer" class="nav-dropdown-item">Pathfinding</a>
+              <a href="#ai-text-analyzer" class="nav-dropdown-item">AI Text Analyzer</a>
+              <a href="#text-case-converter" class="nav-dropdown-item">Case Converter</a>
             </div>
           </div>
 
@@ -258,20 +262,23 @@
               <a href="#workflow" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Proses Kerja</span></a>
               <a href="#work-history" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Riwayat Kerja</span></a>
               <a href="#certificates" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Sertifikat</span></a>
+              <a href="#portfolio" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Portofolio</span></a>
             </div>
           </div>
         </div>
 
-        <!-- Grup Menu "Portofolio" -->
+        <!-- Grup Menu "Live Demos" -->
         <div class="mobile-menu-group">
           <button class="mobile-menu-item has-submenu">
-            <div class="flex items-center gap-4"><i data-lucide="folder-kanban" class="w-6 h-6 text-accent"></i><span>Portofolio</span></div>
+            <div class="flex items-center gap-4"><i data-lucide="play-square" class="w-6 h-6 text-accent"></i><span>Live Demos</span></div>
             <i data-lucide="chevron-down" class="submenu-toggle-icon"></i>
           </button>
           <div class="mobile-submenu-wrapper">
             <div class="mobile-submenu-container">
-              <a href="#portfolio" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Proyek Pilihan</span></a>
-              <a href="#live-demos" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Live Demos</span></a>
+              <a href="#csv-chart-generator" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>CSV to Chart</span></a>
+              <a href="#pathfinding-visualizer" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Pathfinding</span></a>
+              <a href="#ai-text-analyzer" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>AI Text Analyzer</span></a>
+              <a href="#text-case-converter" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Case Converter</span></a>
             </div>
           </div>
         </div>
@@ -627,7 +634,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
               <!-- Demo Baru: CSV to Chart Generator -->
-              <div class="relative z-20 p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+              <div id="csv-chart-generator" class="relative z-20 p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
                   <p class="text-accent text-4xl"><i data-lucide="bar-chart-3"></i></p>
                   <h3 class="text-2xl font-bold" style="color: var(--text-white);">CSV to Chart Generator</h3>
@@ -723,7 +730,7 @@
               </div>
 
               <!-- Demo 1: Pathfinding Visualizer (Full Width) -->
-              <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+              <div id="pathfinding-visualizer" class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
                   <p class="text-accent text-4xl"><i data-lucide="map"></i></p>
                   <h3 class="text-2xl font-bold" style="color: var(--text-white);">Pathfinding Visualizer</h3>
@@ -804,7 +811,7 @@
               </div>
 
               <!-- Demo 2: AI Text Analyzer (Full Width) -->
-              <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+              <div id="ai-text-analyzer" class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
                   <p class="text-accent text-4xl"><i data-lucide="scan-text"></i></p>
                   <h3 class="text-2xl font-bold" style="color: var(--text-white);">AI Text Analyzer</h3>
@@ -948,7 +955,7 @@
               </div>
 
               <!-- Demo 5: Text Case Converter (Full Width) -->
-              <div class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+              <div id="text-case-converter" class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
                 <div class="flex items-center justify-center gap-4 mb-4">
                   <p class="text-accent text-4xl"><i data-lucide="case-sensitive"></i></p>
                   <h3 class="text-2xl font-bold" style="color: var(--text-white);">Text Case Converter</h3>
