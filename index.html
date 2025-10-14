@@ -734,27 +734,25 @@
 
                 <div class="flex flex-col lg:flex-row gap-6 items-start">
 
-                  <div id="pathfinding-grid" class="pathfinding-grid w-full lg:flex-grow"></div>
+                  <!-- Grid Visualizer -->
+                  <div id="pathfinding-grid" class="pathfinding-grid w-full flex-grow"></div>
 
-                  <div class="w-full lg:w-auto lg:min-w-[220px] flex flex-col gap-4">
-                    <!-- Redesigned Algorithm Select Dropdown -->
-                    <div class="flex flex-col gap-2 text-sm">
-                      <label class="text-secondary text-left font-semibold">Algoritma</label>
-                      <div id="algorithm-select-custom" class="custom-select-container">
-                        <button id="algorithm-select-toggle" class="custom-select-toggle">
-                        </button>
-                        <div id="algorithm-select-options" class="custom-select-options">
-                        </div>
-                        <!-- Select asli disembunyikan, digunakan untuk fallback/state -->
-                        <select id="algorithm-select" class="hidden">
-                          <option value="bfs" data-icon="search" data-desc="Unweighted, guarantees shortest path">Breadth-First Search</option>
-                          <option value="dijkstra" data-icon="weight" data-desc="Weighted, guarantees cheapest path">Dijkstra's Algorithm</option>
-                          <option value="a-star" data-icon="star" data-desc="Weighted with heuristic, efficient">A* Search</option>
-                        </select>
-                      </div>
+                  <!-- Kontroler Baru yang Lebih Ramping -->
+                  <div class="w-full lg:w-auto lg:min-w-[260px] flex flex-col gap-6 p-4 rounded-xl" style="background-color: var(--bg-card-secondary);">
+                    <!-- Grup Konfigurasi -->
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-semibold" style="color: var(--text-secondary);">Algoritma</label>
+                      <div id="algorithm-select-custom" class="custom-select-container"></div>
+                      <select id="algorithm-select" class="hidden">
+                        <option value="bfs" data-icon="search" data-desc="Unweighted, guarantees shortest path">Breadth-First Search</option>
+                        <option value="dijkstra" data-icon="weight" data-desc="Weighted, guarantees cheapest path">Dijkstra's Algorithm</option>
+                        <option value="a-star" data-icon="star" data-desc="Weighted with heuristic, efficient">A* Search</option>
+                      </select>
                     </div>
-                    <div class="flex flex-col gap-2 text-sm">
-                      <span class="text-secondary text-left font-semibold">Mode Gambar</span>
+
+                    <!-- Grup Mode Gambar -->
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-semibold" style="color: var(--text-secondary);">Mode Gambar</label>
                       <div id="pathfinding-controls" class="grid grid-cols-2 gap-2">
                         <button class="pathfinding-btn active" data-mode="start" title="Tempatkan titik awal"><i data-lucide="flag-triangle-right" class="w-4 h-4"></i><span>Mulai</span></button>
                         <button class="pathfinding-btn" data-mode="end" title="Tempatkan titik akhir"><i data-lucide="flag-triangle-left" class="w-4 h-4"></i><span>Akhir</span></button>
@@ -762,7 +760,9 @@
                         <button class="pathfinding-btn" data-mode="water" title="Gambar area air (beban lebih berat)"><i data-lucide="waves" class="w-4 h-4"></i><span>Air</span></button>
                       </div>
                     </div>
-                    <div class="flex flex-col gap-2 mt-2">
+
+                    <!-- Grup Aksi -->
+                    <div class="flex flex-col gap-2">
                       <button id="run-pathfinding-btn" class="btn-primary w-full flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i><span id="run-btn-text">Cari Jalan</span></button>
                       <button id="reset-pathfinding-btn" class="btn-secondary w-full flex items-center justify-center gap-2"><i data-lucide="rotate-cw" class="w-4 h-4"></i><span>Reset</span></button>
                     </div>
@@ -1208,10 +1208,10 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
     <!-- Certificate Modal -->
     <div id="certificateModal" class="modal-overlay">
       <div class="modal-content max-w-6xl p-0">
-        <button class="modal-close-btn mt-3" onclick="closeCertificateModal()" aria-label="Close Certificate Modal">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
         <div id="certificate-wrapper" class="p-8 md:p-12 relative">
+          <button class="modal-close-btn" onclick="closeCertificateModal()" aria-label="Close Certificate Modal">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
           <img src="./assets/img/logo_transparant.png" alt="Watermark" class="certificate-watermark" crossorigin="anonymous">
           <canvas class="plexus-canvas certificate-plexus-bg"></canvas>
           <div class="certificate-content-layer relative z-10">
@@ -1264,9 +1264,6 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
     <!-- Redesigned Dynamic Case Study Modal -->
     <div id="caseStudyModal" class="modal-overlay">
       <div class="modal-content !max-w-6xl !p-0">
-        <button class="modal-close-btn !top-4 !right-4" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
         <div class="grid grid-cols-1 lg:grid-cols-5 h-full">
           <!-- Kolom Kiri: Konten Studi Kasus -->
           <div class="lg:col-span-3 flex flex-col h-full">
@@ -1274,6 +1271,9 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
               <h3 id="caseStudyTitle" class="text-xl md:text-2xl font-bold" style="color: var(--text-white);">Studi Kasus Virtual</h3>
             </div>
             <div id="caseStudyBody" class="modal-body">
+              <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
+                <i data-lucide="x" class="w-5 h-5"></i>
+              </button>
               <!-- Konten studi kasus akan disuntikkan di sini -->
             </div>
             <div class="modal-footer justify-start">

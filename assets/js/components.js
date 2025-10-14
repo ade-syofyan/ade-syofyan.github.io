@@ -9,15 +9,21 @@ function initializeCsvToChartGenerator() {
   const chartContainer = document.getElementById("chart-output-container");
   const canvas = document.getElementById("csv-chart-canvas");
   const canvasModal = document.getElementById("csv-chart-canvas-modal");
-  const placeholderInitial = document.getElementById("chart-placeholder-initial");
+  const placeholderInitial = document.getElementById(
+    "chart-placeholder-initial"
+  );
   const placeholderError = document.getElementById("chart-placeholder-error");
   const chartModal = document.getElementById("chartModal");
 
   const controls = document.getElementById("chart-controls");
-  const dataSelectorsContainer = document.getElementById("chart-data-selectors");
+  const dataSelectorsContainer = document.getElementById(
+    "chart-data-selectors"
+  );
   const chartTypeSelect = document.getElementById("chart-type-select");
   const colorSchemeSelect = document.getElementById("chart-color-select");
-  const dataColumnsCheckboxes = document.getElementById("data-columns-checkboxes");
+  const dataColumnsCheckboxes = document.getElementById(
+    "data-columns-checkboxes"
+  );
 
   const codeSourceEl = document.getElementById("csv-chart-code");
 
@@ -37,23 +43,37 @@ Juni,300,170`;
   // Palet warna yang menarik
   const colorSchemes = {
     default: [
-      "rgba(99, 179, 237, 0.7)", "rgba(129, 199, 247, 0.7)", "rgba(159, 219, 252, 0.7)"
+      "rgba(99, 179, 237, 0.7)",
+      "rgba(129, 199, 247, 0.7)",
+      "rgba(159, 219, 252, 0.7)",
     ],
     tableau: [
-      'rgba(78, 121, 167, 0.7)', 'rgba(242, 142, 43, 0.7)', 'rgba(225, 87, 89, 0.7)', 
-      'rgba(118, 183, 178, 0.7)', 'rgba(89, 161, 79, 0.7)', 'rgba(237, 201, 72, 0.7)', 
-      'rgba(175, 122, 161, 0.7)', 'rgba(255, 157, 167, 0.7)', 'rgba(156, 117, 95, 0.7)', 
-      'rgba(186, 176, 172, 0.7)'
+      "rgba(78, 121, 167, 0.7)",
+      "rgba(242, 142, 43, 0.7)",
+      "rgba(225, 87, 89, 0.7)",
+      "rgba(118, 183, 178, 0.7)",
+      "rgba(89, 161, 79, 0.7)",
+      "rgba(237, 201, 72, 0.7)",
+      "rgba(175, 122, 161, 0.7)",
+      "rgba(255, 157, 167, 0.7)",
+      "rgba(156, 117, 95, 0.7)",
+      "rgba(186, 176, 172, 0.7)",
     ],
     sunset: [
-      'rgba(252, 165, 165, 0.7)', 'rgba(251, 113, 133, 0.7)', 'rgba(244, 63, 94, 0.7)', 
-      'rgba(225, 29, 72, 0.7)', 'rgba(159, 18, 57, 0.7)'
+      "rgba(252, 165, 165, 0.7)",
+      "rgba(251, 113, 133, 0.7)",
+      "rgba(244, 63, 94, 0.7)",
+      "rgba(225, 29, 72, 0.7)",
+      "rgba(159, 18, 57, 0.7)",
     ],
     ocean: [
-      'rgba(165, 243, 252, 0.7)', 'rgba(56, 189, 248, 0.7)', 'rgba(14, 116, 144, 0.7)', 
-      'rgba(21, 94, 117, 0.7)', 'rgba(8, 47, 73, 0.7)'
+      "rgba(165, 243, 252, 0.7)",
+      "rgba(56, 189, 248, 0.7)",
+      "rgba(14, 116, 144, 0.7)",
+      "rgba(21, 94, 117, 0.7)",
+      "rgba(8, 47, 73, 0.7)",
     ],
-    viridis: ['#440154', '#414487', '#2A788E', '#22A884', '#7AD151', '#FDE725'],
+    viridis: ["#440154", "#414487", "#2A788E", "#22A884", "#7AD151", "#FDE725"],
   };
 
   // Populate the code block for the "View Code" button
@@ -101,29 +121,35 @@ function createChart(data) {
 
   function parseCSV(csvText) {
     try {
-      const lines = csvText.trim().split('\n');
+      const lines = csvText.trim().split("\n");
       if (lines.length < 2) return null;
 
-      const headers = lines[0].split(',').map(h => h.trim()).filter(Boolean);
+      const headers = lines[0]
+        .split(",")
+        .map((h) => h.trim())
+        .filter(Boolean);
       if (headers.length < 2) return null;
 
       const data = lines
         .slice(1)
-        .filter(line => line.trim() !== '') // Abaikan baris kosong
-        .map(line => {
-          const values = line.split(',');
+        .filter((line) => line.trim() !== "") // Abaikan baris kosong
+        .map((line) => {
+          const values = line.split(",");
           let entry = {};
           headers.forEach((header, i) => {
-            const value = values[i] ? values[i].trim() : '';
-            entry[header] = !isNaN(parseFloat(value)) && isFinite(value) ? Number(value) : value;
+            const value = values[i] ? values[i].trim() : "";
+            entry[header] =
+              !isNaN(parseFloat(value)) && isFinite(value)
+                ? Number(value)
+                : value;
           });
           return entry;
         });
 
       // Validasi baru: Pastikan setidaknya ada SATU kolom data numerik (selain kolom label pertama).
       const dataColumns = headers.slice(1);
-      const hasNumericColumn = dataColumns.some(header => 
-        data.every(row => typeof row[header] === 'number')
+      const hasNumericColumn = dataColumns.some((header) =>
+        data.every((row) => typeof row[header] === "number")
       );
       if (!hasNumericColumn) {
         return null;
@@ -142,18 +168,18 @@ function createChart(data) {
     const { headers, data } = parsedData;
     const labelWrapper = document.getElementById("label-column-select-wrapper");
 
-    labelWrapper.innerHTML = '';
-    dataColumnsCheckboxes.innerHTML = '';
+    labelWrapper.innerHTML = "";
+    dataColumnsCheckboxes.innerHTML = "";
 
     // Buat dropdown untuk kolom label
-    const labelSelect = document.createElement('select');
-    labelSelect.id = 'label-column-select';
-    labelSelect.className = 'hidden';
+    const labelSelect = document.createElement("select");
+    labelSelect.id = "label-column-select";
+    labelSelect.className = "hidden";
     headers.forEach((header, index) => {
-      const option = document.createElement('option');
+      const option = document.createElement("option");
       option.value = header;
       option.textContent = header;
-      option.dataset.icon = 'list';
+      option.dataset.icon = "list";
       if (index === 0) option.selected = true;
       labelSelect.appendChild(option);
     });
@@ -162,12 +188,14 @@ function createChart(data) {
     // Modifikasi callback untuk menonaktifkan checkbox yang sesuai sebelum me-render ulang.
     createCustomSelect(labelWrapper, (selectedLabel) => {
       // Loop melalui semua checkbox kolom data
-      const allCheckboxes = document.querySelectorAll('#data-columns-checkboxes input[type="checkbox"]');
-      allCheckboxes.forEach(cb => {
-        const wrapper = cb.closest('.flex.items-center.justify-between');
+      const allCheckboxes = document.querySelectorAll(
+        '#data-columns-checkboxes input[type="checkbox"]'
+      );
+      allCheckboxes.forEach((cb) => {
+        const wrapper = cb.closest(".flex.items-center.justify-between");
         if (wrapper) {
           // Jika nilai checkbox sama dengan label yang baru dipilih, sembunyikan. Jika tidak, tampilkan.
-          wrapper.style.display = (cb.value === selectedLabel) ? 'none' : 'flex';
+          wrapper.style.display = cb.value === selectedLabel ? "none" : "flex";
         }
       });
 
@@ -176,58 +204,70 @@ function createChart(data) {
     });
 
     // Buat checkboxes untuk kolom data
-    const numericHeaders = headers.filter(h => data.every(row => typeof row[h] === 'number'));
-    const schemeColors = colorSchemes[colorSchemeSelect.value] || colorSchemes.default;
+    const numericHeaders = headers.filter((h) =>
+      data.every((row) => typeof row[h] === "number")
+    );
+    const schemeColors =
+      colorSchemes[colorSchemeSelect.value] || colorSchemes.default;
 
-    headers.forEach(header => {
-      const isNumeric = data.every(row => typeof row[header] === 'number');
-      const checkboxId = `data-col-${header.replace(/\s/g, '-')}`;
+    headers.forEach((header) => {
+      const isNumeric = data.every((row) => typeof row[header] === "number");
+      const checkboxId = `data-col-${header.replace(/\s/g, "-")}`;
 
-      const controlWrapper = document.createElement('div');
-      controlWrapper.className = 'flex items-center justify-between';
-      const label = document.createElement('label');
-      label.className = 'custom-checkbox-label';
+      const controlWrapper = document.createElement("div");
+      controlWrapper.className = "flex items-center justify-between";
+      const label = document.createElement("label");
+      label.className = "custom-checkbox-label";
       label.htmlFor = checkboxId;
 
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
       checkbox.id = checkboxId;
-      checkbox.className = 'custom-checkbox';
+      checkbox.className = "custom-checkbox";
       checkbox.value = header;
       // Secara default, centang kolom numerik yang BUKAN kolom label pertama
       checkbox.checked = isNumeric && header !== headers[0];
 
       // --- PERBAIKAN ---
       // Tambahkan logika cerdas pada event change
-      checkbox.addEventListener('change', (e) => {
-        const currentLabelColumn = document.getElementById('label-column-select').value;
+      checkbox.addEventListener("change", (e) => {
+        const currentLabelColumn = document.getElementById(
+          "label-column-select"
+        ).value;
         const selectedDataColumn = e.target.value;
 
         // Jika user mencentang kolom yang saat ini menjadi label
         if (e.target.checked && selectedDataColumn === currentLabelColumn) {
           // Cari dan pilih label baru yang valid (kolom pertama yang tidak dicentang)
-          const firstAvailableLabel = headers.find(h => {
-            const cb = document.querySelector(`#data-columns-checkboxes input[value="${h}"]`);
+          const firstAvailableLabel = headers.find((h) => {
+            const cb = document.querySelector(
+              `#data-columns-checkboxes input[value="${h}"]`
+            );
             return !cb || !cb.checked;
           });
-          if (firstAvailableLabel) document.querySelector(`#label-column-select-wrapper .custom-select-toggle`).click(); // Buka dropdown
+          if (firstAvailableLabel)
+            document
+              .querySelector(
+                `#label-column-select-wrapper .custom-select-toggle`
+              )
+              .click(); // Buka dropdown
         }
         renderChart();
       });
 
       // --- Redesain Pemilih Warna ---
-      const colorPickerWrapper = document.createElement('div');
-      colorPickerWrapper.className = 'color-picker-wrapper';
+      const colorPickerWrapper = document.createElement("div");
+      colorPickerWrapper.className = "color-picker-wrapper";
 
-      const colorInput = document.createElement('input');
-      colorInput.type = 'color';
-      colorInput.className = 'color-picker-input';
+      const colorInput = document.createElement("input");
+      colorInput.type = "color";
+      colorInput.className = "color-picker-input";
       colorInput.id = `color-for-${checkboxId}`;
-      
-      const colorSwatch = document.createElement('div');
-      colorSwatch.className = 'color-picker-swatch';
 
-      colorInput.addEventListener('input', () => {
+      const colorSwatch = document.createElement("div");
+      colorSwatch.className = "color-picker-swatch";
+
+      colorInput.addEventListener("input", () => {
         colorSwatch.style.backgroundColor = colorInput.value;
         renderChart();
       });
@@ -240,7 +280,7 @@ function createChart(data) {
         colorInput.value = hexValue;
         colorSwatch.style.backgroundColor = hexValue;
       } else {
-        colorPickerWrapper.style.display = 'none'; // Sembunyikan jika bukan numerik
+        colorPickerWrapper.style.display = "none"; // Sembunyikan jika bukan numerik
       }
 
       label.appendChild(checkbox);
@@ -251,7 +291,7 @@ function createChart(data) {
       controlWrapper.appendChild(colorPickerWrapper);
       dataColumnsCheckboxes.appendChild(controlWrapper);
     });
-    dataSelectorsContainer.classList.remove('hidden');
+    dataSelectorsContainer.classList.remove("hidden");
     renderChart(); // Panggil renderChart setelah populate selesai
   }
 
@@ -263,7 +303,7 @@ function createChart(data) {
     if (chartInstance) {
       chartInstance.destroy();
     }
-    fullscreenBtn.classList.add('hidden'); // Sembunyikan tombol fullscreen saat chart dihancurkan
+    fullscreenBtn.classList.add("hidden"); // Sembunyikan tombol fullscreen saat chart dihancurkan
 
     placeholderInitial.classList.add("hidden");
     canvas.style.opacity = 0;
@@ -272,30 +312,34 @@ function createChart(data) {
   function renderChart(targetCanvas = canvas) {
     if (!parsedData) return;
 
-    const labelColumn = document.getElementById('label-column-select').value;
-    const selectedCheckboxes = Array.from(document.querySelectorAll('#data-columns-checkboxes input[type="checkbox"]:checked'));
-    const selectedDataColumns = selectedCheckboxes.map(cb => cb.value);
+    const labelColumn = document.getElementById("label-column-select").value;
+    const selectedCheckboxes = Array.from(
+      document.querySelectorAll(
+        '#data-columns-checkboxes input[type="checkbox"]:checked'
+      )
+    );
+    const selectedDataColumns = selectedCheckboxes.map((cb) => cb.value);
 
     destroyAllCharts();
 
     if (selectedDataColumns.length === 0) {
       // Jika tidak ada kolom data yang dipilih, jangan render apa-apa
-      fullscreenBtn.classList.add('hidden');
+      fullscreenBtn.classList.add("hidden");
       return;
     }
 
     placeholderError.classList.add("hidden");
-    dataSelectorsContainer.classList.remove('hidden');
+    dataSelectorsContainer.classList.remove("hidden");
     controls.style.opacity = 1;
-    controls.style.pointerEvents = 'auto';
-    fullscreenBtn.classList.remove('hidden'); // Tampilkan tombol fullscreen
+    controls.style.pointerEvents = "auto";
+    fullscreenBtn.classList.remove("hidden"); // Tampilkan tombol fullscreen
 
     // Tentukan canvas mana yang akan digunakan
-    const ctx = targetCanvas.getContext('2d');
+    const ctx = targetCanvas.getContext("2d");
 
     // Ambil label dari kolom pertama
-    const labels = parsedData.data.map(row => row[labelColumn]);
-    const chartType = document.getElementById('chart-type-select').value;
+    const labels = parsedData.data.map((row) => row[labelColumn]);
+    const chartType = document.getElementById("chart-type-select").value;
 
     // Buat dataset untuk setiap kolom numerik (selain kolom pertama)
     const datasets = selectedCheckboxes.map((checkbox, index) => {
@@ -303,7 +347,7 @@ function createChart(data) {
       const colorInput = document.getElementById(`color-for-${checkbox.id}`);
       const hexColor = colorInput.value;
       const mainColor = hexToRgba(hexColor, 0.7);
-      const data = parsedData.data.map(row => row[header]);
+      const data = parsedData.data.map((row) => row[header]);
 
       return {
         label: header,
@@ -318,7 +362,7 @@ function createChart(data) {
       type: chartType,
       data: {
         labels: labels,
-        datasets: datasets
+        datasets: datasets,
       },
       options: {
         responsive: true,
@@ -326,31 +370,43 @@ function createChart(data) {
         plugins: {
           legend: {
             // Tampilkan legenda jika ada lebih dari satu dataset, atau jika tipenya pie/doughnut
-            display: datasets.length > 1 || ['pie', 'doughnut', 'polarArea'].includes(chartType),
-            position: 'top',
+            display:
+              datasets.length > 1 ||
+              ["pie", "doughnut", "polarArea"].includes(chartType),
+            position: "top",
             labels: {
-              color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary')
-            }
-          }
+              color: getComputedStyle(
+                document.documentElement
+              ).getPropertyValue("--text-secondary"),
+            },
+          },
         },
         scales: {
           y: {
             beginAtZero: true,
-            grid: { color: 'rgba(128, 128, 128, 0.2)' },
-            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary') }
+            grid: { color: "rgba(128, 128, 128, 0.2)" },
+            ticks: {
+              color: getComputedStyle(
+                document.documentElement
+              ).getPropertyValue("--text-secondary"),
+            },
           },
           x: {
             grid: { display: false },
-            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary') }
-          }
-        }
-      }
+            ticks: {
+              color: getComputedStyle(
+                document.documentElement
+              ).getPropertyValue("--text-secondary"),
+            },
+          },
+        },
+      },
     });
-    
+
     // Animate chart appearance (hanya untuk canvas inline)
     if (targetCanvas === canvas) {
       setTimeout(() => {
-        canvas.style.transition = 'opacity 0.5s ease-in-out';
+        canvas.style.transition = "opacity 0.5s ease-in-out";
         canvas.style.opacity = 1;
       }, 100);
     }
@@ -371,12 +427,13 @@ function createChart(data) {
       destroyAllCharts();
       canvas.style.opacity = 0; // Sembunyikan canvas jika ada
       controls.style.opacity = 0;
-      controls.style.pointerEvents = 'none';
-      dataSelectorsContainer.classList.add('hidden');
+      controls.style.pointerEvents = "none";
+      dataSelectorsContainer.classList.add("hidden");
       if (csvText.trim()) {
         placeholderInitial.classList.add("hidden");
         placeholderError.classList.remove("hidden");
-      } else { // Jika input benar-benar kosong
+      } else {
+        // Jika input benar-benar kosong
         placeholderInitial.classList.remove("hidden");
         placeholderError.classList.add("hidden");
       }
@@ -398,17 +455,24 @@ function createChart(data) {
   });
 
   // Event listener untuk dropdown skema warna
-  const colorSelectWrapper = document.getElementById('chart-color-select-wrapper');
+  const colorSelectWrapper = document.getElementById(
+    "chart-color-select-wrapper"
+  );
   if (colorSelectWrapper) {
     createCustomSelect(colorSelectWrapper, (selectedScheme) => {
       if (!parsedData) return;
       const schemeColors = colorSchemes[selectedScheme] || colorSchemes.default;
-      const numericHeaders = parsedData.headers.filter(h => parsedData.data.every(row => typeof row[h] === 'number'));
-      
+      const numericHeaders = parsedData.headers.filter((h) =>
+        parsedData.data.every((row) => typeof row[h] === "number")
+      );
+
       numericHeaders.forEach((header, index) => {
-        const checkboxId = `data-col-${header.replace(/\s/g, '-')}`;
+        const checkboxId = `data-col-${header.replace(/\s/g, "-")}`;
         const colorInput = document.getElementById(`color-for-${checkboxId}`);
-        if (colorInput) colorInput.value = rgbaToHex(schemeColors[index % schemeColors.length]);
+        if (colorInput)
+          colorInput.value = rgbaToHex(
+            schemeColors[index % schemeColors.length]
+          );
       });
       renderChart();
     });
@@ -435,24 +499,36 @@ function createChart(data) {
     if (!chartInstance) return;
 
     // Dapatkan nama tipe grafik yang dipilih
-    const chartTypeText = document.getElementById('chart-type-select').options[document.getElementById('chart-type-select').selectedIndex].text.replace(/ /g, '_');
+    const chartTypeText = document
+      .getElementById("chart-type-select")
+      .options[
+        document.getElementById("chart-type-select").selectedIndex
+      ].text.replace(/ /g, "_");
 
     // Buat stempel waktu YYYYMMDD_HHMMSS
     const now = new Date();
-    const timestamp = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+    const timestamp = `${now.getFullYear()}${(now.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}${now.getDate().toString().padStart(2, "0")}_${now
+      .getHours()
+      .toString()
+      .padStart(2, "0")}${now.getMinutes().toString().padStart(2, "0")}${now
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`;
 
     // Gabungkan menjadi nama file yang deskriptif
     const filename = `${chartTypeText}_${timestamp}.png`;
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = chartInstance.toBase64Image();
     link.download = filename;
     link.click();
-    unlockAchievement('data_viz_master');
+    unlockAchievement("data_viz_master");
   });
 
   // --- Logika untuk Modal Grafik ---
-  window.closeChartModal = function() {
+  window.closeChartModal = function () {
     chartModal.classList.remove("open");
     unlockBodyScroll();
     renderChart(canvas); // Render ulang di canvas inline setelah modal ditutup
@@ -471,28 +547,33 @@ function createChart(data) {
 
   // --- Helper Functions for Color Conversion ---
   function rgbaToHex(rgba) {
-    if (rgba.startsWith('#')) return rgba; // Already hex
-    const parts = rgba.substring(rgba.indexOf('(') + 1, rgba.lastIndexOf(')')).split(/,\s*/);
+    if (rgba.startsWith("#")) return rgba; // Already hex
+    const parts = rgba
+      .substring(rgba.indexOf("(") + 1, rgba.lastIndexOf(")"))
+      .split(/,\s*/);
     const r = parseInt(parts[0], 10);
     const g = parseInt(parts[1], 10);
     const b = parseInt(parts[2], 10);
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    return (
+      "#" +
+      ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
+    );
   }
 
   function hexToRgba(hex, alpha = 1) {
     let c;
     if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-        c = hex.substring(1).split('');
-        if (c.length == 3) {
-            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-        }
-        c = '0x' + c.join('');
-        const r = (c >> 16) & 255;
-        const g = (c >> 8) & 255;
-        const b = c & 255;
-        return `rgba(${r},${g},${b},${alpha})`;
+      c = hex.substring(1).split("");
+      if (c.length == 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c = "0x" + c.join("");
+      const r = (c >> 16) & 255;
+      const g = (c >> 8) & 255;
+      const b = c & 255;
+      return `rgba(${r},${g},${b},${alpha})`;
     }
-    throw new Error('Bad Hex');
+    throw new Error("Bad Hex");
   }
 }
 
@@ -532,25 +613,27 @@ function createCustomSelect(wrapper, onChangeCallback) {
   const selectEl = wrapper.querySelector("select");
   if (!selectEl) return;
 
-  // Use existing elements or create new ones
-  let toggleBtn = wrapper.querySelector(".custom-select-toggle");
-  if (!toggleBtn) {
-    toggleBtn = document.createElement("button");
-    toggleBtn.className = "custom-select-toggle";
-    wrapper.appendChild(toggleBtn);
-  }
+  // Hapus isi wrapper untuk membangun ulang dari awal
+  wrapper.innerHTML = "";
+
+  // Buat elemen-elemen baru untuk dropdown kustom
+  const toggleBtn = document.createElement("button");
+  toggleBtn.className = "custom-select-toggle";
+  wrapper.appendChild(toggleBtn);
+
+  const optionsContainer = document.createElement("div");
+  optionsContainer.className = "custom-select-options";
+  wrapper.appendChild(optionsContainer);
+
+  // Pindahkan select asli ke dalam wrapper jika belum ada
+  wrapper.appendChild(selectEl);
+
   toggleBtn.setAttribute("aria-haspopup", "listbox");
   toggleBtn.setAttribute("aria-expanded", "false");
 
-  let optionsContainer = wrapper.querySelector(".custom-select-options");
-  if (!optionsContainer) {
-    optionsContainer = document.createElement("div");
-    optionsContainer.className = "custom-select-options";
-    wrapper.appendChild(optionsContainer);
-  }
   optionsContainer.setAttribute("role", "listbox");
   // Clear any existing options to prevent duplication on re-init
-  optionsContainer.innerHTML = '';
+  optionsContainer.innerHTML = "";
 
   // Populate options
   Array.from(selectEl.options).forEach((option) => {
@@ -566,11 +649,17 @@ function createCustomSelect(wrapper, onChangeCallback) {
 
     let innerHTML = "";
     if (icon) {
-      innerHTML += `<i data-lucide="${icon}" class="w-4 h-4 text-accent"></i>`;
+      innerHTML += `<i data-lucide="${icon}" class="w-6 h-6 text-accent"></i>`;
     }
     innerHTML += `<div>
-      <p class="font-semibold" style="color: var(--text-white);">${option.textContent}</p>
-      ${desc ? `<p class="text-xs" style="color: var(--text-secondary);">${desc}</p>` : ""}
+      <p class="font-semibold text-sm" style="color: var(--text-white);">${
+        option.textContent
+      }</p>
+      ${
+        desc
+          ? `<p class="text-xs" style="color: var(--text-secondary);">${desc}</p>`
+          : ""
+      }
     </div>`;
     optionEl.innerHTML = innerHTML;
 
@@ -589,18 +678,13 @@ function createCustomSelect(wrapper, onChangeCallback) {
     if (!selectedOption) return;
 
     selectEl.value = value;
-
     const icon = selectedOption.dataset.icon;
-    const desc = selectedOption.dataset.desc;
 
     let toggleHTML = `<div class="flex items-center gap-3">`;
     if (icon) {
       toggleHTML += `<i data-lucide="${icon}" class="w-4 h-4 text-accent"></i>`;
     }
     toggleHTML += `<span class="font-semibold">${selectedOption.textContent}`;
-    if (desc) {
-      toggleHTML += ` <span class="font-normal opacity-70">(${desc})</span>`;
-    }
     toggleHTML += `</span></div>`;
     toggleHTML += `<i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-secondary"></i>`;
 
@@ -654,7 +738,11 @@ function initializePathfindingVisualizer() {
   const controlsContainer = document.getElementById("pathfinding-controls");
   const runBtn = document.getElementById("run-pathfinding-btn");
   const resetBtn = document.getElementById("reset-pathfinding-btn");
-  const algorithmSelectWrapper = document.getElementById("algorithm-select-custom");
+  // Mengambil elemen select asli dan wrapper-nya
+  const algorithmSelect = document.getElementById("algorithm-select");
+  const algorithmSelectWrapper = document.getElementById(
+    "algorithm-select-custom"
+  );
 
   // Exit if any element is missing to prevent errors
   if (
@@ -662,6 +750,7 @@ function initializePathfindingVisualizer() {
     !controlsContainer ||
     !runBtn ||
     !resetBtn ||
+    !algorithmSelect ||
     !algorithmSelectWrapper
   ) {
     return;
@@ -773,8 +862,10 @@ function initializePathfindingVisualizer() {
     controlsContainer
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = false));
-    
-    const toggle = algorithmSelectWrapper.querySelector('.custom-select-toggle');
+
+    const toggle = algorithmSelectWrapper.querySelector(
+      ".custom-select-toggle"
+    );
     if (toggle) toggle.disabled = false;
 
     gridContainer.classList.remove("shake-animation");
@@ -826,8 +917,10 @@ function initializePathfindingVisualizer() {
     controlsContainer
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = true));
-    
-    const toggle = algorithmSelectWrapper.querySelector('.custom-select-toggle');
+
+    const toggle = algorithmSelectWrapper.querySelector(
+      ".custom-select-toggle"
+    );
     if (toggle) toggle.disabled = true;
 
     resetGrid(false);
@@ -949,7 +1042,7 @@ function initializePathfindingVisualizer() {
     controlsContainer
       .querySelectorAll(".pathfinding-btn")
       .forEach((btn) => (btn.disabled = false));
-    
+
     if (toggle) toggle.disabled = false;
   }
 
@@ -983,7 +1076,9 @@ function initializePathfindingVisualizer() {
 
   // 5. INITIALIZATION
   createGrid();
-  createCustomSelect(algorithmSelectWrapper);
+  // Pindahkan select ke dalam wrapper sebelum membuat dropdown kustom
+  algorithmSelectWrapper.appendChild(algorithmSelect);
+  createCustomSelect(algorithmSelectWrapper, null);
 }
 
 // --- Live Demo: Text Case Converter ---
@@ -1006,9 +1101,7 @@ function initializeTextConverter() {
     title: (str) =>
       str.toLowerCase().replace(/(^|\s|-)\S/g, (L) => L.toUpperCase()),
     sentence: (str) =>
-      str
-        .toLowerCase()
-        .replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase()),
+      str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase()),
     camel: (str) =>
       str
         .toLowerCase()
@@ -1065,9 +1158,9 @@ function initializeTextConverter() {
   copyBtn.addEventListener("click", () => {
     if (!outputEl.value) return;
     navigator.clipboard.writeText(outputEl.value).then(() => {
-      const originalIcon =
-        '<i data-lucide="copy" class="w-4 h-4"></i>';
-      copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i>';
+      const originalIcon = '<i data-lucide="copy" class="w-4 h-4"></i>';
+      copyBtn.innerHTML =
+        '<i data-lucide="check" class="w-4 h-4 text-green-500"></i>';
       lucide.createIcons();
       setTimeout(() => {
         copyBtn.innerHTML = originalIcon;

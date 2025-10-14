@@ -14,6 +14,9 @@ function initializeCaseStudyGenerator() {
     modalTitle.textContent = `Studi Kasus: Sektor ${
       topic.charAt(0).toUpperCase() + topic.slice(1)
     }`;
+    // Pindahkan tombol tutup ke dalam modal body agar bisa di-scroll bersama konten
+    // dan tidak mengganggu header.
+    // Ini adalah perbaikan dari struktur sebelumnya.
     modalBody.innerHTML = `
       <div id="case-study-content-area">
         <div class="flex flex-col items-center justify-center gap-4 py-8">
@@ -21,6 +24,9 @@ function initializeCaseStudyGenerator() {
           <p class="text-lg" style="color: var(--text-secondary);">Menganalisis proyek dan menghasilkan studi kasus untuk Anda...</p>
         </div>
       </div>
+      <button class="modal-close-btn" onclick="closeCaseStudyModal()" aria-label="Close Case Study Modal">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
       <div id="case-study-chat-history" class="mt-4 space-y-4 flex flex-col"></div>
       <div id="case-study-chat-input-container" class="mt-6 hidden">
         <p class="text-sm font-semibold mb-2" style="color: var(--text-secondary);">Punya pertanyaan lebih lanjut tentang studi kasus ini?</p>
