@@ -641,8 +641,8 @@ function createCustomSelect(wrapper, onChangeCallback) {
   const searchInput = document.createElement("input");
   searchInput.type = "search";
   searchInput.className = "custom-select-search-input";
-  searchInput.placeholder = "Cari negara...";
-  searchInput.setAttribute("aria-label", "Cari negara");
+  searchInput.placeholder = "Pencarian...";
+  searchInput.setAttribute("aria-label", "Pencarian");
 
   // Hentikan propagasi klik agar dropdown tidak tertutup saat mengklik input
   searchInput.addEventListener("click", (e) => e.stopPropagation());
@@ -650,7 +650,7 @@ function createCustomSelect(wrapper, onChangeCallback) {
   searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase();
     const options = optionsContainer.querySelectorAll(".custom-select-option");
-    options.forEach(option => {
+    options.forEach((option) => {
       // Cari berdasarkan teks konten (nama negara) atau nilai (kode telepon)
       const text = option.textContent.toLowerCase();
       const value = option.dataset.value.toLowerCase();
@@ -672,28 +672,44 @@ function createCustomSelect(wrapper, onChangeCallback) {
     optionEl.dataset.value = option.value;
     optionEl.setAttribute("role", "option");
 
-    const icon = option.dataset.icon;
-    const desc = option.dataset.desc;
-
-    let innerHTML = "";
-    if (icon) {
-      // --- PERBAIKAN: Cek apakah 'icon' adalah emoji (bukan nama ikon lucide) ---
-      // Kita tahu ini akan selalu emoji untuk dropdown negara
-      innerHTML += `<span class="text-xl leading-none">${icon}</span>`;
-    }
-    innerHTML += `<div class="flex-grow text-left">
-      <p class="font-semibold text-sm" style="color: var(--text-white);">${option.dataset.name} <span class="font-normal" style="color: var(--text-secondary);">(+${option.value})</span></p>
-      ${
-        desc
-          ? `<p class="text-xs" style="color: var(--text-secondary);">${desc}</p>`
-          : ""
+    // --- PERBAIKAN: Logika render opsi yang lebih fleksibel ---
+    // Cek apakah ini dropdown kode negara (berdasarkan dataset.name)
+    if (option.dataset.name) {
+      // Render spesifik untuk dropdown kode negara
+      optionEl.innerHTML = `
+        <span class="text-xl leading-none">${option.dataset.icon || ""}</span>
+        <div class="flex-grow text-left">
+          <p class="font-semibold text-sm" style="color: var(--text-white);">${
+            option.dataset.name
+          } <span class="font-normal" style="color: var(--text-secondary);">(+${
+        option.value
+      })</span></p>
+          ${
+            option.dataset.desc
+              ? `<p class="text-xs" style="color: var(--text-secondary);">${option.dataset.desc}</p>`
+              : ""
+          }
+        </div>
+      `;
+    } else {
+      // Render generik untuk dropdown lainnya (CSV Chart, Pathfinding, dll.)
+      let content = "";
+      if (option.dataset.icon) {
+        content += `<i data-lucide="${option.dataset.icon}" class="w-4 h-4 mr-2 text-accent"></i>`;
       }
-    </div>`;
-    optionEl.innerHTML = innerHTML;
+      content += `<span class="font-semibold text-sm">${option.textContent}</span>`;
+      optionEl.innerHTML = content;
+      optionEl.classList.add("flex", "items-center");
+    }
 
     optionEl.addEventListener("click", () => {
       updateSelected(option.value);
       wrapper.classList.remove("open");
+      // Reset filter pencarian setelah memilih
+      searchInput.value = "";
+      optionsContainer
+        .querySelectorAll(".custom-select-option")
+        .forEach((opt) => opt.classList.remove("hidden"));
       if (onChangeCallback) {
         onChangeCallback(option.value);
       }
@@ -706,15 +722,31 @@ function createCustomSelect(wrapper, onChangeCallback) {
     if (!selectedOption) return;
 
     selectEl.value = value;
-    const icon = selectedOption.dataset.icon;
 
-    let toggleHTML = `<div class="flex items-center gap-3">`;
-    if (icon) {
-      // --- PERBAIKAN: Logika yang sama untuk tombol toggle ---
-      toggleHTML += `<span class="text-base leading-none">${icon}</span>`;
+    // --- PERBAIKAN: Logika render tombol toggle yang fleksibel ---
+    let toggleHTML = "";
+    // Cek apakah ini dropdown kode negara
+    if (selectedOption.dataset.name) {
+      toggleHTML = `<div class="flex items-center gap-3">
+        <span class="text-base leading-none">${
+          selectedOption.dataset.icon || ""
+        }</span>
+        <span class="font-semibold">${selectedOption.dataset.name} (+${
+        selectedOption.value
+      })</span>
+      </div>`;
+    } else {
+      // Render generik untuk dropdown lainnya
+      // --- PERBAIKAN: Tampilkan ikon yang terpilih di tombol toggle ---
+      let content = "";
+      if (selectedOption.dataset.icon) {
+        content += `<i data-lucide="${selectedOption.dataset.icon}" class="w-4 h-4 mr-2 text-accent"></i>`;
+      }
+      content += `<span>${selectedOption.textContent}</span>`;
+      toggleHTML = `<div class="flex items-center">${content}</div>`;
     }
-    toggleHTML += `<span class="font-semibold">${selectedOption.dataset.name} (+${selectedOption.value})</span>`;
-    toggleHTML += `</span></div>`;
+
+    // Selalu tambahkan ikon panah di akhir
     toggleHTML += `<i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-secondary"></i>`;
 
     toggleBtn.innerHTML = toggleHTML;
