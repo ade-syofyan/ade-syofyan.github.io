@@ -2075,27 +2075,39 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   transform: scale(1.05);
 }
 
-/* Tombol untuk membuka code viewer */
+/* --- Redesain Tombol "Lihat Kode" (v2) --- */
 .btn-code-toggle {
-  display: inline-flex;
+  position: absolute;
+  top: 1rem; /* 16px */
+  right: 1rem; /* 16px */
+  z-index: 20;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  background-color: transparent;
+  gap: 0.5rem; /* 8px */
+  background: rgba(var(--bg-card-rgb), 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
   color: var(--text-secondary);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
-  font-size: 0.875rem;
-  margin-top: 1.25rem;
+  padding: 0.5rem 1rem; /* 8px 16px */
+  border-radius: 9999px; /* Pill shape */
+  font-size: 0.8rem; /* 12.8px */
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.live-demo:hover .btn-code-toggle {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .btn-code-toggle:hover {
-  background-color: var(--bg-card-secondary);
   color: var(--text-white);
-  border-color: var(--border-color);
+  background-color: var(--bg-card);
+  transform: scale(1.05);
 }
 
 pre[class*="language-"] {
