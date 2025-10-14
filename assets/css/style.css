@@ -1918,6 +1918,12 @@ html[data-theme='dark'] .desktop-nav a.active .liquid-glass-text {
   font-weight: 700;
 }
 
+/* Gaya BARU untuk ikon pada link aktif */
+.desktop-nav a.active .liquid-glass-wrapper > .lucide {
+  color: var(--color-accent);
+  opacity: 1;
+}
+
 /* Gaya untuk hover state pada teks */
 .desktop-nav a:hover .liquid-glass-text,
 .desktop-nav a.active:hover .liquid-glass-text {
