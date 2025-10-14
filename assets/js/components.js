@@ -635,6 +635,34 @@ function createCustomSelect(wrapper, onChangeCallback) {
   // Clear any existing options to prevent duplication on re-init
   optionsContainer.innerHTML = "";
 
+  // --- FITUR PENCARIAN BARU ---
+  const searchWrapper = document.createElement("div");
+  searchWrapper.className = "custom-select-search-wrapper";
+  const searchInput = document.createElement("input");
+  searchInput.type = "search";
+  searchInput.className = "custom-select-search-input";
+  searchInput.placeholder = "Cari negara...";
+  searchInput.setAttribute("aria-label", "Cari negara");
+
+  // Hentikan propagasi klik agar dropdown tidak tertutup saat mengklik input
+  searchInput.addEventListener("click", (e) => e.stopPropagation());
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const options = optionsContainer.querySelectorAll(".custom-select-option");
+    options.forEach(option => {
+      // Cari berdasarkan teks konten (nama negara) atau nilai (kode telepon)
+      const text = option.textContent.toLowerCase();
+      const value = option.dataset.value.toLowerCase();
+      const isVisible = text.includes(query) || value.includes(query);
+      option.classList.toggle("hidden", !isVisible);
+    });
+  });
+
+  searchWrapper.appendChild(searchInput);
+  optionsContainer.appendChild(searchWrapper);
+  // --- AKHIR FITUR PENCARIAN ---
+
   // Populate options
   Array.from(selectEl.options).forEach((option) => {
     // Skip if option is empty (often a placeholder)
@@ -649,12 +677,12 @@ function createCustomSelect(wrapper, onChangeCallback) {
 
     let innerHTML = "";
     if (icon) {
-      innerHTML += `<i data-lucide="${icon}" class="w-6 h-6 text-accent"></i>`;
+      // --- PERBAIKAN: Cek apakah 'icon' adalah emoji (bukan nama ikon lucide) ---
+      // Kita tahu ini akan selalu emoji untuk dropdown negara
+      innerHTML += `<span class="text-xl leading-none">${icon}</span>`;
     }
-    innerHTML += `<div>
-      <p class="font-semibold text-sm" style="color: var(--text-white);">${
-        option.textContent
-      }</p>
+    innerHTML += `<div class="flex-grow text-left">
+      <p class="font-semibold text-sm" style="color: var(--text-white);">${option.dataset.name} <span class="font-normal" style="color: var(--text-secondary);">(+${option.value})</span></p>
       ${
         desc
           ? `<p class="text-xs" style="color: var(--text-secondary);">${desc}</p>`
@@ -682,9 +710,10 @@ function createCustomSelect(wrapper, onChangeCallback) {
 
     let toggleHTML = `<div class="flex items-center gap-3">`;
     if (icon) {
-      toggleHTML += `<i data-lucide="${icon}" class="w-4 h-4 text-accent"></i>`;
+      // --- PERBAIKAN: Logika yang sama untuk tombol toggle ---
+      toggleHTML += `<span class="text-base leading-none">${icon}</span>`;
     }
-    toggleHTML += `<span class="font-semibold">${selectedOption.textContent}`;
+    toggleHTML += `<span class="font-semibold">${selectedOption.dataset.name} (+${selectedOption.value})</span>`;
     toggleHTML += `</span></div>`;
     toggleHTML += `<i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-secondary"></i>`;
 
@@ -699,6 +728,8 @@ function createCustomSelect(wrapper, onChangeCallback) {
   toggleBtn.addEventListener("click", () => {
     const isOpen = wrapper.classList.toggle("open");
     toggleBtn.setAttribute("aria-expanded", isOpen);
+    // Fokus ke input pencarian saat dropdown dibuka
+    if (isOpen) searchInput.focus();
   });
 
   document.addEventListener("click", (e) => {

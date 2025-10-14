@@ -1303,48 +1303,166 @@ function initializeContactForm() {
   const emailInput = document.getElementById("email");
   const messageInput = document.getElementById("message");
   const submitButton = document.getElementById("submit-contact-form");
+  // Elemen baru untuk WhatsApp
+  const whatsappCodeSelect = document.getElementById("whatsapp_code");
+  const whatsappLocalInput = document.getElementById("whatsapp_local");
+  const whatsappFullInput = document.getElementById("whatsapp"); // Input tersembunyi
+  const submissionStatus = document.getElementById("form-submission-status");
   const COOLDOWN_MINUTES = 5;
   const lastSubmission = parseInt(
     localStorage.getItem("lastContactSubmission") || "0"
   );
   const timeSinceLastSubmission = Date.now() - lastSubmission;
 
-  if (timeSinceLastSubmission < COOLDOWN_MINUTES * 60 * 1000) {
-    const timeRemainingMs =
-      COOLDOWN_MINUTES * 60 * 1000 - timeSinceLastSubmission;
-    const minutesRemaining = Math.floor(timeRemainingMs / 60000);
-    const secondsRemaining = Math.ceil((timeRemainingMs % 60000) / 1000);
+  let cooldownInterval;
 
-    let timeString;
-    if (minutesRemaining > 0) {
-      timeString = `${minutesRemaining} menit`;
-    } else {
-      timeString = `${secondsRemaining} detik`;
+  // --- FUNGSI TERPUSAT UNTUK MENANGANI COOLDOWN ---
+  function activateCooldownMode(messagePrefix = "Terlalu cepat!") {
+    const allInputs = [
+      nameInput,
+      emailInput,
+      whatsappLocalInput,
+      messageInput,
+      whatsappCodeSelect,
+    ];
+    allInputs.forEach((input) => (input.disabled = true));
+    submitButton.disabled = true;
+
+    // opsional: matikan toggle dropdown saat cooldown
+    const customToggle = document.querySelector(
+      ".form-input-group-addon .custom-select-toggle"
+    );
+    if (customToggle) {
+      customToggle.style.pointerEvents = "none";
+      customToggle.style.opacity = "0.6";
     }
 
-    form.innerHTML = `<div class="text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
-        <h4 class="text-xl font-bold text-accent">Terlalu Cepat!</h4>
-        <p style="color: var(--text-secondary);">Anda baru saja mengirim pesan. Silakan coba lagi dalam ${timeString}.</p>
+    if (cooldownInterval) clearInterval(cooldownInterval);
+    const cooldownEndTime =
+      parseInt(localStorage.getItem("lastContactSubmission") || "0") +
+      COOLDOWN_MINUTES * 60 * 1000;
+
+    const updateCooldownMessage = () => {
+      const now = Date.now();
+      const timeRemainingMs = cooldownEndTime - now;
+
+      if (timeRemainingMs <= 0) {
+        submissionStatus.innerHTML = `
+        <div class="flex items-center justify-center gap-2 text-green-400">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>Anda sudah bisa mengirim pesan lagi.</span>
+        </div>`;
+        allInputs.forEach((input) => (input.disabled = false));
+        submitButton.disabled = !Object.values(validationState).every(Boolean);
+
+        // hidupkan kembali toggle dropdown
+        if (customToggle) {
+          customToggle.style.pointerEvents = "";
+          customToggle.style.opacity = "";
+        }
+
+        lucide.createIcons();
+        clearInterval(cooldownInterval);
+        return;
+      }
+
+      const minutes = Math.floor(timeRemainingMs / 60000);
+      const seconds = Math.floor((timeRemainingMs % 60000) / 1000);
+      const timeString = `${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+
+      submissionStatus.innerHTML = `
+      <div class="flex items-center justify-center gap-2 text-yellow-400">
+        <i data-lucide="timer" class="w-4 h-4"></i>
+        <span>${messagePrefix} Coba lagi dalam <strong>${timeString}</strong></span>
       </div>`;
-    return;
+      lucide.createIcons();
+    };
+
+    updateCooldownMessage();
+    cooldownInterval = setInterval(updateCooldownMessage, 1000);
+  }
+
+  populateCountryCodes();
+  updateAndValidateWhatsapp();
+
+  // Kondisi 1: Saat halaman dimuat
+  if (timeSinceLastSubmission < COOLDOWN_MINUTES * 60 * 1000) {
+    activateCooldownMode();
   }
 
   const validators = {
     name: (value) => /^[a-zA-Z\s'-]{2,50}$/.test(value.trim()),
     email: (value) =>
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        // eslint-disable-line
         value
       ),
+    // Validasi baru untuk nomor internasional lengkap di input tersembunyi
+    whatsapp: (value) => /^\+\d{9,15}$/.test(value.trim()),
     message: (value) => value.trim().length >= 10,
   };
 
   const errorMessages = {
     name: "Nama harus berisi minimal 2 karakter huruf.",
     email: "Format email tidak valid.",
+    whatsapp: "Nomor tidak valid. Pastikan panjangnya sesuai.",
     message: "Pesan harus berisi minimal 10 karakter.",
   };
 
-  const validationState = { name: false, email: false, message: false };
+  const validationState = {
+    name: false,
+    email: false,
+    whatsapp: false, // Ini akan mereferensikan validitas nomor lengkap
+    message: false,
+  };
+
+  // --- Fungsi untuk mempopulasi dropdown kode negara ---
+  function populateCountryCodes() {
+    if (typeof countryPhoneCodes === "undefined" || !whatsappCodeSelect) return;
+
+    whatsappCodeSelect.innerHTML = ""; // Kosongkan opsi yang ada
+
+    countryPhoneCodes.forEach((country) => {
+      const option = document.createElement("option");
+      option.value = country.code.replace(/[^0-9]/g, "");
+      option.textContent = `${country.name} (+${option.value})`;// Fallback text
+      option.dataset.name = country.name; // <-- INI YANG HILANG
+      option.dataset.icon = country.emoji;
+      option.dataset.countryCode = country.iso;
+      if (country.iso === "ID") option.selected = true; // Set Indonesia sebagai default
+      whatsappCodeSelect.appendChild(option);
+    });
+
+    // --- PERBAIKAN: Gunakan dropdown kustom untuk menampilkan bendera ---
+    const customSelectWrapper = whatsappCodeSelect.closest(
+      ".form-input-group-addon"
+    );
+    if (customSelectWrapper && typeof createCustomSelect === "function") {
+      createCustomSelect(customSelectWrapper, updateAndValidateWhatsapp);
+    }
+  }
+
+  // Fungsi untuk menggabungkan dan memvalidasi nomor WhatsApp
+  function updateAndValidateWhatsapp() {
+    const code = whatsappCodeSelect.value;
+    const local = whatsappLocalInput.value.trim().replace(/^0+/, ""); // Hapus nol di depan
+    const fullNumber = `+${code}${local}`;
+    whatsappFullInput.value = fullNumber;
+
+    const isValid = validators.whatsapp(fullNumber);
+    validationState.whatsapp = isValid;
+
+    const inputGroup = whatsappLocalInput.closest(".form-input-group");
+    const errorElement = inputGroup.nextElementSibling;
+
+    inputGroup.classList.toggle("valid", isValid);
+    inputGroup.classList.toggle("invalid", !isValid);
+    errorElement.textContent = !isValid ? errorMessages.whatsapp : "";
+
+    submitButton.disabled = !Object.values(validationState).every(Boolean);
+  }
 
   function validateField(input) {
     const isValid = validators[input.id](input.value);
@@ -1358,25 +1476,56 @@ function initializeContactForm() {
     submitButton.disabled = !Object.values(validationState).every(Boolean);
   }
 
+  // Event listener untuk input standar
   [nameInput, emailInput, messageInput].forEach((input) => {
     // Validasi saat pengguna selesai mengetik (on blur) untuk UX yang lebih baik
     input.addEventListener("blur", () => validateField(input));
     // Validasi saat mengetik hanya untuk menghapus status error, bukan menampilkannya
     input.addEventListener("input", () => {
       if (input.classList.contains("invalid")) validateField(input);
+      // Sembunyikan pesan status pengiriman jika pengguna mulai mengetik lagi
+      if (submissionStatus.innerHTML !== "") submissionStatus.innerHTML = "";
     });
   });
 
+  // Event listener khusus untuk grup input WhatsApp
+  whatsappCodeSelect.addEventListener("change", updateAndValidateWhatsapp);
+  whatsappLocalInput.addEventListener("input", updateAndValidateWhatsapp);
+  whatsappLocalInput.addEventListener("blur", updateAndValidateWhatsapp);
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+
+    // --- PERTAHANAN KEDUA: Validasi Cooldown Sebelum Kirim ---
+    const lastSubmissionCheck = parseInt(
+      localStorage.getItem("lastContactSubmission") || "0"
+    );
+    const timeSinceLastCheck = Date.now() - lastSubmissionCheck;
+    if (timeSinceLastCheck < COOLDOWN_MINUTES * 60 * 1000) {
+      // Kondisi 2: Saat mencoba mengirim (lapisan pertahanan)
+      // Panggil fungsi terpusat untuk mengunci form dan menampilkan pesan
+      activateCooldownMode("Aksi diblokir.");
+      return; // Hentikan proses pengiriman
+    }
+    // --- Akhir Pertahanan Kedua ---
+
     if (Object.values(validationState).every(Boolean)) {
       const submitText = submitButton.querySelector(".submit-text");
       const submitSpinner = submitButton.querySelector(".submit-spinner");
       submitText.classList.add("hidden");
+      // Kosongkan status pesan sebelum mengirim
+      submissionStatus.innerHTML = "";
+
       submitSpinner.classList.remove("hidden");
 
       // Nonaktifkan semua input saat mengirim
-      [nameInput, emailInput, messageInput].forEach((input) => {
+      [
+        nameInput,
+        emailInput,
+        whatsappLocalInput,
+        whatsappCodeSelect,
+        messageInput,
+      ].forEach((input) => {
         input.setAttribute("readonly", true);
       });
       submitButton.disabled = true;
@@ -1408,27 +1557,43 @@ function initializeContactForm() {
             [nameInput, emailInput, messageInput].forEach((input) => {
               input.classList.remove("valid");
             });
+            // Reset khusus untuk grup WhatsApp
+            whatsappLocalInput
+              .closest(".form-input-group")
+              .classList.remove("valid");
           } else {
             throw new Error("Network response was not ok.");
           }
         })
         .catch((error) => {
-          submitButton.disabled = false;
-          Swal.fire({
-            icon: "error",
-            title: "Gagal Mengirim",
-            text: "Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.",
-          });
+          // --- DESAIN ERROR BARU ---
+          submissionStatus.innerHTML = `
+            <div class="flex items-center justify-center gap-2 text-red-400">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              <span>Gagal mengirim pesan. Silakan coba lagi nanti.</span>
+            </div>`;
         })
         .finally(() => {
           submitText.classList.remove("hidden");
           submitSpinner.classList.add("hidden");
-          [nameInput, emailInput, messageInput].forEach((input) => {
+          [
+            nameInput,
+            emailInput,
+            whatsappLocalInput,
+            whatsappCodeSelect,
+            messageInput,
+          ].forEach((input) => {
             input.removeAttribute("readonly");
           });
+          submitButton.disabled =
+            !Object.values(validationState).every(Boolean);
+          lucide.createIcons(); // Render ikon baru (alert-triangle)
         });
     }
   });
+
+  // Panggil fungsi untuk mengisi dropdown saat inisialisasi
+  populateCountryCodes();
 }
 
 // --- Work History Rendering ---
