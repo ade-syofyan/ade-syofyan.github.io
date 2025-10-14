@@ -1357,11 +1357,11 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
     </div>
 
     <!-- Lightbox Modal untuk Gambar -->
-    <div id="lightboxModal" class="lightbox-overlay">
-      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close Image Viewer">
+    <div id="lightboxModal" class="modal-overlay">
+      <button class="modal-close-btn" onclick="closeLightbox()" aria-label="Close Image Viewer">
         <i data-lucide="x" class="w-8 h-8"></i>
       </button>
-      <img class="lightbox-content" id="lightboxImage" alt="Gambar yang diperbesar">
+      <img id="lightboxImage" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl" alt="Gambar yang diperbesar">
     </div>
 
     <!-- Modal Chatbot -->
