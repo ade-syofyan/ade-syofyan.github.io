@@ -786,7 +786,7 @@ html[data-theme='light'] .project-sidebar-section {
   margin-top: 0.25rem;
   padding: 0.5rem;
   min-width: 200px;
-  background-color: rgba(var(--bg-card-rgb), 0.25);
+  background-color: rgba(var(--bg-card-rgb), 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(var(--border-color-rgb), 0.15);
