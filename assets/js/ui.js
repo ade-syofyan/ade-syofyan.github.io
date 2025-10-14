@@ -387,9 +387,11 @@ function initializeModals() {
                  onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
           `;
           // Langsung tambahkan event listener untuk memperbesar gambar saat diklik
-          slide.querySelector('.project-modal-image').addEventListener('click', (e) => {
-            openLightbox(e.target.dataset.lightboxSrc);
-          });
+          slide
+            .querySelector(".project-modal-image")
+            .addEventListener("click", (e) => {
+              openLightbox(e.target.dataset.lightboxSrc);
+            });
           imageWrapper.appendChild(slide);
 
           // Buat dot paginasi
@@ -982,6 +984,28 @@ function initializeSkillFiltering() {
   });
 }
 
+// --- Interactive Contact Cards ---
+function initializeContactCards() {
+  const contactCards = document.querySelectorAll(".contact-card-v2");
+
+  contactCards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      // Tambahkan kelas animasi
+      if (!card.classList.contains("is-clicked")) {
+        card.classList.add("is-clicked");
+        // Hapus kelas setelah animasi selesai agar bisa dipicu lagi
+        card.addEventListener(
+          "animationend",
+          () => {
+            card.classList.remove("is-clicked");
+          },
+          { once: true }
+        );
+      }
+    });
+  });
+}
+
 // --- Testimonial Rendering ---
 function renderTestimonials(testimonials) {
   const testimonialsGrid = document.getElementById("testimonials-grid");
@@ -1286,24 +1310,36 @@ function initializeContactForm() {
   const timeSinceLastSubmission = Date.now() - lastSubmission;
 
   if (timeSinceLastSubmission < COOLDOWN_MINUTES * 60 * 1000) {
-    const minutesRemaining = Math.ceil(
-      (COOLDOWN_MINUTES * 60 * 1000 - timeSinceLastSubmission) / 60000
-    );
+    const timeRemainingMs =
+      COOLDOWN_MINUTES * 60 * 1000 - timeSinceLastSubmission;
+    const minutesRemaining = Math.floor(timeRemainingMs / 60000);
+    const secondsRemaining = Math.ceil((timeRemainingMs % 60000) / 1000);
+
+    let timeString;
+    if (minutesRemaining > 0) {
+      timeString = `${minutesRemaining} menit`;
+    } else {
+      timeString = `${secondsRemaining} detik`;
+    }
+
     form.innerHTML = `<div class="text-center p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
         <h4 class="text-xl font-bold text-accent">Terlalu Cepat!</h4>
-        <p style="color: var(--text-secondary);">Anda baru saja mengirim pesan. Silakan coba lagi dalam ${minutesRemaining} menit.</p>
+        <p style="color: var(--text-secondary);">Anda baru saja mengirim pesan. Silakan coba lagi dalam ${timeString}.</p>
       </div>`;
     return;
   }
 
   const validators = {
-    name: (value) => value.trim() !== "",
-    email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    name: (value) => /^[a-zA-Z\s'-]{2,50}$/.test(value.trim()),
+    email: (value) =>
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        value
+      ),
     message: (value) => value.trim().length >= 10,
   };
 
   const errorMessages = {
-    name: "Nama tidak boleh kosong.",
+    name: "Nama harus berisi minimal 2 karakter huruf.",
     email: "Format email tidak valid.",
     message: "Pesan harus berisi minimal 10 karakter.",
   };
@@ -1316,15 +1352,19 @@ function initializeContactForm() {
     validationState[input.id] = isValid;
 
     input.classList.toggle("valid", isValid);
-    input.classList.toggle("invalid", !isValid && input.value.length > 0);
-    errorElement.textContent =
-      !isValid && input.value.length > 0 ? errorMessages[input.id] : "";
+    input.classList.toggle("invalid", !isValid);
+    errorElement.textContent = !isValid ? errorMessages[input.id] : "";
 
     submitButton.disabled = !Object.values(validationState).every(Boolean);
   }
 
   [nameInput, emailInput, messageInput].forEach((input) => {
-    input.addEventListener("input", () => validateField(input));
+    // Validasi saat pengguna selesai mengetik (on blur) untuk UX yang lebih baik
+    input.addEventListener("blur", () => validateField(input));
+    // Validasi saat mengetik hanya untuk menghapus status error, bukan menampilkannya
+    input.addEventListener("input", () => {
+      if (input.classList.contains("invalid")) validateField(input);
+    });
   });
 
   form.addEventListener("submit", (e) => {
@@ -1334,6 +1374,11 @@ function initializeContactForm() {
       const submitSpinner = submitButton.querySelector(".submit-spinner");
       submitText.classList.add("hidden");
       submitSpinner.classList.remove("hidden");
+
+      // Nonaktifkan semua input saat mengirim
+      [nameInput, emailInput, messageInput].forEach((input) => {
+        input.setAttribute("readonly", true);
+      });
       submitButton.disabled = true;
       lucide.createIcons();
 
@@ -1363,19 +1408,23 @@ function initializeContactForm() {
             [nameInput, emailInput, messageInput].forEach((input) => {
               input.classList.remove("valid");
             });
-            submitText.classList.remove("hidden");
-            submitSpinner.classList.add("hidden");
           } else {
             throw new Error("Network response was not ok.");
           }
         })
         .catch((error) => {
-          submitButton.textContent = "Kirim Pesan";
           submitButton.disabled = false;
           Swal.fire({
             icon: "error",
             title: "Gagal Mengirim",
             text: "Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.",
+          });
+        })
+        .finally(() => {
+          submitText.classList.remove("hidden");
+          submitSpinner.classList.add("hidden");
+          [nameInput, emailInput, messageInput].forEach((input) => {
+            input.removeAttribute("readonly");
           });
         });
     }

@@ -1116,9 +1116,9 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 fade-in-on-scroll relative my-8 md:mx-auto container">
-      <div class="text-center relative z-10">
-        <h2 class="text-4xl font-bold mb-10" style="color: var(--text-white);">Hubungi Saya</h2>
-        <p class="text-lg mb-8 max-w-2xl mx-auto" style="color: var(--text-secondary);">
+      <div class="relative z-10">
+        <h2 class="text-4xl font-bold mb-10 text-center " style="color: var(--text-white);">Hubungi Saya</h2>
+        <p class="text-lg mb-8 max-w-2xl mx-auto text-center " style="color: var(--text-secondary);">
           Tertarik untuk berkolaborasi atau memiliki pertanyaan? Jangan ragu
           untuk menghubungi saya melalui kontak di bawah ini.
         </p>
@@ -1126,29 +1126,35 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
           class="flex flex-col md:flex-row justify-center items-center gap-8" id="contact-cards"
         >
           <!-- Kartu Kontak: Email -->
-          <div class="contact-card-v2">
+          <div class="contact-card-v2" onclick="window.location.href='mailto:ade.syofyan@gmail.com'" data-copy-value="ade.syofyan@gmail.com" data-copy-type="Email">
             <div class="contact-card-v2-icon"><i data-lucide="mail"></i></div>
-            <div class="contact-card-v2-content">
+            <div class="contact-card-v2-content"> 
+              <span class="copy-indicator">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </span>
               <h3 class="contact-card-v2-title">Email</h3>
-              <a id="contact-email" href="#" class="contact-card-v2-link">ade.syofyan@gmail.com</a>
+              <a id="contact-email" href="mailto:ade.syofyan@gmail.com" class="contact-card-v2-link">ade.syofyan@gmail.com</a>
             </div>
           </div>
 
           <!-- Kartu Kontak: Telepon -->
-          <div class="contact-card-v2">
+          <div class="contact-card-v2" onclick="window.location.href='tel:082284955080'" data-copy-value="082284955080" data-copy-type="Nomor Telepon">
             <div class="contact-card-v2-icon"><i data-lucide="phone"></i></div>
-            <div class="contact-card-v2-content">
+            <div class="contact-card-v2-content"> 
+              <span class="copy-indicator">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </span>
               <h3 class="contact-card-v2-title">Telepon</h3>
-              <a id="contact-phone" href="#" class="contact-card-v2-link">0822-8495-5080</a>
+              <a id="contact-phone" href="tel:082284955080" class="contact-card-v2-link">0822-8495-5080</a>
             </div>
           </div>
 
           <!-- Kartu Kontak: LinkedIn -->
-          <div class="contact-card-v2">
+          <div class="contact-card-v2" onclick="window.open('https://www.linkedin.com/in/ade-syofyan/', '_blank')">
             <div class="contact-card-v2-icon"><i data-lucide="linkedin"></i></div>
             <div class="contact-card-v2-content">
               <h3 class="contact-card-v2-title">LinkedIn</h3>
-              <a id="contact-linkedin" href="#" target="_blank" class="contact-card-v2-link">Profil LinkedIn</a>
+              <a id="contact-linkedin" href="https://www.linkedin.com/in/ade-syofyan/" target="_blank" class="contact-card-v2-link">Profil LinkedIn</a>
             </div>
           </div>
 
