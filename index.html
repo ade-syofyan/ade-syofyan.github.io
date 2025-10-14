@@ -656,9 +656,21 @@
                   </div>
                   <!-- Kolom Output Grafik -->
                   <div class="flex flex-col gap-4">
-                    <div id="chart-output-container" class="relative min-h-[244px] p-4 rounded-lg flex items-center justify-center" style="background-color: var(--bg-primary);">
-                      <canvas id="csv-chart-canvas"></canvas>
-                      <p id="chart-placeholder" class="text-center" style="color: var(--text-secondary);">Grafik akan muncul di sini</p>
+                    <div id="chart-output-container" class="chart-output-container relative min-h-[244px] rounded-lg flex items-center justify-center">
+                      <canvas id="csv-chart-canvas" class="transition-opacity duration-300 opacity-0"></canvas>
+                      <button id="csv-fullscreen-btn" class="btn-copy-code !p-2 hidden" title="Tampilan Penuh">
+                        <i data-lucide="maximize" class="w-5 h-5"></i>
+                      </button>
+                      <div id="chart-placeholder-initial" class="chart-placeholder-wrapper">
+                        <i data-lucide="bar-chart-3" class="w-16 h-16 text-accent opacity-30"></i>
+                        <h4 class="text-lg font-semibold mt-4" style="color: var(--text-white);">Menunggu Data</h4>
+                        <p class="text-sm mt-1" style="color: var(--text-secondary);">Tempel data CSV atau gunakan contoh untuk memulai.</p>
+                      </div>
+                      <div id="chart-placeholder-error" class="chart-placeholder-wrapper hidden">
+                        <i data-lucide="alert-triangle" class="w-16 h-16 text-red-500 opacity-50"></i>
+                        <h4 class="text-lg font-semibold mt-4 text-red-400">Format Tidak Valid</h4>
+                        <p id="chart-error-message" class="text-sm mt-1 max-w-xs" style="color: var(--text-secondary);">Pastikan data Anda memiliki header dan kolom numerik.</p>
+                      </div>
                     </div>
                     <!-- Kontrol Grafik -->
                     <div id="chart-controls" class="relative z-10 grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm opacity-0 transition-opacity duration-500" style="pointer-events: none;">
@@ -674,15 +686,32 @@
                       <div id="chart-color-select-wrapper" class="custom-select-container">
                         <select id="chart-color-select" class="hidden">
                           <option value="default" data-icon="palette">Biru Modern</option>
-                          <option value="viridis" data-icon="palette">Viridis</option>
-                          <option value="spectral" data-icon="palette">Spektral</option>
-                          <option value="pastel" data-icon="palette">Pastel</option>
+                          <option value="tableau" data-icon="palette">Tableau</option>
+                          <option value="sunset" data-icon="palette">Sunset</option>
+                          <option value="ocean" data-icon="palette">Ocean</option>
+                          <option value="viridis" data-icon="palette">Viridis (Scientific)</option>
+                          <option value="spectral" data-icon="palette">Spektral (Diverging)</option>
                         </select>
                       </div>
                       <button id="csv-download-btn" class="pathfinding-btn !justify-start sm:!justify-center">
                         <i data-lucide="download" class="w-4 h-4"></i>
                         <span>Unduh Grafik</span>
                       </button>
+                    </div>
+                  </div>
+                  <!-- Kontrol Pemilihan Data Dinamis -->
+                  <div id="chart-data-selectors" class="hidden lg:col-span-2 p-4 rounded-lg space-y-4" style="background-color: var(--bg-card-secondary);">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                      <div>
+                        <label for="label-column-select" class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Kolom Label (Sumbu X)</label>
+                        <div id="label-column-select-wrapper" class="custom-select-container"></div>
+                      </div>
+                      <div>
+                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Kolom Data untuk Grafik (Sumbu Y)</label>
+                        <div id="data-columns-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                          <!-- Checkbox akan disuntikkan oleh JS -->
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -713,14 +742,16 @@
                       <label class="text-secondary text-left font-semibold">Algoritma</label>
                       <div id="algorithm-select-custom" class="custom-select-container">
                         <button id="algorithm-select-toggle" class="custom-select-toggle">
-                          <!-- Konten akan diisi oleh JS -->
                         </button>
                         <div id="algorithm-select-options" class="custom-select-options">
-                          <!-- Opsi akan diisi oleh JS -->
                         </div>
+                        <!-- Select asli disembunyikan, digunakan untuk fallback/state -->
+                        <select id="algorithm-select" class="hidden">
+                          <option value="bfs" data-icon="search" data-desc="Unweighted, guarantees shortest path">Breadth-First Search</option>
+                          <option value="dijkstra" data-icon="weight" data-desc="Weighted, guarantees cheapest path">Dijkstra's Algorithm</option>
+                          <option value="a-star" data-icon="star" data-desc="Weighted with heuristic, efficient">A* Search</option>
+                        </select>
                       </div>
-                      <!-- Select asli disembunyikan, digunakan untuk fallback/state -->
-                      <select id="algorithm-select" class="hidden"><option value="bfs"></option><option value="dijkstra"></option><option value="a-star"></option></select>
                     </div>
                     <div class="flex flex-col gap-2 text-sm">
                       <span class="text-secondary text-left font-semibold">Mode Gambar</span>
@@ -1420,6 +1451,18 @@ document.querySelector('[data-case="title"]').addEventListener('click', () => {
         <div id="codeViewerHeader" class="code-viewer-header flex-shrink-0"></div>
         <div id="codeViewerContent" class="flex-grow min-h-0">
           <!-- Konten kode akan disuntikkan di sini -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Viewer Modal -->
+    <div id="chartModal" class="modal-overlay">
+      <div class="modal-content !max-w-6xl !h-[85vh] !p-4 flex flex-col">
+        <button class="modal-close-btn" onclick="closeChartModal()" aria-label="Close Chart Viewer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="flex-grow min-h-0 relative">
+          <canvas id="csv-chart-canvas-modal"></canvas>
         </div>
       </div>
     </div>
