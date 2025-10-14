@@ -676,8 +676,11 @@ function createCustomSelect(wrapper, onChangeCallback) {
     // Cek apakah ini dropdown kode negara (berdasarkan dataset.name)
     if (option.dataset.name) {
       // Render spesifik untuk dropdown kode negara
+      // --- PERBAIKAN: Gunakan dataset.code untuk bendera, bukan dataset.icon ---
       optionEl.innerHTML = `
-        <span class="text-xl leading-none">${option.dataset.icon || ""}</span>
+        <span class="text-xl leading-none flag-icon flag-icon-${
+          option.dataset.code ? option.dataset.code.toLowerCase() : ""
+        }"></span>
         <div class="flex-grow text-left">
           <p class="font-semibold text-sm" style="color: var(--text-white);">${
             option.dataset.name
@@ -727,10 +730,11 @@ function createCustomSelect(wrapper, onChangeCallback) {
     let toggleHTML = "";
     // Cek apakah ini dropdown kode negara
     if (selectedOption.dataset.name) {
+      // --- PERBAIKAN: Gunakan dataset.code untuk bendera, bukan dataset.icon ---
       toggleHTML = `<div class="flex items-center gap-3">
-        <span class="text-base leading-none">${
-          selectedOption.dataset.icon || ""
-        }</span>
+        <span class="text-base leading-none flag-icon flag-icon-${
+          selectedOption.dataset.code ? selectedOption.dataset.code.toLowerCase() : ""
+        }"></span>
         <span class="font-semibold">${selectedOption.dataset.name} (+${
         selectedOption.value
       })</span>

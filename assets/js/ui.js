@@ -1382,10 +1382,10 @@ function initializeContactForm() {
     countryPhoneCodes.forEach((country) => {
       const option = document.createElement("option");
       option.value = country.code.replace(/[^0-9]/g, "");
-      option.textContent = `${country.name} (+${option.value})`; // hindari "++62"
+      option.textContent = `${country.name} (+${option.value})`;
       option.dataset.name = country.name;
-      option.dataset.icon = country.emoji;
-      option.dataset.countryCode = country.iso;
+      // --- PERBAIKAN: Gunakan 'iso' sebagai 'data-code' untuk flag-icon-css ---
+      option.dataset.code = country.iso; // 'iso' berisi kode negara 2 huruf (mis: 'ID', 'US')
       if (country.iso === "ID") option.selected = true;
       whatsappCodeSelect.appendChild(option);
     });
