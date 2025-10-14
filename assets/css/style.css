@@ -50,11 +50,14 @@ html[data-theme='light'] {
   --bg-modal: #ffffff;
   --bg-overlay: rgba(247, 250, 252, 0.8);
   --text-primary: #34495e;
-  --text-secondary: #5c6c7a; /* Kontras ditingkatkan dari #7f8c8d */
+  --text-secondary: #5c6c7a;
+  /* Kontras ditingkatkan dari #7f8c8d */
   --text-white: #212529;
-  --color-accent: #138496; /* Kontras ditingkatkan dari #17a2b8 */
+  --color-accent: #138496;
+  /* Kontras ditingkatkan dari #17a2b8 */
   --color-accent-rgb: 19, 132, 150;
-  --color-accent-hover: #106b7b; /* Dibuat lebih gelap untuk efek hover yang jelas */
+  --color-accent-hover: #106b7b;
+  /* Dibuat lebih gelap untuk efek hover yang jelas */
   --border-color: #dee2e6;
   --border-color-rgb: 222, 226, 230;
   --highlight-bg: #ffe680;
@@ -543,6 +546,7 @@ html[data-theme='light'] .project-sidebar-section {
   overflow-y: auto;
   flex-grow: 1;
 }
+
 /* --- Redesigned Case Study Modal Styles --- */
 .chat-bubble {
   padding: 0.75rem 1rem;
@@ -552,12 +556,14 @@ html[data-theme='light'] .project-sidebar-section {
   line-height: 1.6;
   word-wrap: break-word;
 }
+
 .chat-bubble.user {
   background-color: var(--color-accent);
   color: var(--color-white);
   align-self: flex-end;
   border-bottom-right-radius: 0.25rem;
 }
+
 .chat-bubble.ai {
   background-color: var(--bg-card-secondary);
   align-self: flex-start;
@@ -1648,7 +1654,8 @@ html[data-theme='light'] .skill-card-v2-content {
   background: linear-gradient(145deg, rgba(var(--color-accent-rgb), 0.2), rgba(var(--color-accent-rgb), 0.1));
   color: var(--color-accent);
   margin-bottom: 1rem;
-  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5); /* Transisi untuk ikon */
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  /* Transisi untuk ikon */
 }
 
 .skill-card-v2:hover .skill-card-v2-icon-wrapper {
@@ -2538,6 +2545,32 @@ body.hackerman-mode #achievement-toast {
   border-color: var(--border-color) !important;
 }
 
+/* --- Redesigned Text Case Converter Styles --- */
+.case-converter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--bg-card-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.case-converter-btn.active,
+.case-converter-btn:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
 /* --- Redesigned Custom Select (Pathfinding) --- */
 .custom-select-container {
   position: relative;
@@ -2806,7 +2839,9 @@ body.hackerman-mode #achievement-toast {
 /* red-500 */
 
 /* Override textarea style for this demo */
-#text-analyzer-input {
+#text-analyzer-input,
+#text-converter-input,
+#text-converter-output {
   padding: 0.75rem 1rem;
   resize: vertical;
 }

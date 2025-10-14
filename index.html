@@ -859,31 +859,37 @@
                   Alat sederhana untuk mengubah format teks Anda secara instan. Masukkan teks dan pilih konversi yang diinginkan.
                 </p>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                  <textarea id="text-converter-input" class="form-input !rounded-lg h-40" placeholder="Masukkan teks di sini..."></textarea>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                  <!-- Kolom Input -->
                   <div class="relative">
-                    <textarea id="text-converter-output" class="form-input !rounded-lg h-40" placeholder="Hasil akan muncul di sini..." readonly></textarea>
+                    <textarea id="text-converter-input" class="form-input !rounded-lg h-48 lg:h-full" placeholder="Masukkan teks di sini..."></textarea>
+                    <button id="clear-input-btn" class="absolute top-2 right-2 btn-copy-code" title="Hapus Teks">
+                      <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                    <div id="text-converter-stats" class="flex justify-end gap-4 text-xs mt-2 pr-2" style="color: var(--text-secondary);">
+                      <div><span id="char-count" class="font-bold text-accent">0</span> Karakter</div>
+                      <div><span id="word-count" class="font-bold text-accent">0</span> Kata</div>
+                      <div><span id="line-count" class="font-bold text-accent">0</span> Baris</div>
+                    </div>
+                  </div>
+                  <!-- Kolom Output -->
+                  <div class="relative">
+                    <textarea id="text-converter-output" class="form-input !rounded-lg h-48 lg:h-full" placeholder="Hasil akan muncul di sini..." readonly></textarea>
                     <button id="copy-output-btn" class="absolute top-2 right-2 btn-copy-code" title="Salin Hasil">
                       <i data-lucide="copy" class="w-4 h-4"></i>
                     </button>
                   </div>
                 </div>
 
-                <div id="text-converter-controls" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
-                  <button class="pathfinding-btn" data-case="upper">UPPERCASE</button>
-                  <button class="pathfinding-btn" data-case="lower">lowercase</button>
-                  <button class="pathfinding-btn" data-case="title">Title Case</button>
-                  <button class="pathfinding-btn" data-case="sentence">Sentence case</button>
-                  <button class="pathfinding-btn" data-case="camel">camelCase</button>
-                  <button class="pathfinding-btn" data-case="pascal">PascalCase</button>
-                  <button class="pathfinding-btn" data-case="kebab">kebab-case</button>
-                  <button class="pathfinding-btn" data-case="snake">snake_case</button>
-                </div>
-
-                <div id="text-converter-stats" class="flex justify-center gap-4 text-center text-sm" style="color: var(--text-secondary);">
-                  <div><span id="char-count" class="font-bold text-accent">0</span> Karakter</div>
-                  <div><span id="word-count" class="font-bold text-accent">0</span> Kata</div>
-                  <div><span id="line-count" class="font-bold text-accent">0</span> Baris</div>
+                <div id="text-converter-controls" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+                  <button class="case-converter-btn" data-case="upper">UPPERCASE</button>
+                  <button class="case-converter-btn" data-case="lower">lowercase</button>
+                  <button class="case-converter-btn" data-case="title">Title Case</button>
+                  <button class="case-converter-btn" data-case="sentence">Sentence case</button>
+                  <button class="case-converter-btn" data-case="camel">camelCase</button>
+                  <button class="case-converter-btn" data-case="pascal">PascalCase</button>
+                  <button class="case-converter-btn" data-case="kebab">kebab-case</button>
+                  <button class="case-converter-btn" data-case="snake">snake_case</button>
                 </div>
 
                 <button class="btn-code-toggle" data-code-source="text-converter-code">

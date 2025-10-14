@@ -451,6 +451,7 @@ function initializeTextConverter() {
   const outputEl = document.getElementById("text-converter-output");
   const controlsContainer = document.getElementById("text-converter-controls");
   const copyBtn = document.getElementById("copy-output-btn");
+  const clearBtn = document.getElementById("clear-input-btn");
 
   const charCountEl = document.getElementById("char-count");
   const wordCountEl = document.getElementById("word-count");
@@ -500,7 +501,11 @@ function initializeTextConverter() {
   }
 
   inputEl.addEventListener("input", updateStats);
-
+  clearBtn.addEventListener("click", () => {
+    inputEl.value = "";
+    outputEl.value = "";
+    updateStats();
+  });
   controlsContainer.querySelectorAll("button").forEach((button) => {
     button.addEventListener("click", () => {
       const caseType = button.dataset.case;
@@ -519,7 +524,8 @@ function initializeTextConverter() {
   copyBtn.addEventListener("click", () => {
     if (!outputEl.value) return;
     navigator.clipboard.writeText(outputEl.value).then(() => {
-      const originalIcon = copyBtn.innerHTML;
+      const originalIcon =
+        '<i data-lucide="copy" class="w-4 h-4"></i>';
       copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i>';
       lucide.createIcons();
       setTimeout(() => {
