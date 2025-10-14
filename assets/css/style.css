@@ -1899,10 +1899,6 @@ html[data-theme='light'] .skill-card-v2-content {
   transition: padding 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
 }
 
-.desktop-nav a:hover.nav-link-anchor {
-  padding: 0.2rem;
-}
-
 .liquid-glass-wrapper {
   position: relative;
   display: flex;
