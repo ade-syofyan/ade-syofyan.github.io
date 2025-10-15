@@ -221,7 +221,7 @@ function createPlexusInstance(canvas, options = {}) {
   resizeCanvas();
   init();
   // Jangan langsung mulai, biarkan IntersectionObserver yang mengontrol
-  // animate(); 
+  // animate();
 
   // Pindahkan event listener ke elemen parent (section) agar tidak terhalang konten
   window.addEventListener("mousemove", (event) => {
@@ -319,7 +319,7 @@ function initializeScrollAnimations() {
   const observerOptions = {
     root: null,
     rootMargin: "0px",
-    threshold: 0.15,
+    threshold: 0.1, // PERBAIKAN: Menurunkan threshold agar lebih mudah terpicu di mobile
   };
 
   const observerCallback = (entries, observer) => {
