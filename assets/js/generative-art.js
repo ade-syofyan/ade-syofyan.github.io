@@ -1,6 +1,6 @@
 // File: assets/js/generative-art.js
 function initializeGenerativeArt() {
-  const DEBUG = true;
+  const DEBUG = false;
   const LOG_PREFIX = "[ParticleFlow]";
   const log = (...a) => DEBUG && console.log(LOG_PREFIX, ...a);
   const warn = (...a) => console.warn(LOG_PREFIX, ...a);
