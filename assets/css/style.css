@@ -3959,16 +3959,9 @@ html[data-theme='light'] .timeline-logo-v2 {
 }
 
 #signature-pad-canvas {
-  background: #ffffff;
-  /* latar terang */
   border: 1px dashed var(--border-color);
   border-radius: .5rem;
-}
-
-html[data-theme='light'] #signature-pad-canvas {
-  background: #f8fafc;
-  /* Lebih lembut dari putih murni */
-  border-color: #cbd5e1;
+  transition: background-color 0.3s ease;
 }
 
 /* --- PDF Signer Redesign --- */
@@ -4015,7 +4008,7 @@ html[data-theme='light'] #signature-pad-canvas {
   border-radius: 1.5rem;
   text-align: center;
   cursor: pointer;
-  
+
   /* Apply liquid glass effect */
   background-color: rgba(var(--bg-card-rgb), 0.2);
   backdrop-filter: blur(20px);
@@ -4047,8 +4040,7 @@ html[data-theme='light'] #signature-pad-canvas {
 }
 
 html[data-theme='dark'] #signature-pad-canvas {
-  background: #ffffff;
-  /* tetap putih di dark mode */
+  border-color: var(--border-color);
 }
 
 #pdf-viewer-container {
@@ -4084,6 +4076,7 @@ html[data-theme='dark'] #signature-pad-canvas {
   user-select: text;
   outline: none;
 }
+
 .pdf-text-box[data-placeholder][data-empty="1"]::before {
   content: attr(data-placeholder);
   position: absolute;
@@ -4171,7 +4164,8 @@ html[data-theme='dark'] .pdf-text-box[data-placeholder][data-empty="1"]::before 
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
 }
-  line-height: 1.2;
+
+line-height: 1.2;
 }
 
 .pdf-text-box.selected {

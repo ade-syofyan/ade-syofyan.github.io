@@ -2320,10 +2320,34 @@ function initializePdfSigner() {
     penColor = e.target.value || "#000000";
     sigPadCtx.strokeStyle = penColor;
   });
+  sigColorInput?.addEventListener("input", (e) => {
+    const newColor = e.target.value || "#000000";
+    penColor = newColor;
+    sigPadCtx.strokeStyle = newColor;
+    setSignaturePadBackground(newColor);
+  });
   sigWidthInput?.addEventListener("input", (e) => {
     penWidth = +e.target.value || 2;
     sigPadCtx.lineWidth = penWidth;
   });
+
+  function setSignaturePadBackground(color) {
+    // Fungsi untuk mengecek apakah warna terang atau gelap berdasarkan luminance
+    const isLight = (c) => {
+      const hex = c.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      return luminance > 0.6; // Threshold disetel ke 0.6 agar lebih sensitif pada warna terang
+    };
+
+    if (isLight(color)) {
+      sigPadCanvas.style.backgroundColor = '#1a202c'; // Warna gelap (bg-primary)
+    } else {
+      sigPadCanvas.style.backgroundColor = '#ffffff'; // Warna terang default
+    }
+  }
 
   const getPos = (canvas, e) => {
     const r = canvas.getBoundingClientRect();
@@ -2353,12 +2377,15 @@ function initializePdfSigner() {
     sigPadCtx.beginPath();
   };
   const clearSignature = () => {
+    const currentColor = sigColorInput.value;
     sigPadCtx.clearRect(0, 0, sigPadCanvas.width, sigPadCanvas.height);
     isSignatureDrawn = false;
     placeSigBtn.disabled = true;
+    setSignaturePadBackground(currentColor); // Atur kembali background setelah clear
   };
 
   placeSigBtn.addEventListener("click", async () => {
+
     if (!isSignatureDrawn) {
       void Swal.fire(
         "Tunggu!",
@@ -2367,6 +2394,20 @@ function initializePdfSigner() {
       );
       return;
     }
+    // Simpan background asli, buat jadi transparan untuk di-capture, lalu kembalikan
+    const originalBg = sigPadCanvas.style.backgroundColor;
+    sigPadCanvas.style.backgroundColor = 'transparent';
+
+    // Re-draw tanda tangan di atas background transparan sebelum capture
+    // Ini penting karena clearRect() sebelumnya menghapus gambar
+    // Untuk simplisitas, kita akan capture apa yang ada.
+    // Jika tanda tangan hilang saat clear, kita perlu menyimpan path dan menggambar ulang.
+    // Untuk sekarang, kita asumsikan `placeSigBtn` ditekan sebelum `clear`.
+
+    // Setelah capture, kembalikan background
+    setTimeout(() => {
+        sigPadCanvas.style.backgroundColor = originalBg;
+    }, 100);
     const pngBytes = await canvasToPngBytes(sigPadCanvas);
     const dataUrl = sigPadCanvas.toDataURL("image/png");
     sigImg.src = dataUrl;
@@ -3290,6 +3331,7 @@ function initializePdfSigner() {
 
   placeSigBtn.disabled = true;
   resizeSigPad();
+  setSignaturePad-canvas-background(sigColorInput.value); // Panggil saat inisialisasi
   window.addEventListener("resize", () => {
     resizeSigPad();
     if (pdfDoc) void renderPage(currentPageNum);
