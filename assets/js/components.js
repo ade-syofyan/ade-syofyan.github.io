@@ -2086,6 +2086,9 @@ function initializePdfSigner() {
   const currentPageEl = document.getElementById("pdf-current-page");
   const totalPagesEl = document.getElementById("pdf-total-pages");
 
+  const tabs = document.querySelectorAll(".pdf-controls-tab");
+  const tabContents = document.querySelectorAll(".pdf-tab-content");
+
   const downloadSignedPdfBtn = document.getElementById(
     "download-signed-pdf-btn"
   );
@@ -2093,6 +2096,19 @@ function initializePdfSigner() {
     "download-signature-png-btn"
   );
   const resetBtn = document.getElementById("pdf-signer-reset-btn");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      // Nonaktifkan semua tab dan konten
+      tabs.forEach((t) => t.classList.remove("active"));
+      tabContents.forEach((c) => c.classList.add("hidden"));
+
+      // Aktifkan tab yang diklik
+      tab.classList.add("active");
+      const contentId = `pdf-tab-${tab.dataset.tab}`;
+      document.getElementById(contentId)?.classList.remove("hidden");
+    });
+  });
 
   // Text controls
   const addTextBtn = document.getElementById("add-text-btn");
@@ -2560,10 +2576,7 @@ function initializePdfSigner() {
     const left = domRect.left - stageRect.left;
     const top = domRect.top - stageRect.top;
     const [pTopX, pTopY] = viewport.convertToPdfPoint(left, top);
-    const [pBottomX, pBottomY] = viewport.convertToPdfPoint(
-      left,
-      top + fontPx
-    );
+    const [pBottomX, pBottomY] = viewport.convertToPdfPoint(left, top + fontPx);
     const dy = Math.hypot(pTopX - pBottomX, pTopY - pBottomY);
     return dy || null;
   }
@@ -2655,17 +2668,16 @@ function initializePdfSigner() {
   function getBoxEditableText(el) {
     if (!el) return "";
     const clone = el.cloneNode(true);
-    clone.querySelectorAll(".resize-handle, .close-btn").forEach((node) =>
-      node.remove()
-    );
+    clone
+      .querySelectorAll(".resize-handle, .close-btn")
+      .forEach((node) => node.remove());
     return clone.innerText || "";
   }
 
   function updatePlaceholderState(el, textValue) {
     if (!el) return;
     if (!el.dataset.placeholder) el.dataset.placeholder = TEXT_PLACEHOLDER;
-    const value =
-      textValue !== undefined ? textValue : getBoxEditableText(el);
+    const value = textValue !== undefined ? textValue : getBoxEditableText(el);
     if (value.trim().length > 0) {
       delete el.dataset.empty;
     } else {
@@ -2978,10 +2990,7 @@ function initializePdfSigner() {
   // Bungkus teks sesuai lebar box saat draw ke PDF
   function drawWrappedText(page, font, rgbFn, T, pageW, pageH) {
     const pad = 2;
-    const sizePt = Math.max(
-      T.fontPt || (T.nFont || 0.00002) * pageH,
-      0.0001
-    );
+    const sizePt = Math.max(T.fontPt || (T.nFont || 0.00002) * pageH, 0.0001);
     const col = hexToRgb01(T.color || "#000000");
     const color = rgbFn(col.r, col.g, col.b);
 

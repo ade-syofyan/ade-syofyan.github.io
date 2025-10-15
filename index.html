@@ -1062,59 +1062,69 @@
                     </div>
 
                     <!-- Kolom Kanan: Signature Pad & Controls -->
-                    <div class="flex flex-col gap-4">
-                      
-                      <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Area Tanda Tangan</label>
-                      <div class="flex items-center gap-3 mb-2">
-                        <label class="text-sm">Warna:</label>
-                        <input id="sig-color" type="color" value="#000000" />
-                        <label class="text-sm ml-4">Ketebalan:</label>
-                        <input id="sig-width" type="range" min="1" max="8" value="2" />
+                    <div class="flex flex-col gap-4 h-full">
+                      <!-- Navigasi Tab -->
+                      <div class="pdf-controls-tabs">
+                        <button class="pdf-controls-tab active" data-tab="signature"><i data-lucide="pen-tool"></i><span>Tanda Tangan</span></button>
+                        <button class="pdf-controls-tab" data-tab="text"><i data-lucide="type"></i><span>Teks</span></button>
+                        <button class="pdf-controls-tab" data-tab="actions"><i data-lucide="settings-2"></i><span>Aksi</span></button>
                       </div>
-                      <canvas id="signature-pad-canvas" class="w-full h-40 bg-white/5 rounded-lg border border-white/10 cursor-crosshair touch-none"></canvas>
-                      <div class="flex justify-end gap-2 mt-2">
-                        <button id="clear-signature-btn" class="pathfinding-btn !text-xs" title="Hapus Tanda Tangan"><i data-lucide="eraser" class="w-4 h-4"></i></button>
-                        <button id="place-signature-btn" class="pathfinding-btn !text-xs" title="Letakkan Tanda Tangan"><i data-lucide="check-circle" class="w-4 h-4"></i><span>Letakkan</span></button>
-                      </div>
-                      
-                      <!-- Form Teks -->
-                      <div class="p-3 rounded-lg" style="background-color: var(--bg-card-secondary);">
-                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Isi Teks (per halaman)</label>
-                        <div class="flex items-center gap-3 mb-2">
-                          <label class="text-sm">Warna:</label>
-                          <input id="text-color" type="color" value="#000000" />
-                          <label class="text-sm ml-4">Ukuran:</label>
-                          <input id="text-size" type="range" min="10" max="48" value="16" />
+
+                      <!-- Konten Tab -->
+                      <div class="flex-grow">
+                        <!-- Tab: Tanda Tangan -->
+                        <div id="pdf-tab-signature" class="pdf-tab-content flex flex-col gap-3">
+                          <div class="flex items-center gap-3">
+                            <label class="text-sm">Warna:</label>
+                            <input id="sig-color" type="color" value="#000000" />
+                            <label class="text-sm ml-auto">Tebal:</label>
+                            <input id="sig-width" type="range" min="1" max="8" value="2" class="w-20" />
+                          </div>
+                          <canvas id="signature-pad-canvas" class="w-full h-40 rounded-lg border cursor-crosshair touch-none" style="border-color: var(--border-color);"></canvas>
+                          <div class="flex justify-end gap-2">
+                            <button id="clear-signature-btn" class="pathfinding-btn !text-xs" title="Hapus Tanda Tangan"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+                            <button id="place-signature-btn" class="pathfinding-btn !text-xs" title="Letakkan Tanda Tangan"><i data-lucide="check-circle" class="w-4 h-4"></i><span>Letakkan</span></button>
+                          </div>
                         </div>
-                        <div class="flex gap-2">
-                          <button id="add-text-btn" class="pathfinding-btn !text-xs"><i data-lucide="type"></i><span>Tambah Teks</span></button>
-                          <button id="remove-text-btn" class="pathfinding-btn !text-xs"><i data-lucide="trash-2"></i><span>Hapus Teks Terpilih</span></button>
+
+                        <!-- Tab: Teks -->
+                        <div id="pdf-tab-text" class="pdf-tab-content hidden flex flex-col gap-3">
+                          <div class="flex items-center gap-3">
+                            <label class="text-sm">Warna:</label>
+                            <input id="text-color" type="color" value="#000000" />
+                            <label class="text-sm ml-auto">Ukuran:</label>
+                            <input id="text-size" type="range" min="10" max="48" value="16" class="w-20" />
+                          </div>
+                          <div class="grid grid-cols-2 gap-2">
+                            <button id="add-text-btn" class="pathfinding-btn !text-xs"><i data-lucide="plus-circle"></i><span>Tambah Teks</span></button>
+                            <button id="remove-text-btn" class="pathfinding-btn !text-xs"><i data-lucide="trash-2"></i><span>Hapus Teks</span></button>
+                          </div>
+                        </div>
+
+                        <!-- Tab: Aksi -->
+                        <div id="pdf-tab-actions" class="pdf-tab-content hidden flex flex-col gap-3">
+                          <button id="download-signature-png-btn" class="btn-secondary w-full flex items-center justify-center gap-2">
+                            <i data-lucide="image" class="w-4 h-4"></i>
+                            <span>Unduh TTD (PNG)</span>
+                          </button>
+                          <button id="pdf-signer-reset-btn" class="text-accent text-sm mt-2 hover:underline">Mulai Ulang dengan PDF lain</button>
                         </div>
                       </div>
 
-                      <!-- Kontrol PDF -->
-                      <div class="p-3 rounded-lg" style="background-color: var(--bg-card-secondary);">
-                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Navigasi Dokumen</label>
+                      <!-- Kontrol yang Selalu Terlihat -->
+                      <div class="mt-auto flex flex-col gap-3 pt-3 border-t" style="border-color: var(--border-color);">
                         <div class="flex items-center justify-between">
                           <button id="pdf-prev-page" class="pathfinding-btn"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
-                          <span style="color: var(--text-secondary);">Hal <span id="pdf-current-page">1</span> dari <span id="pdf-total-pages">1</span></span>
+                          <span style="color: var(--text-secondary);">Hal <span id="pdf-current-page">1</span> / <span id="pdf-total-pages">1</span></span>
                           <button id="pdf-next-page" class="pathfinding-btn"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                         </div>
-                      </div>
-
-                      <!-- Tombol Aksi -->
-                      <div class="mt-auto flex flex-col gap-2">
                         <button id="download-signed-pdf-btn" class="btn-primary w-full flex items-center justify-center gap-2" disabled>
                           <i data-lucide="download-cloud" class="w-4 h-4"></i>
                           <span>Unduh PDF Tertanda</span>
                         </button>
-                        <button id="download-signature-png-btn" class="btn-secondary w-full flex items-center justify-center gap-2">
-                          <i data-lucide="image" class="w-4 h-4"></i>
-                          <span>Unduh TTD (PNG)</span>
-                        </button>
-                        <button id="pdf-signer-reset-btn" class="text-accent text-sm mt-2 hover:underline">Mulai Ulang dengan PDF lain</button>
                       </div>
                     </div>
+                    
                   </div>
                 </div>
                 <button class="btn-code-toggle" data-code-source="pdf-signer-code">
