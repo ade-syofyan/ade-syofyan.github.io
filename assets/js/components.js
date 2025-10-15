@@ -653,7 +653,7 @@ function createCustomSelect(wrapper, onChangeCallback) {
     options.forEach((option) => {
       // Cari berdasarkan teks konten (nama negara) atau nilai (kode telepon)
       const text = option.textContent.toLowerCase();
-      const value = option.dataset.value.toLowerCase();
+      const value = (option.dataset.value || "").toLowerCase();
       const isVisible = text.includes(query) || value.includes(query);
       option.classList.toggle("hidden", !isVisible);
     });
@@ -681,12 +681,10 @@ function createCustomSelect(wrapper, onChangeCallback) {
         <span class="text-xl leading-none flag-icon flag-icon-${
           option.dataset.code ? option.dataset.code.toLowerCase() : ""
         }"></span>
-        <div class="flex-grow text-left">
+        <div class="flex-grow text-left overflow-hidden">
           <p class="font-semibold text-sm" style="color: var(--text-white);">${
             option.dataset.name
-          } <span class="font-normal" style="color: var(--text-secondary);">(+${
-        option.value
-      })</span></p>
+          } <span class="font-normal" style="color: var(--text-secondary);">(+${(option.value || "").split(":")[1] || option.value})</span></p>
           ${
             option.dataset.desc
               ? `<p class="text-xs" style="color: var(--text-secondary);">${option.dataset.desc}</p>`
@@ -737,9 +735,7 @@ function createCustomSelect(wrapper, onChangeCallback) {
             ? selectedOption.dataset.code.toLowerCase()
             : ""
         }"></span>
-        <span class="font-semibold">${selectedOption.dataset.name} (+${
-        selectedOption.value
-      })</span>
+        <span class="font-semibold">${selectedOption.dataset.code} (+${(selectedOption.value || "").split(":")[1] || selectedOption.value})</span>
       </div>`;
     } else {
       // Render generik untuk dropdown lainnya

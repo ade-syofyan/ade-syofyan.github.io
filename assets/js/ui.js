@@ -382,7 +382,7 @@ function initializeModals() {
           slide.className = "w-full flex-shrink-0";
           slide.innerHTML = `
             <img src="${imgData.src}" alt="${imgData.alt}"
-                 class="w-full h-64 md:h-96 object-cover cursor-zoom-in project-modal-image"
+                 class="w-full h-64 md:h-96 object-contain cursor-zoom-in project-modal-image"
                  data-lightbox-src="${imgData.src}"
                  onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
           `;
@@ -771,7 +771,7 @@ function renderProjects(
     const highlightedTag = highlightText(project.tag, currentSearchQuery);
 
     projectCard.innerHTML = `
-      <img src="${project.thumbnail}" alt="Thumbnail untuk ${project.title}" class="rounded-lg mb-4 w-full h-48 object-cover" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
+      <img src="${project.thumbnail}" alt="Thumbnail untuk ${project.title}" class="rounded-lg mb-4 w-full h-64 object-contain bg-primary" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGE1NTY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjZTJlOGYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZSBFcnJvciA8L3RleHQ+PC9zdmc+';">
       <h3 class="text-2xl font-bold mb-2" style="color: var(--text-white);">${highlightedTitle}</h3>
       <p class="text-lg mb-4" style="color: var(--text-secondary);">${highlightedType}</p>
       <span class="inline-block text-white text-xs font-semibold px-3 py-1 rounded-full" style="background-color: var(--color-accent);">${highlightedTag}</span>
@@ -1345,7 +1345,7 @@ function initializeContactForm() {
 
   // === 2) Helper yang menggunakan validator/state ===
   function updateAndValidateWhatsapp() {
-    const code = whatsappCodeSelect.value;
+    const code = whatsappCodeSelect.value.split(":")[1] || whatsappCodeSelect.value;
     const local = whatsappLocalInput.value.trim().replace(/^0+/, "");
     const fullNumber = `+${code}${local}`;
     whatsappFullInput.value = fullNumber;
@@ -1381,7 +1381,7 @@ function initializeContactForm() {
     whatsappCodeSelect.innerHTML = "";
     countryPhoneCodes.forEach((country) => {
       const option = document.createElement("option");
-      option.value = country.code.replace(/[^0-9]/g, "");
+      option.value = `${country.iso}:${country.code.replace(/[^0-9]/g, "")}`;
       option.textContent = `${country.name} (+${option.value})`;
       option.dataset.name = country.name;
       // --- PERBAIKAN: Gunakan 'iso' sebagai 'data-code' untuk flag-icon-css ---
