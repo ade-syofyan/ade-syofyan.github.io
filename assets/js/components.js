@@ -2094,31 +2094,49 @@ function initializePdfSigner() {
   );
   const resetBtn = document.getElementById("pdf-signer-reset-btn");
 
+  // Text controls
+  const addTextBtn = document.getElementById("add-text-btn");
+  const textColorInp = document.getElementById("text-color");
+  const textSizeInp = document.getElementById("text-size");
+  const removeTextBtn = document.getElementById("remove-text-btn");
+
   if (!uploadView) return;
 
-  // ---------------------- State ----------------------
+  // ---------- State ----------
   const MAX_SIZE = 10 * 1024 * 1024;
   let pdfDoc = null;
   let currentPageNum = 1;
   let pdfFile = null;
   let originalPdfBytes = null;
 
-  let isSignatureDrawn = false; // status area gambar TTD
-  // Per-halaman placement map: key = pageNumber (1-based)
-  // value = { nLeft, nTop, nWidth, nHeight, pngBytes(Uint8Array), dataUrl }
-  const placements = new Map();
+  // Signature per page (maks 1)
+  let isSignatureDrawn = false;
+  const placements = new Map(); // page -> {nLeft,nTop,nWidth,nHeight,pngBytes,dataUrl,pdfRect?}
+  const pageViewportMap = new Map(); // page -> pdf.js viewport (with rotation info)
+  let currentViewport = null;
 
-  // drag/resize state (untuk overlay di halaman aktif)
+  // Text per page (banyak)
+  // textItems: Map<pageNum, Map<id, {nLeft,nTop,nWidth,nHeight,nFont,color,text}>>
+  const textItems = new Map();
+  let selectedTextId = null;
+  const DRAG_TOL = 6;
+  const TEXT_PLACEHOLDER = "ketik...";
+  const LEGACY_PLACEHOLDERS = new Set([
+    "Teks…",
+    "Teks...",
+    "Ketik teks...",
+    "ketik...",
+    "ketik....",
+  ]);
+
+  // drag/resize signature
   let isDragging = false,
-    isResizing = false;
-  let offsetX = 0,
+    isResizing = false,
+    offsetX = 0,
     offsetY = 0;
 
-  // ---------------------- Helpers ----------------------
-  const getTouch = (e) =>
-    (e.touches && e.touches[0]) ||
-    (e.changedTouches && e.changedTouches[0]) ||
-    e;
+  // ---------- Helpers ----------
+  const getTouch = (e) => e.touches?.[0] || e.changedTouches?.[0] || e;
 
   async function canvasToPngBytes(canvas) {
     const blob = await new Promise((res) => canvas.toBlob(res, "image/png"));
@@ -2126,69 +2144,39 @@ function initializePdfSigner() {
     return new Uint8Array(buf);
   }
 
+  // text-layer di atas canvas
+  const textLayer = document.createElement("div");
+  textLayer.id = "pdf-text-layer";
+  Object.assign(textLayer.style, {
+    position: "absolute",
+    inset: "0",
+    zIndex: "5",
+    pointerEvents: "auto",
+  });
+  pdfStage.appendChild(textLayer);
+  sigDragContainer.style.zIndex = "10";
+
   function syncStageSizeToCanvas() {
-    if (pdfCanvas.style.width) {
-      pdfStage.style.width = pdfCanvas.style.width;
-      pdfStage.style.height = pdfCanvas.style.height;
-    } else {
-      pdfStage.style.width = pdfCanvas.width + "px";
-      pdfStage.style.height = pdfCanvas.height + "px";
-    }
+    pdfStage.style.width = pdfCanvas.style.width || pdfCanvas.width + "px";
+    pdfStage.style.height = pdfCanvas.style.height || pdfCanvas.height + "px";
   }
   function updateVerticalCentering() {
     const contH = pdfViewerContainer.clientHeight || 0;
     const stageH = pdfStage.offsetHeight || pdfCanvas.offsetHeight || 0;
-    const shouldCenter = stageH > 0 && contH > 0 && stageH + 1 < contH;
-    pdfViewerContainer.style.alignItems = shouldCenter
-      ? "center"
-      : "flex-start";
+    pdfViewerContainer.style.alignItems =
+      stageH > 0 && contH > 0 && stageH + 1 < contH ? "center" : "flex-start";
   }
   function updateDownloadButtonState() {
-    downloadSignedPdfBtn.disabled = placements.size === 0;
+    const hasSig = placements.size > 0;
+    const hasTxt = [...textItems.values()].some((m) => m.size > 0);
+    downloadSignedPdfBtn.disabled = !(hasSig || hasTxt);
   }
-  function hasPlacementOnCurrentPage() {
-    return placements.has(currentPageNum);
-  }
-  function applyPlacementToUI(pageNum) {
-    const p = placements.get(pageNum);
-    if (!p) {
-      sigDragContainer.classList.add("hidden");
-      return;
-    }
-    // pasang preview + posisi berdasarkan rasio
-    sigImg.src = p.dataUrl;
-    const stageRect = pdfStage.getBoundingClientRect();
-    sigDragContainer.style.width = `${p.nWidth * stageRect.width}px`;
-    sigDragContainer.style.height = `${p.nHeight * stageRect.height}px`;
-    sigDragContainer.style.left = `${p.nLeft * stageRect.width}px`;
-    sigDragContainer.style.top = `${p.nTop * stageRect.height}px`;
-    sigDragContainer.classList.remove("hidden");
-  }
-  function saveOverlayToMap() {
-    // simpan posisi overlay (rasio) ke halaman aktif
-    const stageRect = pdfStage.getBoundingClientRect();
-    const rect = sigDragContainer.getBoundingClientRect();
-    const nLeft = (rect.left - stageRect.left) / stageRect.width;
-    const nTop = (rect.top - stageRect.top) / stageRect.height;
-    const nWidth = rect.width / stageRect.width;
-    const nHeight = rect.height / stageRect.height;
+  const ensureTextMap = (page) => {
+    if (!textItems.has(page)) textItems.set(page, new Map());
+    return textItems.get(page);
+  };
 
-    const existing = placements.get(currentPageNum);
-    if (existing) {
-      placements.set(currentPageNum, {
-        ...existing,
-        nLeft,
-        nTop,
-        nWidth,
-        nHeight,
-      });
-    } else {
-      // tidak ada pngBytes? jangan simpan (harus lewat "Letakkan" dulu)
-    }
-    updateDownloadButtonState();
-  }
-
-  // ---------------------- PDF Handling ----------------------
+  // ---------- PDF load/render ----------
   const handleFileSelect = (file) => {
     if (!file) return;
     if (file.type !== "application/pdf" || file.size > MAX_SIZE) {
@@ -2201,7 +2189,6 @@ function initializePdfSigner() {
       );
       return;
     }
-
     pdfFile = file;
     uploadView.classList.add("hidden");
     mainView.classList.remove("hidden");
@@ -2215,20 +2202,19 @@ function initializePdfSigner() {
     const reader = new FileReader();
     reader.onload = async (e) => {
       originalPdfBytes = e.target.result;
-      const typedarray = new Uint8Array(originalPdfBytes);
+      const typed = new Uint8Array(originalPdfBytes);
       try {
-        pdfDoc = await pdfjsLib.getDocument({ data: typedarray }).promise;
+        pdfDoc = await pdfjsLib.getDocument({ data: typed }).promise;
         totalPagesEl.textContent = pdfDoc.numPages;
         currentPageNum = 1;
-        placements.clear(); // reset semua placement
-        await renderPage(currentPageNum); // tampilkan halaman 1
-      } catch (error) {
-        console.error("Error parsing PDF:", error);
-        await Swal.fire(
-          "Error",
-          "Gagal memuat file PDF. File mungkin rusak atau tidak didukung.",
-          "error"
-        );
+        placements.clear();
+        textItems.clear();
+        pageViewportMap.clear();
+        currentViewport = null;
+        await renderPage(currentPageNum);
+      } catch (err) {
+        console.error(err);
+        await Swal.fire("Error", "Gagal memuat file PDF.", "error");
         resetToUploadView();
       }
     };
@@ -2244,6 +2230,8 @@ function initializePdfSigner() {
       const containerWidth = pdfViewerContainer.clientWidth || viewport.width;
       const scale = containerWidth / viewport.width;
       const scaledViewport = page.getViewport({ scale });
+      pageViewportMap.set(num, scaledViewport);
+      currentViewport = scaledViewport;
 
       pdfCanvas.width = Math.ceil(scaledViewport.width);
       pdfCanvas.height = Math.ceil(scaledViewport.height);
@@ -2260,11 +2248,10 @@ function initializePdfSigner() {
       currentPageNum = num;
       updatePageButtons();
 
-      // tampilkan placement jika ada untuk halaman ini
-      applyPlacementToUI(currentPageNum);
+      applyPlacementToUI(currentPageNum); // signature halaman ini
+      renderTextLayerForPage(currentPageNum); // teks halaman ini
+
       updateDownloadButtonState();
-    } catch (error) {
-      console.error("Error rendering page:", error);
     } finally {
       loadingSpinner.style.display = "none";
     }
@@ -2282,12 +2269,11 @@ function initializePdfSigner() {
       renderPage(currentPageNum + 1);
   });
 
-  // ---------------------- Signature Pad ----------------------
+  // ---------- Signature Pad ----------
   const sigColorInput = document.getElementById("sig-color");
   const sigWidthInput = document.getElementById("sig-width");
-
-  let drawing = false;
-  let lastX = 0,
+  let drawing = false,
+    lastX = 0,
     lastY = 0;
   let penColor = sigColorInput?.value || "#000000";
   let penWidth = +(sigWidthInput?.value || 2);
@@ -2301,7 +2287,7 @@ function initializePdfSigner() {
       const w =
         parseFloat(cs.width) || sigPadCanvas.parentElement?.clientWidth || 300;
       const h = parseFloat(cs.height) || 160;
-      rect = { width: w, height: h, left: 0, top: 0, right: 0, bottom: 0 };
+      rect = { width: w, height: h };
     }
     const dpr = window.devicePixelRatio || 1;
     sigPadCanvas.width = Math.max(1, Math.round(rect.width * dpr));
@@ -2314,8 +2300,6 @@ function initializePdfSigner() {
     sigPadCtx.strokeStyle = penColor;
     sigPadCtx.lineWidth = penWidth;
   }
-  resizeSigPad();
-
   sigColorInput?.addEventListener("input", (e) => {
     penColor = e.target.value || "#000000";
     sigPadCtx.strokeStyle = penColor;
@@ -2326,25 +2310,25 @@ function initializePdfSigner() {
   });
 
   const getPos = (canvas, e) => {
-    const rect = canvas.getBoundingClientRect();
-    const evt = getTouch(e);
-    return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+    const r = canvas.getBoundingClientRect();
+    const t = getTouch(e);
+    return { x: t.clientX - r.left, y: t.clientY - r.top };
   };
   const startDrawing = (e) => {
     drawing = true;
     e.preventDefault();
-    const pos = getPos(sigPadCanvas, e);
-    [lastX, lastY] = [pos.x, pos.y];
+    const p = getPos(sigPadCanvas, e);
+    [lastX, lastY] = [p.x, p.y];
     sigPadCtx.beginPath();
   };
   const draw = (e) => {
     if (!drawing) return;
     e.preventDefault();
-    const pos = getPos(sigPadCanvas, e);
+    const p = getPos(sigPadCanvas, e);
     sigPadCtx.moveTo(lastX, lastY);
-    sigPadCtx.lineTo(pos.x, pos.y);
+    sigPadCtx.lineTo(p.x, p.y);
     sigPadCtx.stroke();
-    [lastX, lastY] = [pos.x, pos.y];
+    [lastX, lastY] = [p.x, p.y];
     isSignatureDrawn = true;
     placeSigBtn.disabled = false;
   };
@@ -2358,7 +2342,6 @@ function initializePdfSigner() {
     placeSigBtn.disabled = true;
   };
 
-  // ---------------------- Place Signature (per-halaman) ----------------------
   placeSigBtn.addEventListener("click", async () => {
     if (!isSignatureDrawn) {
       void Swal.fire(
@@ -2368,260 +2351,881 @@ function initializePdfSigner() {
       );
       return;
     }
-
-    // capture png dari kanvas TTD (unik untuk placement kali ini)
     const pngBytes = await canvasToPngBytes(sigPadCanvas);
     const dataUrl = sigPadCanvas.toDataURL("image/png");
-
-    // default posisi/ukuran overlay
     sigImg.src = dataUrl;
     sigDragContainer.classList.remove("hidden");
     sigDragContainer.style.width = "150px";
     sigDragContainer.style.height = "75px";
     sigDragContainer.style.left = "50px";
     sigDragContainer.style.top = "50px";
-
-    // simpan placement untuk halaman aktif (pakai rasio agar kebal resize)
     const stageRect = pdfStage.getBoundingClientRect();
-    const nLeft = 50 / stageRect.width;
-    const nTop = 50 / stageRect.height;
-    const nWidth = 150 / stageRect.width;
-    const nHeight = 75 / stageRect.height;
-
+    const stageWidth = stageRect.width || 1;
+    const stageHeight = stageRect.height || 1;
     placements.set(currentPageNum, {
-      nLeft,
-      nTop,
-      nWidth,
-      nHeight,
+      nLeft: 50 / stageWidth,
+      nTop: 50 / stageHeight,
+      nWidth: 150 / stageWidth,
+      nHeight: 75 / stageHeight,
       pngBytes,
       dataUrl,
     });
+    saveOverlayToMap();
     updateDownloadButtonState();
   });
 
-  // ---------------------- Hapus signature (halaman aktif saja) ----------------------
-  function removePlacedSignatureForCurrentPage() {
-    placements.delete(currentPageNum);
-    sigDragContainer.classList.add("hidden");
-    updateDownloadButtonState();
+  function applyPlacementToUI(pageNum) {
+    const p = placements.get(pageNum);
+    if (!p) {
+      sigDragContainer.classList.add("hidden");
+      return;
+    }
+    sigImg.src = p.dataUrl;
+    const stageRect = pdfStage.getBoundingClientRect();
+    sigDragContainer.style.width = `${p.nWidth * stageRect.width}px`;
+    sigDragContainer.style.height = `${p.nHeight * stageRect.height}px`;
+    sigDragContainer.style.left = `${p.nLeft * stageRect.width}px`;
+    sigDragContainer.style.top = `${p.nTop * stageRect.height}px`;
+    sigDragContainer.classList.remove("hidden");
+    saveOverlayToMap();
+  }
+  function saveOverlayToMap() {
+    const stageRect = pdfStage.getBoundingClientRect();
+    const rect = sigDragContainer.getBoundingClientRect();
+    const p = placements.get(currentPageNum);
+    if (!p) return;
+    const stageWidth = stageRect.width;
+    const stageHeight = stageRect.height;
+    if (!stageWidth || !stageHeight) return;
+    const viewport = getViewportForPage(currentPageNum);
+    const pdfQuad = computePdfQuad(viewport, stageRect, rect);
+    const pdfRectFromQuad = quadToRect(pdfQuad);
+    const pdfRect = computePdfRect(viewport, stageRect, rect);
+    placements.set(currentPageNum, {
+      ...p,
+      nLeft: (rect.left - stageRect.left) / stageWidth,
+      nTop: (rect.top - stageRect.top) / stageHeight,
+      nWidth: rect.width / stageWidth,
+      nHeight: rect.height / stageHeight,
+      pdfRect: pdfRectFromQuad || pdfRect || p.pdfRect || null,
+      pdfQuad: pdfQuad || p.pdfQuad || null,
+      rotation: viewport?.rotation ?? p.rotation ?? 0,
+    });
   }
   removeSigBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
-    removePlacedSignatureForCurrentPage();
-  });
-  window.addEventListener("keydown", (e) => {
-    if (!hasPlacementOnCurrentPage()) return;
-    const tag = (e.target && e.target.tagName) || "";
-    if (tag === "INPUT" || tag === "TEXTAREA" || e.isComposing) return;
-    if (e.key === "Delete" || e.key === "Backspace") {
-      e.preventDefault();
-      removePlacedSignatureForCurrentPage();
-    }
+    placements.delete(currentPageNum);
+    sigDragContainer.classList.add("hidden");
+    updateDownloadButtonState();
   });
 
-  // ---------------------- Drag & Resize (Pointer Events) ----------------------
   sigImg.setAttribute("draggable", "false");
   sigImg.style.pointerEvents = "none";
-  sigImg.style.userSelect = "none";
-  sigImg.style.webkitUserDrag = "none";
   sigDragContainer.style.touchAction = "none";
-
   const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
-
   sigDragContainer.addEventListener("pointerdown", (e) => {
     if (e.target.id === "remove-signature-btn") return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
     e.preventDefault();
-
-    if (e.target.classList && e.target.classList.contains("resize-handle")) {
+    if (e.target.classList?.contains("resize-handle")) {
       isResizing = true;
     } else {
       isDragging = true;
-      const rect = sigDragContainer.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
+      const r = sigDragContainer.getBoundingClientRect();
+      offsetX = e.clientX - r.left;
+      offsetY = e.clientY - r.top;
     }
-
     try {
       sigDragContainer.setPointerCapture(e.pointerId);
-    } catch (_) {}
+    } catch {}
     pdfViewerContainer.style.userSelect = "none";
   });
-
   sigDragContainer.addEventListener("pointermove", (e) => {
     if (!isDragging && !isResizing) return;
     const stageRect = pdfStage.getBoundingClientRect();
-
     if (isDragging) {
-      let newX = e.clientX - stageRect.left - offsetX;
-      let newY = e.clientY - stageRect.top - offsetY;
-      newX = clamp(newX, 0, stageRect.width - sigDragContainer.offsetWidth);
-      newY = clamp(newY, 0, stageRect.height - sigDragContainer.offsetHeight);
-      sigDragContainer.style.left = `${newX}px`;
-      sigDragContainer.style.top = `${newY}px`;
-    } else if (isResizing) {
-      const rect = sigDragContainer.getBoundingClientRect();
-      let newWidth = e.clientX - rect.left;
-      let newHeight = e.clientY - rect.top;
-      newWidth = clamp(
-        newWidth,
-        50,
-        stageRect.width - (rect.left - stageRect.left)
-      );
-      newHeight = clamp(
-        newHeight,
-        30,
-        stageRect.height - (rect.top - stageRect.top)
-      );
-      sigDragContainer.style.width = `${newWidth}px`;
-      sigDragContainer.style.height = `${newHeight}px`;
+      let x = e.clientX - stageRect.left - offsetX,
+        y = e.clientY - stageRect.top - offsetY;
+      x = clamp(x, 0, stageRect.width - sigDragContainer.offsetWidth);
+      y = clamp(y, 0, stageRect.height - sigDragContainer.offsetHeight);
+      sigDragContainer.style.left = `${x}px`;
+      sigDragContainer.style.top = `${y}px`;
+    } else {
+      const r = sigDragContainer.getBoundingClientRect();
+      let w = e.clientX - r.left,
+        h = e.clientY - r.top;
+      w = clamp(w, 50, stageRect.width - (r.left - stageRect.left));
+      h = clamp(h, 30, stageRect.height - (r.top - stageRect.top));
+      sigDragContainer.style.width = `${w}px`;
+      sigDragContainer.style.height = `${h}px`;
     }
   });
-
   const endPointer = (e) => {
     if (!isDragging && !isResizing) return;
     isDragging = false;
     isResizing = false;
     try {
       sigDragContainer.releasePointerCapture(e.pointerId);
-    } catch (_) {}
+    } catch {}
     pdfViewerContainer.style.userSelect = "auto";
-    if (hasPlacementOnCurrentPage()) saveOverlayToMap(); // simpan posisi terbaru
+    if (placements.has(currentPageNum)) saveOverlayToMap();
   };
   sigDragContainer.addEventListener("pointerup", endPointer);
   sigDragContainer.addEventListener("pointercancel", endPointer);
-  window.addEventListener("mouseup", () => {
-    isDragging = isResizing = false;
-    pdfViewerContainer.style.userSelect = "auto";
-    if (hasPlacementOnCurrentPage()) saveOverlayToMap();
-  });
-  window.addEventListener("touchend", () => {
-    isDragging = isResizing = false;
-    pdfViewerContainer.style.userSelect = "auto";
-    if (hasPlacementOnCurrentPage()) saveOverlayToMap();
-  });
 
-  // ---------------------- Download Signature PNG ----------------------
-  downloadSigPngBtn.addEventListener("click", async () => {
-    if (!isSignatureDrawn) {
-      void Swal.fire(
-        "Tunggu!",
-        "Silakan buat tanda tangan terlebih dahulu.",
-        "info"
-      );
-      return;
-    }
-    const blob = await new Promise((res) =>
-      sigPadCanvas.toBlob(res, "image/png")
+  // ---------- TEXT helpers ----------
+  function hexToRgb01(hex) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!m) return { r: 0, g: 0, b: 0 };
+    return {
+      r: parseInt(m[1], 16) / 255,
+      g: parseInt(m[2], 16) / 255,
+      b: parseInt(m[3], 16) / 255,
+    };
+  }
+  function newId() {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+  function rgbToHex(rgbStr) {
+    const m = rgbStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    if (!m) return null;
+    const toHex = (n) => ("0" + parseInt(n, 10).toString(16)).slice(-2);
+    return `#${toHex(m[1])}${toHex(m[2])}${toHex(m[3])}`;
+  }
+  function getSelectedTextEl() {
+    if (!selectedTextId) return null;
+    return (
+      [...textLayer.children].find((n) => n.dataset?.id === selectedTextId) ||
+      null
     );
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = `signature-${makeTimestampLabel()}.png`;
-    link.href = url;
-    link.click();
-    URL.revokeObjectURL(url);
+  }
+  function syncControlsWithSelection(el) {
+    if (!el) return;
+    const cs = getComputedStyle(el);
+    const m = cs.color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    const toHex = (n) => ("0" + parseInt(n, 10).toString(16)).slice(-2);
+    const hex = m ? `#${toHex(m[1])}${toHex(m[2])}${toHex(m[3])}` : "#000000";
+    if (textColorInp) textColorInp.value = hex;
+    if (textSizeInp)
+      textSizeInp.value = Math.round(parseFloat(cs.fontSize) || 16);
+  }
+  function clearTextSelectionUI() {
+    selectedTextId = null;
+    [...textLayer.children].forEach((el) => el.classList.remove("selected"));
+  }
+  function selectTextEl(el) {
+    clearTextSelectionUI();
+    el.classList.add("selected");
+    selectedTextId = el.dataset.id;
+    syncControlsWithSelection(el);
+  }
+
+  function getViewportForPage(pageNum = currentPageNum) {
+    return (
+      pageViewportMap.get(pageNum) ||
+      (pageNum === currentPageNum ? currentViewport : null)
+    );
+  }
+
+  function computePdfRect(viewport, stageRect, domRect) {
+    if (!viewport || !stageRect) return null;
+    const left = domRect.left - stageRect.left;
+    const top = domRect.top - stageRect.top;
+    const right = left + domRect.width;
+    const bottom = top + domRect.height;
+    if (
+      Number.isNaN(left) ||
+      Number.isNaN(top) ||
+      Number.isNaN(right) ||
+      Number.isNaN(bottom)
+    ) {
+      return null;
+    }
+    const [px1, py1] = viewport.convertToPdfPoint(left, top);
+    const [px2, py2] = viewport.convertToPdfPoint(right, bottom);
+    const minX = Math.min(px1, px2);
+    const maxX = Math.max(px1, px2);
+    const minY = Math.min(py1, py2);
+    const maxY = Math.max(py1, py2);
+    return {
+      x: minX,
+      y: minY,
+      width: Math.max(0, maxX - minX),
+      height: Math.max(0, maxY - minY),
+    };
+  }
+
+  function computePdfFontSize(viewport, stageRect, domRect, fontPx) {
+    if (!viewport || !stageRect || !fontPx) return null;
+    const left = domRect.left - stageRect.left;
+    const top = domRect.top - stageRect.top;
+    const [pTopX, pTopY] = viewport.convertToPdfPoint(left, top);
+    const [pBottomX, pBottomY] = viewport.convertToPdfPoint(
+      left,
+      top + fontPx
+    );
+    const dy = Math.hypot(pTopX - pBottomX, pTopY - pBottomY);
+    return dy || null;
+  }
+
+  function computePdfQuad(viewport, stageRect, domRect) {
+    if (!viewport || !stageRect) return null;
+    const relLeft = domRect.left - stageRect.left;
+    const relTop = domRect.top - stageRect.top;
+    const relRight = relLeft + domRect.width;
+    const relBottom = relTop + domRect.height;
+    try {
+      const tl = viewport.convertToPdfPoint(relLeft, relTop);
+      const tr = viewport.convertToPdfPoint(relRight, relTop);
+      const bl = viewport.convertToPdfPoint(relLeft, relBottom);
+      const br = viewport.convertToPdfPoint(relRight, relBottom);
+      if (!tl || !tr || !bl || !br) return null;
+      return {
+        tl: { x: tl[0], y: tl[1] },
+        tr: { x: tr[0], y: tr[1] },
+        bl: { x: bl[0], y: bl[1] },
+        br: { x: br[0], y: br[1] },
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  function quadToRect(quad) {
+    if (!quad) return null;
+    const xs = [quad.tl?.x, quad.tr?.x, quad.bl?.x, quad.br?.x].filter(
+      (n) => typeof n === "number" && !Number.isNaN(n)
+    );
+    const ys = [quad.tl?.y, quad.tr?.y, quad.bl?.y, quad.br?.y].filter(
+      (n) => typeof n === "number" && !Number.isNaN(n)
+    );
+    if (!xs.length || !ys.length) return null;
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    return {
+      x: minX,
+      y: minY,
+      width: Math.max(0, maxX - minX),
+      height: Math.max(0, maxY - minY),
+    };
+  }
+
+  function vectorLength(vec) {
+    return Math.hypot(vec.x || 0, vec.y || 0);
+  }
+
+  function normalizedRectToPdfRect(box, viewport) {
+    if (!viewport || !box) return null;
+    const vw = viewport.width || 0;
+    const vh = viewport.height || 0;
+    if (!vw || !vh) return null;
+    const left = (box.nLeft || 0) * vw;
+    const top = (box.nTop || 0) * vh;
+    const right = left + (box.nWidth || 0) * vw;
+    const bottom = top + (box.nHeight || 0) * vh;
+    const [px1, py1] = viewport.convertToPdfPoint(left, top);
+    const [px2, py2] = viewport.convertToPdfPoint(right, bottom);
+    const minX = Math.min(px1, px2);
+    const maxX = Math.max(px1, px2);
+    const minY = Math.min(py1, py2);
+    const maxY = Math.max(py1, py2);
+    return {
+      x: minX,
+      y: minY,
+      width: Math.max(0, maxX - minX),
+      height: Math.max(0, maxY - minY),
+    };
+  }
+
+  function normalizedFontToPdf(box, viewport) {
+    if (!viewport || !box || !box.nFont) return null;
+    const vh = viewport.height || 0;
+    if (!vh) return null;
+    const fontPx = box.nFont * vh;
+    const vw = viewport.width || 0;
+    const left = (box.nLeft || 0) * vw;
+    const top = (box.nTop || 0) * vh;
+    const [pTopX, pTopY] = viewport.convertToPdfPoint(left, top);
+    const [pBottomX, pBottomY] = viewport.convertToPdfPoint(left, top + fontPx);
+    return Math.hypot(pTopX - pBottomX, pTopY - pBottomY) || null;
+  }
+
+  function getBoxEditableText(el) {
+    if (!el) return "";
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll(".resize-handle, .close-btn").forEach((node) =>
+      node.remove()
+    );
+    return clone.innerText || "";
+  }
+
+  function updatePlaceholderState(el, textValue) {
+    if (!el) return;
+    if (!el.dataset.placeholder) el.dataset.placeholder = TEXT_PLACEHOLDER;
+    const value =
+      textValue !== undefined ? textValue : getBoxEditableText(el);
+    if (value.trim().length > 0) {
+      delete el.dataset.empty;
+    } else {
+      el.dataset.empty = "1";
+    }
+  }
+
+  function initializeTextBoxElement(el) {
+    if (!el || el.dataset?.boxInit === "1") return;
+    el.dataset.boxInit = "1";
+    if (!el.dataset.placeholder) el.dataset.placeholder = TEXT_PLACEHOLDER;
+
+    let handle = el.querySelector(".resize-handle");
+    if (!handle) {
+      handle = document.createElement("div");
+      handle.className = "resize-handle";
+      handle.contentEditable = "false";
+      el.appendChild(handle);
+    } else {
+      handle.contentEditable = "false";
+    }
+
+    let close = el.querySelector(".close-btn");
+    if (!close) {
+      close = document.createElement("div");
+      close.className = "close-btn";
+      close.textContent = "×";
+      close.contentEditable = "false";
+      el.appendChild(close);
+    } else {
+      close.contentEditable = "false";
+    }
+
+    let startCX = 0,
+      startCY = 0,
+      moved = false;
+    let tDragging = false,
+      tResizing = false;
+    let tOffsetX = 0,
+      tOffsetY = 0;
+
+    const beginPointer = (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      selectTextEl(el);
+      el.style.zIndex = String(Date.now() % 1e9);
+
+      moved = false;
+      startCX = e.clientX;
+      startCY = e.clientY;
+      tDragging = false;
+      tResizing = false;
+
+      if (e.target === close) {
+        const pageMap = ensureTextMap(currentPageNum);
+        pageMap.delete(el.dataset.id);
+        clearTextSelectionUI();
+        el.remove();
+        updateDownloadButtonState();
+        return;
+      }
+
+      if (e.target === handle) {
+        tResizing = true;
+      } else {
+        tDragging = true;
+        el.dataset._wasEditable = el.isContentEditable ? "1" : "0";
+        el.contentEditable = "false";
+        el.style.userSelect = "none";
+        el.style.cursor = "grabbing";
+        const r = el.getBoundingClientRect();
+        tOffsetX = e.clientX - r.left;
+        tOffsetY = e.clientY - r.top;
+      }
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch {}
+      e.preventDefault();
+    };
+
+    const movePointer = (e) => {
+      if (!tDragging && !tResizing) return;
+      e.preventDefault();
+
+      const stage = pdfStage.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+
+      if (
+        !moved &&
+        (Math.abs(e.clientX - startCX) > DRAG_TOL ||
+          Math.abs(e.clientY - startCY) > DRAG_TOL)
+      ) {
+        moved = true;
+      }
+
+      if (tDragging) {
+        let nx = e.clientX - stage.left - tOffsetX;
+        let ny = e.clientY - stage.top - tOffsetY;
+        nx = Math.max(0, Math.min(nx, stage.width - r.width));
+        ny = Math.max(0, Math.min(ny, stage.height - r.height));
+        el.style.left = `${nx}px`;
+        el.style.top = `${ny}px`;
+      } else if (tResizing) {
+        let w = e.clientX - r.left;
+        let h = e.clientY - r.top;
+        w = Math.max(60, Math.min(w, stage.width - (r.left - stage.left)));
+        h = Math.max(24, Math.min(h, stage.height - (r.top - stage.top)));
+        el.style.width = `${w}px`;
+        el.style.height = `${h}px`;
+      }
+    };
+
+    const endPointer = (e) => {
+      if (!tDragging && !tResizing) return;
+      tDragging = false;
+      tResizing = false;
+      try {
+        el.releasePointerCapture(e.pointerId);
+      } catch {}
+      if (el.dataset._wasEditable === "1") {
+        el.contentEditable = "true";
+        if (!moved) {
+          el.focus();
+        }
+      }
+      el.style.userSelect = "";
+      el.style.cursor = "";
+      saveTextBox(el);
+    };
+
+    el.addEventListener("pointerdown", beginPointer);
+    el.addEventListener("pointermove", movePointer);
+    el.addEventListener("pointerup", endPointer);
+    el.addEventListener("pointercancel", endPointer);
+
+    el.addEventListener("input", () => saveTextBox(el));
+    el.addEventListener("click", () => selectTextEl(el));
+    el.addEventListener("dblclick", () => {
+      el.contentEditable = "true";
+      el.focus();
+      selectTextEl(el);
+    });
+
+    updatePlaceholderState(el);
+  }
+
+  // Render text layer untuk halaman aktif
+  function renderTextLayerForPage(pageNum) {
+    textLayer.innerHTML = "";
+    clearTextSelectionUI();
+
+    const stageRect = pdfStage.getBoundingClientRect();
+    const map = textItems.get(pageNum);
+    if (!map) return;
+
+    for (const [id, T] of map.entries()) {
+      const el = document.createElement("div");
+      el.className = "pdf-text-box";
+      el.contentEditable = "true";
+      el.dataset.id = id;
+      const storedText = T.text || "";
+      const isLegacyPlaceholder =
+        !storedText.trim() || LEGACY_PLACEHOLDERS.has(storedText.trim());
+      const safeText = isLegacyPlaceholder ? "" : storedText;
+      if (isLegacyPlaceholder && storedText !== safeText) {
+        T.text = "";
+      }
+      el.textContent = safeText;
+
+      el.style.left = `${T.nLeft * stageRect.width}px`;
+      el.style.top = `${T.nTop * stageRect.height}px`;
+      el.style.width = `${T.nWidth * stageRect.width}px`;
+      el.style.height = `${T.nHeight * stageRect.height}px`;
+      el.style.color = T.color || "#000";
+      el.style.fontSize = `${
+        (T.nFont || 16 / stageRect.height) * stageRect.height
+      }px`;
+
+      el.dataset.placeholder = TEXT_PLACEHOLDER;
+      updatePlaceholderState(el, safeText);
+      el.style.touchAction = "none";
+      el.style.pointerEvents = "auto";
+      initializeTextBoxElement(el);
+
+      textLayer.appendChild(el);
+      saveTextBox(el);
+    }
+  }
+
+  // klik kosong pada textLayer untuk batal pilih
+  textLayer.addEventListener("pointerdown", (e) => {
+    if (e.target === textLayer) clearTextSelectionUI();
   });
 
-  // ---------------------- Embed & Download Signed PDF ----------------------
+  function saveTextBox(el) {
+    const id = el.dataset.id;
+    if (!id) return;
+    const stage = pdfStage.getBoundingClientRect();
+    const stageWidth = stage.width;
+    const stageHeight = stage.height;
+    if (!stageWidth || !stageHeight) return;
+    const r = el.getBoundingClientRect();
+    const pageMap = ensureTextMap(currentPageNum);
+    const prev = pageMap.get(id);
+    const fontPx = parseFloat(getComputedStyle(el).fontSize) || 16;
+    const textValue = getBoxEditableText(el);
+    const viewport = getViewportForPage(currentPageNum);
+    const pdfQuad = computePdfQuad(viewport, stage, r);
+    const pdfRectFromQuad = quadToRect(pdfQuad);
+    const pdfRect = computePdfRect(viewport, stage, r);
+    const fontPt = computePdfFontSize(viewport, stage, r, fontPx);
+
+    pageMap.set(id, {
+      nLeft: (r.left - stage.left) / stageWidth,
+      nTop: (r.top - stage.top) / stageHeight,
+      nWidth: r.width / stageWidth,
+      nHeight: r.height / stageHeight,
+      nFont: fontPx / stageHeight,
+      color: rgbToHex(getComputedStyle(el).color) || "#000000",
+      text: textValue,
+      pdfRect: pdfRectFromQuad || pdfRect || prev?.pdfRect || null,
+      pdfQuad: pdfQuad || prev?.pdfQuad || null,
+      fontPt: fontPt || prev?.fontPt || null,
+      rotation: viewport?.rotation ?? prev?.rotation ?? 0,
+    });
+    updatePlaceholderState(el, textValue);
+    updateDownloadButtonState();
+  }
+
+  // Tambah teks baru
+  addTextBtn?.addEventListener("click", () => {
+    const stage = pdfStage.getBoundingClientRect();
+    const id = newId();
+    const color = textColorInp?.value || "#000000";
+    const fontPx = +(textSizeInp?.value || 16);
+
+    const el = document.createElement("div");
+    el.className = "pdf-text-box";
+    el.contentEditable = "true";
+    el.dataset.id = id;
+    el.textContent = "";
+    el.style.left = "50px";
+    el.style.top = "50px";
+    el.style.width = "180px";
+    el.style.height = "40px";
+    el.style.color = color;
+    el.style.fontSize = `${fontPx}px`;
+    el.dataset.placeholder = TEXT_PLACEHOLDER;
+    el.dataset.empty = "1";
+
+    initializeTextBoxElement(el);
+
+    textLayer.appendChild(el);
+    selectTextEl(el);
+    saveTextBox(el);
+  });
+
+  // Hapus teks terpilih
+  removeTextBtn?.addEventListener("click", () => {
+    if (!selectedTextId) return;
+    const map = ensureTextMap(currentPageNum);
+    map.delete(selectedTextId);
+    const el = [...textLayer.children].find(
+      (n) => n.dataset?.id === selectedTextId
+    );
+    if (el) el.remove();
+    clearTextSelectionUI();
+    updateDownloadButtonState();
+  });
+
+  // Sinkron control -> box terpilih
+  textColorInp?.addEventListener("input", () => {
+    const el = getSelectedTextEl();
+    if (!el) return;
+    el.style.color = textColorInp.value;
+    saveTextBox(el);
+  });
+  textSizeInp?.addEventListener("input", () => {
+    const el = getSelectedTextEl();
+    if (!el) return;
+    const px = +textSizeInp.value || 16;
+    el.style.fontSize = `${px}px`;
+    saveTextBox(el);
+  });
+
+  // Delete/backspace: jangan ganggu saat lagi mengetik
+  window.addEventListener("keydown", (e) => {
+    const tag = (e.target && e.target.tagName) || "";
+    const isEditing = document.activeElement?.isContentEditable;
+    if (tag === "INPUT" || tag === "TEXTAREA" || isEditing) return;
+    if ((e.key === "Delete" || e.key === "Backspace") && selectedTextId) {
+      e.preventDefault();
+      removeTextBtn?.click();
+    }
+  });
+
+  // ---------- Download (signature + text) ----------
   function makeTimestampLabel() {
-    const d = new Date();
-    const pad = (n) => String(n).padStart(2, "0");
-    const yyyy = d.getFullYear();
-    const mm = pad(d.getMonth() + 1);
-    const dd = pad(d.getDate());
-    const HH = pad(d.getHours());
-    const MI = pad(d.getMinutes());
-    const SS = pad(d.getSeconds());
-    const offsetMin = -d.getTimezoneOffset();
-    let tz = `UTC${offsetMin >= 0 ? "+" : ""}${offsetMin / 60}`;
-    if (offsetMin === 7 * 60) tz = "WIB";
-    else if (offsetMin === 8 * 60) tz = "WITA";
-    else if (offsetMin === 9 * 60) tz = "WIT";
-    return `${yyyy}${mm}${dd}-${HH}${MI}${SS}-${tz}`;
+    const d = new Date(),
+      pad = (n) => String(n).padStart(2, "0");
+    const tzMinutes = -d.getTimezoneOffset();
+    let tz = `UTC${tzMinutes >= 0 ? "+" : ""}${tzMinutes / 60}`;
+    if (tzMinutes === 420) tz = "WIB";
+    else if (tzMinutes === 480) tz = "WITA";
+    else if (tzMinutes === 540) tz = "WIT";
+    return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(
+      d.getHours()
+    )}${pad(d.getMinutes())}${pad(d.getSeconds())}-${tz}`;
+  }
+
+  // Bungkus teks sesuai lebar box saat draw ke PDF
+  function drawWrappedText(page, font, rgbFn, T, pageW, pageH) {
+    const pad = 2;
+    const sizePt = Math.max(
+      T.fontPt || (T.nFont || 0.00002) * pageH,
+      0.0001
+    );
+    const col = hexToRgb01(T.color || "#000000");
+    const color = rgbFn(col.r, col.g, col.b);
+
+    const quad = T.pdfQuad;
+    let origin;
+    let xVec;
+    let yVec;
+    let boxWidth;
+    let boxHeight;
+    if (quad && quad.tl && quad.tr && quad.bl) {
+      origin = quad.tl;
+      xVec = {
+        x: quad.tr.x - quad.tl.x,
+        y: quad.tr.y - quad.tl.y,
+      };
+      yVec = {
+        x: quad.bl.x - quad.tl.x,
+        y: quad.bl.y - quad.tl.y,
+      };
+      boxWidth = vectorLength(xVec);
+      boxHeight = vectorLength(yVec);
+    } else {
+      origin = {
+        x: T.nLeft * pageW,
+        y: pageH - T.nTop * pageH,
+      };
+      boxWidth = Math.max(1, T.nWidth * pageW);
+      boxHeight = Math.max(1, T.nHeight * pageH);
+      xVec = { x: boxWidth, y: 0 };
+      yVec = { x: 0, y: -boxHeight };
+    }
+    boxWidth = Math.max(boxWidth, 1);
+    boxHeight = Math.max(boxHeight, 1);
+    const angle =
+      Math.atan2(xVec.y, xVec.x) || 0; /* orientasi baseline (TL -> TR) */
+    const maxW = Math.max(10, boxWidth - pad * 2);
+
+    const raw = (T.text || "").replace(/\r/g, "");
+    const paragraphs = raw.split(/\n/);
+
+    const mapPoint = (localX, localY) => {
+      const fx = localX / boxWidth;
+      const fy = localY / boxHeight;
+      return {
+        x: origin.x + xVec.x * fx + yVec.x * fy,
+        y: origin.y + xVec.y * fx + yVec.y * fy,
+      };
+    };
+
+    let cursorY = pad + sizePt;
+    const lineStep = sizePt * 1.2;
+
+    for (const para of paragraphs) {
+      if (!para) {
+        cursorY += lineStep;
+        continue;
+      }
+      const words = para.split(/\s+/);
+      let line = "";
+      for (const w of words) {
+        const test = line ? line + " " + w : w;
+        const width = font.widthOfTextAtSize(test, sizePt);
+        if (width <= maxW) {
+          line = test;
+        } else {
+          if (line) {
+            const start = mapPoint(pad, cursorY);
+            page.drawText(line, {
+              x: start.x,
+              y: start.y,
+              size: sizePt,
+              font,
+              color,
+              rotate: PDFLib.degrees((angle * 180) / Math.PI),
+            });
+            cursorY += lineStep;
+          }
+          const ww = font.widthOfTextAtSize(w, sizePt);
+          if (ww > maxW) {
+            const start = mapPoint(pad, cursorY);
+            page.drawText(w, {
+              x: start.x,
+              y: start.y,
+              size: sizePt,
+              font,
+              color,
+              rotate: PDFLib.degrees((angle * 180) / Math.PI),
+            });
+            cursorY += lineStep;
+            line = "";
+          } else {
+            line = w;
+          }
+        }
+      }
+      if (line) {
+        const start = mapPoint(pad, cursorY);
+        page.drawText(line, {
+          x: start.x,
+          y: start.y,
+          size: sizePt,
+          font,
+          color,
+          rotate: PDFLib.degrees((angle * 180) / Math.PI),
+        });
+        cursorY += lineStep;
+      }
+    }
   }
 
   downloadSignedPdfBtn.addEventListener("click", async () => {
-    if (placements.size === 0) {
-      void Swal.fire(
-        "Tunggu!",
-        "Belum ada tanda tangan di halaman mana pun.",
-        "info"
-      );
+    const hasSig = placements.size > 0;
+    const hasTxt = [...textItems.values()].some((m) => m.size > 0);
+    if (!hasSig && !hasTxt) {
+      void Swal.fire("Tunggu!", "Belum ada tanda tangan atau teks.", "info");
       return;
     }
 
     loadingSpinner.style.display = "flex";
     try {
-      const { PDFDocument } = PDFLib;
+      const { PDFDocument, StandardFonts, rgb } = PDFLib;
       const pdfDocToModify = await PDFDocument.load(originalPdfBytes);
       const pages = pdfDocToModify.getPages();
+      const helvetica = await pdfDocToModify.embedFont(StandardFonts.Helvetica);
 
-      // loop semua halaman, gambar TTD hanya jika placement tersedia
       for (let i = 0; i < pages.length; i++) {
-        const pageNum = i + 1;
-        const p = placements.get(pageNum);
-        if (!p) continue;
+        const page = pages[i],
+          pageNum = i + 1;
+        const pageW = page.getWidth(),
+          pageH = page.getHeight();
 
-        const page = pages[i];
-        const pageW = page.getWidth();
-        const pageH = page.getHeight();
+        const s = placements.get(pageNum);
+        if (s) {
+          const img = await pdfDocToModify.embedPng(s.pngBytes);
+          const quad = s.pdfQuad;
+          if (quad && quad.bl && quad.br && quad.tl) {
+            const origin = quad.bl;
+            const xVec = {
+              x: quad.br.x - quad.bl.x,
+              y: quad.br.y - quad.bl.y,
+            };
+            const yVec = {
+              x: quad.tl.x - quad.bl.x,
+              y: quad.tl.y - quad.bl.y,
+            };
+            const widthLen = Math.max(1, vectorLength(xVec));
+            const heightLen = Math.max(1, vectorLength(yVec));
+            const angle = Math.atan2(xVec.y, xVec.x);
+            page.drawImage(img, {
+              x: origin.x,
+              y: origin.y,
+              width: widthLen,
+              height: heightLen,
+              rotate: PDFLib.degrees((angle * 180) / Math.PI),
+            });
+          } else {
+            let x;
+            let y;
+            let w;
+            let h;
+            let rect = s.pdfRect;
+            if (!rect || rect.width <= 0 || rect.height <= 0) {
+              const viewport = pageViewportMap.get(pageNum);
+              const computed = normalizedRectToPdfRect(s, viewport);
+              if (computed) rect = computed;
+            }
+            if (rect && rect.width > 0 && rect.height > 0) {
+              ({ x, y, width: w, height: h } = rect);
+            } else {
+              w = s.nWidth * pageW;
+              h = s.nHeight * pageH;
+              x = s.nLeft * pageW;
+              y = pageH - s.nTop * pageH - h;
+            }
+            page.drawImage(img, { x, y, width: w, height: h });
+          }
+        }
 
-        const img = await pdfDocToModify.embedPng(p.pngBytes);
-
-        const width = p.nWidth * pageW;
-        const height = p.nHeight * pageH;
-        const x = p.nLeft * pageW;
-        const y = pageH - p.nTop * pageH - height; // koordinat PDF kiri-bawah
-
-        page.drawImage(img, { x, y, width, height });
+        const tmap = textItems.get(pageNum);
+        if (tmap) {
+          const viewport = pageViewportMap.get(pageNum);
+          for (const T of tmap.values()) {
+            if (
+              viewport &&
+              (!T.pdfRect || T.pdfRect.width <= 0 || T.pdfRect.height <= 0)
+            ) {
+              const rect = normalizedRectToPdfRect(T, viewport);
+              if (rect) T.pdfRect = rect;
+            }
+            if (viewport && (!T.fontPt || T.fontPt <= 0)) {
+              const fontPt = normalizedFontToPdf(T, viewport);
+              if (fontPt) T.fontPt = fontPt;
+            }
+            drawWrappedText(page, helvetica, rgb, T, pageW, pageH);
+          }
+        }
       }
 
       const pdfBytes = await pdfDocToModify.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      const baseName = (pdfFile?.name || "document.pdf").replace(/\.pdf$/i, "");
-      link.download = `${baseName}-signed-${makeTimestampLabel()}.pdf`;
-      link.click();
+      const a = document.createElement("a");
+      a.href = url;
+      const base = (pdfFile?.name || "document.pdf").replace(/\.pdf$/i, "");
+      a.download = `${base}-filled-${makeTimestampLabel()}.pdf`;
+      a.click();
       URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error signing PDF:", error);
-      void Swal.fire(
-        "Error",
-        "Terjadi kesalahan saat menandatangani PDF.",
-        "error"
-      );
+    } catch (err) {
+      console.error(err);
+      void Swal.fire("Error", "Terjadi kesalahan saat menyimpan PDF.", "error");
     } finally {
       loadingSpinner.style.display = "none";
     }
   });
 
-  // ---------------------- Reset & Init ----------------------
-  const resetToUploadView = () => {
+  // ---------- Reset & init ----------
+  function resetToUploadView() {
     uploadView.classList.remove("hidden");
     mainView.classList.add("hidden");
     pdfDoc = null;
     originalPdfBytes = null;
     pdfFile = null;
-
     clearSignature();
     sigDragContainer.classList.add("hidden");
     placements.clear();
+    textItems.clear();
+    pageViewportMap.clear();
+    currentViewport = null;
+    textLayer.innerHTML = "";
+    selectedTextId = null;
     uploadInput.value = "";
     pdfViewerContainer.style.alignItems = "";
     updatePageButtons();
     updateDownloadButtonState();
-  };
+  }
 
   resetBtn.addEventListener("click", resetToUploadView);
   uploadInput.addEventListener("change", (e) =>
     handleFileSelect(e.target.files[0])
   );
 
-  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((ev) => {
     uploadArea.addEventListener(
-      eventName,
+      ev,
       (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -2629,20 +3233,20 @@ function initializePdfSigner() {
       false
     );
   });
-  ["dragenter", "dragover"].forEach((eventName) => {
+  ["dragenter", "dragover"].forEach((ev) =>
     uploadArea.addEventListener(
-      eventName,
+      ev,
       () => uploadArea.classList.add("highlight"),
       false
-    );
-  });
-  ["dragleave", "drop"].forEach((eventName) => {
+    )
+  );
+  ["dragleave", "drop"].forEach((ev) =>
     uploadArea.addEventListener(
-      eventName,
+      ev,
       () => uploadArea.classList.remove("highlight"),
       false
-    );
-  });
+    )
+  );
   uploadArea.addEventListener(
     "drop",
     (e) => handleFileSelect(e.dataTransfer.files[0]),
@@ -2659,7 +3263,22 @@ function initializePdfSigner() {
   sigPadCanvas.addEventListener("touchend", stopDrawing);
   clearSigBtn.addEventListener("click", clearSignature);
 
-  // init
+  // Controls sync -> selection
+  textColorInp?.addEventListener("change", () => {
+    const el = getSelectedTextEl();
+    if (el) {
+      el.style.color = textColorInp.value;
+      saveTextBox(el);
+    }
+  });
+  textSizeInp?.addEventListener("change", () => {
+    const el = getSelectedTextEl();
+    if (el) {
+      el.style.fontSize = `${+textSizeInp.value || 16}px`;
+      saveTextBox(el);
+    }
+  });
+
   placeSigBtn.disabled = true;
   resizeSigPad();
   window.addEventListener("resize", () => {
@@ -2671,11 +3290,8 @@ function initializePdfSigner() {
     pdfViewerContainer
   );
   new ResizeObserver(() => updateVerticalCentering()).observe(pdfStage);
-
-  const themeObserver = new MutationObserver((mutations) => {
-    for (const m of mutations)
-      if (m.attributeName === "data-theme") resizeSigPad();
+  const themeObserver = new MutationObserver((m) => {
+    for (const x of m) if (x.attributeName === "data-theme") resizeSigPad();
   });
   themeObserver.observe(document.documentElement, { attributes: true });
 }
-

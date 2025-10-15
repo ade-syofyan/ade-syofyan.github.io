@@ -972,12 +972,12 @@
                     }
                   </code></pre>
                   <pre data-lang="js" class="language-javascript"><code>const countEl = document.getElementById('visitor-count');
-    let visitors = Math.floor(Math.random() * 151) + 150;
-    setInterval(() => {
-      const fluctuation = Math.floor(Math.random() * 5) - 2;
-      visitors = Math.max(100, visitors + fluctuation);
-      countEl.textContent = visitors;
-    }, Math.random() * 2000 + 2000);
+                    let visitors = Math.floor(Math.random() * 151) + 150;
+                    setInterval(() => {
+                      const fluctuation = Math.floor(Math.random() * 5) - 2;
+                      visitors = Math.max(100, visitors + fluctuation);
+                      countEl.textContent = visitors;
+                    }, Math.random() * 2000 + 2000);
                   </code></pre>
                 </div>
               </div>
@@ -1059,21 +1059,35 @@
 
                     <!-- Kolom Kanan: Signature Pad & Controls -->
                     <div class="flex flex-col gap-4">
-                      <div>
-                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Area Tanda Tangan</label>
-                        <div class="flex items-center gap-3 mb-2">
-                          <label class="text-sm">Warna:</label>
-                          <input id="sig-color" type="color" value="#000000" />
-                          <label class="text-sm ml-4">Ketebalan:</label>
-                          <input id="sig-width" type="range" min="1" max="8" value="2" />
-                        </div>
-                        <canvas id="signature-pad-canvas" class="w-full h-40 bg-white/5 rounded-lg border border-white/10 cursor-crosshair touch-none"></canvas>
-                        <div class="flex justify-end gap-2 mt-2">
-                          <button id="clear-signature-btn" class="pathfinding-btn !text-xs" title="Hapus Tanda Tangan"><i data-lucide="eraser" class="w-4 h-4"></i></button>
-                          <button id="place-signature-btn" class="pathfinding-btn !text-xs" title="Letakkan Tanda Tangan"><i data-lucide="check-circle" class="w-4 h-4"></i><span>Letakkan</span></button>
-                        </div>
+                      
+                      <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Area Tanda Tangan</label>
+                      <div class="flex items-center gap-3 mb-2">
+                        <label class="text-sm">Warna:</label>
+                        <input id="sig-color" type="color" value="#000000" />
+                        <label class="text-sm ml-4">Ketebalan:</label>
+                        <input id="sig-width" type="range" min="1" max="8" value="2" />
+                      </div>
+                      <canvas id="signature-pad-canvas" class="w-full h-40 bg-white/5 rounded-lg border border-white/10 cursor-crosshair touch-none"></canvas>
+                      <div class="flex justify-end gap-2 mt-2">
+                        <button id="clear-signature-btn" class="pathfinding-btn !text-xs" title="Hapus Tanda Tangan"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+                        <button id="place-signature-btn" class="pathfinding-btn !text-xs" title="Letakkan Tanda Tangan"><i data-lucide="check-circle" class="w-4 h-4"></i><span>Letakkan</span></button>
                       </div>
                       
+                      <!-- Form Teks -->
+                      <div class="p-3 rounded-lg" style="background-color: var(--bg-card-secondary);">
+                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Isi Teks (per halaman)</label>
+                        <div class="flex items-center gap-3 mb-2">
+                          <label class="text-sm">Warna:</label>
+                          <input id="text-color" type="color" value="#000000" />
+                          <label class="text-sm ml-4">Ukuran:</label>
+                          <input id="text-size" type="range" min="10" max="48" value="16" />
+                        </div>
+                        <div class="flex gap-2">
+                          <button id="add-text-btn" class="pathfinding-btn !text-xs"><i data-lucide="type"></i><span>Tambah Teks</span></button>
+                          <button id="remove-text-btn" class="pathfinding-btn !text-xs"><i data-lucide="trash-2"></i><span>Hapus Teks Terpilih</span></button>
+                        </div>
+                      </div>
+
                       <!-- Kontrol PDF -->
                       <div class="p-3 rounded-lg" style="background-color: var(--bg-card-secondary);">
                         <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Navigasi Dokumen</label>
@@ -1104,24 +1118,24 @@
                 </button>
                 <div id="pdf-signer-code" class="hidden" data-keep-source="true">
                   <pre data-lang="html" class="language-html"><code>&lt;!-- 1. Upload View --&gt;
-&lt;input type="file" id="pdf-upload-input" accept="application/pdf"&gt;
+                    &lt;input type="file" id="pdf-upload-input" accept="application/pdf"&gt;
 
-&lt;!-- 2. Main View --&gt;
-&lt;canvas id="pdf-render-canvas"&gt;&lt;/canvas&gt; &lt;!-- For PDF page --&gt;
-&lt;canvas id="signature-pad-canvas"&gt;&lt;/canvas&gt; &lt;!-- For drawing --&gt;
-&lt;div id="signature-drag-container"&gt;&lt;/div&gt; &lt;!-- For placing --&gt;
-&lt;button id="download-signed-pdf-btn"&gt;Download Signed PDF&lt;/button&gt;</code></pre>
-                  <pre data-lang="js" class="language-javascript"><code>// Using pdf.js to render PDF on canvas
-const pdfDoc = await pdfjsLib.getDocument(fileArrayBuffer).promise;
-const page = await pdfDoc.getPage(1);
-page.render({ canvasContext, viewport });
+                    &lt;!-- 2. Main View --&gt;
+                    &lt;canvas id="pdf-render-canvas"&gt;&lt;/canvas&gt; &lt;!-- For PDF page --&gt;
+                    &lt;canvas id="signature-pad-canvas"&gt;&lt;/canvas&gt; &lt;!-- For drawing --&gt;
+                    &lt;div id="signature-drag-container"&gt;&lt;/div&gt; &lt;!-- For placing --&gt;
+                    &lt;button id="download-signed-pdf-btn"&gt;Download Signed PDF&lt;/button&gt;</code></pre>
+                                      <pre data-lang="js" class="language-javascript"><code>// Using pdf.js to render PDF on canvas
+                    const pdfDoc = await pdfjsLib.getDocument(fileArrayBuffer).promise;
+                    const page = await pdfDoc.getPage(1);
+                    page.render({ canvasContext, viewport });
 
-// Using pdf-lib.js to modify PDF
-const pdfDocToModify = await PDFLib.PDFDocument.load(originalPdfBytes);
-const signatureImage = await pdfDocToModify.embedPng(signaturePngBytes);
-const pageToSign = pdfDocToModify.getPages()[pageNum - 1];
-pageToSign.drawImage(signatureImage, { x, y, width, height });
-const pdfBytes = await pdfDocToModify.save();</code></pre>
+                    // Using pdf-lib.js to modify PDF
+                    const pdfDocToModify = await PDFLib.PDFDocument.load(originalPdfBytes);
+                    const signatureImage = await pdfDocToModify.embedPng(signaturePngBytes);
+                    const pageToSign = pdfDocToModify.getPages()[pageNum - 1];
+                    pageToSign.drawImage(signatureImage, { x, y, width, height });
+                    const pdfBytes = await pdfDocToModify.save();</code></pre>
                 </div>
               </div>
 
@@ -1173,19 +1187,19 @@ const pdfBytes = await pdfDocToModify.save();</code></pre>
                 </button>
                 <div id="text-converter-code" class="hidden" data-keep-source="true">
                   <pre data-lang="html" class="language-html"><code>&lt;textarea id="text-converter-input"&gt;&lt;/textarea&gt;
-&lt;div id="text-converter-controls"&gt;
-  &lt;button data-case="upper"&gt;UPPERCASE&lt;/button&gt;
-  &lt;!-- ... more buttons ... --&gt;
-&lt;/div&gt;
-&lt;textarea id="text-converter-output" readonly&gt;&lt;/textarea&gt;</code></pre>
-                  <pre data-lang="js" class="language-javascript"><code>function toTitleCase(str) {
-  return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-}
+                    &lt;div id="text-converter-controls"&gt;
+                      &lt;button data-case="upper"&gt;UPPERCASE&lt;/button&gt;
+                      &lt;!-- ... more buttons ... --&gt;
+                    &lt;/div&gt;
+                    &lt;textarea id="text-converter-output" readonly&gt;&lt;/textarea&gt;</code></pre>
+                                      <pre data-lang="js" class="language-javascript"><code>function toTitleCase(str) {
+                      return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+                    }
 
-document.querySelector('[data-case="title"]').addEventListener('click', () => {
-  const input = document.getElementById('text-converter-input').value;
-  document.getElementById('text-converter-output').value = toTitleCase(input);
-});</code></pre>
+                    document.querySelector('[data-case="title"]').addEventListener('click', () => {
+                      const input = document.getElementById('text-converter-input').value;
+                      document.getElementById('text-converter-output').value = toTitleCase(input);
+                    });</code></pre>
                 </div>
               </div>
 
