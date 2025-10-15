@@ -778,6 +778,10 @@ html[data-theme='light'] .project-sidebar-section {
 
 /* --- Gaya baru untuk menu dropdown desktop --- */
 
+.nav-dropdown-group {
+  position: relative;
+}
+
 .nav-dropdown-menu {
   position: absolute;
   top: 100%;
