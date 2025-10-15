@@ -2064,7 +2064,7 @@ function initializePdfSigner() {
   const uploadView = document.getElementById("pdf-signer-upload-view");
   const mainView = document.getElementById("pdf-signer-main-view");
   const uploadInput = document.getElementById("pdf-upload-input");
-  const uploadArea = document.querySelector(".pdf-upload-area");
+  const uploadArea = document.querySelector(".pdf-upload-area-v2");
 
   const pdfViewerContainer = document.getElementById("pdf-viewer-container");
   const pdfStage = document.getElementById("pdf-stage");

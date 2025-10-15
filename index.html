@@ -1023,12 +1023,16 @@
                 </p>
 
                 <!-- Step 1: Upload PDF -->
-                <div id="pdf-signer-upload-view">
-                  <label for="pdf-upload-input" class="pdf-upload-area">
-                    <i data-lucide="upload-cloud" class="w-16 h-16 text-accent opacity-50"></i>
-                    <span class="mt-4 text-lg font-semibold" style="color: var(--text-white);">Klik untuk mengunggah atau jatuhkan file PDF di sini</span>
-                    <span class="mt-1 text-sm" style="color: var(--text-secondary);">Maks. 10MB. Privasi Anda terlindungi.</span>
+                <div id="pdf-signer-upload-view" class="max-w-2xl mx-auto">
+                  <label for="pdf-upload-input" class="pdf-upload-area-v2">
+                    <div class="upload-icon-wrapper">
+                      <i data-lucide="file-up" class="w-12 h-12 text-accent"></i>
+                    </div>
+                    <h4 class="text-xl font-bold" style="color: var(--text-white);">Jatuhkan file PDF Anda di sini</h4>
+                    <p style="color: var(--text-secondary);">atau</p>
+                    <span class="btn-primary cursor-pointer !py-3 !px-6">Pilih File dari Komputer</span>
                   </label>
+                  <p class="mt-4 text-sm text-center" style="color: var(--text-secondary);">Maks. 10MB. Privasi Anda terlindungi, semua proses di browser Anda.</p>
                   <input type="file" id="pdf-upload-input" class="hidden" accept="application/pdf">
                 </div>
 
