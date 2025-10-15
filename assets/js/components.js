@@ -2334,7 +2334,7 @@ function initializePdfSigner() {
   function setSignaturePadBackground(color) {
     // Fungsi untuk mengecek apakah warna terang atau gelap berdasarkan luminance
     const isLight = (c) => {
-      const hex = c.replace('#', '');
+      const hex = c.replace("#", "");
       const r = parseInt(hex.substring(0, 2), 16);
       const g = parseInt(hex.substring(2, 4), 16);
       const b = parseInt(hex.substring(4, 6), 16);
@@ -2343,9 +2343,9 @@ function initializePdfSigner() {
     };
 
     if (isLight(color)) {
-      sigPadCanvas.style.backgroundColor = '#1a202c'; // Warna gelap (bg-primary)
+      sigPadCanvas.style.backgroundColor = "#1a202c"; // Warna gelap (bg-primary)
     } else {
-      sigPadCanvas.style.backgroundColor = '#ffffff'; // Warna terang default
+      sigPadCanvas.style.backgroundColor = "#ffffff"; // Warna terang default
     }
   }
 
@@ -2385,7 +2385,6 @@ function initializePdfSigner() {
   };
 
   placeSigBtn.addEventListener("click", async () => {
-
     if (!isSignatureDrawn) {
       void Swal.fire(
         "Tunggu!",
@@ -2396,7 +2395,7 @@ function initializePdfSigner() {
     }
     // Simpan background asli, buat jadi transparan untuk di-capture, lalu kembalikan
     const originalBg = sigPadCanvas.style.backgroundColor;
-    sigPadCanvas.style.backgroundColor = 'transparent';
+    sigPadCanvas.style.backgroundColor = "transparent";
 
     // Re-draw tanda tangan di atas background transparan sebelum capture
     // Ini penting karena clearRect() sebelumnya menghapus gambar
@@ -2406,7 +2405,7 @@ function initializePdfSigner() {
 
     // Setelah capture, kembalikan background
     setTimeout(() => {
-        sigPadCanvas.style.backgroundColor = originalBg;
+      sigPadCanvas.style.backgroundColor = originalBg;
     }, 100);
     const pngBytes = await canvasToPngBytes(sigPadCanvas);
     const dataUrl = sigPadCanvas.toDataURL("image/png");
@@ -3028,6 +3027,28 @@ function initializePdfSigner() {
     )}${pad(d.getMinutes())}${pad(d.getSeconds())}-${tz}`;
   }
 
+  downloadSigPngBtn?.addEventListener("click", async () => {
+    let dataUrl = placements.get(currentPageNum)?.dataUrl;
+
+    if (!dataUrl && isSignatureDrawn) {
+      dataUrl = sigPadCanvas.toDataURL("image/png");
+    }
+
+    if (!dataUrl) {
+      await Swal.fire(
+        "Tunggu!",
+        "Belum ada tanda tangan untuk diunduh.",
+        "info"
+      );
+      return;
+    }
+
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = `TTD-${makeTimestampLabel()}.png`;
+    a.click();
+  });
+
   // Bungkus teks sesuai lebar box saat draw ke PDF
   function drawWrappedText(page, font, rgbFn, T, pageW, pageH) {
     const pad = 2;
@@ -3331,7 +3352,7 @@ function initializePdfSigner() {
 
   placeSigBtn.disabled = true;
   resizeSigPad();
-  setSignaturePad-canvas-background(sigColorInput.value); // Panggil saat inisialisasi
+  setSignaturePadBackground(sigColorInput.value);
   window.addEventListener("resize", () => {
     resizeSigPad();
     if (pdfDoc) void renderPage(currentPageNum);
