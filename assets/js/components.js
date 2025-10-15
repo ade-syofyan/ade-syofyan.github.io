@@ -733,7 +733,9 @@ function createCustomSelect(wrapper, onChangeCallback) {
       // --- PERBAIKAN: Gunakan dataset.code untuk bendera, bukan dataset.icon ---
       toggleHTML = `<div class="flex items-center gap-3">
         <span class="text-base leading-none flag-icon flag-icon-${
-          selectedOption.dataset.code ? selectedOption.dataset.code.toLowerCase() : ""
+          selectedOption.dataset.code
+            ? selectedOption.dataset.code.toLowerCase()
+            : ""
         }"></span>
         <span class="font-semibold">${selectedOption.dataset.name} (+${
         selectedOption.value
@@ -2057,3 +2059,623 @@ function initializeCssHackerAchievement() {
 
   observer.observe(document.body, { attributes: true });
 }
+
+function initializePdfSigner() {
+  const uploadView = document.getElementById("pdf-signer-upload-view");
+  const mainView = document.getElementById("pdf-signer-main-view");
+  const uploadInput = document.getElementById("pdf-upload-input");
+  const uploadArea = document.querySelector(".pdf-upload-area");
+
+  const pdfViewerContainer = document.getElementById("pdf-viewer-container");
+  const pdfStage = document.getElementById("pdf-stage");
+  const pdfCanvas = document.getElementById("pdf-render-canvas");
+  const pdfCtx = pdfCanvas.getContext("2d");
+  const loadingSpinner = document.getElementById("pdf-loading-spinner");
+
+  const sigPadCanvas = document.getElementById("signature-pad-canvas");
+  const sigPadCtx = sigPadCanvas.getContext("2d");
+  const clearSigBtn = document.getElementById("clear-signature-btn");
+  const placeSigBtn = document.getElementById("place-signature-btn");
+
+  const sigDragContainer = document.getElementById("signature-drag-container");
+  const sigImg = document.getElementById("placed-signature-img");
+  const removeSigBtn = document.getElementById("remove-signature-btn");
+
+  const prevPageBtn = document.getElementById("pdf-prev-page");
+  const nextPageBtn = document.getElementById("pdf-next-page");
+  const currentPageEl = document.getElementById("pdf-current-page");
+  const totalPagesEl = document.getElementById("pdf-total-pages");
+
+  const downloadSignedPdfBtn = document.getElementById(
+    "download-signed-pdf-btn"
+  );
+  const downloadSigPngBtn = document.getElementById(
+    "download-signature-png-btn"
+  );
+  const resetBtn = document.getElementById("pdf-signer-reset-btn");
+
+  if (!uploadView) return;
+
+  // ---------------------- State ----------------------
+  const MAX_SIZE = 10 * 1024 * 1024;
+  let pdfDoc = null;
+  let currentPageNum = 1;
+  let pdfFile = null;
+  let originalPdfBytes = null;
+
+  let isSignatureDrawn = false; // status area gambar TTD
+  // Per-halaman placement map: key = pageNumber (1-based)
+  // value = { nLeft, nTop, nWidth, nHeight, pngBytes(Uint8Array), dataUrl }
+  const placements = new Map();
+
+  // drag/resize state (untuk overlay di halaman aktif)
+  let isDragging = false,
+    isResizing = false;
+  let offsetX = 0,
+    offsetY = 0;
+
+  // ---------------------- Helpers ----------------------
+  const getTouch = (e) =>
+    (e.touches && e.touches[0]) ||
+    (e.changedTouches && e.changedTouches[0]) ||
+    e;
+
+  async function canvasToPngBytes(canvas) {
+    const blob = await new Promise((res) => canvas.toBlob(res, "image/png"));
+    const buf = await blob.arrayBuffer();
+    return new Uint8Array(buf);
+  }
+
+  function syncStageSizeToCanvas() {
+    if (pdfCanvas.style.width) {
+      pdfStage.style.width = pdfCanvas.style.width;
+      pdfStage.style.height = pdfCanvas.style.height;
+    } else {
+      pdfStage.style.width = pdfCanvas.width + "px";
+      pdfStage.style.height = pdfCanvas.height + "px";
+    }
+  }
+  function updateVerticalCentering() {
+    const contH = pdfViewerContainer.clientHeight || 0;
+    const stageH = pdfStage.offsetHeight || pdfCanvas.offsetHeight || 0;
+    const shouldCenter = stageH > 0 && contH > 0 && stageH + 1 < contH;
+    pdfViewerContainer.style.alignItems = shouldCenter
+      ? "center"
+      : "flex-start";
+  }
+  function updateDownloadButtonState() {
+    downloadSignedPdfBtn.disabled = placements.size === 0;
+  }
+  function hasPlacementOnCurrentPage() {
+    return placements.has(currentPageNum);
+  }
+  function applyPlacementToUI(pageNum) {
+    const p = placements.get(pageNum);
+    if (!p) {
+      sigDragContainer.classList.add("hidden");
+      return;
+    }
+    // pasang preview + posisi berdasarkan rasio
+    sigImg.src = p.dataUrl;
+    const stageRect = pdfStage.getBoundingClientRect();
+    sigDragContainer.style.width = `${p.nWidth * stageRect.width}px`;
+    sigDragContainer.style.height = `${p.nHeight * stageRect.height}px`;
+    sigDragContainer.style.left = `${p.nLeft * stageRect.width}px`;
+    sigDragContainer.style.top = `${p.nTop * stageRect.height}px`;
+    sigDragContainer.classList.remove("hidden");
+  }
+  function saveOverlayToMap() {
+    // simpan posisi overlay (rasio) ke halaman aktif
+    const stageRect = pdfStage.getBoundingClientRect();
+    const rect = sigDragContainer.getBoundingClientRect();
+    const nLeft = (rect.left - stageRect.left) / stageRect.width;
+    const nTop = (rect.top - stageRect.top) / stageRect.height;
+    const nWidth = rect.width / stageRect.width;
+    const nHeight = rect.height / stageRect.height;
+
+    const existing = placements.get(currentPageNum);
+    if (existing) {
+      placements.set(currentPageNum, {
+        ...existing,
+        nLeft,
+        nTop,
+        nWidth,
+        nHeight,
+      });
+    } else {
+      // tidak ada pngBytes? jangan simpan (harus lewat "Letakkan" dulu)
+    }
+    updateDownloadButtonState();
+  }
+
+  // ---------------------- PDF Handling ----------------------
+  const handleFileSelect = (file) => {
+    if (!file) return;
+    if (file.type !== "application/pdf" || file.size > MAX_SIZE) {
+      void Swal.fire(
+        file.size > MAX_SIZE ? "File Terlalu Besar" : "File Tidak Valid",
+        file.size > MAX_SIZE
+          ? "Batas maksimal 10MB."
+          : "Silakan unggah file berformat PDF.",
+        "warning"
+      );
+      return;
+    }
+
+    pdfFile = file;
+    uploadView.classList.add("hidden");
+    mainView.classList.remove("hidden");
+    loadingSpinner.style.display = "flex";
+
+    requestAnimationFrame(() => {
+      resizeSigPad();
+      updateVerticalCentering();
+    });
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      originalPdfBytes = e.target.result;
+      const typedarray = new Uint8Array(originalPdfBytes);
+      try {
+        pdfDoc = await pdfjsLib.getDocument({ data: typedarray }).promise;
+        totalPagesEl.textContent = pdfDoc.numPages;
+        currentPageNum = 1;
+        placements.clear(); // reset semua placement
+        await renderPage(currentPageNum); // tampilkan halaman 1
+      } catch (error) {
+        console.error("Error parsing PDF:", error);
+        await Swal.fire(
+          "Error",
+          "Gagal memuat file PDF. File mungkin rusak atau tidak didukung.",
+          "error"
+        );
+        resetToUploadView();
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const renderPage = async (num) => {
+    if (!pdfDoc) return;
+    loadingSpinner.style.display = "flex";
+    try {
+      const page = await pdfDoc.getPage(num);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const containerWidth = pdfViewerContainer.clientWidth || viewport.width;
+      const scale = containerWidth / viewport.width;
+      const scaledViewport = page.getViewport({ scale });
+
+      pdfCanvas.width = Math.ceil(scaledViewport.width);
+      pdfCanvas.height = Math.ceil(scaledViewport.height);
+      pdfCanvas.style.width = `${scaledViewport.width}px`;
+      pdfCanvas.style.height = `${scaledViewport.height}px`;
+
+      await page.render({ canvasContext: pdfCtx, viewport: scaledViewport })
+        .promise;
+
+      syncStageSizeToCanvas();
+      updateVerticalCentering();
+
+      currentPageEl.textContent = num;
+      currentPageNum = num;
+      updatePageButtons();
+
+      // tampilkan placement jika ada untuk halaman ini
+      applyPlacementToUI(currentPageNum);
+      updateDownloadButtonState();
+    } catch (error) {
+      console.error("Error rendering page:", error);
+    } finally {
+      loadingSpinner.style.display = "none";
+    }
+  };
+
+  const updatePageButtons = () => {
+    prevPageBtn.disabled = !pdfDoc || currentPageNum <= 1;
+    nextPageBtn.disabled = !pdfDoc || currentPageNum >= pdfDoc.numPages;
+  };
+  prevPageBtn.addEventListener("click", () => {
+    if (pdfDoc && currentPageNum > 1) renderPage(currentPageNum - 1);
+  });
+  nextPageBtn.addEventListener("click", () => {
+    if (pdfDoc && currentPageNum < pdfDoc.numPages)
+      renderPage(currentPageNum + 1);
+  });
+
+  // ---------------------- Signature Pad ----------------------
+  const sigColorInput = document.getElementById("sig-color");
+  const sigWidthInput = document.getElementById("sig-width");
+
+  let drawing = false;
+  let lastX = 0,
+    lastY = 0;
+  let penColor = sigColorInput?.value || "#000000";
+  let penWidth = +(sigWidthInput?.value || 2);
+
+  function resizeSigPad() {
+    sigPadCanvas.style.width = "";
+    sigPadCanvas.style.height = "";
+    let rect = sigPadCanvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      const cs = getComputedStyle(sigPadCanvas);
+      const w =
+        parseFloat(cs.width) || sigPadCanvas.parentElement?.clientWidth || 300;
+      const h = parseFloat(cs.height) || 160;
+      rect = { width: w, height: h, left: 0, top: 0, right: 0, bottom: 0 };
+    }
+    const dpr = window.devicePixelRatio || 1;
+    sigPadCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    sigPadCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+    sigPadCanvas.style.width = rect.width + "px";
+    sigPadCanvas.style.height = rect.height + "px";
+    sigPadCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    sigPadCtx.lineCap = "round";
+    sigPadCtx.lineJoin = "round";
+    sigPadCtx.strokeStyle = penColor;
+    sigPadCtx.lineWidth = penWidth;
+  }
+  resizeSigPad();
+
+  sigColorInput?.addEventListener("input", (e) => {
+    penColor = e.target.value || "#000000";
+    sigPadCtx.strokeStyle = penColor;
+  });
+  sigWidthInput?.addEventListener("input", (e) => {
+    penWidth = +e.target.value || 2;
+    sigPadCtx.lineWidth = penWidth;
+  });
+
+  const getPos = (canvas, e) => {
+    const rect = canvas.getBoundingClientRect();
+    const evt = getTouch(e);
+    return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+  };
+  const startDrawing = (e) => {
+    drawing = true;
+    e.preventDefault();
+    const pos = getPos(sigPadCanvas, e);
+    [lastX, lastY] = [pos.x, pos.y];
+    sigPadCtx.beginPath();
+  };
+  const draw = (e) => {
+    if (!drawing) return;
+    e.preventDefault();
+    const pos = getPos(sigPadCanvas, e);
+    sigPadCtx.moveTo(lastX, lastY);
+    sigPadCtx.lineTo(pos.x, pos.y);
+    sigPadCtx.stroke();
+    [lastX, lastY] = [pos.x, pos.y];
+    isSignatureDrawn = true;
+    placeSigBtn.disabled = false;
+  };
+  const stopDrawing = () => {
+    drawing = false;
+    sigPadCtx.beginPath();
+  };
+  const clearSignature = () => {
+    sigPadCtx.clearRect(0, 0, sigPadCanvas.width, sigPadCanvas.height);
+    isSignatureDrawn = false;
+    placeSigBtn.disabled = true;
+  };
+
+  // ---------------------- Place Signature (per-halaman) ----------------------
+  placeSigBtn.addEventListener("click", async () => {
+    if (!isSignatureDrawn) {
+      void Swal.fire(
+        "Tunggu!",
+        "Silakan buat tanda tangan terlebih dahulu.",
+        "info"
+      );
+      return;
+    }
+
+    // capture png dari kanvas TTD (unik untuk placement kali ini)
+    const pngBytes = await canvasToPngBytes(sigPadCanvas);
+    const dataUrl = sigPadCanvas.toDataURL("image/png");
+
+    // default posisi/ukuran overlay
+    sigImg.src = dataUrl;
+    sigDragContainer.classList.remove("hidden");
+    sigDragContainer.style.width = "150px";
+    sigDragContainer.style.height = "75px";
+    sigDragContainer.style.left = "50px";
+    sigDragContainer.style.top = "50px";
+
+    // simpan placement untuk halaman aktif (pakai rasio agar kebal resize)
+    const stageRect = pdfStage.getBoundingClientRect();
+    const nLeft = 50 / stageRect.width;
+    const nTop = 50 / stageRect.height;
+    const nWidth = 150 / stageRect.width;
+    const nHeight = 75 / stageRect.height;
+
+    placements.set(currentPageNum, {
+      nLeft,
+      nTop,
+      nWidth,
+      nHeight,
+      pngBytes,
+      dataUrl,
+    });
+    updateDownloadButtonState();
+  });
+
+  // ---------------------- Hapus signature (halaman aktif saja) ----------------------
+  function removePlacedSignatureForCurrentPage() {
+    placements.delete(currentPageNum);
+    sigDragContainer.classList.add("hidden");
+    updateDownloadButtonState();
+  }
+  removeSigBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    removePlacedSignatureForCurrentPage();
+  });
+  window.addEventListener("keydown", (e) => {
+    if (!hasPlacementOnCurrentPage()) return;
+    const tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA" || e.isComposing) return;
+    if (e.key === "Delete" || e.key === "Backspace") {
+      e.preventDefault();
+      removePlacedSignatureForCurrentPage();
+    }
+  });
+
+  // ---------------------- Drag & Resize (Pointer Events) ----------------------
+  sigImg.setAttribute("draggable", "false");
+  sigImg.style.pointerEvents = "none";
+  sigImg.style.userSelect = "none";
+  sigImg.style.webkitUserDrag = "none";
+  sigDragContainer.style.touchAction = "none";
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
+
+  sigDragContainer.addEventListener("pointerdown", (e) => {
+    if (e.target.id === "remove-signature-btn") return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    e.preventDefault();
+
+    if (e.target.classList && e.target.classList.contains("resize-handle")) {
+      isResizing = true;
+    } else {
+      isDragging = true;
+      const rect = sigDragContainer.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+    }
+
+    try {
+      sigDragContainer.setPointerCapture(e.pointerId);
+    } catch (_) {}
+    pdfViewerContainer.style.userSelect = "none";
+  });
+
+  sigDragContainer.addEventListener("pointermove", (e) => {
+    if (!isDragging && !isResizing) return;
+    const stageRect = pdfStage.getBoundingClientRect();
+
+    if (isDragging) {
+      let newX = e.clientX - stageRect.left - offsetX;
+      let newY = e.clientY - stageRect.top - offsetY;
+      newX = clamp(newX, 0, stageRect.width - sigDragContainer.offsetWidth);
+      newY = clamp(newY, 0, stageRect.height - sigDragContainer.offsetHeight);
+      sigDragContainer.style.left = `${newX}px`;
+      sigDragContainer.style.top = `${newY}px`;
+    } else if (isResizing) {
+      const rect = sigDragContainer.getBoundingClientRect();
+      let newWidth = e.clientX - rect.left;
+      let newHeight = e.clientY - rect.top;
+      newWidth = clamp(
+        newWidth,
+        50,
+        stageRect.width - (rect.left - stageRect.left)
+      );
+      newHeight = clamp(
+        newHeight,
+        30,
+        stageRect.height - (rect.top - stageRect.top)
+      );
+      sigDragContainer.style.width = `${newWidth}px`;
+      sigDragContainer.style.height = `${newHeight}px`;
+    }
+  });
+
+  const endPointer = (e) => {
+    if (!isDragging && !isResizing) return;
+    isDragging = false;
+    isResizing = false;
+    try {
+      sigDragContainer.releasePointerCapture(e.pointerId);
+    } catch (_) {}
+    pdfViewerContainer.style.userSelect = "auto";
+    if (hasPlacementOnCurrentPage()) saveOverlayToMap(); // simpan posisi terbaru
+  };
+  sigDragContainer.addEventListener("pointerup", endPointer);
+  sigDragContainer.addEventListener("pointercancel", endPointer);
+  window.addEventListener("mouseup", () => {
+    isDragging = isResizing = false;
+    pdfViewerContainer.style.userSelect = "auto";
+    if (hasPlacementOnCurrentPage()) saveOverlayToMap();
+  });
+  window.addEventListener("touchend", () => {
+    isDragging = isResizing = false;
+    pdfViewerContainer.style.userSelect = "auto";
+    if (hasPlacementOnCurrentPage()) saveOverlayToMap();
+  });
+
+  // ---------------------- Download Signature PNG ----------------------
+  downloadSigPngBtn.addEventListener("click", async () => {
+    if (!isSignatureDrawn) {
+      void Swal.fire(
+        "Tunggu!",
+        "Silakan buat tanda tangan terlebih dahulu.",
+        "info"
+      );
+      return;
+    }
+    const blob = await new Promise((res) =>
+      sigPadCanvas.toBlob(res, "image/png")
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = `signature-${makeTimestampLabel()}.png`;
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------------------- Embed & Download Signed PDF ----------------------
+  function makeTimestampLabel() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth() + 1);
+    const dd = pad(d.getDate());
+    const HH = pad(d.getHours());
+    const MI = pad(d.getMinutes());
+    const SS = pad(d.getSeconds());
+    const offsetMin = -d.getTimezoneOffset();
+    let tz = `UTC${offsetMin >= 0 ? "+" : ""}${offsetMin / 60}`;
+    if (offsetMin === 7 * 60) tz = "WIB";
+    else if (offsetMin === 8 * 60) tz = "WITA";
+    else if (offsetMin === 9 * 60) tz = "WIT";
+    return `${yyyy}${mm}${dd}-${HH}${MI}${SS}-${tz}`;
+  }
+
+  downloadSignedPdfBtn.addEventListener("click", async () => {
+    if (placements.size === 0) {
+      void Swal.fire(
+        "Tunggu!",
+        "Belum ada tanda tangan di halaman mana pun.",
+        "info"
+      );
+      return;
+    }
+
+    loadingSpinner.style.display = "flex";
+    try {
+      const { PDFDocument } = PDFLib;
+      const pdfDocToModify = await PDFDocument.load(originalPdfBytes);
+      const pages = pdfDocToModify.getPages();
+
+      // loop semua halaman, gambar TTD hanya jika placement tersedia
+      for (let i = 0; i < pages.length; i++) {
+        const pageNum = i + 1;
+        const p = placements.get(pageNum);
+        if (!p) continue;
+
+        const page = pages[i];
+        const pageW = page.getWidth();
+        const pageH = page.getHeight();
+
+        const img = await pdfDocToModify.embedPng(p.pngBytes);
+
+        const width = p.nWidth * pageW;
+        const height = p.nHeight * pageH;
+        const x = p.nLeft * pageW;
+        const y = pageH - p.nTop * pageH - height; // koordinat PDF kiri-bawah
+
+        page.drawImage(img, { x, y, width, height });
+      }
+
+      const pdfBytes = await pdfDocToModify.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const baseName = (pdfFile?.name || "document.pdf").replace(/\.pdf$/i, "");
+      link.download = `${baseName}-signed-${makeTimestampLabel()}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error signing PDF:", error);
+      void Swal.fire(
+        "Error",
+        "Terjadi kesalahan saat menandatangani PDF.",
+        "error"
+      );
+    } finally {
+      loadingSpinner.style.display = "none";
+    }
+  });
+
+  // ---------------------- Reset & Init ----------------------
+  const resetToUploadView = () => {
+    uploadView.classList.remove("hidden");
+    mainView.classList.add("hidden");
+    pdfDoc = null;
+    originalPdfBytes = null;
+    pdfFile = null;
+
+    clearSignature();
+    sigDragContainer.classList.add("hidden");
+    placements.clear();
+    uploadInput.value = "";
+    pdfViewerContainer.style.alignItems = "";
+    updatePageButtons();
+    updateDownloadButtonState();
+  };
+
+  resetBtn.addEventListener("click", resetToUploadView);
+  uploadInput.addEventListener("change", (e) =>
+    handleFileSelect(e.target.files[0])
+  );
+
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    uploadArea.addEventListener(
+      eventName,
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      false
+    );
+  });
+  ["dragenter", "dragover"].forEach((eventName) => {
+    uploadArea.addEventListener(
+      eventName,
+      () => uploadArea.classList.add("highlight"),
+      false
+    );
+  });
+  ["dragleave", "drop"].forEach((eventName) => {
+    uploadArea.addEventListener(
+      eventName,
+      () => uploadArea.classList.remove("highlight"),
+      false
+    );
+  });
+  uploadArea.addEventListener(
+    "drop",
+    (e) => handleFileSelect(e.dataTransfer.files[0]),
+    false
+  );
+
+  // Signature pad listeners
+  sigPadCanvas.addEventListener("mousedown", startDrawing);
+  sigPadCanvas.addEventListener("mousemove", draw);
+  sigPadCanvas.addEventListener("mouseup", stopDrawing);
+  sigPadCanvas.addEventListener("mouseleave", stopDrawing);
+  sigPadCanvas.addEventListener("touchstart", startDrawing, { passive: false });
+  sigPadCanvas.addEventListener("touchmove", draw, { passive: false });
+  sigPadCanvas.addEventListener("touchend", stopDrawing);
+  clearSigBtn.addEventListener("click", clearSignature);
+
+  // init
+  placeSigBtn.disabled = true;
+  resizeSigPad();
+  window.addEventListener("resize", () => {
+    resizeSigPad();
+    if (pdfDoc) void renderPage(currentPageNum);
+    updateVerticalCentering();
+  });
+  new ResizeObserver(() => updateVerticalCentering()).observe(
+    pdfViewerContainer
+  );
+  new ResizeObserver(() => updateVerticalCentering()).observe(pdfStage);
+
+  const themeObserver = new MutationObserver((mutations) => {
+    for (const m of mutations)
+      if (m.attributeName === "data-theme") resizeSigPad();
+  });
+  themeObserver.observe(document.documentElement, { attributes: true });
+}
+

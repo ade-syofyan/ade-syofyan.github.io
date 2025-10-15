@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeCaseStudyGenerator();
   initializeContactForm();
   initializeGenerativeArt();
+  initializePdfSigner();
 
   // Initialize Complex Modules
   initializeTerminal();

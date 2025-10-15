@@ -3953,3 +3953,33 @@ html[data-theme='light'] .timeline-logo-v2 {
   pointer-events: none;
   border-radius: inherit;
 }
+
+#signature-pad-canvas {
+  background: #ffffff;
+  /* latar terang */
+  border: 1px dashed var(--border-color);
+  border-radius: .5rem;
+}
+
+html[data-theme='dark'] #signature-pad-canvas {
+  background: #ffffff;
+  /* tetap putih di dark mode */
+}
+
+#pdf-viewer-container {
+  gap: 0.5rem;
+}
+
+/* spasi kecil saat ada scrollbar */
+#pdf-stage {
+  position: relative;
+}
+
+#pdf-render-canvas {
+  display: block;
+}
+
+/* hilangkan whitespace bawaan canvas */
+#signature-drag-container {
+  position: absolute;
+}

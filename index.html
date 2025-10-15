@@ -128,6 +128,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>
       // Set worker source for PDF.js to work correctly
+      // pdf-lib for PDF modification
+      
       if (typeof pdfjsLib !== 'undefined') {
         pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
       }
@@ -135,6 +137,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
   </head>
   <body class="leading-relaxed"> 
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- Navbar -->
     <nav class="py-4 md:py-0 shadow-lg sticky top-0 z-50" style="transition: background-color 0.3s ease;">
       <div
@@ -174,6 +177,7 @@
               <a href="#pathfinding-visualizer" class="nav-dropdown-item">Pathfinding</a>
               <a href="#ai-text-analyzer" class="nav-dropdown-item">AI Text Analyzer</a>
               <a href="#text-case-converter" class="nav-dropdown-item">Case Converter</a>
+              <a href="#pdf-signer-demo" class="nav-dropdown-item">PDF Signer</a>
             </div>
           </div>
 
@@ -280,6 +284,7 @@
               <a href="#pathfinding-visualizer" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Pathfinding</span></a>
               <a href="#ai-text-analyzer" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>AI Text Analyzer</span></a>
               <a href="#text-case-converter" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Case Converter</span></a>
+              <a href="#pdf-signer-demo" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>PDF Signer</span></a>
             </div>
           </div>
         </div>
@@ -1004,6 +1009,119 @@
     // ... create and append swatch element
   }
 }</code></pre>
+                </div>
+              </div>
+
+              <!-- Demo Baru: PDF Signer (Full Width) -->
+              <div id="pdf-signer-demo" class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="file-signature"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">PDF Digital Signature</h3>
+                </div>
+                <p class="mb-6 text-center" style="color: var(--text-secondary);">
+                  Unggah PDF, buat tanda tangan Anda, letakkan di dokumen, lalu unduh hasilnya. Semua proses terjadi di browser Anda.
+                </p>
+
+                <!-- Step 1: Upload PDF -->
+                <div id="pdf-signer-upload-view">
+                  <label for="pdf-upload-input" class="pdf-upload-area">
+                    <i data-lucide="upload-cloud" class="w-16 h-16 text-accent opacity-50"></i>
+                    <span class="mt-4 text-lg font-semibold" style="color: var(--text-white);">Klik untuk mengunggah atau jatuhkan file PDF di sini</span>
+                    <span class="mt-1 text-sm" style="color: var(--text-secondary);">Maks. 10MB. Privasi Anda terlindungi.</span>
+                  </label>
+                  <input type="file" id="pdf-upload-input" class="hidden" accept="application/pdf">
+                </div>
+
+                <!-- Step 2: Sign & Place -->
+                <div id="pdf-signer-main-view" class="hidden">
+                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Kolom Kiri: PDF Viewer -->
+                    <div class="lg:col-span-2 relative w-full min-h-[400px] rounded-lg flex items-center justify-center" style="background-color: var(--bg-card-secondary);">
+                      <div id="pdf-viewer-container" class="relative w-full h-full overflow-auto flex items-start justify-center">
+                        <!-- stage dipusatkan; ukuran mengikuti kanvas -->
+                        <div id="pdf-stage" class="relative inline-block">
+                          <canvas id="pdf-render-canvas" class="block"></canvas>
+                          <div id="signature-drag-container" class="hidden absolute top-0 left-0 cursor-move border-2 border-dashed border-accent">
+                            <img id="placed-signature-img" class="w-full h-full" alt="Signature Preview">
+                            <div class="resize-handle"></div>
+                            <button id="remove-signature-btn"
+                            class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white text-sm leading-none
+                                  flex items-center justify-center shadow hover:opacity-90"
+                            title="Hapus tanda tangan">×</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="pdf-loading-spinner" class="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-20">
+                        <i data-lucide="loader" class="w-12 h-12 animate-spin text-accent"></i>
+                      </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Signature Pad & Controls -->
+                    <div class="flex flex-col gap-4">
+                      <div>
+                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Area Tanda Tangan</label>
+                        <div class="flex items-center gap-3 mb-2">
+                          <label class="text-sm">Warna:</label>
+                          <input id="sig-color" type="color" value="#000000" />
+                          <label class="text-sm ml-4">Ketebalan:</label>
+                          <input id="sig-width" type="range" min="1" max="8" value="2" />
+                        </div>
+                        <canvas id="signature-pad-canvas" class="w-full h-40 bg-white/5 rounded-lg border border-white/10 cursor-crosshair touch-none"></canvas>
+                        <div class="flex justify-end gap-2 mt-2">
+                          <button id="clear-signature-btn" class="pathfinding-btn !text-xs" title="Hapus Tanda Tangan"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+                          <button id="place-signature-btn" class="pathfinding-btn !text-xs" title="Letakkan Tanda Tangan"><i data-lucide="check-circle" class="w-4 h-4"></i><span>Letakkan</span></button>
+                        </div>
+                      </div>
+                      
+                      <!-- Kontrol PDF -->
+                      <div class="p-3 rounded-lg" style="background-color: var(--bg-card-secondary);">
+                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Navigasi Dokumen</label>
+                        <div class="flex items-center justify-between">
+                          <button id="pdf-prev-page" class="pathfinding-btn"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+                          <span style="color: var(--text-secondary);">Hal <span id="pdf-current-page">1</span> dari <span id="pdf-total-pages">1</span></span>
+                          <button id="pdf-next-page" class="pathfinding-btn"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- Tombol Aksi -->
+                      <div class="mt-auto flex flex-col gap-2">
+                        <button id="download-signed-pdf-btn" class="btn-primary w-full flex items-center justify-center gap-2" disabled>
+                          <i data-lucide="download-cloud" class="w-4 h-4"></i>
+                          <span>Unduh PDF Tertanda</span>
+                        </button>
+                        <button id="download-signature-png-btn" class="btn-secondary w-full flex items-center justify-center gap-2">
+                          <i data-lucide="image" class="w-4 h-4"></i>
+                          <span>Unduh TTD (PNG)</span>
+                        </button>
+                        <button id="pdf-signer-reset-btn" class="text-accent text-sm mt-2 hover:underline">Mulai Ulang dengan PDF lain</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn-code-toggle" data-code-source="pdf-signer-code">
+                  <i data-lucide="code-2" class="w-4 h-4"></i><span>Code</span>
+                </button>
+                <div id="pdf-signer-code" class="hidden" data-keep-source="true">
+                  <pre data-lang="html" class="language-html"><code>&lt;!-- 1. Upload View --&gt;
+&lt;input type="file" id="pdf-upload-input" accept="application/pdf"&gt;
+
+&lt;!-- 2. Main View --&gt;
+&lt;canvas id="pdf-render-canvas"&gt;&lt;/canvas&gt; &lt;!-- For PDF page --&gt;
+&lt;canvas id="signature-pad-canvas"&gt;&lt;/canvas&gt; &lt;!-- For drawing --&gt;
+&lt;div id="signature-drag-container"&gt;&lt;/div&gt; &lt;!-- For placing --&gt;
+&lt;button id="download-signed-pdf-btn"&gt;Download Signed PDF&lt;/button&gt;</code></pre>
+                  <pre data-lang="js" class="language-javascript"><code>// Using pdf.js to render PDF on canvas
+const pdfDoc = await pdfjsLib.getDocument(fileArrayBuffer).promise;
+const page = await pdfDoc.getPage(1);
+page.render({ canvasContext, viewport });
+
+// Using pdf-lib.js to modify PDF
+const pdfDocToModify = await PDFLib.PDFDocument.load(originalPdfBytes);
+const signatureImage = await pdfDocToModify.embedPng(signaturePngBytes);
+const pageToSign = pdfDocToModify.getPages()[pageNum - 1];
+pageToSign.drawImage(signatureImage, { x, y, width, height });
+const pdfBytes = await pdfDocToModify.save();</code></pre>
                 </div>
               </div>
 
