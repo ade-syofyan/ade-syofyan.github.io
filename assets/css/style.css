@@ -3335,6 +3335,8 @@ body.hackerman-mode #achievement-toast {
   opacity: 0.6;
   /* Kurangi intensitas keseluruhan */
   pointer-events: none;
+  border-radius: inherit; /* Tambahkan ini */
+  overflow: hidden; /* Tambahkan ini */
 }
 
 .aurora__item {
@@ -4163,9 +4165,6 @@ html[data-theme='dark'] .pdf-text-box[data-placeholder][data-empty="1"]::before 
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-}
-
-line-height: 1.2;
 }
 
 .pdf-text-box.selected {
