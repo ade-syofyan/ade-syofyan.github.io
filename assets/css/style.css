@@ -2666,6 +2666,7 @@ body.hackerman-mode #achievement-toast {
   height: 100%;
   opacity: 0;
   cursor: pointer;
+  z-index: 2;
 }
 
 /* --- Redesigned Text Case Converter Styles --- */

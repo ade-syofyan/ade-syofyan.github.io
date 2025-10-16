@@ -273,10 +273,10 @@ Maret,Otomotif,Surabaya,30,3000000000`;
       colorInput.value = hex;
       colorSwatch.style.backgroundColor = hex;
 
+      pickerWrap.appendChild(colorSwatch);
+      pickerWrap.appendChild(colorInput);
       lab.appendChild(cb);
       lab.appendChild(document.createTextNode(header));
-      pickerWrap.appendChild(colorInput);
-      pickerWrap.appendChild(colorSwatch);
       row.appendChild(lab);
       row.appendChild(pickerWrap);
       dataColumnsCheckboxes.appendChild(row);
@@ -433,7 +433,12 @@ Maret,Otomotif,Surabaya,30,3000000000`;
       // dataset per (group × kolom Y)
       groupValues.forEach((gVal) => {
         selectedDataColumns.forEach((col) => {
-          const color = rgbaToHex(schemeColors[dsIndex % schemeColors.length]);
+          // Ambil warna dari color picker jika ada, jika tidak, gunakan skema
+          const colorInputId = `color-for-data-col-${col.replace(/\s/g, "-")}`;
+          const colorInput = document.getElementById(colorInputId);
+          const color = colorInput
+            ? colorInput.value
+            : rgbaToHex(schemeColors[dsIndex % schemeColors.length]);
           dsIndex++;
           const data = labels.map((x) => {
             const perGroup = store.get(x)?.get(gVal)?.[col];
@@ -459,7 +464,12 @@ Maret,Otomotif,Surabaya,30,3000000000`;
     } else {
       // dataset per kolom Y (tanpa grouping)
       selectedDataColumns.forEach((col) => {
-        const color = rgbaToHex(schemeColors[dsIndex % schemeColors.length]);
+        // Ambil warna dari color picker jika ada, jika tidak, gunakan skema
+        const colorInputId = `color-for-data-col-${col.replace(/\s/g, "-")}`;
+        const colorInput = document.getElementById(colorInputId);
+        const color = colorInput
+          ? colorInput.value
+          : rgbaToHex(schemeColors[dsIndex % schemeColors.length]);
         dsIndex++;
         const data = labels.map((x) => {
           const b = store.get(x)?.get("__ALL__")?.[col];
@@ -577,8 +587,15 @@ Maret,Otomotif,Surabaya,30,3000000000`;
       numericHeaders.forEach((header, i) => {
         const checkboxId = `data-col-${header.replace(/\s/g, "-")}`;
         const colorInput = document.getElementById(`color-for-${checkboxId}`);
-        if (colorInput)
-          colorInput.value = rgbaToHex(schemeColors[i % schemeColors.length]);
+        if (colorInput) {
+          const newHexColor = rgbaToHex(schemeColors[i % schemeColors.length]);
+          colorInput.value = newHexColor;
+          // Temukan swatch yang sesuai dan perbarui warnanya
+          const swatch = colorInput.previousElementSibling;
+          if (swatch && swatch.classList.contains('color-picker-swatch')) {
+            swatch.style.backgroundColor = newHexColor;
+          }
+        }
       });
       renderChart();
     });
