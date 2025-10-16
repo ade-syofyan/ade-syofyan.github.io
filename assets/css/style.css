@@ -114,6 +114,14 @@ body.modal-open {
   transition: background-color 0.3s ease;
 }
 
+.form-label {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 600;
+  margin-bottom: 0.5rem; /* 8px */
+  display: block;
+  color: var(--text-secondary);
+}
+
 /* Efek Liquid Glass untuk kontainer section utama */
 .liquid-glass-card {
   background-color: rgba(var(--bg-card-rgb), 0.2);

@@ -714,37 +714,29 @@
                   </div>
 
                   <!-- Kontrol Pemilihan Data Dinamis -->
-                  <div id="chart-data-selectors" class="hidden lg:col-span-2 p-4 rounded-lg space-y-4" style="background-color: var(--bg-card-secondary);">
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                      <div>
-                        <label for="label-column-select" class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Kolom Label (Sumbu X)</label>
-                        <div id="label-column-select-wrapper" class="custom-select-container"></div>
-                      </div>
-                      <div>
-                        <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Kolom Data untuk Grafik (Sumbu Y)</label>
-                        <div id="data-columns-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                          <!-- Checkbox akan disuntikkan oleh JS -->
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Kelompokkan (opsional) -->
+                  <div id="chart-data-selectors" class="hidden lg:col-span-2 p-4 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 bg-card-secondary">
+                    <!-- Kolom Label (Sumbu X) -->
                     <div>
-                      <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">
-                        Kelompokkan berdasarkan (Series)
-                      </label>
+                      <label for="label-column-select" class="form-label">Kolom Label (Sumbu X)</label>
+                      <div id="label-column-select-wrapper" class="custom-select-container"></div>
+                    </div>
+                    <!-- Kelompokkan berdasarkan (Series) -->
+                    <div>
+                      <label class="form-label">Kelompokkan berdasarkan (Series)</label>
                       <div id="group-by-select-wrapper" class="custom-select-container"></div>
                     </div>
-
-                    <!-- Agregasi -->
+                    <!-- Metode Agregasi -->
                     <div>
-                      <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">
-                        Metode Agregasi
-                      </label>
+                      <label class="form-label">Metode Agregasi</label>
                       <div id="agg-select-wrapper" class="custom-select-container"></div>
                     </div>
-
+                    <!-- Kolom Data untuk Grafik (Sumbu Y) -->
+                    <div>
+                      <label class="form-label">Kolom Data untuk Grafik (Sumbu Y)</label>
+                      <div id="data-columns-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                        <!-- Checkbox akan disuntikkan oleh JS -->
+                      </div>
+                    </div>
                   </div>
                 </div>
 
