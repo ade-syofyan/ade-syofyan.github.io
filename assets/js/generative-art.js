@@ -3,8 +3,8 @@ function initializeGenerativeArt() {
   const DEBUG = false;
   const LOG_PREFIX = "[ParticleFlow]";
   const log = (...a) => DEBUG && console.log(LOG_PREFIX, ...a);
-  const warn = (...a) => console.warn(LOG_PREFIX, ...a);
-  const error = (...a) => console.error(LOG_PREFIX, ...a);
+  const warn = (...a) => DEBUG && console.warn(LOG_PREFIX, ...a);
+  const error = (...a) => DEBUG && console.error(LOG_PREFIX, ...a);
 
   try {
     // Pastikan SimplexNoise sudah siap (mis. dari CDN)
@@ -38,7 +38,7 @@ function initializeGenerativeArt() {
 
     demoEls.forEach((demoEl, idx) => {
       const tag = `#${idx + 1}`;
-      console.groupCollapsed(`${LOG_PREFIX} ${tag} init`);
+      //console.groupCollapsed(`${LOG_PREFIX} ${tag} init`);
 
       // --- Query elemen di-scope ke tiap demoEl ---
       const canvas = demoEl.querySelector("#particle-canvas");
@@ -59,7 +59,7 @@ function initializeGenerativeArt() {
         startStopButton: !!startStopButton,
         clearButton: !!clearButton,
       };
-      console.table(present);
+      // console.table(present);
 
       if (
         !canvas ||
@@ -71,7 +71,7 @@ function initializeGenerativeArt() {
         warn(
           `${tag} Elemen demo tidak lengkap. Batal init untuk container ini.`
         );
-        console.groupEnd();
+        // console.groupEnd();
         return;
       }
 
@@ -352,7 +352,7 @@ function initializeGenerativeArt() {
         }, 200);
       });
 
-      console.groupEnd();
+      // console.groupEnd();
     });
 
     // Tangkap error yang tidak tertangani
