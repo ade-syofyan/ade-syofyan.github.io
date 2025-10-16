@@ -712,8 +712,10 @@
                       </button>
                     </div>
                   </div>
+
                   <!-- Kontrol Pemilihan Data Dinamis -->
                   <div id="chart-data-selectors" class="hidden lg:col-span-2 p-4 rounded-lg space-y-4" style="background-color: var(--bg-card-secondary);">
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                       <div>
                         <label for="label-column-select" class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">Kolom Label (Sumbu X)</label>
@@ -726,6 +728,23 @@
                         </div>
                       </div>
                     </div>
+
+                    <!-- Kelompokkan (opsional) -->
+                    <div>
+                      <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">
+                        Kelompokkan berdasarkan (Series)
+                      </label>
+                      <div id="group-by-select-wrapper" class="custom-select-container"></div>
+                    </div>
+
+                    <!-- Agregasi -->
+                    <div>
+                      <label class="text-sm font-semibold mb-2 block" style="color: var(--text-secondary);">
+                        Metode Agregasi
+                      </label>
+                      <div id="agg-select-wrapper" class="custom-select-container"></div>
+                    </div>
+
                   </div>
                 </div>
 
