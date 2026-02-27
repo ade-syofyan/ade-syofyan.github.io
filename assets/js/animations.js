@@ -364,13 +364,12 @@ function initializeTypingEffect() {
   }
 
   const textsToType = [
-    "Mobile & Web Developer dengan keahlian memecahkan masalah.",
-    "Membangun solusi digital inovatif dari ide hingga implementasi.",
-    "Spesialis dalam integrasi AI untuk efisiensi bisnis.",
-    "Mahir dalam teknologi modern seperti Flutter, Laravel, dan Firebase.",
-    "Berpengalaman lebih dari 7 tahun di industri teknologi.",
-    "Mengembangkan solusi untuk sektor properti, otomotif, dan layanan publik.",
-    "Spesialis dalam migrasi sistem backend untuk skalabilitas yang lebih baik.",
+    "Senior Mobile & Web Developer fokus pada solusi bisnis yang efisien.",
+    "Berpengalaman membangun produk untuk sektor otomotif, properti, dan layanan publik.",
+    "Mengarahkan pengembangan dari ide, desain, sampai rilis produk.",
+    "Spesialis integrasi AI untuk otomasi proses dan pengambilan keputusan.",
+    "Mahir Flutter, Laravel, Firebase, dan stack modern untuk delivery cepat.",
+    "Fokus pada stabilitas, performa, dan pengalaman pengguna yang rapi.",
   ];
 
   let textIndex = 0;

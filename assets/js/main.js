@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initializePathfindingVisualizer();
   initializeCsvToChartGenerator();
   initializeAiTextAnalyzer();
+  initializeImageOptimizerDemo();
+  initializeAccessibilityCheckerDemo();
   initializeTextConverter();
   initializePaletteGenerator();
   initializeCertificateGenerator();

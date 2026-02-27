@@ -388,11 +388,19 @@ const projectsData = [
 // --- Work History Data ---
 const workHistoryData = [
   {
+    company: "Toyota Intercom",
+    role: "Web Developer",
+    duration: "Nov 2025 - Saat ini",
+    description:
+      "Mengembangkan dan memelihara aplikasi web untuk layanan dan operasional Toyota Intercom, fokus pada stabilitas, pengalaman pengguna, dan integrasi data lintas fungsi.",
+    logo: "./assets/img/company/toyota.svg",
+  },
+  {
     company: "PT. Dofla Jaya Properti",
     role: "Staff IT",
     duration: "Nov 2023 - Okt 2025",
     description:
-      "Bertanggung jawab sebagai Web Developer serta mencakup IT Support dan Maintenance Server untuk mendukung operasional perusahaan.",
+      "Membangun dan merawat aplikasi web internal, sekaligus memastikan infrastruktur server dan dukungan teknis berjalan stabil untuk operasional harian.",
     logo: "./assets/img/company/doflaland.png",
   },
   {
@@ -400,7 +408,7 @@ const workHistoryData = [
     role: "Senior Mobile Developer",
     duration: "Agu 2016 - Jan 2023",
     description:
-      "Mengembangkan berbagai aplikasi mobile (Android Native & Flutter) dan web untuk klien. Terlibat dalam seluruh siklus hidup proyek, dari perencanaan hingga deployment dan maintenance.",
+      "Memimpin pengembangan aplikasi mobile dan web untuk klien, dari perencanaan, implementasi, hingga rilis dan pemeliharaan.",
     logo: "./assets/img/company/sukumaya.png",
   },
   {
@@ -408,7 +416,7 @@ const workHistoryData = [
     role: "Founder",
     duration: "Mei 2014 - Des 2016",
     description:
-      "Mendirikan dan memimpin software house yang fokus pada pembuatan website dan aplikasi kustom untuk klien lokal menggunakan CodeIgniter/PHP Native dan MySQL, serta membuat web company profile berbasis wordpress.",
+      "Mendirikan dan memimpin software house untuk solusi web & aplikasi kustom, menangani proses end-to-end dari kebutuhan klien hingga deployment.",
     logo: "./assets/img/company/minangsoft.png",
   },
 ];

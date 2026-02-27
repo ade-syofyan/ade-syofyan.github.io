@@ -1556,6 +1556,500 @@ function initializePaletteGenerator() {
   generatePalette(); // Initial generation
 }
 
+// --- Live Demo: Image Optimizer ---
+function initializeImageOptimizerDemo() {
+  const input = document.getElementById("image-optimizer-input");
+  const compareStage = document.getElementById("image-optimizer-compare-stage");
+  const originalImgEl = document.getElementById("image-optimizer-original-img");
+  const optimizedImgEl = document.getElementById(
+    "image-optimizer-optimized-img"
+  );
+  const compareSlider = document.getElementById(
+    "image-optimizer-compare-slider"
+  );
+  const compareHandle = document.getElementById(
+    "image-optimizer-compare-handle"
+  );
+  const formatSelect = document.getElementById("image-optimizer-format");
+  const qualityInput = document.getElementById("image-optimizer-quality");
+  const qualityValue = document.getElementById("image-optimizer-quality-value");
+  const widthInput = document.getElementById("image-optimizer-width");
+  const widthValue = document.getElementById("image-optimizer-width-value");
+  const originalMeta = document.getElementById("image-optimizer-original-meta");
+  const optimizedMeta = document.getElementById(
+    "image-optimizer-optimized-meta"
+  );
+  const savingsEl = document.getElementById("image-optimizer-savings");
+  const downloadBtn = document.getElementById("image-optimizer-download");
+  const resetBtn = document.getElementById("image-optimizer-reset");
+  const actionsContainer = document.querySelector(".image-optimizer-actions");
+  const controlsBar = document.querySelector(".image-optimizer-controls-bar");
+
+  if (!input || !originalImgEl || !optimizedImgEl || !compareStage) return;
+
+  let originalFile = null;
+  let originalUrl = null;
+  let optimizedUrl = null;
+  let optimizedBlob = null;
+  let originalImage = null;
+  let position = 0.5;
+  let rafId = null;
+
+  function formatBytes(bytes) {
+    if (!bytes || bytes <= 0) return "0 B";
+    const units = ["B", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const size = bytes / Math.pow(1024, i);
+    return `${size.toFixed(size >= 10 ? 1 : 2)} ${units[i]}`;
+  }
+
+  function updateQualityLabel() {
+    if (!qualityValue || !qualityInput) return;
+    qualityValue.textContent = Number(qualityInput.value).toFixed(2);
+  }
+
+  function updateWidthLabel() {
+    if (!widthValue || !widthInput) return;
+    widthValue.textContent = `${widthInput.value}px`;
+  }
+
+  function getOutputType() {
+    const format = formatSelect ? formatSelect.value : "auto";
+    if (format === "auto") {
+      return originalFile?.type || "image/jpeg";
+    }
+    if (format === "jpeg") return "image/jpeg";
+    if (format === "webp") return "image/webp";
+    if (format === "png") return "image/png";
+    return "image/jpeg";
+  }
+
+  function resetOptimized() {
+    if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
+    optimizedUrl = null;
+    optimizedBlob = null;
+    optimizedImgEl.removeAttribute("src");
+    if (optimizedMeta) optimizedMeta.textContent = "-";
+    if (savingsEl) savingsEl.textContent = "";
+    if (downloadBtn) downloadBtn.disabled = true;
+    if (resetBtn) resetBtn.disabled = true;
+    if (actionsContainer) actionsContainer.classList.add("hidden");
+    if (controlsBar) controlsBar.classList.add("hidden");
+    compareStage.classList.remove("has-image");
+  }
+
+  function applyPosition() {
+    const pct = Math.max(0, Math.min(100, position * 100));
+    if (optimizedImgEl) {
+      // Tampilkan optimasi di sisi kanan (setelah handle)
+      optimizedImgEl.style.clipPath = `inset(0 0 0 ${pct}%)`;
+    }
+    if (compareHandle) {
+      compareHandle.style.left = `${pct}%`;
+    }
+  }
+
+  function scheduleApply() {
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      applyPosition();
+    });
+  }
+
+  function updateOptimized() {
+    if (!originalFile || !originalImage) return;
+    updateQualityLabel();
+    updateWidthLabel();
+
+    const maxWidth = parseInt(widthInput?.value || "1200", 10);
+    const quality = parseFloat(qualityInput?.value || "0.8");
+    const mimeType = getOutputType();
+    const scale = Math.min(1, maxWidth / originalImage.naturalWidth);
+    const targetW = Math.max(1, Math.round(originalImage.naturalWidth * scale));
+    const targetH = Math.max(1, Math.round(originalImage.naturalHeight * scale));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    if (mimeType === "image/jpeg") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, targetW, targetH);
+    }
+    ctx.drawImage(originalImage, 0, 0, targetW, targetH);
+
+    const qualityArg = mimeType === "image/png" ? undefined : quality;
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) return;
+        if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
+        optimizedBlob = blob;
+        optimizedUrl = URL.createObjectURL(blob);
+        optimizedImgEl.src = optimizedUrl;
+        if (optimizedMeta) {
+          const formatLabel = mimeType.replace("image/", "").toUpperCase();
+          optimizedMeta.textContent = `${targetW}x${targetH} • ${formatBytes(
+            blob.size
+          )} • ${formatLabel}`;
+        }
+        if (savingsEl && originalFile.size) {
+          const savings = Math.max(
+            0,
+            Math.round((1 - blob.size / originalFile.size) * 100)
+          );
+          savingsEl.textContent = `Hemat ukuran sekitar ${savings}%`;
+        }
+        if (downloadBtn) downloadBtn.disabled = false;
+        if (resetBtn) resetBtn.disabled = false;
+        if (actionsContainer) actionsContainer.classList.remove("hidden");
+        if (controlsBar) controlsBar.classList.remove("hidden");
+        compareStage.classList.add("has-image");
+        scheduleApply();
+      },
+      mimeType,
+      qualityArg
+    );
+  }
+
+  function loadFile(file) {
+    if (!file || !file.type.startsWith("image/")) return;
+    originalFile = file;
+    if (originalUrl) URL.revokeObjectURL(originalUrl);
+    originalUrl = URL.createObjectURL(file);
+    originalImage = new Image();
+    originalImage.onload = () => {
+      if (originalMeta) {
+        originalMeta.textContent = `${originalImage.naturalWidth}x${originalImage.naturalHeight} • ${formatBytes(
+          file.size
+        )}`;
+      }
+      originalImgEl.src = originalUrl;
+      position = (compareSlider?.value || 50) / 100;
+      scheduleApply();
+      compareStage.classList.add("has-image");
+      if (actionsContainer) actionsContainer.classList.remove("hidden");
+      if (resetBtn) resetBtn.disabled = false;
+      if (controlsBar) controlsBar.classList.remove("hidden");
+      updateOptimized();
+    };
+    originalImage.src = originalUrl;
+  }
+
+  input.addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    resetOptimized();
+    if (file) loadFile(file);
+  });
+
+  if (compareStage) {
+    compareStage.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      compareStage.classList.add("drag-active");
+    });
+    compareStage.addEventListener("dragleave", () => {
+      compareStage.classList.remove("drag-active");
+    });
+    compareStage.addEventListener("drop", (e) => {
+      e.preventDefault();
+      compareStage.classList.remove("drag-active");
+      const file = e.dataTransfer?.files && e.dataTransfer.files[0];
+      resetOptimized();
+      if (file) loadFile(file);
+    });
+  }
+
+  [formatSelect, qualityInput, widthInput].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("input", updateOptimized);
+  });
+
+  if (compareSlider) {
+    compareSlider.addEventListener("input", (e) => {
+      position = Number(e.target.value) / 100;
+      scheduleApply();
+    });
+    position = Number(compareSlider.value) / 100;
+    scheduleApply();
+  }
+
+  if (compareStage) {
+    let dragging = false;
+
+    const updateFromPointer = (clientX) => {
+      const rect = compareStage.getBoundingClientRect();
+      const pct = (clientX - rect.left) / rect.width;
+      const clamped = Math.max(0, Math.min(1, pct));
+      position = clamped;
+      if (compareSlider) compareSlider.value = clamped * 100;
+      scheduleApply();
+    };
+
+    compareStage.addEventListener("pointerdown", (e) => {
+      if (!originalFile) return;
+      dragging = true;
+      compareStage.setPointerCapture(e.pointerId);
+      updateFromPointer(e.clientX);
+    });
+
+    compareStage.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      updateFromPointer(e.clientX);
+    });
+
+    compareStage.addEventListener("pointerup", (e) => {
+      dragging = false;
+      compareStage.releasePointerCapture(e.pointerId);
+    });
+
+    compareStage.addEventListener("pointerleave", () => {
+      dragging = false;
+    });
+  }
+
+  if (downloadBtn) {
+    downloadBtn.addEventListener("click", () => {
+      if (!optimizedBlob) return;
+      const domain = (window.location.hostname || "portfolio")
+        .replace(/[^a-z0-9.-]/gi, "_")
+        .replace(/\.+/g, ".");
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      const timestamp = `${now.getFullYear()}${pad(
+        now.getMonth() + 1
+      )}${pad(now.getDate())}-${pad(now.getHours())}${pad(
+        now.getMinutes()
+      )}${pad(now.getSeconds())}`;
+      const mimeType = optimizedBlob.type || "image/jpeg";
+      const ext =
+        mimeType === "image/webp"
+          ? "webp"
+          : mimeType === "image/png"
+          ? "png"
+          : "jpg";
+      const link = document.createElement("a");
+      link.href = optimizedUrl || URL.createObjectURL(optimizedBlob);
+      link.download = `${domain}-image-optimizer-${timestamp}.${ext}`;
+      link.click();
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (!window.Swal) {
+        // Fallback sederhana jika SweetAlert tidak tersedia
+        if (!confirm("Reset foto? Anda perlu mengunggah ulang.")) return;
+        if (originalUrl) URL.revokeObjectURL(originalUrl);
+        originalUrl = null;
+        originalFile = null;
+        originalImage = null;
+        originalImgEl.removeAttribute("src");
+        if (originalMeta) originalMeta.textContent = "-";
+        if (compareSlider) {
+          compareSlider.value = 50;
+          position = 0.5;
+          scheduleApply();
+        }
+        if (input) input.value = "";
+        resetOptimized();
+        return;
+      }
+
+      Swal.fire({
+        title: "Reset foto?",
+        text: "File akan dihapus. Anda perlu mengunggah ulang.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, reset",
+        cancelButtonText: "Batal",
+        confirmButtonColor: "#ef4444",
+      }).then((result) => {
+        if (!result.isConfirmed) return;
+        if (originalUrl) URL.revokeObjectURL(originalUrl);
+        originalUrl = null;
+        originalFile = null;
+        originalImage = null;
+        originalImgEl.removeAttribute("src");
+        if (originalMeta) originalMeta.textContent = "-";
+        if (compareSlider) {
+          compareSlider.value = 50;
+          position = 0.5;
+          scheduleApply();
+        }
+        if (input) input.value = "";
+        resetOptimized();
+      });
+    });
+  }
+
+  updateQualityLabel();
+  updateWidthLabel();
+  if (actionsContainer) actionsContainer.classList.add("hidden");
+  if (controlsBar) controlsBar.classList.add("hidden");
+}
+
+// --- Live Demo: Accessibility Checker ---
+function initializeAccessibilityCheckerDemo() {
+  const textInput = document.getElementById("a11y-text-input");
+  const textColor = document.getElementById("a11y-text-color");
+  const textHex = document.getElementById("a11y-text-hex");
+  const bgColor = document.getElementById("a11y-bg-color");
+  const bgHex = document.getElementById("a11y-bg-hex");
+  const fontSize = document.getElementById("a11y-font-size");
+  const fontSizeValue = document.getElementById("a11y-font-size-value");
+  const fontWeight = document.getElementById("a11y-font-weight");
+  const preview = document.getElementById("a11y-preview");
+  const previewText = document.getElementById("a11y-preview-text");
+  const ratioEl = document.getElementById("a11y-contrast-ratio");
+  const aaEl = document.getElementById("a11y-wcag-aa");
+  const aaaEl = document.getElementById("a11y-wcag-aaa");
+  const sizeNote = document.getElementById("a11y-size-note");
+  const issuesEl = document.getElementById("a11y-issues");
+  const swapBtn = document.getElementById("a11y-swap-btn");
+  const sampleBtn = document.getElementById("a11y-sample-btn");
+
+  if (!textInput || !preview) return;
+
+  function normalizeHex(value) {
+    if (!value) return null;
+    let hex = value.trim().replace("#", "");
+    if (hex.length === 3) {
+      hex = hex
+        .split("")
+        .map((c) => c + c)
+        .join("");
+    }
+    if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
+    return `#${hex.toLowerCase()}`;
+  }
+
+  function hexToRgb(hex) {
+    const normalized = normalizeHex(hex);
+    if (!normalized) return null;
+    const value = normalized.replace("#", "");
+    const r = parseInt(value.substring(0, 2), 16);
+    const g = parseInt(value.substring(2, 4), 16);
+    const b = parseInt(value.substring(4, 6), 16);
+    return { r, g, b };
+  }
+
+  function relativeLuminance({ r, g, b }) {
+    const srgb = [r, g, b].map((v) => v / 255);
+    const [R, G, B] = srgb.map((c) =>
+      c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+    );
+    return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+  }
+
+  function contrastRatio(fg, bg) {
+    const L1 = relativeLuminance(fg);
+    const L2 = relativeLuminance(bg);
+    const lighter = Math.max(L1, L2);
+    const darker = Math.min(L1, L2);
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+
+  function setBadge(el, pass) {
+    if (!el) return;
+    el.textContent = pass ? "Lulus" : "Gagal";
+    el.classList.remove("pass", "fail");
+    el.classList.add(pass ? "pass" : "fail");
+  }
+
+  function update() {
+    const textValue = textInput.value || "";
+    if (previewText) previewText.textContent = textValue;
+
+    const safeTextHex = normalizeHex(textHex.value) || textColor.value;
+    const safeBgHex = normalizeHex(bgHex.value) || bgColor.value;
+    textHex.value = safeTextHex;
+    textColor.value = safeTextHex;
+    bgHex.value = safeBgHex;
+    bgColor.value = safeBgHex;
+
+    const fontSizeValueNum = parseInt(fontSize.value, 10);
+    const fontWeightValue = parseInt(fontWeight.value, 10);
+    if (fontSizeValue) fontSizeValue.textContent = `${fontSizeValueNum}px`;
+    if (previewText) {
+      previewText.style.color = safeTextHex;
+      previewText.style.fontSize = `${fontSizeValueNum}px`;
+      previewText.style.fontWeight = fontWeightValue;
+    }
+    preview.style.backgroundColor = safeBgHex;
+
+    const fgRgb = hexToRgb(safeTextHex);
+    const bgRgb = hexToRgb(safeBgHex);
+    if (!fgRgb || !bgRgb) return;
+
+    const ratio = contrastRatio(fgRgb, bgRgb);
+    const isLargeText =
+      fontSizeValueNum >= 24 || (fontSizeValueNum >= 19 && fontWeightValue >= 700);
+    const aaThreshold = isLargeText ? 3 : 4.5;
+    const aaaThreshold = isLargeText ? 4.5 : 7;
+    const passAA = ratio >= aaThreshold;
+    const passAAA = ratio >= aaaThreshold;
+
+    if (ratioEl) ratioEl.textContent = ratio.toFixed(2);
+    setBadge(aaEl, passAA);
+    setBadge(aaaEl, passAAA);
+    if (sizeNote) {
+      sizeNote.textContent = `Teks ${isLargeText ? "besar" : "normal"} • AA ${aaThreshold}:1 • AAA ${aaaThreshold}:1`;
+    }
+
+    if (issuesEl) {
+      const issues = [];
+      if (!passAA) {
+        issues.push("Kontras belum memenuhi WCAG AA. Coba gelapkan teks atau cerahkan latar.");
+      }
+      if (passAA && !passAAA) {
+        issues.push("Kontras sudah AA, tetapi belum AAA.");
+      }
+      if (fontSizeValueNum < 16) {
+        issues.push("Ukuran teks di bawah 16px, pertimbangkan untuk memperbesar.");
+      }
+      if (issues.length === 0) {
+        issues.push("Tidak ada masalah utama terdeteksi.");
+      }
+      issuesEl.innerHTML = issues.map((item) => `<li>${item}</li>`).join("");
+    }
+  }
+
+  textInput.addEventListener("input", update);
+  [textColor, textHex, bgColor, bgHex].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("input", update);
+    el.addEventListener("change", update);
+  });
+  [fontSize, fontWeight].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("input", update);
+  });
+
+  if (swapBtn) {
+    swapBtn.addEventListener("click", () => {
+      const currentText = textHex.value;
+      textHex.value = bgHex.value;
+      bgHex.value = currentText;
+      update();
+    });
+  }
+
+  if (sampleBtn) {
+    sampleBtn.addEventListener("click", () => {
+      textInput.value = "Booking service berhasil. Estimasi selesai 45 menit.";
+      textHex.value = "#0f172a";
+      bgHex.value = "#e2e8f0";
+      fontSize.value = "18";
+      fontWeight.value = "600";
+      update();
+    });
+  }
+
+  update();
+}
+
 // --- Live Demo: Certificate Generator ---
 function initializeCertificateGenerator() {
   const modal = document.getElementById("certificateModal");

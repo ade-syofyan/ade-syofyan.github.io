@@ -116,7 +116,7 @@
     <!-- SweetAlert2 for modern alerts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./assets/css/swal-theme.css">
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css?v=20260227">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css@3.5.0/css/flag-icon.min.css">
     <!-- jsPDF for PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -176,6 +176,8 @@
               <a href="#csv-chart-generator" class="nav-dropdown-item">CSV to Chart</a>
               <a href="#pathfinding-visualizer" class="nav-dropdown-item">Pathfinding</a>
               <a href="#ai-text-analyzer" class="nav-dropdown-item">AI Text Analyzer</a>
+              <a href="#image-optimizer-demo" class="nav-dropdown-item">Image Optimizer</a>
+              <a href="#accessibility-checker-demo" class="nav-dropdown-item">Accessibility Checker</a>
               <a href="#text-case-converter" class="nav-dropdown-item">Case Converter</a>
               <a href="#pdf-signer-demo" class="nav-dropdown-item">PDF Signer</a>
             </div>
@@ -283,6 +285,8 @@
               <a href="#csv-chart-generator" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>CSV to Chart</span></a>
               <a href="#pathfinding-visualizer" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Pathfinding</span></a>
               <a href="#ai-text-analyzer" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>AI Text Analyzer</span></a>
+              <a href="#image-optimizer-demo" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Image Optimizer</span></a>
+              <a href="#accessibility-checker-demo" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Accessibility Checker</span></a>
               <a href="#text-case-converter" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>Case Converter</span></a>
               <a href="#pdf-signer-demo" class="mobile-menu-item mobile-submenu-item" onclick="closeMobileMenu()"><span>PDF Signer</span></a>
             </div>
@@ -363,7 +367,7 @@
           <div class="relative lg:-ml-10 liquid-glass-card p-8 md:p-12 text-center lg:text-left">
             <h2 class="text-4xl font-bold mb-6" style="color: var(--text-white);">Tentang Saya</h2>
             <p class="text-lg mb-6" style="color: var(--text-secondary);">
-              Saya seorang <span class="font-semibold text-accent">Programmer Senior</span> dengan pengalaman lebih dari <span class="font-semibold text-accent">7 tahun</span> dalam pengembangan aplikasi web, mobile, dan ERP. Saya bersemangat dalam membangun solusi digital inovatif yang efisien dan berdampak positif, dengan spesialisasi dalam <span class="font-semibold text-accent">integrasi AI</span> untuk efisiensi bisnis.
+              Saya seorang <span class="font-semibold text-accent">Programmer Senior</span> dengan pengalaman lebih dari <span class="font-semibold text-accent">7 tahun</span> dalam pengembangan aplikasi web, mobile, dan ERP. Fokus saya adalah membangun solusi yang <span class="font-semibold text-accent">stabil, cepat, dan mudah digunakan</span> untuk sektor otomotif, properti, dan layanan publik, dengan <span class="font-semibold text-accent">integrasi AI</span> untuk efisiensi proses bisnis.
             </p>
 
             <!-- Kartu Statistik -->
@@ -578,6 +582,41 @@
         <h2 class="text-4xl font-bold mb-16 text-center" style="color: var(--text-white);">Perjalanan Karier</h2>
         <div id="work-history-timeline" class="relative max-w-5xl mx-auto">
           <!-- Timeline items will be injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Case Study Section -->
+    <section id="featured-case-study" class="py-20 fade-in-on-scroll my-8 md:mx-auto container">
+      <div class="relative z-10 max-w-6xl mx-auto">
+        <h2 class="text-4xl font-bold mb-10 text-center" style="color: var(--text-white);">Studi Kasus Unggulan</h2>
+        <div class="liquid-glass-card p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="flex justify-center">
+            <img
+              src="./assets/img/project/intercom/intercom-1.webp"
+              alt="Tampilan aplikasi myIntercom (Toyota)"
+              class="w-full max-w-md rounded-xl shadow-lg"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-accent uppercase tracking-wide mb-2">Automotive Customer App</p>
+            <h3 class="text-2xl md:text-3xl font-bold mb-4" style="color: var(--text-white);">
+              myIntercom (Toyota) — Layanan Pelanggan Otomotif
+            </h3>
+            <p class="mb-4" style="color: var(--text-secondary);">
+              Aplikasi pelanggan yang menyederhanakan booking service, test drive, trade-in, dan promo. Fokus pada alur layanan yang cepat, konsisten, dan mudah dipahami pengguna.
+            </p>
+            <ul class="mb-6 text-sm space-y-2" style="color: var(--text-secondary);">
+              <li>Flutter untuk pengembangan mobile lintas platform</li>
+              <li>Laravel untuk backend & API yang aman</li>
+              <li>Push notification real-time untuk status layanan</li>
+            </ul>
+            <div class="flex flex-wrap gap-3">
+              <button class="btn-primary" onclick="openModal('myintercom')">Lihat Studi Kasus</button>
+              <a href="#portfolio" class="btn-secondary">Lihat Portofolio</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1020,6 +1059,163 @@
     // ... create and append swatch element
   }
 }</code></pre>
+                </div>
+              </div>
+
+              <!-- Demo Baru: Image Optimizer (Full Width) -->
+              <div id="image-optimizer-demo" class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="image"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Image Optimizer Preview</h3>
+                </div>
+                <p class="mb-6 text-center" style="color: var(--text-secondary);">
+                  Unggah gambar untuk melihat perbandingan ukuran, dimensi, dan kualitas setelah optimasi.
+                </p>
+
+                <div class="image-optimizer-layout">
+                  <div class="image-optimizer-top single">
+                    <div class="image-optimizer-controls-bar">
+                      <div class="image-optimizer-field">
+                        <label class="form-label">Format</label>
+                        <select id="image-optimizer-format" class="form-input !rounded-lg">
+                          <option value="auto">Auto (Asli)</option>
+                          <option value="jpeg">JPEG</option>
+                          <option value="webp">WebP</option>
+                          <option value="png">PNG</option>
+                        </select>
+                      </div>
+                      <div class="image-optimizer-field">
+                        <label class="form-label">Kualitas</label>
+                        <div class="image-optimizer-inline">
+                          <input type="range" id="image-optimizer-quality" min="0" max="1" step="0.05" value="0.8" class="w-full custom-range">
+                          <span id="image-optimizer-quality-value" class="text-sm font-mono text-accent">0.80</span>
+                        </div>
+                      </div>
+                      <div class="image-optimizer-field">
+                        <label class="form-label">Lebar Maks</label>
+                        <div class="image-optimizer-inline">
+                          <input type="number" id="image-optimizer-width" min="360" max="2000" step="40" value="1200" class="form-input !rounded-lg">
+                          <span id="image-optimizer-width-value" class="text-sm font-mono text-accent">1200px</span>
+                        </div>
+                      </div>
+                      <div class="image-optimizer-actions">
+                        <button id="image-optimizer-download" class="btn-secondary w-full" disabled>Unduh Hasil</button>
+                        <button id="image-optimizer-reset" class="btn-secondary w-full" disabled>Reset Foto</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="image-optimizer-compare">
+                    <label class="image-optimizer-compare-stage" id="image-optimizer-compare-stage" for="image-optimizer-input">
+                      <div class="image-optimizer-compare-label left">
+                        <span>Asli</span>
+                        <span id="image-optimizer-original-meta" class="text-xs">-</span>
+                      </div>
+                      <div class="image-optimizer-compare-label right">
+                        <span>Optimasi</span>
+                        <span id="image-optimizer-optimized-meta" class="text-xs">-</span>
+                      </div>
+                      <img id="image-optimizer-original-img" alt="Preview gambar asli">
+                      <img id="image-optimizer-optimized-img" alt="Preview gambar optimasi">
+
+                      <div class="image-optimizer-placeholder" data-role="compare">
+                        <div class="placeholder-icon">
+                          <i data-lucide="sparkles"></i>
+                        </div>
+                        <div class="placeholder-text">
+                          <strong>Bandingkan kualitas</strong>
+                          <span>Unggah gambar untuk melihat perbandingan.</span>
+                        </div>
+                      </div>
+
+                      <input type="range" id="image-optimizer-compare-slider" min="0" max="100" value="50" aria-label="Slider perbandingan gambar">
+                      <div class="image-optimizer-compare-handle" id="image-optimizer-compare-handle"></div>
+                    </label>
+                    <p id="image-optimizer-savings" class="image-optimizer-savings"> </p>
+                  </div>
+                  <input type="file" id="image-optimizer-input" class="hidden" accept="image/*">
+                </div>
+              </div>
+
+              <!-- Demo Baru: Accessibility Checker (Full Width) -->
+              <div id="accessibility-checker-demo" class="p-6 rounded-xl shadow-lg md:col-span-2 live-demo liquid-glass-card">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                  <p class="text-accent text-4xl"><i data-lucide="accessibility"></i></p>
+                  <h3 class="text-2xl font-bold" style="color: var(--text-white);">Accessibility Checker</h3>
+                </div>
+                <p class="mb-6 text-center" style="color: var(--text-secondary);">
+                  Cek kontras warna, ukuran teks, dan status WCAG AA/AAA secara instan.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                  <!-- Kontrol -->
+                  <div class="flex flex-col gap-4 p-4 rounded-lg" style="background-color: var(--bg-card-secondary);">
+                    <div>
+                      <label class="form-label">Teks</label>
+                      <input type="text" id="a11y-text-input" class="form-input !rounded-lg" value="Jadwal servis tersedia hari ini.">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                      <div>
+                        <label class="form-label">Warna Teks</label>
+                        <div class="flex items-center gap-2">
+                          <input type="color" id="a11y-text-color" class="a11y-color-input" value="#0f172a">
+                          <input type="text" id="a11y-text-hex" class="form-input !rounded-lg" value="#0f172a">
+                        </div>
+                      </div>
+                      <div>
+                        <label class="form-label">Warna Latar</label>
+                        <div class="flex items-center gap-2">
+                          <input type="color" id="a11y-bg-color" class="a11y-color-input" value="#f8fafc">
+                          <input type="text" id="a11y-bg-hex" class="form-input !rounded-lg" value="#f8fafc">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                      <div>
+                        <label class="form-label">Ukuran Teks</label>
+                        <div class="flex items-center gap-3">
+                          <input type="range" id="a11y-font-size" min="12" max="32" step="1" value="18" class="w-full custom-range">
+                          <span id="a11y-font-size-value" class="text-sm font-mono text-accent">18px</span>
+                        </div>
+                      </div>
+                      <div>
+                        <label class="form-label">Ketebalan</label>
+                        <select id="a11y-font-weight" class="form-input !rounded-lg">
+                          <option value="400">Regular</option>
+                          <option value="600">Semibold</option>
+                          <option value="700">Bold</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <button id="a11y-swap-btn" class="btn-secondary w-full">Tukar Warna</button>
+                      <button id="a11y-sample-btn" class="btn-primary w-full">Gunakan Contoh</button>
+                    </div>
+                  </div>
+
+                  <!-- Preview & Hasil -->
+                  <div class="flex flex-col gap-4">
+                    <div id="a11y-preview" class="a11y-preview-card">
+                      <p id="a11y-preview-text">Jadwal servis tersedia hari ini.</p>
+                      <button class="a11y-preview-btn">Lanjutkan</button>
+                    </div>
+                    <div class="a11y-results-card">
+                      <div class="a11y-result-row">
+                        <span>Contrast Ratio</span>
+                        <strong id="a11y-contrast-ratio">-</strong>
+                      </div>
+                      <div class="a11y-result-row">
+                        <span>WCAG AA</span>
+                        <span id="a11y-wcag-aa" class="a11y-badge">-</span>
+                      </div>
+                      <div class="a11y-result-row">
+                        <span>WCAG AAA</span>
+                        <span id="a11y-wcag-aaa" class="a11y-badge">-</span>
+                      </div>
+                      <p id="a11y-size-note" class="text-xs mt-2" style="color: var(--text-secondary);"></p>
+                      <ul id="a11y-issues" class="a11y-issues"></ul>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1866,14 +2062,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.1.1/simplex-noise.min.js" defer></script>
     <script src="./assets/js/config.js" defer></script>
-    <script src="./assets/js/data.js" defer></script>
+    <script src="./assets/js/data.js?v=20260227" defer></script>
     <script src="./assets/js/caseStudyGenerator.js" defer></script>
     <script src="./assets/js/ui.js" defer></script>
-    <script src="./assets/js/animations.js" defer></script>
-    <script src="./assets/js/components.js" defer></script>
+    <script src="./assets/js/animations.js?v=20260227" defer></script>
+    <script src="./assets/js/components.js?v=20260227" defer></script>
     <script src="./assets/js/terminal.js" defer></script>
     <script src="./assets/js/chatbot.js" defer></script>
     <script src="./assets/js/generative-art.js" defer></script>
-    <script src="./assets/js/main.js" defer></script>
+    <script src="./assets/js/main.js?v=20260227" defer></script>
   </body>
 </html>
